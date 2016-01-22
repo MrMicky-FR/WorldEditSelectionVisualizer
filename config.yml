@@ -1,0 +1,15 @@
+useProtocolLib: false
+particleDistance: 16
+maxSize: 10000
+checkForAxe: false
+selectionItem: WOOD_AXE
+particleEffect: reddust
+horizontalLinesForCuboid: true
+horizontalLinesForPolygon: true
+horizontalLinesForCylinder: true
+horizontalLinesForEllipsoid: true
+gapBetweenPoints: 0.5
+verticalGap: 1
+updateSelectionInterval: 20
+updateParticlesInterval: 5
+players:

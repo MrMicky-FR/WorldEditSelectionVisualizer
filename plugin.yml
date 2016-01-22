@@ -1,0 +1,24 @@
+name: WorldEditSelectionVisualizer
+main: com.rojel.wesv.WorldEditSelectionVisualizer
+version: 1.4.2
+authors: [Rojetto, ZathrusWriter]
+description: Shows WorldEdit selections with particles.
+depend: [WorldEdit]
+softdepend: [ProtocolLib]
+commands:
+  wesv:
+    description: Toggles the visualizer.
+    permission: wesv.toggle
+    usage: /wesv
+permissions:
+  wesv.*:
+    default: true
+    children:
+      wesv.use: true
+      wesv.toggle: true
+  wesv.use:
+    default: true
+    description: Allows the visualizer to be used.
+  wesv.toggle:
+    default: true
+    description: Allows the visualizer to be toggled.
