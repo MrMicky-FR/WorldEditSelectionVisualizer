@@ -124,7 +124,8 @@ implements Listener {
         this.lastSelectionTooLarge.remove(event.getPlayer().getUniqueId());
     }
 
-    public boolean holdsSelectionItem(Player player) {
+    @SuppressWarnings("deprecation")
+	public boolean holdsSelectionItem(Player player) {
         ItemStack item = player.getItemInHand();
         return item != null && item.getType() == this.config.selectionItem();
     }
