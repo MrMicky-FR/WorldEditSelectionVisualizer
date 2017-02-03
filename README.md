@@ -1,3 +1,6 @@
+[![Coverage Status](https://coveralls.io/repos/github/martinambrus/WorldEdit-ServerSide-Visualizer/badge.svg)](https://coveralls.io/github/martinambrus/WorldEdit-ServerSide-Visualizer) [![codecov](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer)
+ <a href="https://codeclimate.com/github/martinambrus/WorldEdit-ServerSide-Visualizer/coverage"><img src="https://codeclimate.com/github/martinambrus/WorldEdit-ServerSide-Visualizer/badges/coverage.svg" /></a> <a href="https://codeclimate.com/github/martinambrus/WorldEdit-ServerSide-Visualizer"><img src="https://codeclimate.com/github/martinambrus/WorldEdit-ServerSide-Visualizer/badges/issue_count.svg" /></a> [![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/WorldEdit-ServerSide-Visualizer/Lobby)
+
 Overview
 
 WorldEditSelectionVisualizer (WESV) is essentially the famous WorldEditCUI mod (http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) in the form of a bukkit plugin, which means that players don't need to install anything on their client.
