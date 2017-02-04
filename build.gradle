@@ -1,0 +1,84 @@
+group 'com.rojel.wesv'
+version '1.0'
+
+#import org.apache.tools.ant.filters.ReplaceTokens
+
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+
+ext {
+    println("$rootProject.name")
+    BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
+    WORLDEDIT_VERSION = '6.1'
+    BUILD_DIR = "../../../Plugins/BuildDir/$group"
+    FINAL_DIR  = '../../../Plugins/'
+    MAIN_CLASS = "${group}.WorldEditSelectionVisualizer".toString()
+}
+buildDir = BUILD_DIR
+
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+#    test {
+#        java {
+#            srcDirs = ['src/test/java']
+#        }
+#        resources {
+#            srcDirs = ['src/test/resources']
+#        }
+#    }
+}
+
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"}
+    maven {url 'http://maven.sk89q.com/artifactory/repo/'}
+    maven {url 'http://repo.ess3.net/content/groups/essentials' }
+}
+dependencies {
+#    testCompile group: 'junit',
+#            name: 'junit',
+#            version: '4.11'
+    /*WorldEdit*/
+    compile group: 'com.sk89q.worldedit',
+            name: 'worldedit-bukkit',
+            version: WORLDEDIT_VERSION
+    //Spigot API
+    compile group: 'org.spigotmc',
+            name: 'spigot-api',
+            version: BUKKIT_API_VERSION
+#    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
+}
+
+task copy(type: Copy) {
+    from "${buildDir}/libs"
+    into "$FINAL_DIR"
+}
+
+#task templates(type: Copy) {
+#    delete "src/main/resources/config.yml"
+#    delete "src/main/resources/plugin.yml"
+#    from "template/plugin.yml"
+#    into 'src/main/resources'
+#    filter(ReplaceTokens, tokens: [
+#            version: version,
+#            name   : rootProject.name,
+#            class  : MAIN_CLASS,
+#            genTime: "#Generated At: ${new Date().format("\'MM/dd/yy~hh:mm-a\'")}".toString(),
+#    ])
+#    from "template/config.yml"
+#    into sourceSets.main.resources.getSrcDirs().getAt(0)
+#}
