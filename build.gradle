@@ -1,7 +1,7 @@
 group 'com.rojel.wesv'
 version '1.0'
 
-#import org.apache.tools.ant.filters.ReplaceTokens
+//import org.apache.tools.ant.filters.ReplaceTokens
 
 
 apply plugin: 'java'
@@ -30,14 +30,14 @@ sourceSets {
             srcDirs = ['src/main/resources']
         }
     }
-#    test {
-#        java {
-#            srcDirs = ['src/test/java']
-#        }
-#        resources {
-#            srcDirs = ['src/test/resources']
-#        }
-#    }
+/*    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }*/
 }
 
 
@@ -49,9 +49,9 @@ repositories {
     maven {url 'http://repo.ess3.net/content/groups/essentials' }
 }
 dependencies {
-#    testCompile group: 'junit',
-#            name: 'junit',
-#            version: '4.11'
+/*    testCompile group: 'junit',
+            name: 'junit',
+            version: '4.11'*/
     /*WorldEdit*/
     compile group: 'com.sk89q.worldedit',
             name: 'worldedit-bukkit',
@@ -60,7 +60,7 @@ dependencies {
     compile group: 'org.spigotmc',
             name: 'spigot-api',
             version: BUKKIT_API_VERSION
-#    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
+//    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
 }
 
 task copy(type: Copy) {
@@ -68,17 +68,17 @@ task copy(type: Copy) {
     into "$FINAL_DIR"
 }
 
-#task templates(type: Copy) {
-#    delete "src/main/resources/config.yml"
-#    delete "src/main/resources/plugin.yml"
-#    from "template/plugin.yml"
-#    into 'src/main/resources'
-#    filter(ReplaceTokens, tokens: [
-#            version: version,
-#            name   : rootProject.name,
-#            class  : MAIN_CLASS,
-#            genTime: "#Generated At: ${new Date().format("\'MM/dd/yy~hh:mm-a\'")}".toString(),
-#    ])
-#    from "template/config.yml"
-#    into sourceSets.main.resources.getSrcDirs().getAt(0)
-#}
+/*task templates(type: Copy) {
+    delete "src/main/resources/config.yml"
+    delete "src/main/resources/plugin.yml"
+    from "template/plugin.yml"
+    into 'src/main/resources'
+    filter(ReplaceTokens, tokens: [
+            version: version,
+            name   : rootProject.name,
+            class  : MAIN_CLASS,
+            genTime: "#Generated At: ${new Date().format("\'MM/dd/yy~hh:mm-a\'")}".toString(),
+    ])
+    from "template/config.yml"
+    into sourceSets.main.resources.getSrcDirs().getAt(0)
+}*/
