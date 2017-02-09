@@ -67,10 +67,6 @@ repositories {
         name "ProtocolLib"
     	url "http://repo.dmulloy2.net/content/groups/public/"
     }
-    /*maven {
-        name "Essentials"
-        url "http://repo.ess3.net/content/groups/essentials"
-    }*/
 }
 dependencies {
 /*    testCompile group: 'junit',
