@@ -15,6 +15,7 @@ ext {
     println("$rootProject.name")
     BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
+    PROTOCOLLIB_VERSION = '4.2.0'
     BUILD_DIR = "../../../Plugins/BuildDir/$group"
     FINAL_DIR  = '../../../Plugins/'
     MAIN_CLASS = "${group}.WorldEditSelectionVisualizer".toString()
@@ -56,7 +57,7 @@ repositories {
     }
     maven {
         name "WorldEdit"
-        url 'http://maven.sk89q.com/artifactory/repo/'
+        url "http://maven.sk89q.com/artifactory/repo/"
     }
     maven {
         name "ProtocolLib"
@@ -64,7 +65,7 @@ repositories {
     }
     /*maven {
         name "Essentials"
-        url 'http://repo.ess3.net/content/groups/essentials'
+        url "http://repo.ess3.net/content/groups/essentials"
     }*/
 }
 dependencies {
@@ -79,6 +80,10 @@ dependencies {
     compile group: 'org.spigotmc',
             name: 'spigot-api',
             version: BUKKIT_API_VERSION
+    // ProtocolLib
+    compile group: 'com.comphenix.protocol',
+            name: 'ProtocolLib',
+            version: PROTOCOLLIB_VERSION
 //    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
 }
 
