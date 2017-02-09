@@ -89,6 +89,12 @@ dependencies {
 //    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
 }
 
+jar {
+   baseName = 'wesv'
+   from('.') {
+   include 'config|plugin.yml'
+}
+
 task copy(type: Copy) {
     from "${buildDir}/libs"
     into "$FINAL_DIR"
