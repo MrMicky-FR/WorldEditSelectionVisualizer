@@ -28,9 +28,12 @@ before_deploy:
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   provider: releases
+  overwrite: true
   api_key:
     secure: U2iBjSqvUHmnXuY4lPBU4B7vqwI91nG3rVOmYHzNTZRUyDidjtcgx+mGFe6il9sq/HM2WfpPugMex+ycMvenTDh0O/ooosC1Ru8zc3zjmQgkPPJ1Fb0TCizV51e5siN1K+ln6HNbEZzgwQitG6TDdnrg5dNCrFDOZ47u5Hk2NYWtB0r4O7r+ph+Pp4Mch2tAm/YZgKhNWDSDjGVNCkhZ/LdGVCmLRWGP+2o9VdTNka9BpqMfwSREyHUkiJJ0q6IsZznxlPWRNlarpbcYVsMghMn7wIPYv4HmWKotBOfhYNI0LyJWOS2DpNITYEe7MGPaXkjnCb3phz/1WXkov1Q3w+Y7780QGNVmlBoVBrvCY1LJ0/viAVVBJlqHl85zD9gInQc6iQrXQh+3IXwiPrC28ftBn518hig1OcQ+RRoQrcfWGDbeD4yeykaum9dGxHihXRDZ4Q2PObIjogH/+2KzmEZGZ2nJBv3zcUCqklyLZ/uNOqizppHfgrcC5b7eCu9nYTB0z//3ag6XMErnah9Y2gbdGbdstfuXNigX/2U+20ecQs5aCcrkGveU9bInTG99l7OTxj39uVvs1LBphTEpXL9P2+7Z7Rp+AEyVytJcqv4VQw+/JCjmmtHCn5Q848okfE+QSQU3z2jmY3UwHgkgQ++vdUTHGd1ng4wFUjL8BIw=
   file_glob: true
   file: "${RELEASE_PKG_FILE}"
+  skip_cleanup: true
   on:
     repo: martinambrus/WorldEdit-ServerSide-Visualizer
+    tags: true
