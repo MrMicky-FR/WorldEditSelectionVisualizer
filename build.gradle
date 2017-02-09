@@ -46,10 +46,26 @@ sourceSets {
 repositories {
     mavenCentral()
     mavenLocal()
-    maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"}
-    maven {url 'https://oss.sonatype.org/content/repositories/snapshots'}
-    maven {url 'http://maven.sk89q.com/artifactory/repo/'}
-    maven {url 'http://repo.ess3.net/content/groups/essentials' }
+    maven {
+        name "Spigot"
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+    maven {
+        name "BungeeCord"
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
+        name "WorldEdit"
+        url 'http://maven.sk89q.com/artifactory/repo/'
+    }
+    maven {
+        name "ProtocolLib"
+    	url "http://repo.dmulloy2.net/content/groups/public/"
+    }
+    /*maven {
+        name "Essentials"
+        url 'http://repo.ess3.net/content/groups/essentials'
+    }*/
 }
 dependencies {
 /*    testCompile group: 'junit',
