@@ -31,9 +31,11 @@ sourceSets {
             srcDir 'src/com/darkblade12/particleeffect'
             srcDir 'src/com/rojel/wesv'
         }
-        /*resources {
-            srcDirs = ['src/main/resources']
-        }*/
+        resources {
+            srcDir '.'
+            include '*.yml'
+            excluse '.*.yml'
+        }
     }
 /*    test {
         java {
@@ -91,8 +93,6 @@ dependencies {
 
 jar {
    baseName = 'wesv'
-   from('.') {
-   include 'config|plugin.yml'
 }
 
 task copy(type: Copy) {
