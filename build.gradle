@@ -25,7 +25,8 @@ buildDir = BUILD_DIR
 sourceSets {
     main {
         java {
-            srcDirs = ['src/com/darkblade12/particleeffect/', 'src/com/rojel/wesv/']
+            srcDir = 'src/com/darkblade12/particleeffect'
+            srcDir = 'src/com/rojel/wesv'
         }
         /*resources {
             srcDirs = ['src/main/resources']
