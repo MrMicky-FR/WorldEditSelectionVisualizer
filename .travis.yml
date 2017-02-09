@@ -36,4 +36,3 @@ deploy:
   skip_cleanup: true
   on:
     repo: martinambrus/WorldEdit-ServerSide-Visualizer
-    tags: true
