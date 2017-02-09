@@ -38,4 +38,4 @@ deploy:
   on:
     repo: martinambrus/WorldEdit-ServerSide-Visualizer
     branch: master
-    jdk: 1.7
+    jdk: oraclejdk7
