@@ -58,11 +58,11 @@ repositories {
         name "WorldEdit"
         url 'http://maven.sk89q.com/artifactory/repo/'
     }
-    /*maven {
+    maven {
         name "ProtocolLib"
     	url "http://repo.dmulloy2.net/content/groups/public/"
     }
-    maven {
+    /*maven {
         name "Essentials"
         url 'http://repo.ess3.net/content/groups/essentials'
     }*/
