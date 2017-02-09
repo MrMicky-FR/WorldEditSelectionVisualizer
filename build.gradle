@@ -34,7 +34,7 @@ sourceSets {
         resources {
             srcDir '.'
             include '*.yml'
-            excluse '.*.yml'
+            exclude '.*.yml'
         }
     }
 /*    test {
