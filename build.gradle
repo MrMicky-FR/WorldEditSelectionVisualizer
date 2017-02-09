@@ -16,8 +16,10 @@ ext {
     BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
     PROTOCOLLIB_VERSION = '4.2.0'
-    BUILD_DIR = "../../../Plugins/BuildDir/$group"
-    FINAL_DIR  = '../../../Plugins/'
+    //BUILD_DIR = "../../../Plugins/BuildDir/$group"
+    //FINAL_DIR  = '../../../Plugins/'
+    BUILD_DIR = "build/$group"
+    FINAL_DIR  = 'Plugins/'
     MAIN_CLASS = "${group}.WorldEditSelectionVisualizer".toString()
 }
 buildDir = BUILD_DIR
