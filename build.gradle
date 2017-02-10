@@ -1,5 +1,6 @@
 group 'com.rojel.wesv'
-version '1.0'
+// the following will be replaced by a real version from plugin.yml
+version '%PLUGIN_VERSION%'
 
 //import org.apache.tools.ant.filters.ReplaceTokens
 
