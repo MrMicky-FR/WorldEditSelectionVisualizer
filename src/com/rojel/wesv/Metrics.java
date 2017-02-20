@@ -450,7 +450,7 @@ public class Metrics {
                 graphJson = new StringBuilder();
                 graphJson.append('{');
 
-                for (final Plotter plotter : graph.getPlotters()) {
+                for (final AbstractPlotter plotter : graph.getPlotters()) {
                     appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
                 }
 
@@ -557,7 +557,7 @@ public class Metrics {
                     while (iter.hasNext()) {
                         final Graph graph = iter.next();
 
-                        for (final Plotter plotter : graph.getPlotters()) {
+                        for (final AbstractPlotter plotter : graph.getPlotters()) {
                             plotter.reset();
                         }
                     }
@@ -706,8 +706,7 @@ public class Metrics {
                 default:
                     if (chr < ' ') {
                         final String t = "000" + Integer.toHexString(chr);
-                        final int nonPrintableHexaOffset = 4;
-                        builder.append("\\u" + t.substring(t.length() - nonPrintableHexaOffset));
+                        builder.append("\\u" + t.substring(t.length() - 4));
                     } else {
                         builder.append(chr);
                     }
@@ -744,7 +743,7 @@ public class Metrics {
         /**
          * The set of plotters that are contained within this graph
          */
-        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
+        private final Set<AbstractPlotter> plotters = new LinkedHashSet<AbstractPlotter>();
 
         /***
          * Constructor. Will take this graph's name and save it.
@@ -769,7 +768,7 @@ public class Metrics {
          *
          * @param plotter the plotter to add to the graph
          */
-        public void addPlotter(final Plotter plotter) {
+        public void addPlotter(final AbstractPlotter plotter) {
             this.plotters.add(plotter);
         }
 
@@ -778,7 +777,7 @@ public class Metrics {
          *
          * @param plotter the plotter to remove from the graph
          */
-        public void removePlotter(final Plotter plotter) {
+        public void removePlotter(final AbstractPlotter plotter) {
             this.plotters.remove(plotter);
         }
 
@@ -787,7 +786,7 @@ public class Metrics {
          *
          * @return an unmodifiable {@link java.util.Set} of the plotter objects
          */
-        public Set<Plotter> getPlotters() {
+        public Set<AbstractPlotter> getPlotters() {
             return Collections.unmodifiableSet(this.plotters);
         }
 
@@ -809,14 +808,14 @@ public class Metrics {
         /**
          * Called when the server owner decides to opt-out of BukkitMetrics while the server is running.
          */
-        protected void onOptOut() {
+        private void onOptOut() {
         }
     }
 
     /**
      * Interface used to collect custom data for a plugin
      */
-    public abstract static class Plotter {
+    public abstract static class AbstractPlotter {
 
         /**
          * The plot's name
@@ -826,7 +825,7 @@ public class Metrics {
         /**
          * Construct a plotter with the default plot name
          */
-        public Plotter() {
+        public AbstractPlotter() {
             this("Default");
         }
 
@@ -835,7 +834,7 @@ public class Metrics {
          *
          * @param name the name of the plotter to use, which will show up on the website
          */
-        public Plotter(final String name) {
+        public AbstractPlotter(final String name) {
             this.name = name;
         }
 
@@ -870,11 +869,11 @@ public class Metrics {
 
         @Override
         public boolean equals(final Object object) {
-            if (!(object instanceof Plotter)) {
+            if (!(object instanceof AbstractPlotter)) {
                 return false;
             }
 
-            final Plotter plotter = (Plotter) object;
+            final AbstractPlotter plotter = (AbstractPlotter) object;
             return plotter.name.equals(this.name) && plotter.getValue() == this.getValue();
         }
     }
