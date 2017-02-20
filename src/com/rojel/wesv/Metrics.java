@@ -809,6 +809,7 @@ public class Metrics {
          * Called when the server owner decides to opt-out of BukkitMetrics while the server is running.
          */
         private void onOptOut() {
+            // extendable
         }
     }
 
