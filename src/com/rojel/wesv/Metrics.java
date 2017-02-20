@@ -615,6 +615,7 @@ public class Metrics {
                 try {
                     gzos.close();
                 } catch (final IOException ignore) {
+                    // no harm done if we cannot implicitly close the stream
                 }
             }
         }
@@ -631,7 +632,7 @@ public class Metrics {
         try {
             Class.forName("mineshafter.MineServer");
             return true;
-        } catch (final Exception e) {
+        } catch (final ClassNotFoundException ex) {
             return false;
         }
     }
@@ -639,9 +640,9 @@ public class Metrics {
     /**
      * Appends a json encoded key/value pair to the given string builder.
      *
-     * @param json
-     * @param key
-     * @param value
+     * @param json The JSON string to be sent out to the server.
+     * @param key Key to append to the JSON string.
+     * @param value Value for the key to be appended to the JSON string.
      * @throws UnsupportedEncodingException If the encoding of the data is invalid.
      */
     private static void appendJSONPair(final StringBuilder json, final String key, final String value)
@@ -674,8 +675,8 @@ public class Metrics {
     /**
      * Escape a string to create a valid JSON string
      *
-     * @param text
-     * @return
+     * @param text The actual JSON string to escape.
+     * @return Returns the original JSON string escaped for validation purposes.
      */
     private static String escapeJSON(final String text) {
         final StringBuilder builder = new StringBuilder();
@@ -705,7 +706,8 @@ public class Metrics {
                 default:
                     if (chr < ' ') {
                         final String t = "000" + Integer.toHexString(chr);
-                        builder.append("\\u" + t.substring(t.length() - 4));
+                        final int nonPrintableHexaOffset = 4;
+                        builder.append("\\u" + t.substring(t.length() - nonPrintableHexaOffset));
                     } else {
                         builder.append(chr);
                     }
@@ -731,7 +733,7 @@ public class Metrics {
     /**
      * Represents a custom graph on the website
      */
-    public static class Graph {
+    public static final class Graph {
 
         /**
          * The graph's name, alphanumeric and spaces only :) If it does not comply to the above when submitted, it is
@@ -744,6 +746,11 @@ public class Metrics {
          */
         private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
 
+        /***
+         * Constructor. Will take this graph's name and save it.
+         *
+         * @param name Name of the new graph.
+         */
         private Graph(final String name) {
             this.name = name;
         }
@@ -809,7 +816,7 @@ public class Metrics {
     /**
      * Interface used to collect custom data for a plugin
      */
-    public static abstract class Plotter {
+    public abstract static class Plotter {
 
         /**
          * The plot's name
