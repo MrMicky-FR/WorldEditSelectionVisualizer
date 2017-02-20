@@ -63,11 +63,11 @@ import org.bukkit.scheduler.BukkitTask;
  * An external, MCStats (Minecraft plugins statistics) communication class.
  * This class will set up and send out data about how this plugin is used
  * unless the administrator opts-out of sending plugin statistics.
- * 
- * Administrators can opt-out of sending statistical information by setting 
+ *
+ * Administrators can opt-out of sending statistical information by setting
  * the "opt-out" option to "false" in config.yml file in plugins/PluginMetrics
  * folder.
- * 
+ *
  * @author  Hidendra
  * @since   1.0a
  */
@@ -87,19 +87,19 @@ public class Metrics {
      * Interval of time to ping (in minutes).
      */
     private static final int PING_INTERVAL = 15;
-    
+
     /***
-     * The key from config used to determine whether an administrator 
+     * The key from config used to determine whether an administrator
      * is opting-out of sending statistical information.
      */
     private static final String optOutKey = "opt-out";
-    
+
     /***
      * The key from config used to read and write the unique server ID.
      * @see guid
      */
     private static final String guidKey = "guid";
-    
+
     /***
      * This is used when logging to the console for debugging and informational purposes.
      */
@@ -144,7 +144,7 @@ public class Metrics {
      * Lock for synchronization.
      */
     private final Object optOutLock = new Object();
-    
+
     /**
      * The scheduled task.
      */
@@ -152,8 +152,9 @@ public class Metrics {
 
     /***
      * Constructor.
-     * 
+     *
      * @param plugin - The actual plugin Metrics will be sent for.
+     * @throws IOException if there is a problem with reading the configuration YAML file.
      */
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
@@ -207,7 +208,7 @@ public class Metrics {
     /**
      * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend
      *
-     * @param The name of the graph
+     * @param graph The name of the graph
      */
     public void addGraph(final Graph graph) {
         if (graph == null) {
@@ -227,7 +228,7 @@ public class Metrics {
     public boolean start() {
         synchronized (this.optOutLock) {
             // Did we opt out?
-            if (isOptOut()) {
+            if (this.isOptOut()) {
                 return false;
             }
 
@@ -245,13 +246,13 @@ public class Metrics {
                 public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
-                        synchronized (optOutLock) {
+                        synchronized (Metrics.this.optOutLock) {
                             // Disable Task, if it is running and the server owner decided to opt-out
-                            if (isOptOut() && task != null) {
-                                task.cancel();
-                                task = null;
+                            if (Metrics.this.isOptOut() && Metrics.this.task != null) {
+                                Metrics.this.task.cancel();
+                                Metrics.this.task = null;
                                 // Tell all plotters to stop gathering information.
-                                for (final Graph graph : graphs) {
+                                for (final Graph graph : Metrics.this.graphs) {
                                     graph.onOptOut();
                                 }
                             }
@@ -260,13 +261,13 @@ public class Metrics {
                         // We use the inverse of firstPost because if it is the first time we are posting,
                         // it is not a interval ping, so it evaluates to FALSE
                         // Each time thereafter it will evaluate to TRUE, i.e PING!
-                        postPlugin(!firstPost);
+                        Metrics.this.postPlugin(!this.firstPost);
 
                         // After the first post we set firstPost to false
                         // Each post thereafter will be a ping
-                        firstPost = false;
-                    } catch (IOException e) {
-                        if (debug) {
+                        this.firstPost = false;
+                    } catch (final IOException e) {
+                        if (Metrics.this.debug) {
                             Bukkit.getLogger().log(Level.INFO, metricsName + " " + e.getMessage());
                         }
                     }
@@ -286,13 +287,13 @@ public class Metrics {
         synchronized (this.optOutLock) {
             try {
                 // Reload the metrics file
-            	this.configuration.load(this.getConfigFile());
-            } catch (IOException ex) {
+                this.configuration.load(this.getConfigFile());
+            } catch (final IOException ex) {
                 if (this.debug) {
                     Bukkit.getLogger().log(Level.INFO, Metrics.metricsName + " " + ex.getMessage());
                 }
                 return true;
-            } catch (InvalidConfigurationException ex) {
+            } catch (final InvalidConfigurationException ex) {
                 if (this.debug) {
                     Bukkit.getLogger().log(Level.INFO, Metrics.metricsName + " " + ex.getMessage());
                 }
@@ -304,39 +305,43 @@ public class Metrics {
 
     /**
      * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
+     *
+     * @throws IOException If there is a problem saving the configuration YAML file.
      */
     public void enable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (this.optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
-            if (isOptOut()) {
-            	this.configuration.set(Metrics.optOutKey, false);
-            	this.configuration.save(this.configurationFile);
+            if (this.isOptOut()) {
+                this.configuration.set(Metrics.optOutKey, false);
+                this.configuration.save(this.configurationFile);
             }
 
             // Enable Task, if it is not running
             if (this.task == null) {
-                start();
+                this.start();
             }
         }
     }
 
     /**
      * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
+     *
+     * @throws IOException If there is a problem saving the configuration YAML file.
      */
     public void disable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (this.optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
-            if (!isOptOut()) {
-            	this.configuration.set(Metrics.optOutKey, true);
-            	this.configuration.save(this.configurationFile);
+            if (!this.isOptOut()) {
+                this.configuration.set(Metrics.optOutKey, true);
+                this.configuration.save(this.configurationFile);
             }
 
             // Disable Task, if it is running
             if (this.task != null) {
-            	this.task.cancel();
-            	this.task = null;
+                this.task.cancel();
+                this.task = null;
             }
         }
     }
@@ -366,16 +371,13 @@ public class Metrics {
     private int getOnlinePlayers() {
         try {
             final Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
-            if(onlinePlayerMethod.getReturnType().equals(Collection.class)) {
-                return ((Collection<?>)onlinePlayerMethod.invoke(Bukkit.getServer())).size();
+            if (onlinePlayerMethod.getReturnType().equals(Collection.class)) {
+                return ((Collection<?>) onlinePlayerMethod.invoke(Bukkit.getServer())).size();
             } else {
-                return ((Player[])onlinePlayerMethod.invoke(Bukkit.getServer())).length;
+                return ((Player[]) onlinePlayerMethod.invoke(Bukkit.getServer())).length;
             }
-        } catch (
-        		NoSuchMethodException | SecurityException | 
-        		IllegalAccessException | IllegalArgumentException | 
-        		InvocationTargetException ex
-        ) {
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException ex) {
             if (this.debug) {
                 Bukkit.getLogger().log(Level.INFO, Metrics.metricsName + " " + ex.getMessage());
             }
@@ -386,28 +388,29 @@ public class Metrics {
 
     /**
      * Appends server software specific section to the JSON string to be sent.
-     * 
+     *
      * @param  json - The JSON string with all statistics to be sent out.
      * @return This method returns the same JSON StringBuilder that was passed to it.
+     * @throws IOException If there is a problem with encoding of the data.
      */
     private StringBuilder getServerData(final StringBuilder json) throws IOException {
-        boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
+        final boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         final String pluginVersion = this.plugin.getDescription().getVersion();
         final String serverVersion = Bukkit.getVersion();
         final int playersOnline = this.getOnlinePlayers();
-        
+
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
         appendJSONPair(json, "guid", this.guid);
         appendJSONPair(json, "plugin_version", pluginVersion);
         appendJSONPair(json, "server_version", serverVersion);
         appendJSONPair(json, "players_online", Integer.toString(playersOnline));
         appendJSONPair(json, "auth_mode", onlineMode ? "1" : "0");
-        
+
         // New data as of R6
         final String osname = System.getProperty("os.name");
         String osarch = System.getProperty("os.arch");
         final String osversion = System.getProperty("os.version");
-        final String java_version = System.getProperty("java.version");
+        final String javaVersion = System.getProperty("java.version");
         final int coreCount = Runtime.getRuntime().availableProcessors();
 
         // normalize os arch .. amd64 -> x86_64
@@ -419,20 +422,21 @@ public class Metrics {
         appendJSONPair(json, "osarch", osarch);
         appendJSONPair(json, "osversion", osversion);
         appendJSONPair(json, "cores", Integer.toString(coreCount));
-        appendJSONPair(json, "java_version", java_version);
-        
+        appendJSONPair(json, "java_version", javaVersion);
+
         return json;
     }
-    
+
     /**
      * Appends graphs section to the JSON string to be sent.
-     * 
+     *
      * @param  json - The JSON string with all statistics to be sent out.
      * @param  graphs - Data to be used for statistics going into graphs.
      * @return This method returns the same JSON StringBuilder that was passed to it.
+     * @throws IOException If there is a problem with encoding of the data.
      */
-    private StringBuilder getGraphsData(StringBuilder json, Set<Graph> graphs) throws IOException {
-    	synchronized (graphs) {
+    private StringBuilder getGraphsData(final StringBuilder json, final Set<Graph> graphs) throws IOException {
+        synchronized (graphs) {
             json.append(",\"graphs\":{");
 
             boolean firstGraph = true;
@@ -446,7 +450,7 @@ public class Metrics {
                 graphJson = new StringBuilder();
                 graphJson.append('{');
 
-                for (Plotter plotter : graph.getPlotters()) {
+                for (final Plotter plotter : graph.getPlotters()) {
                     appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
                 }
 
@@ -465,35 +469,36 @@ public class Metrics {
 
             json.append('}');
         }
-    	
-    	return json;
+
+        return json;
     }
-    
+
     /***
      * Sends the statistics in JSON format.
-     * 
+     *
      * @param  json - The actual statistics to send, in JSON format.
+     * @throws MalformedURLException If the URL to send data to is invalid.
+     * @throws IOException If there is a problem with opening the connection or writing the output buffer.
      */
     private void sendStats(final StringBuilder json) throws MalformedURLException, IOException {
-    	String pluginName = this.plugin.getDescription().getName();
+        final String pluginName = this.plugin.getDescription().getName();
 
-    	// Create the url
-        URL url = new URL(BASE_URL + String.format(REPORT_URL, urlEncode(pluginName)));
+        // Create the url
+        final URL url = new URL(BASE_URL + String.format(REPORT_URL, urlEncode(pluginName)));
 
         // Connect to the website
         URLConnection connection;
 
         // Mineshafter creates a socks proxy, so we can safely bypass it
         // It does not reroute POST requests so we need to go around it
-        if (isMineshafterPresent()) {
+        if (this.isMineshafterPresent()) {
             connection = url.openConnection(Proxy.NO_PROXY);
         } else {
             connection = url.openConnection();
         }
 
-
-        byte[] uncompressed = json.toString().getBytes();
-        byte[] compressed = gzip(json.toString());
+        final byte[] uncompressed = json.toString().getBytes();
+        final byte[] compressed = gzip(json.toString());
 
         // Headers
         connection.addRequestProperty("User-Agent", "MCStats/" + REVISION);
@@ -506,25 +511,28 @@ public class Metrics {
         connection.setDoOutput(true);
 
         if (this.debug) {
-            System.out.println(Metrics.metricsName + " Prepared request for " + pluginName + " uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
+            System.out.println(Metrics.metricsName + " Prepared request for " + pluginName + " uncompressed="
+                    + uncompressed.length + " compressed=" + compressed.length);
         }
 
         // Write the data
-        OutputStream os = connection.getOutputStream();
+        final OutputStream os = connection.getOutputStream();
         os.write(compressed);
         os.flush();
 
         this.readServerResponse(connection, os);
     }
-    
+
     /***
      * Reads what came back from the server after we sent the data.
-     * 
+     *
      * @param  connection - The connection to the server which was used to send the data.
      * @param  os         - Output stream that was used to write the data out.
+     * @throws IOException If there is a problem with closing any of the resources
+     *                     or the received data contains an error.
      */
-    private void readServerResponse(URLConnection connection, OutputStream os) throws IOException {
-    	// Now read the response
+    private void readServerResponse(final URLConnection connection, final OutputStream os) throws IOException {
+        // Now read the response
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String response = reader.readLine();
 
@@ -549,7 +557,7 @@ public class Metrics {
                     while (iter.hasNext()) {
                         final Graph graph = iter.next();
 
-                        for (Plotter plotter : graph.getPlotters()) {
+                        for (final Plotter plotter : graph.getPlotters()) {
                             plotter.reset();
                         }
                     }
@@ -557,13 +565,15 @@ public class Metrics {
             }
         }
     }
-    
+
     /**
      * Generic method that posts a plugin to the metrics website.
+     *
+     * @throws IOException If there is a problem with encoding of the data.
      */
     private void postPlugin(final boolean isPing) throws IOException {
         // Construct the post data
-        StringBuilder json = new StringBuilder(1024);
+        final StringBuilder json = new StringBuilder(1024);
         json.append('{');
 
         // add server software specific section
@@ -591,22 +601,22 @@ public class Metrics {
      * @param  input String input to apply GZIP compression to.
      * @return Returns a byte array for the compressed string.
      */
-    public static byte[] gzip(String input) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    public static byte[] gzip(final String input) {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         GZIPOutputStream gzos = null;
 
         try {
             gzos = new GZIPOutputStream(baos);
             gzos.write(input.getBytes("UTF-8"));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         } finally {
             if (gzos != null) {
-				try {
-				    gzos.close();
-				} catch (IOException ignore) {
-				}
-			}
+                try {
+                    gzos.close();
+                } catch (final IOException ignore) {
+                }
+            }
         }
 
         return baos.toByteArray();
@@ -621,7 +631,7 @@ public class Metrics {
         try {
             Class.forName("mineshafter.MineServer");
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
     }
@@ -632,9 +642,10 @@ public class Metrics {
      * @param json
      * @param key
      * @param value
-     * @throws UnsupportedEncodingException
+     * @throws UnsupportedEncodingException If the encoding of the data is invalid.
      */
-    private static void appendJSONPair(StringBuilder json, String key, String value) throws UnsupportedEncodingException {
+    private static void appendJSONPair(final StringBuilder json, final String key, final String value)
+            throws UnsupportedEncodingException {
         boolean isValueNumeric = false;
 
         try {
@@ -642,7 +653,7 @@ public class Metrics {
                 Double.parseDouble(value);
                 isValueNumeric = true;
             }
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             isValueNumeric = false;
         }
 
@@ -666,12 +677,12 @@ public class Metrics {
      * @param text
      * @return
      */
-    private static String escapeJSON(String text) {
-        StringBuilder builder = new StringBuilder();
+    private static String escapeJSON(final String text) {
+        final StringBuilder builder = new StringBuilder();
 
         builder.append('"');
         for (int index = 0; index < text.length(); index++) {
-            char chr = text.charAt(index);
+            final char chr = text.charAt(index);
 
             switch (chr) {
                 case '"':
@@ -693,7 +704,7 @@ public class Metrics {
                     break;
                 default:
                     if (chr < ' ') {
-                        String t = "000" + Integer.toHexString(chr);
+                        final String t = "000" + Integer.toHexString(chr);
                         builder.append("\\u" + t.substring(t.length() - 4));
                     } else {
                         builder.append(chr);
@@ -711,6 +722,7 @@ public class Metrics {
      *
      * @param text the text to encode
      * @return the encoded text, as UTF-8
+     * @throws UnsupportedEncodingException If the encoding of the data is invalid.
      */
     private static String urlEncode(final String text) throws UnsupportedEncodingException {
         return URLEncoder.encode(text, "UTF-8");
@@ -751,7 +763,7 @@ public class Metrics {
          * @param plotter the plotter to add to the graph
          */
         public void addPlotter(final Plotter plotter) {
-        	this.plotters.add(plotter);
+            this.plotters.add(plotter);
         }
 
         /**
@@ -760,7 +772,7 @@ public class Metrics {
          * @param plotter the plotter to remove from the graph
          */
         public void removePlotter(final Plotter plotter) {
-        	this.plotters.remove(plotter);
+            this.plotters.remove(plotter);
         }
 
         /**
@@ -846,7 +858,7 @@ public class Metrics {
 
         @Override
         public int hashCode() {
-            return getColumnName().hashCode();
+            return this.getColumnName().hashCode();
         }
 
         @Override
@@ -856,7 +868,7 @@ public class Metrics {
             }
 
             final Plotter plotter = (Plotter) object;
-            return plotter.name.equals(this.name) && plotter.getValue() == getValue();
+            return plotter.name.equals(this.name) && plotter.getValue() == this.getValue();
         }
     }
 }
