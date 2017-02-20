@@ -86,7 +86,7 @@ public class Metrics {
     /**
      * Interval of time to ping (in minutes).
      */
-    private static final int PING_INTERVAL = 15;
+    private static final int PING_INTERVAL = 15 * 1200;
 
     /***
      * The key from config used to determine whether an administrator
@@ -109,6 +109,11 @@ public class Metrics {
      * The current revision number.
      */
     private static final int REVISION = 7;
+
+    /***
+     * Last 4 characters from a hex conversion of string which will be removed.
+     */
+    private static final int HEX_ERASABLE_EXTRA = 4;
 
     /**
      * The plugin this metrics submits for.
@@ -206,9 +211,9 @@ public class Metrics {
     }
 
     /**
-     * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend
+     * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend.
      *
-     * @param graph The name of the graph
+     * @param graph The name of the graph.
      */
     public void addGraph(final Graph graph) {
         if (graph == null) {
@@ -272,7 +277,7 @@ public class Metrics {
                         }
                     }
                 }
-            }, 0, PING_INTERVAL * 1200);
+            }, 0, PING_INTERVAL);
 
             return true;
         }
@@ -414,7 +419,7 @@ public class Metrics {
         final int coreCount = Runtime.getRuntime().availableProcessors();
 
         // normalize os arch .. amd64 -> x86_64
-        if (osarch.equals("amd64")) {
+        if ("amd64".equals(osarch)) {
             osarch = "x86_64";
         }
 
@@ -442,12 +447,12 @@ public class Metrics {
             boolean firstGraph = true;
 
             final Iterator<Graph> iter = graphs.iterator();
-            StringBuilder graphJson = new StringBuilder();
+            final StringBuilder graphJson = new StringBuilder();
 
             while (iter.hasNext()) {
                 final Graph graph = iter.next();
 
-                graphJson = new StringBuilder();
+                graphJson.setLength(0);
                 graphJson.append('{');
 
                 for (final AbstractPlotter plotter : graph.getPlotters()) {
@@ -540,17 +545,17 @@ public class Metrics {
         os.close();
         reader.close();
 
-        if (response == null || response.startsWith("ERR") || response.startsWith("7")) {
+        if (response == null || response.startsWith("ERR") || response.charAt(0) == '7') {
             if (response == null) {
                 response = "null";
-            } else if (response.startsWith("7")) {
+            } else if (response.charAt(0) == '7') {
                 response = response.substring(response.startsWith("7,") ? 2 : 1);
             }
 
             throw new IOException(response);
         } else {
             // Is this the first update this hour?
-            if (response.equals("1") || response.contains("This is your first update this hour")) {
+            if ("1".equals(response) || response.contains("This is your first update this hour")) {
                 synchronized (this.graphs) {
                     final Iterator<Graph> iter = this.graphs.iterator();
 
@@ -569,6 +574,7 @@ public class Metrics {
     /**
      * Generic method that posts a plugin to the metrics website.
      *
+     * @param isPing True if this post is a PING request.
      * @throws IOException If there is a problem with encoding of the data.
      */
     private void postPlugin(final boolean isPing) throws IOException {
@@ -609,13 +615,14 @@ public class Metrics {
             gzos = new GZIPOutputStream(baos);
             gzos.write(input.getBytes("UTF-8"));
         } catch (final IOException e) {
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
         } finally {
             if (gzos != null) {
                 try {
                     gzos.close();
-                } catch (final IOException ignore) {
-                    // no harm done if we cannot implicitly close the stream
+                } catch (final IOException e) {
+                    Bukkit.getLogger().log(Level.INFO,
+                            "Could not close a GZip Stream. This error is not fatal only informational.", e);
                 }
             }
         }
@@ -650,7 +657,7 @@ public class Metrics {
         boolean isValueNumeric = false;
 
         try {
-            if (value.equals("0") || !value.endsWith("0")) {
+            if ("0".equals(value) || !value.endsWith("0")) {
                 Double.parseDouble(value);
                 isValueNumeric = true;
             }
@@ -706,7 +713,7 @@ public class Metrics {
                 default:
                     if (chr < ' ') {
                         final String t = "000" + Integer.toHexString(chr);
-                        builder.append("\\u" + t.substring(t.length() - 4));
+                        builder.append("\\u" + t.substring(t.length() - HEX_ERASABLE_EXTRA));
                     } else {
                         builder.append(chr);
                     }
@@ -861,6 +868,7 @@ public class Metrics {
          * Called after the website graphs have been updated
          */
         public void reset() {
+            // extendable
         }
 
         @Override
