@@ -34,7 +34,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -55,71 +57,105 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
 
+/**
+ * An external, MCStats (Minecraft plugins statistics) communication class.
+ * This class will set up and send out data about how this plugin is used
+ * unless the administrator opts-out of sending plugin statistics.
+ * 
+ * Administrators can opt-out of sending statistical information by setting 
+ * the "opt-out" option to "false" in config.yml file in plugins/PluginMetrics
+ * folder.
+ * 
+ * @author  Hidendra
+ * @since   1.0a
+ */
 public class Metrics {
 
     /**
-     * The current revision number
-     */
-    private final static int REVISION = 7;
-
-    /**
-     * The base url of the metrics domain
+     * The base url of the metrics domain.
      */
     private static final String BASE_URL = "http://report.mcstats.org";
 
     /**
-     * The url used to report a server's status
+     * The url used to report a server's status.
      */
     private static final String REPORT_URL = "/plugin/%s";
 
     /**
-     * Interval of time to ping (in minutes)
+     * Interval of time to ping (in minutes).
      */
     private static final int PING_INTERVAL = 15;
 
     /**
-     * The plugin this metrics submits for
+     * The current revision number.
+     */
+    private final static int REVISION = 7;
+
+    /**
+     * The plugin this metrics submits for.
      */
     private final Plugin plugin;
 
     /**
-     * All of the custom graphs to submit to metrics
+     * All of the custom graphs to submit to metrics.
      */
     private final Set<Graph> graphs = Collections.synchronizedSet(new HashSet<Graph>());
 
     /**
-     * The plugin configuration file
+     * The plugin configuration file.
      */
     private final YamlConfiguration configuration;
 
     /**
-     * The plugin configuration file
+     * The plugin configuration file.
      */
     private final File configurationFile;
 
     /**
-     * Unique server id
+     * Unique server id.
      */
     private final String guid;
 
     /**
-     * Debug mode
+     * Debug mode.
      */
     private final boolean debug;
 
     /**
-     * Lock for synchronization
+     * Lock for synchronization.
      */
     private final Object optOutLock = new Object();
 
-    /**
-     * The scheduled task
+    /***
+     * The key from config used to determine whether an administrator 
+     * is opting-out of sending statistical information.
      */
-    private volatile BukkitTask task = null;
+    private final String optOutKey = "opt-out";
+    
+    /***
+     * The key from config used to read and write the unique server ID.
+     * @see guid
+     */
+    private final String guidKey = "guid";
+    
+    /***
+     * This is used when logging to the console for debugging and informational purposes.
+     */
+    private final String metricsName = "Metrics";
+    
+    /**
+     * The scheduled task.
+     */
+    private volatile BukkitTask task;
 
+    /***
+     * Constructor.
+     * 
+     * @param  {org.bukkit.plugin.Plugin} plugin - The actual plugin Metrics will be sent for.
+     * @throws IOException
+     */
     public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
@@ -128,23 +164,23 @@ public class Metrics {
         this.plugin = plugin;
 
         // load the config
-        configurationFile = getConfigFile();
-        configuration = YamlConfiguration.loadConfiguration(configurationFile);
+        this.configurationFile = this.getConfigFile();
+        this.configuration = YamlConfiguration.loadConfiguration(this.configurationFile);
 
         // add some defaults
-        configuration.addDefault("opt-out", false);
-        configuration.addDefault("guid", UUID.randomUUID().toString());
-        configuration.addDefault("debug", false);
+        this.configuration.addDefault(this.optOutKey, false);
+        this.configuration.addDefault(this.guidKey, UUID.randomUUID().toString());
+        this.configuration.addDefault("debug", false);
 
         // Do we need to create the file?
-        if (configuration.get("guid", null) == null) {
-            configuration.options().header("http://mcstats.org").copyDefaults(true);
-            configuration.save(configurationFile);
+        if (this.configuration.get(this.guidKey, null) == null) {
+        	this.configuration.options().header("http://mcstats.org").copyDefaults(true);
+        	this.configuration.save(this.configurationFile);
         }
 
         // Load the guid then
-        guid = configuration.getString("guid");
-        debug = configuration.getBoolean("debug", false);
+        this.guid = this.configuration.getString(this.guidKey);
+        this.debug = this.configuration.getBoolean("debug", false);
     }
 
     /**
@@ -163,7 +199,7 @@ public class Metrics {
         final Graph graph = new Graph(name);
 
         // Now we can add our graph
-        graphs.add(graph);
+        this.graphs.add(graph);
 
         // and return back
         return graph;
@@ -179,7 +215,7 @@ public class Metrics {
             throw new IllegalArgumentException("Graph cannot be null");
         }
 
-        graphs.add(graph);
+        this.graphs.add(graph);
     }
 
     /**
@@ -190,24 +226,24 @@ public class Metrics {
      * @return True if statistics measuring is running, otherwise false.
      */
     public boolean start() {
-        synchronized (optOutLock) {
+        synchronized (this.optOutLock) {
             // Did we opt out?
             if (isOptOut()) {
                 return false;
             }
 
             // Is metrics already running?
-            if (task != null) {
+            if (this.task != null) {
                 return true;
             }
 
             // Begin hitting the server with glorious data
-            task = plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new Runnable() {
+            this.task = this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
                 @Override
-				public void run() {
+                public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
@@ -216,7 +252,7 @@ public class Metrics {
                                 task.cancel();
                                 task = null;
                                 // Tell all plotters to stop gathering information.
-                                for (Graph graph : graphs) {
+                                for (final Graph graph : graphs) {
                                     graph.onOptOut();
                                 }
                             }
@@ -232,7 +268,7 @@ public class Metrics {
                         firstPost = false;
                     } catch (IOException e) {
                         if (debug) {
-                            Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+                            Bukkit.getLogger().log(Level.INFO, metricsName + " " + e.getMessage());
                         }
                     }
                 }
@@ -248,22 +284,22 @@ public class Metrics {
      * @return true if metrics should be opted out of it
      */
     public boolean isOptOut() {
-        synchronized (optOutLock) {
+        synchronized (this.optOutLock) {
             try {
                 // Reload the metrics file
-                configuration.load(getConfigFile());
+            	this.configuration.load(this.getConfigFile());
             } catch (IOException ex) {
-                if (debug) {
-                    Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                if (this.debug) {
+                    Bukkit.getLogger().log(Level.INFO, this.metricsName + " " + ex.getMessage());
                 }
                 return true;
             } catch (InvalidConfigurationException ex) {
-                if (debug) {
-                    Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                if (this.debug) {
+                    Bukkit.getLogger().log(Level.INFO, this.metricsName + " " + ex.getMessage());
                 }
                 return true;
             }
-            return configuration.getBoolean("opt-out", false);
+            return this.configuration.getBoolean(this.optOutKey, false);
         }
     }
 
@@ -274,15 +310,15 @@ public class Metrics {
      */
     public void enable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
-        synchronized (optOutLock) {
+        synchronized (this.optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
             if (isOptOut()) {
-                configuration.set("opt-out", false);
-                configuration.save(configurationFile);
+            	this.configuration.set(this.optOutKey, false);
+            	this.configuration.save(this.configurationFile);
             }
 
             // Enable Task, if it is not running
-            if (task == null) {
+            if (this.task == null) {
                 start();
             }
         }
@@ -295,17 +331,17 @@ public class Metrics {
      */
     public void disable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
-        synchronized (optOutLock) {
+        synchronized (this.optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
             if (!isOptOut()) {
-                configuration.set("opt-out", true);
-                configuration.save(configurationFile);
+            	this.configuration.set(this.optOutKey, true);
+            	this.configuration.save(this.configurationFile);
             }
 
             // Disable Task, if it is running
-            if (task != null) {
-                task.cancel();
-                task = null;
+            if (this.task != null) {
+            	this.task.cancel();
+            	this.task = null;
             }
         }
     }
@@ -315,13 +351,13 @@ public class Metrics {
      *
      * @return the File object for the config file
      */
-    public File getConfigFile() {
+    private File getConfigFile() {
         // I believe the easiest way to get the base folder (e.g craftbukkit set via -P) for plugins to use
         // is to abuse the plugin object we already have
         // plugin.getDataFolder() => base/plugins/PluginA/
         // pluginsFolder => base/plugins/
         // The base is not necessarily relative to the startup directory.
-        File pluginsFolder = plugin.getDataFolder().getParentFile();
+        final File pluginsFolder = this.plugin.getDataFolder().getParentFile();
 
         // return => base/plugins/PluginMetrics/config.yml
         return new File(new File(pluginsFolder, "PluginMetrics"), "config.yml");
@@ -334,15 +370,15 @@ public class Metrics {
      */
     private int getOnlinePlayers() {
         try {
-            Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
+            final Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
             if(onlinePlayerMethod.getReturnType().equals(Collection.class)) {
                 return ((Collection<?>)onlinePlayerMethod.invoke(Bukkit.getServer())).size();
             } else {
                 return ((Player[])onlinePlayerMethod.invoke(Bukkit.getServer())).length;
             }
-        } catch (Exception ex) {
-            if (debug) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            if (this.debug) {
+                Bukkit.getLogger().log(Level.INFO, this.metricsName + " " + ex.getMessage());
             }
         }
 
@@ -350,29 +386,26 @@ public class Metrics {
     }
 
     /**
-     * Generic method that posts a plugin to the metrics website
+     * Appends server software specific section to the JSON string to be sent.
+     * 
+     * @param  StringBuilder json - The JSON string with all statistics to be sent out.
+     * @throws IOException 
+     * 
+     * @return This method returns the same JSON StringBuilder that was passed to it.
      */
-    private void postPlugin(final boolean isPing) throws IOException {
-        // Server software specific section
-        PluginDescriptionFile description = plugin.getDescription();
-        String pluginName = description.getName();
+    private StringBuilder getServerData(StringBuilder json) throws IOException {
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
-        String pluginVersion = description.getVersion();
+        String pluginVersion = this.plugin.getDescription().getVersion();
         String serverVersion = Bukkit.getVersion();
         int playersOnline = this.getOnlinePlayers();
-
-        // END server software specific section -- all code below does not use any code outside of this class / Java
-
-        // Construct the post data
-        StringBuilder json = new StringBuilder(1024);
-        json.append('{');
-
+        
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
-        appendJSONPair(json, "guid", guid);
+        appendJSONPair(json, "guid", this.guid);
         appendJSONPair(json, "plugin_version", pluginVersion);
         appendJSONPair(json, "server_version", serverVersion);
         appendJSONPair(json, "players_online", Integer.toString(playersOnline));
-
+        appendJSONPair(json, "auth_mode", onlineMode ? "1" : "0");
+        
         // New data as of R6
         String osname = System.getProperty("os.name");
         String osarch = System.getProperty("os.arch");
@@ -389,58 +422,74 @@ public class Metrics {
         appendJSONPair(json, "osarch", osarch);
         appendJSONPair(json, "osversion", osversion);
         appendJSONPair(json, "cores", Integer.toString(coreCount));
-        appendJSONPair(json, "auth_mode", onlineMode ? "1" : "0");
         appendJSONPair(json, "java_version", java_version);
+        
+        return json;
+    }
+    
+    /**
+     * Appends graphs section to the JSON string to be sent.
+     * 
+     * @param  StringBuilder json - The JSON string with all statistics to be sent out.
+     * @param  Set<Graph>    graphs - Data to be used for statistics going into graphs.
+     * @throws IOException
+     * 
+     * @return This method returns the same JSON StringBuilder that was passed to it.
+     */
+    private StringBuilder getGraphsData(StringBuilder json, Set<Graph> graphs) throws IOException {
+    	synchronized (graphs) {
+            json.append(',');
+            json.append('"');
+            json.append("graphs");
+            json.append('"');
+            json.append(':');
+            json.append('{');
 
-        // If we're pinging, append it
-        if (isPing) {
-            appendJSONPair(json, "ping", "1");
-        }
+            boolean firstGraph = true;
 
-        if (graphs.size() > 0) {
-            synchronized (graphs) {
-                json.append(',');
-                json.append('"');
-                json.append("graphs");
-                json.append('"');
-                json.append(':');
-                json.append('{');
+            final Iterator<Graph> iter = graphs.iterator();
 
-                boolean firstGraph = true;
+            while (iter.hasNext()) {
+                Graph graph = iter.next();
 
-                final Iterator<Graph> iter = graphs.iterator();
+                StringBuilder graphJson = new StringBuilder();
+                graphJson.append('{');
 
-                while (iter.hasNext()) {
-                    Graph graph = iter.next();
-
-                    StringBuilder graphJson = new StringBuilder();
-                    graphJson.append('{');
-
-                    for (Plotter plotter : graph.getPlotters()) {
-                        appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
-                    }
-
-                    graphJson.append('}');
-
-                    if (!firstGraph) {
-                        json.append(',');
-                    }
-
-                    json.append(escapeJSON(graph.getName()));
-                    json.append(':');
-                    json.append(graphJson);
-
-                    firstGraph = false;
+                for (Plotter plotter : graph.getPlotters()) {
+                    appendJSONPair(graphJson, plotter.getColumnName(), Integer.toString(plotter.getValue()));
                 }
 
-                json.append('}');
+                graphJson.append('}');
+
+                if (!firstGraph) {
+                    json.append(',');
+                }
+
+                json.append(escapeJSON(graph.getName()));
+                json.append(':');
+                json.append(graphJson);
+
+                firstGraph = false;
             }
+
+            json.append('}');
         }
+    	
+    	return json;
+    }
+    
+    /***
+     * Sends the statistics in JSON format.
+     * 
+     * @param  StringBuilder json - The actual statistics to send, in JSON format.
+     * @return This method does not return a value.
+     * @throws IOException 
+     * @throws MalformedURLException 
+     */
+    private void sendStats(StringBuilder json) throws MalformedURLException, IOException {
+    	String pluginName = this.plugin.getDescription().getName();
 
-        // close json
-        json.append('}');
-
-        // Create the url
+    	// Create the url
         URL url = new URL(BASE_URL + String.format(REPORT_URL, urlEncode(pluginName)));
 
         // Connect to the website
@@ -468,8 +517,8 @@ public class Metrics {
 
         connection.setDoOutput(true);
 
-        if (debug) {
-            System.out.println("[Metrics] Prepared request for " + pluginName + " uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
+        if (this.debug) {
+            System.out.println(this.metricsName + " Prepared request for " + pluginName + " uncompressed=" + uncompressed.length + " compressed=" + compressed.length);
         }
 
         // Write the data
@@ -477,7 +526,20 @@ public class Metrics {
         os.write(compressed);
         os.flush();
 
-        // Now read the response
+        this.readServerResponse(connection, os);
+    }
+    
+    /***
+     * Reads what came back from the server after we sent the data.
+     * 
+     * @param  URLConnection connection - The connection to the server which was used to send the data.
+     * @param  OutputStream  os         - Output stream that was used to write the data out.
+     * 
+     * @return This method does not return a value.
+     * @throws IOException 
+     */
+    private void readServerResponse(URLConnection connection, OutputStream os) throws IOException {
+    	// Now read the response
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String response = reader.readLine();
 
@@ -496,8 +558,8 @@ public class Metrics {
         } else {
             // Is this the first update this hour?
             if (response.equals("1") || response.contains("This is your first update this hour")) {
-                synchronized (graphs) {
-                    final Iterator<Graph> iter = graphs.iterator();
+                synchronized (this.graphs) {
+                    final Iterator<Graph> iter = this.graphs.iterator();
 
                     while (iter.hasNext()) {
                         final Graph graph = iter.next();
@@ -509,6 +571,33 @@ public class Metrics {
                 }
             }
         }
+    }
+    
+    /**
+     * Generic method that posts a plugin to the metrics website
+     */
+    private void postPlugin(final boolean isPing) throws IOException {
+        // Construct the post data
+        StringBuilder json = new StringBuilder(1024);
+        json.append('{');
+
+        // add server software specific section
+        this.getServerData(json);
+
+        // If we're pinging, append it
+        if (isPing) {
+            appendJSONPair(json, "ping", "1");
+        }
+
+        if (this.graphs.size() > 0) {
+            this.getGraphsData(json, this.graphs);
+        }
+
+        // close json
+        json.append('}');
+
+        // send the data
+        this.sendStats(json);
     }
 
     /**
@@ -668,7 +757,7 @@ public class Metrics {
          * @return the Graph's name
          */
         public String getName() {
-            return name;
+            return this.name;
         }
 
         /**
@@ -677,7 +766,7 @@ public class Metrics {
          * @param plotter the plotter to add to the graph
          */
         public void addPlotter(final Plotter plotter) {
-            plotters.add(plotter);
+        	this.plotters.add(plotter);
         }
 
         /**
@@ -686,7 +775,7 @@ public class Metrics {
          * @param plotter the plotter to remove from the graph
          */
         public void removePlotter(final Plotter plotter) {
-            plotters.remove(plotter);
+        	this.plotters.remove(plotter);
         }
 
         /**
@@ -695,12 +784,12 @@ public class Metrics {
          * @return an unmodifiable {@link java.util.Set} of the plotter objects
          */
         public Set<Plotter> getPlotters() {
-            return Collections.unmodifiableSet(plotters);
+            return Collections.unmodifiableSet(this.plotters);
         }
 
         @Override
         public int hashCode() {
-            return name.hashCode();
+            return this.name.hashCode();
         }
 
         @Override
@@ -710,7 +799,7 @@ public class Metrics {
             }
 
             final Graph graph = (Graph) object;
-            return graph.name.equals(name);
+            return graph.name.equals(this.name);
         }
 
         /**
@@ -761,7 +850,7 @@ public class Metrics {
          * @return the plotted point's column name
          */
         public String getColumnName() {
-            return name;
+            return this.name;
         }
 
         /**
@@ -782,7 +871,7 @@ public class Metrics {
             }
 
             final Plotter plotter = (Plotter) object;
-            return plotter.name.equals(name) && plotter.getValue() == getValue();
+            return plotter.name.equals(this.name) && plotter.getValue() == getValue();
         }
     }
 }
