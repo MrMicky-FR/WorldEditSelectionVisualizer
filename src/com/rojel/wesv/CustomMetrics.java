@@ -20,16 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CustomMetrics {
 
     /**
-     * The plugin for which these statistics are being collected.
-     */
-    private final JavaPlugin plugin;
-
-    /**
-     * Plugin configuration, determines what data to capture.
-     */
-    private final Configuration config;
-
-    /**
      * Configuration option for disabled metrics options.
      */
     private static final String disabledValue = "Disabled";
@@ -38,6 +28,16 @@ public class CustomMetrics {
      * Configuration option for enabled metrics options.
      */
     private static final String enabledValue = "Enabled";
+
+    /**
+     * The plugin for which these statistics are being collected.
+     */
+    private final JavaPlugin plugin;
+
+    /**
+     * Plugin configuration, determines what data to capture.
+     */
+    private final Configuration config;
 
     /**
      * Constructor. Saves references to plugin and its configuration.
