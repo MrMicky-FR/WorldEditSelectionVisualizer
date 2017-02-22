@@ -30,6 +30,16 @@ public class CustomMetrics {
     private final Configuration config;
 
     /**
+     * Configuration option for disabled metrics options.
+     */
+    private final String disabledValue = "Disabled";
+
+    /**
+     * Configuration option for enabled metrics options.
+     */
+    private final String enabledValue = "Enabled";
+
+    /**
      * Constructor. Saves references to plugin and its configuration.
      *
      * @param plugin - The plugin for which statistics are being collected.
@@ -47,13 +57,11 @@ public class CustomMetrics {
         try {
             // initialize metrics
             final Metrics metrics = new Metrics(this.plugin);
-            final String disabledValue = "Enabled";
-            final String enabledValue = "Enabled";
 
             // create graph for Horizontal lines for cuboid selections
             final Metrics.Graph cuboidGraph = metrics.createGraph("Horizontal lines for cuboid selections");
-            cuboidGraph
-                    .addPlotter(new Metrics.AbstractPlotter(this.config.cuboidLines() ? enabledValue : disabledValue) {
+            cuboidGraph.addPlotter(
+                    new Metrics.AbstractPlotter(this.config.cuboidLines() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
@@ -63,8 +71,8 @@ public class CustomMetrics {
 
             // create graph for Horizontal lines for polygon selections
             final Metrics.Graph polygonGraph = metrics.createGraph("Horizontal lines for polygon selections");
-            polygonGraph
-                    .addPlotter(new Metrics.AbstractPlotter(this.config.polygonLines() ? enabledValue : disabledValue) {
+            polygonGraph.addPlotter(
+                    new Metrics.AbstractPlotter(this.config.polygonLines() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
@@ -75,7 +83,7 @@ public class CustomMetrics {
             // create graph for Horizontal lines for cylinder selections
             final Metrics.Graph cylinderGraph = metrics.createGraph("Horizontal lines for cylinder selections");
             cylinderGraph.addPlotter(
-                    new Metrics.AbstractPlotter(this.config.cylinderLines() ? enabledValue : disabledValue) {
+                    new Metrics.AbstractPlotter(this.config.cylinderLines() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
@@ -86,7 +94,7 @@ public class CustomMetrics {
             // create graph for Horizontal lines for ellipsoid selections
             final Metrics.Graph ellipsoidGraph = metrics.createGraph("Horizontal lines for ellipsoid selections");
             ellipsoidGraph.addPlotter(
-                    new Metrics.AbstractPlotter(this.config.ellipsoidLines() ? enabledValue : disabledValue) {
+                    new Metrics.AbstractPlotter(this.config.ellipsoidLines() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
@@ -148,8 +156,8 @@ public class CustomMetrics {
 
             // create graph for Check for axe
             final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
-            checkForAxeGraph
-                    .addPlotter(new Metrics.AbstractPlotter(this.config.checkForAxe() ? enabledValue : disabledValue) {
+            checkForAxeGraph.addPlotter(
+                    new Metrics.AbstractPlotter(this.config.checkForAxe() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
@@ -160,7 +168,7 @@ public class CustomMetrics {
             // create graph for Use ProtocolLib
             final Metrics.Graph protocolLibGraph = metrics.createGraph("Use ProtocolLib");
             protocolLibGraph.addPlotter(
-                    new Metrics.AbstractPlotter(this.config.useProtocolLib() ? enabledValue : disabledValue) {
+                    new Metrics.AbstractPlotter(this.config.useProtocolLib() ? this.enabledValue : this.disabledValue) {
 
                         @Override
                         public int getValue() {
