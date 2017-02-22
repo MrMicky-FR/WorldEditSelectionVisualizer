@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -100,9 +99,7 @@ implements Listener {
 
     @EventHandler
     private void onWorldEditSelectionChange(WorldEditSelectionChangeEvent event) {
-    	System.out.println(Bukkit.getServer().getClass().getPackage().getName());
-    	System.out.println(Bukkit.getServer().getClass().getPackage().getName().substring(23));
-    	Player player = event.getPlayer();
+        Player player = event.getPlayer();
         if (this.isSelectionShown(player)) {
             this.showSelection(player);
         }
