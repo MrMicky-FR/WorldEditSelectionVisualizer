@@ -1,5 +1,6 @@
 group 'com.rojel.wesv'
 // the following will be replaced by a real version from plugin.yml
+// by using grep, awk and sed (Linux programs) when built via Travis CI
 version '%PLUGIN_VERSION%'
 
 //import org.apache.tools.ant.filters.ReplaceTokens
@@ -36,14 +37,14 @@ sourceSets {
             exclude '.*.yml'
         }
     }
-/*    test {
+    test {
         java {
             srcDirs = ['src/test/java']
         }
         resources {
             srcDirs = ['src/test/resources']
         }
-    }*/
+    }
 }
 
 
@@ -66,24 +67,75 @@ repositories {
         name "ProtocolLib"
     	url "http://repo.dmulloy2.net/content/groups/public/"
     }
+    maven {
+        name "MockitoBeta"
+        url "https://mvnrepository.com/artifact/org.mockito/mockito-all/"
+    }
 }
 dependencies {
-/*    testCompile group: 'junit',
-            name: 'junit',
-            version: '4.11'*/
-    /*WorldEdit*/
+    // JUnit
+    testCompile group: 'junit',
+                name: 'junit',
+                version: '4.12'
+    
+    // CGLib
+    testCompile group: 'cglib',
+                name: 'cglib-nodep',
+                version: '3.2.2'
+
+    // EasyMock
+    testCompile group: 'org.easymock',
+                name: 'easymock',
+                version: '3.4'
+
+    // hamcrest
+    testCompile group: 'org.hamcrest',
+                name: 'hamcrest-all',
+                version: '1.3'
+
+    // JavaAssist
+    testCompile group: 'org.javassist',
+                name: 'javassist',
+                version: '3.22.0-CR1'
+
+    // Mockito 2 Beta
+    testCompile group: 'org.mockito',
+                name: 'mockito-all',
+                version: '2.0.2-beta'
+
+    // Objenesis
+    testCompile group: 'org.objenesis',
+                name: 'objenesis',
+                version: '2.2'
+
+    // PowerMock-API-EasyMock
+    testCompile group: 'org.powermock',
+                name: 'powermock-api-easymock',
+                version: '1.6.5'
+
+    // PowerMock-Mockito-Release
+    testCompile group: 'org.powermock',
+                name: 'powermock-mockito-release-full',
+                version: '1.6.4'
+
+    // PowerMock-Mockito-JUnit
+    testCompile group: 'org.powermock',
+                name: 'powermock-module-junit4',
+                version: '1.6.4'
+
+    // WorldEdit
     compile group: 'com.sk89q.worldedit',
             name: 'worldedit-bukkit',
             version: WORLDEDIT_VERSION
-    //Spigot API
+    // Spigot API
     compile group: 'org.spigotmc',
             name: 'spigot-api',
             version: BUKKIT_API_VERSION
+
     // ProtocolLib
     compile group: 'com.comphenix.protocol',
             name: 'ProtocolLib',
             version: PROTOCOLLIB_VERSION
-//    compile 'net.ess3:Essentials:2.14-SNAPSHOT'
 }
 
 jar {
