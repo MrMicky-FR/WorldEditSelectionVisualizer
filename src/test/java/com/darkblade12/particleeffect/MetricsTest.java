@@ -52,19 +52,12 @@ public class MetricsTest {
     private Metrics met;
 
     /**
-     * A blank constructor here for coding style purposes.
-     */
-    public MetricsTest() {
-        // a blank constructor here for coding style purposes
-    }
-
-    @Before
-    /**
      * This method will setup the testing with mocks of the Server, Plugin and PluginManager
      * classes, as well as an instance of the Metric class.
      *
      * @throws Exception if any of the classes cannot be mocked or Metrics cannot be instantiated.
      */
+    @Before
     public void setUp() throws Exception {
         this.pluginMock = PowerMockito.mock(Plugin.class);
         this.pManagerMock = PowerMockito.mock(PluginManager.class);
@@ -78,19 +71,19 @@ public class MetricsTest {
         this.met = new Metrics(this.pluginMock);
     }
 
-    @Test
     /**
      * Test that we can add a new graph.
      */
+    @Test
     public void testCreateGraph() {
         assertThat("Test graph is not of class Metrics.Graph", this.met.createGraph("test"),
                 instanceOf(Metrics.Graph.class));
     }
 
-    @Test
     /**
      * Tests that the new graph retains its given name.
      */
+    @Test
     public void testGraphName() {
         final Metrics.Graph graph = this.met.createGraph("test2");
         assertThat("Test graph did not retain its given name.", graph.getName(), is("test2"));
