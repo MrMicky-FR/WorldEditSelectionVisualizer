@@ -622,7 +622,7 @@ public class Metrics {
                     gzos.close();
                 } catch (final IOException e) {
                     Bukkit.getLogger().log(Level.INFO,
-                            "Could not close a GZip Stream. This error is not fatal only informational.", e);
+                            "[Metrics] Could not close a GZip Stream. This error is not fatal only informational.", e);
                 }
             }
         }
