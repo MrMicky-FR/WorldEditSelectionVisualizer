@@ -31,29 +31,69 @@ import com.comphenix.protocol.metrics.Metrics;
 @PrepareForTest(Metrics.class)
 public class MetricsTest {
 
-    private Plugin        plugin;
-    private PluginManager pManager;
-    private Server        server;
-    private Metrics       met;
+    /**
+     * A mock of the Plugin class.
+     */
+    private Plugin pluginMock;
+
+    /**
+     * A mock of the PluginManager class.
+     */
+    private PluginManager pManagerMock;
+
+    /**
+     * A mock of the Server class.
+     */
+    private Server serverMock;
+
+    /**
+     * An actual instance of the Metrics class to be tested.
+     */
+    private Metrics met;
+
+    /**
+     * A blank constructor here for coding style purposes.
+     */
+    public MetricsTest() {
+        // a blank constructor here for coding style purposes
+    }
 
     @Before
+    /**
+     * This method will setup the testing with mocks of the Server, Plugin and PluginManager
+     * classes, as well as an instance of the Metric class.
+     *
+     * @throws Exception if any of the classes cannot be mocked or Metrics cannot be instantiated.
+     */
     public void setUp() throws Exception {
-        this.plugin = PowerMockito.mock(Plugin.class);
-        this.pManager = PowerMockito.mock(PluginManager.class);
+        this.pluginMock = PowerMockito.mock(Plugin.class);
+        this.pManagerMock = PowerMockito.mock(PluginManager.class);
 
-        this.server = PowerMockito.mock(Server.class);
-        PowerMockito.when(this.server.getPluginManager()).thenReturn(this.pManager);
+        this.serverMock = PowerMockito.mock(Server.class);
+        PowerMockito.when(this.serverMock.getPluginManager()).thenReturn(this.pManagerMock);
 
-        PowerMockito.when(this.plugin.getServer()).thenReturn(this.server);
-        PowerMockito.when(this.plugin.getDataFolder()).thenReturn(new File("plugin.yml"));
+        PowerMockito.when(this.pluginMock.getServer()).thenReturn(this.serverMock);
+        PowerMockito.when(this.pluginMock.getDataFolder()).thenReturn(new File("plugin.yml"));
 
-        this.met = new Metrics(this.plugin);
+        this.met = new Metrics(this.pluginMock);
     }
 
     @Test
-    public void testGraph() throws Exception {
+    /**
+     * Test that we can add a new graph.
+     */
+    public void testCreateGraph() {
         final Metrics.Graph graph = this.met.createGraph("test");
         assertThat(this.met.createGraph("test"), instanceOf(Metrics.Graph.class));
         assertThat(graph.getName(), is("test"));
+    }
+
+    @Test
+    /**
+     * Tests that the new graph retains its given name.
+     */
+    public void testGraphName() {
+        final Metrics.Graph graph = this.met.createGraph("test2");
+        assertThat(graph.getName(), is("test2"));
     }
 }
