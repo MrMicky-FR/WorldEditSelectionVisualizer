@@ -83,9 +83,8 @@ public class MetricsTest {
      * Test that we can add a new graph.
      */
     public void testCreateGraph() {
-        final Metrics.Graph graph = this.met.createGraph("test");
-        assertThat(this.met.createGraph("test"), instanceOf(Metrics.Graph.class));
-        assertThat(graph.getName(), is("test"));
+        assertThat("Test graph is not of class Metrics.Graph", this.met.createGraph("test"),
+                instanceOf(Metrics.Graph.class));
     }
 
     @Test
@@ -94,6 +93,6 @@ public class MetricsTest {
      */
     public void testGraphName() {
         final Metrics.Graph graph = this.met.createGraph("test2");
-        assertThat(graph.getName(), is("test2"));
+        assertThat("Test graph did not retain its given name.", graph.getName(), is("test2"));
     }
 }
