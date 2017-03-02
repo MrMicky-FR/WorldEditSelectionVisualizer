@@ -23,8 +23,7 @@ notifications:
     on_failure: always
     on_start: never
 after_success:
-  - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
-  - bash <(curl -s https://codecov.io/bash) -t 8f454491-044a-46a3-9bf1-450f11a4fc12
+  - bash <(curl -s https://codecov.io/bash)
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls build/com.rojel.wesv/libs/*.jar)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
