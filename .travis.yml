@@ -23,7 +23,7 @@ notifications:
     on_failure: always
     on_start: never
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - if [[ "$(java -version 2>&1 | sed 's/java version "\(.*\)\.\(.*\)\..*"/\1\2/; 1q')" == "17" ]]; then bash <(curl -s https://codecov.io/bash); fi
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls build/com.rojel.wesv/libs/*.jar)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
