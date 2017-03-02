@@ -172,6 +172,8 @@ test {
     }
 }
 
+check.dependsOn jacocoTestReport
+
 /*task templates(type: Copy) {
     delete "src/main/resources/config.yml"
     delete "src/main/resources/plugin.yml"
