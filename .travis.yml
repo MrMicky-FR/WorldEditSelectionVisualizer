@@ -1,7 +1,5 @@
 language: java
 sudo: false
-script:
-  - if [ -e ./gradlew ]; then ./gradlew test;else gradle test;fi
 before_install:
   - rm -f build/com.rojel.wesv/libs/*
   - "export TRAVIS_TAG=wesv-$(grep 'version: ' plugin.yml | awk '{print $2}')-build-$TRAVIS_BUILD_NUMBER"
