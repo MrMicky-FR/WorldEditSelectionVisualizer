@@ -1,7 +1,5 @@
 language: java
 sudo: false
-script:
-  - gradle test jacocoTestReport
 before_install:
   - rm -f build/com.rojel.wesv/libs/*
   - "export TRAVIS_TAG=wesv-$(grep 'version: ' plugin.yml | awk '{print $2}')-build-$TRAVIS_BUILD_NUMBER"
