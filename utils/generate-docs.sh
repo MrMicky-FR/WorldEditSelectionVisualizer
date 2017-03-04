@@ -2,9 +2,8 @@
 
 if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] ; then
 
-  cd ../
   echo -e "Generating javadoc...\n"
-  ./gradlew Javadoc
+  gradlew Javadoc
 
   echo -e "Publishing javadoc...\n"
 
@@ -13,7 +12,7 @@ if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "fal
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/WPIRoboticsProjects/grip gh-pages #> /dev/null
+  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/martinambrus/WorldEdit-ServerSide-Visualizer gh-pages > /dev/null
 
   cd gh-pages
   git rm -rf ./javadoc
