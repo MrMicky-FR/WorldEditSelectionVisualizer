@@ -76,11 +76,19 @@ public class MetricsTest extends TestCase {
         PowerMockito.when(this.pluginMock.getServer()).thenReturn(this.serverMock);
         PowerMockito.when(this.pluginMock.getDataFolder()).thenReturn(new File("plugin.yml"));
 
+        // remove the PluginMetrics/config.yml file, so our tests will test its creation as well
+        File f = new File("PluginMetrics/config.yml");
+        f.delete();
+
+        // also remove the folder
+        f = new File("PluginMetrics");
+        f.delete();
+
         this.met = new Metrics(this.pluginMock);
     }
 
     /**
-     * Test that we can add a new graph.
+     * Test that we can create a new graph.
      */
     @Test
     public void testCreateGraph() {
@@ -89,11 +97,27 @@ public class MetricsTest extends TestCase {
     }
 
     /**
+     * Test that we can add a new graph.
+     */
+    @Test
+    public void testAddGraph() {
+        this.met.addGraph(this.met.createGraph("test2"));
+    }
+
+    /**
      * Tests that the new graph retains its given name.
      */
     @Test
     public void testGraphName() {
-        final Metrics.Graph graph = this.met.createGraph("test2");
-        assertThat("Test graph did not retain its given name.", graph.getName(), is("test2"));
+        final Metrics.Graph graph = this.met.createGraph("test3");
+        assertThat("Test graph did not retain its given name.", graph.getName(), is("test3"));
+    }
+
+    /**
+     * Tests that the opt-out value is false by default.
+     */
+    @Test
+    public void testOptOutDefault() {
+        assertThat("Opt-Out value is not false by default.", this.met.isOptOut(), is(false));
     }
 }
