@@ -30,12 +30,12 @@ import junit.framework.TestCase;
 //@RunWith(PowerMockRunner.class)
 @PrepareForTest(Metrics.class)
 public class MetricsTest extends TestCase {
-    @Rule
     /**
      * In order to run this with PoweMockito and get some
      * code coverage reports from JaCoCo, we need to use
      * the following Rule instead of using the "RunWith" annotation.
      */
+    @Rule
     public PowerMockRule rule = new PowerMockRule();
 
     /**
