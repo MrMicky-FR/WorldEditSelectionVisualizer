@@ -30,7 +30,7 @@ This plugin can be downloaded from the [official page](https://www.spigotmc.org/
 
 **Documentation**
 
-A JavaDoc documentation is available at http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc, in case you'd feel the need to hack into the plugin :-P
+A [JavaDoc documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc) is available, in case you'd feel the need to hack into the plugin :-P
 
 **Screenshots**
 
