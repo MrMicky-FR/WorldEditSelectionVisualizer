@@ -17,8 +17,9 @@ if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "fal
 
   cd gh-pages
   git rm -rf ./javadoc
+  git rm -rf ./README.md
   cp -Rf $HOME/javadoc-latest ./javadoc
-  cp $HOME/README.md .
+  /bin/cp -f $HOME/README.md .
   git add -f .
   git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
   git push -fq origin gh-pages > /dev/null
