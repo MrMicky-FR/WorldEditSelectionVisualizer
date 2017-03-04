@@ -5,11 +5,11 @@ version '%PLUGIN_VERSION%'
 
 //import org.apache.tools.ant.filters.ReplaceTokens
 
-
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'jacoco'
+apply plugin: 'eclipse'
 
 //sourceCompatibility = 1.8
 
@@ -31,22 +31,16 @@ sourceSets {
             srcDir 'src/com/darkblade12/particleeffect'
             srcDir 'src/com/rojel/wesv'
         }
-        resources {
-            srcDir '.'
-            include '*.yml'
-            exclude '.*.yml'
-        }
     }
     test {
         java {
-            srcDirs = ['src/test/java']
+            srcDirs = ['src/test']
         }
         resources {
             srcDirs = ['src/test/resources']
         }
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -72,16 +66,12 @@ repositories {
         url "https://mvnrepository.com/artifact/org.mockito/mockito-all/"
     }
 }
+
 dependencies {
-    // JUnit
-    testCompile group: 'junit',
-                name: 'junit',
-                version: '4.12'
-    
     // CGLib
     testCompile group: 'cglib',
                 name: 'cglib-nodep',
-                version: '3.2.2'
+                version: '3.2.4'
 
     // EasyMock
     testCompile group: 'org.easymock',
@@ -98,6 +88,11 @@ dependencies {
                 name: 'javassist',
                 version: '3.22.0-CR1'
 
+    // JUnit
+    testCompile group: 'junit',
+                name: 'junit',
+                version: '4.12'
+
     // Mockito 2 Beta
     testCompile group: 'org.mockito',
                 name: 'mockito-all',
@@ -106,21 +101,36 @@ dependencies {
     // Objenesis
     testCompile group: 'org.objenesis',
                 name: 'objenesis',
-                version: '2.2'
+                version: '2.5.1'
 
     // PowerMock-API-EasyMock
     testCompile group: 'org.powermock',
                 name: 'powermock-api-easymock',
                 version: '1.6.5'
+    
+    // PowerMock-Module-JavaAgenr
+    testCompile group: 'org.powermock',
+                name: 'powermock-module-javaagent',
+                version: '1.6.5'
+
+    // PowerMock-Module-JUnit4
+    testCompile group: 'org.powermock',
+                name: 'powermock-module-junit4',
+                version: '1.6.5'
+
+    // PowerMock-Module-JUnit4-Rule-Agent
+    testCompile group: 'org.powermock',
+                name: 'powermock-module-junit4-rule-agent',
+                version: '1.6.5'
+
+    // PowerMock-Module-testng-agent
+    testCompile group: 'org.powermock',
+                name: 'powermock-module-testng-agent',
+                version: '1.6.5'
 
     // PowerMock-Mockito-Release
     testCompile group: 'org.powermock',
                 name: 'powermock-mockito-release-full',
-                version: '1.6.4'
-
-    // PowerMock-Mockito-JUnit
-    testCompile group: 'org.powermock',
-                name: 'powermock-module-junit4',
                 version: '1.6.4'
 
     // WorldEdit
@@ -150,25 +160,28 @@ task copy(type: Copy) {
 jacocoTestReport {
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled true
     }
 }
 
 test {
     testLogging {
         // set options for log level LIFECYCLE
-        //events "failed"
-        //exceptionFormat "short"
+        events "failed"
+        exceptionFormat "short"
 
         // set options for log level DEBUG
-        //debug {
+        debug {
             events "started", "skipped", "failed"
             exceptionFormat "full"
-        //}
+        }
 
         // remove standard output/error logging from --info builds
         // by assigning only 'failed' and 'skipped' events
-        //info.events = ["failed", "skipped"]
+        info.events = ["failed", "skipped"]
+    }
+    doFirst {
+      jvmArgs "-noverify"
     }
 }
 
