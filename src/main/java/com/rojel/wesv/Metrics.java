@@ -161,11 +161,11 @@ public class Metrics {
      *
      * <pre>
      * <strong>Example:</strong>
-     * <code>
+     * </pre>
+     * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * metrics.start();
-     * </code>
-     * </pre>
+     * ```
      *
      * @param plugin The actual plugin Metrics will be sent for.
      * @throws IOException if there is a problem with reading the configuration YAML file.
@@ -203,10 +203,10 @@ public class Metrics {
      *
      * <pre>
      * <strong>Example:</strong>
-     * <code>
-     * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
-     * </code>
      * </pre>
+     * ```java
+     * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
+     * ```
      *
      * @param  name The name of the graph
      * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
@@ -231,12 +231,12 @@ public class Metrics {
      *
      * <pre>
      * <strong>Example:</strong>
-     * <code>
+     * </pre>
+     * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
      * metrics.addGraph(checkForAxeGraph);
-     * </code>
-     * </pre>
+     * ```
      *
      * @param graph The name of the graph.
      */
@@ -255,11 +255,11 @@ public class Metrics {
      *
      * <pre>
      * <strong>Example:</strong>
-     * <code>
+     * </pre>
+     * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * metrics.start();
-     * </code>
-     * </pre>
+     * ```
      *
      * @return True if statistics measuring is running, otherwise false.
      */
@@ -321,13 +321,13 @@ public class Metrics {
      *
      * <pre>
      * <strong>Example:</strong>
-     * <code>
+     * </pre>
+     * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * if (!metrics.isOptOut) {
      *   metrics.start();
      * }
-     * </code>
-     * </pre>
+     * ```
      *
      * @return true if metrics should be opted out of it
      */
