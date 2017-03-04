@@ -101,7 +101,11 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testAddGraph() {
-        this.met.addGraph(this.met.createGraph("test2"));
+        try {
+            this.met.addGraph(this.met.createGraph("test2"));
+        } catch (final IllegalArgumentException ex) {
+            fail("Adding a new graph was unsuccessful.");
+        }
     }
 
     /**
