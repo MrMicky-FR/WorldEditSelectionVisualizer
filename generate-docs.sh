@@ -3,6 +3,7 @@
 if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] ; then
 
   echo -e "Generating javadoc...\n"
+  ls -al
   ./gradlew Javadoc
 
   echo -e "Publishing javadoc...\n"
