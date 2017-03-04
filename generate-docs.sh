@@ -8,6 +8,7 @@ if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "fal
   echo -e "Publishing javadoc...\n"
 
   cp -R build/com.rojel.wesv/docs/javadoc $HOME/javadoc-latest
+  /bin/cp -f README.md $HOME/README.md
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
