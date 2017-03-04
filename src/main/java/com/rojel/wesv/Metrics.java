@@ -159,6 +159,13 @@ public class Metrics {
     /***
      * Constructor.
      *
+     * <strong>Example:</strong>
+     * <pre>
+     * {@code
+     * new Metrics();
+     * }
+     * </pre>
+     *
      * @param plugin The actual plugin Metrics will be sent for.
      * @throws IOException if there is a problem with reading the configuration YAML file.
      */
