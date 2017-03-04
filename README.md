@@ -1,6 +1,9 @@
-[![Stories in Ready](https://badge.waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer.png?label=ready&title=Ready)](https://waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer)
-[![Build Status](https://travis-ci.org/martinambrus/WorldEdit-ServerSide-Visualizer.svg?branch=master)](https://travis-ci.org/martinambrus/WorldEdit-ServerSide-Visualizer) [![codecov](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer)
- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9e43833af9e1428580111b7ea25c8e32)](https://www.codacy.com/app/martinambrus/WorldEdit-ServerSide-Visualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=martinambrus/WorldEdit-ServerSide-Visualizer&amp;utm_campaign=Badge_Grade) [![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/WorldEdit-ServerSide-Visualizer/Lobby) [![Gratipay User](https://img.shields.io/gratipay/user/martinambrus.svg?style=plastic)]()
+[![Build Status](https://travis-ci.org/martinambrus/WorldEdit-ServerSide-Visualizer.svg?branch=master)](https://travis-ci.org/martinambrus/WorldEdit-ServerSide-Visualizer) 
+[![codecov](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9e43833af9e1428580111b7ea25c8e32)](https://www.codacy.com/app/martinambrus/WorldEdit-ServerSide-Visualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=martinambrus/WorldEdit-ServerSide-Visualizer&amp;utm_campaign=Badge_Grade) 
+[![Stories in Ready](https://badge.waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer.png?label=ready&title=Ready)](http://waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer)
+[![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/WorldEdit-ServerSide-Visualizer/Lobby) 
+[![Gratipay User](https://img.shields.io/gratipay/user/martinambrus.svg?style=plastic)]()
 
 **Overview**
 
