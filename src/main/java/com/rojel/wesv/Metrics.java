@@ -159,9 +159,6 @@ public class Metrics {
     /***
      * Constructor, creates an instance of Metrics.
      *
-     * <pre>
-     * <strong>Example:</strong>
-     * </pre>
      * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * metrics.start();
@@ -201,9 +198,6 @@ public class Metrics {
      * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics
      * website. Plotters can be added to the graph object returned.
      *
-     * <pre>
-     * <strong>Example:</strong>
-     * </pre>
      * ```java
      * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
      * ```
@@ -229,9 +223,6 @@ public class Metrics {
     /**
      * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend.
      *
-     * <pre>
-     * <strong>Example:</strong>
-     * </pre>
      * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
@@ -253,9 +244,6 @@ public class Metrics {
      * initial data to the metrics backend, and then after that it will post in increments of PING_INTERVAL * 1200
      * ticks.
      *
-     * <pre>
-     * <strong>Example:</strong>
-     * </pre>
      * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * metrics.start();
@@ -319,9 +307,6 @@ public class Metrics {
     /**
      * Has the server owner denied plugin metrics?
      *
-     * <pre>
-     * <strong>Example:</strong>
-     * </pre>
      * ```java
      * final Metrics metrics = new Metrics(yourPluginInstance);
      * if (!metrics.isOptOut) {
