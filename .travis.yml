@@ -41,6 +41,7 @@ deploy:
     repo: martinambrus/WorldEdit-ServerSide-Visualizer
     branch: master
     jdk: oraclejdk7
+    condition: "$TRAVIS_PULL_REQUEST = false"
 branches:
   only:
     - master
