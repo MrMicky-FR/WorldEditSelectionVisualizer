@@ -6,6 +6,8 @@ package com.rojel.wesv;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -19,6 +21,9 @@ import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
+
+import com.rojel.wesv.Metrics.AbstractPlotter;
+import com.rojel.wesv.Metrics.Graph;
 
 import junit.framework.TestCase;
 
@@ -59,6 +64,11 @@ public class MetricsTest extends TestCase {
     private Metrics met;
 
     /**
+     * A graph that we use to perform plotter operation tests on.
+     */
+    private Graph graph;
+
+    /**
      * This method will setup the testing with mocks of the Server, Plugin and PluginManager
      * classes, as well as an instance of the Metric class.
      *
@@ -85,6 +95,7 @@ public class MetricsTest extends TestCase {
         f.delete();
 
         this.met = new Metrics(this.pluginMock);
+        this.graph = this.met.createGraph("test");
     }
 
     /**
@@ -92,8 +103,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testCreateGraph() {
-        assertThat("Test graph is not of class Metrics.Graph", this.met.createGraph("test"),
-                instanceOf(Metrics.Graph.class));
+        assertThat("Test graph is not of class Metrics.Graph", this.graph, instanceOf(Metrics.Graph.class));
     }
 
     /**
@@ -102,7 +112,7 @@ public class MetricsTest extends TestCase {
     @Test
     public void testAddGraph() {
         try {
-            this.met.addGraph(this.met.createGraph("test2"));
+            this.met.addGraph(this.graph);
         } catch (final IllegalArgumentException ex) {
             fail("Adding a new graph was unsuccessful.");
         }
@@ -113,8 +123,50 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testGraphName() {
-        final Metrics.Graph graph = this.met.createGraph("test3");
-        assertThat("Test graph did not retain its given name.", graph.getName(), is("test3"));
+        assertThat("Test graph did not retain its given name.", this.graph.getName(), is("test"));
+    }
+
+    /**
+     * Tests that we can add a new plotter to a graph.
+     */
+    @Test
+    public void testAddPlotter() {
+        final AbstractPlotter aplotter = new Metrics.AbstractPlotter("Enabled") {
+
+            @Override
+            public int getValue() {
+                return 1;
+            }
+        };
+
+        this.graph.addPlotter(aplotter);
+        assertThat("Could not add a plotter to the new graph.", this.graph.getPlotters(), contains(aplotter));
+    }
+
+    /**
+     * Tests that we can remove a plotter from the graph.
+     */
+    @Test
+    public void testRemovePlotter() {
+        final AbstractPlotter aplotter = new Metrics.AbstractPlotter("Enabled") {
+
+            @Override
+            public int getValue() {
+                return 1;
+            }
+        };
+
+        this.graph.addPlotter(aplotter);
+        this.graph.removePlotter(aplotter);
+        assertThat("Could not remove a plotter from the graph.", this.graph.getPlotters(), not(contains(aplotter)));
+    }
+
+    /**
+     * Tests that we can compare graphs.
+     */
+    @Test
+    public void testCompareGraphs() {
+        assertThat("Same graphs are not equal.", this.graph.equals(this.graph), is(true));
     }
 
     /**
