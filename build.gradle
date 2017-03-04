@@ -33,6 +33,7 @@ sourceSets {
             srcDir '.'
             include '*.yml'
             exclude '.*.yml'
+            exclude 'codecov.yml'
         }
     }
     test {
