@@ -1,5 +1,5 @@
 /*
- * Decompiled with CFR 0_110.
+  * Decompiled with CFR 0_110.
  *
  * Could not load the following classes:
  *  org.bukkit.Material
@@ -8,34 +8,31 @@
  *  org.bukkit.entity.Player
  *  org.bukkit.plugin.java.JavaPlugin
  */
-package com.rojel.wesv;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.darkblade12.particleeffect.ParticleEffect;
-
 public class Configuration {
-    private JavaPlugin plugin;
+    private final JavaPlugin  plugin;
     private FileConfiguration config;
-    private ParticleEffect particle;
-    private double gapBetweenPoints;
-    private double verticalGap;
-    private int updateParticlesInterval;
-    private int updateSelectionInterval;
-    private boolean cuboidLines;
-    private boolean polygonLines;
-    private boolean cylinderLines;
-    private boolean ellipsoidLines;
-    private boolean checkForAxe;
-    private Material selectionItem;
-    private int particleDistance;
-    private boolean useProtocolLib;
-    private int maxSize;
+    private ParticleEffect    particle;
+    private double            gapBetweenPoints;
+    private double            verticalGap;
+    private int               updateParticlesInterval;
+    private int               updateSelectionInterval;
+    private boolean           cuboidLines;
+    private boolean           polygonLines;
+    private boolean           cylinderLines;
+    private boolean           ellipsoidLines;
+    private boolean           checkForAxe;
+    private Material          selectionItem;
+    private int               particleDistance;
+    private boolean           useProtocolLib;
+    private int               maxSize;
 
-    public Configuration(JavaPlugin plugin) {
+    public Configuration(final JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -59,8 +56,8 @@ public class Configuration {
         this.maxSize = this.config.getInt("maxSize");
     }
 
-    public ParticleEffect getParticleEffect(String name) {
-        ParticleEffect effect = ParticleEffect.fromName(name);
+    public ParticleEffect getParticleEffect(final String name) {
+        final ParticleEffect effect = ParticleEffect.fromName(name);
         if (effect != null) {
             return effect;
         }
@@ -68,8 +65,8 @@ public class Configuration {
         return ParticleEffect.REDSTONE;
     }
 
-    public Material getSelectionItem(String name) {
-        Material selectionItem = Material.getMaterial(name);
+    public Material getSelectionItem(final String name) {
+        final Material selectionItem = Material.getMaterial(name);
         if (selectionItem != null) {
             return selectionItem;
         }
@@ -77,13 +74,13 @@ public class Configuration {
         return Material.WOOD_AXE;
     }
 
-    public boolean isEnabled(Player player) {
-        String path = "players." + player.getUniqueId().toString();
+    public boolean isEnabled(final Player player) {
+        final String path = "players." + player.getUniqueId().toString();
         this.config.addDefault(path, true);
         return this.config.getBoolean(path);
     }
 
-    public void setEnabled(Player player, boolean enabled) {
+    public void setEnabled(final Player player, final boolean enabled) {
         this.config.set("players." + player.getUniqueId().toString(), enabled);
         this.plugin.saveConfig();
     }
@@ -144,4 +141,3 @@ public class Configuration {
         return this.maxSize;
     }
 }
-

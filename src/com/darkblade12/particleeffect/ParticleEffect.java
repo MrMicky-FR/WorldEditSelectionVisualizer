@@ -1,16 +1,4 @@
-/*
- * Decompiled with CFR 0_110.
- *
- * Could not load the following classes:
- *  org.bukkit.Bukkit
- *  org.bukkit.Location
- *  org.bukkit.Material
- *  org.bukkit.World
- *  org.bukkit.block.Block
- *  org.bukkit.entity.Player
- *  org.bukkit.util.Vector
- */
-package com.darkblade12.particleeffect;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

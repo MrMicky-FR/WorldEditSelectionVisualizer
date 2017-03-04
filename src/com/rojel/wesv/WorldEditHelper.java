@@ -25,7 +25,8 @@
  *  org.bukkit.scheduler.BukkitRunnable
  *  org.bukkit.scheduler.BukkitTask
  */
-package com.rojel.wesv;
+
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,52 +46,55 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 
-public class WorldEditHelper
-implements Listener {
-    private final JavaPlugin plugin;
-    private final WorldEditPlugin we;
+public class WorldEditHelper implements Listener {
+    private final JavaPlugin        plugin;
+    private final WorldEditPlugin   we;
     private final Map<UUID, Region> lastSelectedRegions;
 
     public WorldEditHelper(final JavaPlugin plugin, final Configuration config) {
         this.plugin = plugin;
-        this.we = (WorldEditPlugin)plugin.getServer().getPluginManager().getPlugin("WorldEdit");
+        this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
         this.lastSelectedRegions = new HashMap<UUID, Region>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        new BukkitRunnable(){
+        new BukkitRunnable() {
 
             @Override
-			public void run() {
-                for (Player player : plugin.getServer().getOnlinePlayers()) {
+            public void run() {
+                for (final Player player : plugin.getServer().getOnlinePlayers()) {
                     Region currentRegion;
-                    if (!config.isEnabled(player) || !player.hasPermission("wesv.use") || WorldEditHelper.this.compareRegion(WorldEditHelper.this.lastSelectedRegions.get(player.getUniqueId()), currentRegion = WorldEditHelper.this.getSelectedRegion(player))) {
-						continue;
-					}
+                    if (!config.isEnabled(player) || !player.hasPermission("wesv.use")
+                            || WorldEditHelper.this.compareRegion(
+                                    WorldEditHelper.this.lastSelectedRegions.get(player.getUniqueId()),
+                                    currentRegion = WorldEditHelper.this.getSelectedRegion(player))) {
+                        continue;
+                    }
                     if (currentRegion != null) {
                         WorldEditHelper.this.lastSelectedRegions.put(player.getUniqueId(), currentRegion.clone());
                     } else {
                         WorldEditHelper.this.lastSelectedRegions.remove(player.getUniqueId());
                     }
-                    plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
+                    plugin.getServer().getPluginManager()
+                            .callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
                 }
             }
         }.runTaskTimer(plugin, 0, config.updateSelectionInterval());
     }
 
-    public Region getSelectedRegion(Player player) {
+    public Region getSelectedRegion(final Player player) {
         RegionSelector selector;
-        LocalSession session = this.we.getWorldEdit().getSessionManager().findByName(player.getName());
-        if (session != null && session.getSelectionWorld() != null && (selector = session.getRegionSelector(session.getSelectionWorld())).isDefined()) {
+        final LocalSession session = this.we.getWorldEdit().getSessionManager().findByName(player.getName());
+        if (session != null && session.getSelectionWorld() != null
+                && (selector = session.getRegionSelector(session.getSelectionWorld())).isDefined()) {
             try {
                 return selector.getRegion();
-            }
-            catch (IncompleteRegionException e) {
+            } catch (final IncompleteRegionException e) {
                 this.plugin.getServer().getLogger().info("Region still incomplete.");
             }
         }
         return null;
     }
 
-    public boolean compareRegion(Region r1, Region r2) {
+    public boolean compareRegion(final Region r1, final Region r2) {
         boolean points;
         if (r1 == null && r2 == null) {
             return true;
@@ -101,21 +105,23 @@ implements Listener {
         if (r1 == null && r2 != null) {
             return false;
         }
-        points = r1.getMinimumPoint().equals(r2.getMinimumPoint()) && r1.getMaximumPoint().equals(r2.getMaximumPoint()) && r1.getCenter().equals(r2.getCenter());
-        boolean worlds = r1.getWorld() != null ? r1.getWorld().equals(r2.getWorld()) : r2.getWorld() == null;
-        boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight() && r1.getLength() == r2.getLength();
-        boolean type = r1.getClass().equals(r2.getClass());
+        points = r1.getMinimumPoint().equals(r2.getMinimumPoint()) && r1.getMaximumPoint().equals(r2.getMaximumPoint())
+                && r1.getCenter().equals(r2.getCenter());
+        final boolean worlds = r1.getWorld() != null ? r1.getWorld().equals(r2.getWorld()) : r2.getWorld() == null;
+        final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight()
+                && r1.getLength() == r2.getLength();
+        final boolean type = r1.getClass().equals(r2.getClass());
         boolean polyPoints = true;
         if (r1 instanceof Polygonal2DRegion && r2 instanceof Polygonal2DRegion) {
-            Polygonal2DRegion r1Poly = (Polygonal2DRegion)r1;
-            Polygonal2DRegion r2Poly = (Polygonal2DRegion)r2;
+            final Polygonal2DRegion r1Poly = (Polygonal2DRegion) r1;
+            final Polygonal2DRegion r2Poly = (Polygonal2DRegion) r2;
             if (r1Poly.getPoints().size() != r2Poly.getPoints().size()) {
                 polyPoints = false;
             } else {
                 for (int i = 0; i < r1Poly.getPoints().size(); ++i) {
                     if (r1Poly.getPoints().get(i).equals(r2Poly.getPoints().get(i))) {
-						continue;
-					}
+                        continue;
+                    }
                     polyPoints = false;
                 }
             }
@@ -124,9 +130,8 @@ implements Listener {
     }
 
     @EventHandler
-    private void onPlayerQuit(PlayerQuitEvent event) {
+    private void onPlayerQuit(final PlayerQuitEvent event) {
         this.lastSelectedRegions.remove(event.getPlayer().getUniqueId());
     }
 
 }
-

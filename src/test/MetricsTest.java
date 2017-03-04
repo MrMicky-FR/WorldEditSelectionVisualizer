@@ -2,8 +2,6 @@
  * Reflection utilities test to make sure WESV remains cross-version compatible.
  */
 
-package test.java.com.darkblade12.particleeffect;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,22 +12,24 @@ import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import com.comphenix.protocol.metrics.Metrics;
+import junit.framework.TestCase;
 
 /**
 * Tests for the Metrics class.
 * @author martinambrus
 *
 */
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
 @PrepareForTest(Metrics.class)
-public class MetricsTest {
+public class MetricsTest extends TestCase {
+    @Rule
+    public PowerMockRule rule = new PowerMockRule();
 
     /**
      * A mock of the Plugin class.
@@ -57,6 +57,7 @@ public class MetricsTest {
      *
      * @throws Exception if any of the classes cannot be mocked or Metrics cannot be instantiated.
      */
+    @Override
     @Before
     public void setUp() throws Exception {
         this.pluginMock = PowerMockito.mock(Plugin.class);

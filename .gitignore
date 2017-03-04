@@ -1,2 +1,7 @@
 /bin/
 /.gradle/
+/build/
+/gradle/
+/PluginMetrics/
+/gradlew
+/gradlew.bat
