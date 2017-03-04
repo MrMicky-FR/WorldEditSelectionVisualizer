@@ -157,13 +157,14 @@ public class Metrics {
     private volatile BukkitTask task;
 
     /***
-     * Constructor.
+     * Constructor, creates an instance of Metrics.
      *
-     * <strong>Example:</strong>
      * <pre>
-     * {@code
-     * new Metrics();
-     * }
+     * <strong>Example:</strong>
+     * <code>
+     * final Metrics metrics = new Metrics(yourPluginInstance);
+     * metrics.start();
+     * </code>
      * </pre>
      *
      * @param plugin The actual plugin Metrics will be sent for.
@@ -200,6 +201,13 @@ public class Metrics {
      * Construct and create a Graph that can be used to separate specific plotters to their own graphs on the metrics
      * website. Plotters can be added to the graph object returned.
      *
+     * <pre>
+     * <strong>Example:</strong>
+     * <code>
+     * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
+     * </code>
+     * </pre>
+     *
      * @param  name The name of the graph
      * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
      */
@@ -221,6 +229,15 @@ public class Metrics {
     /**
      * Add a Graph object to BukkitMetrics that represents data for the plugin that should be sent to the backend.
      *
+     * <pre>
+     * <strong>Example:</strong>
+     * <code>
+     * final Metrics metrics = new Metrics(yourPluginInstance);
+     * final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
+     * metrics.addGraph(checkForAxeGraph);
+     * </code>
+     * </pre>
+     *
      * @param graph The name of the graph.
      */
     public void addGraph(final Graph graph) {
@@ -235,6 +252,14 @@ public class Metrics {
      * Start measuring statistics. This will immediately create an async repeating task as the plugin and send the
      * initial data to the metrics backend, and then after that it will post in increments of PING_INTERVAL * 1200
      * ticks.
+     *
+     * <pre>
+     * <strong>Example:</strong>
+     * <code>
+     * final Metrics metrics = new Metrics(yourPluginInstance);
+     * metrics.start();
+     * </code>
+     * </pre>
      *
      * @return True if statistics measuring is running, otherwise false.
      */
@@ -293,6 +318,16 @@ public class Metrics {
 
     /**
      * Has the server owner denied plugin metrics?
+     *
+     * <pre>
+     * <strong>Example:</strong>
+     * <code>
+     * final Metrics metrics = new Metrics(yourPluginInstance);
+     * if (!metrics.isOptOut) {
+     *   metrics.start();
+     * }
+     * </code>
+     * </pre>
      *
      * @return true if metrics should be opted out of it
      */

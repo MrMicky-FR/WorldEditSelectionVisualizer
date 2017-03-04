@@ -15,11 +15,11 @@ if [ "$TRAVIS_JDK_VERSION" == "oraclejdk7" ] && [ "$TRAVIS_PULL_REQUEST" == "fal
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/martinambrus/WorldEdit-ServerSide-Visualizer gh-pages > /dev/null
 
   cd gh-pages
-  git rm -rf ./javadoc
-  cp -Rf $HOME/javadoc-latest ./javadoc
+  git rm -rf javadoc
+  cp -Rf $HOME/javadoc-latest javadoc
   git add -f .
   git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
-  git push -fq origin gh-pages #> /dev/null
+  git push -fq origin gh-pages > /dev/null
 
   echo -e "Published Javadoc to gh-pages.\n"
 
