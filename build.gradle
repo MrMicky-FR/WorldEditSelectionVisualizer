@@ -24,20 +24,15 @@ ext {
 }
 buildDir = BUILD_DIR
 
-
 sourceSets {
     main {
         java {
-            srcDir 'src/com/darkblade12/particleeffect'
-            srcDir 'src/com/rojel/wesv'
+            srcDir 'src/main/java'
         }
     }
     test {
         java {
             srcDirs = ['src/test']
-        }
-        resources {
-            srcDirs = ['src/test/resources']
         }
     }
 }

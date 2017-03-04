@@ -26,7 +26,7 @@
  * either expressed or implied, of anybody else.
  */
 
-
+package com.rojel.wesv;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

@@ -21,6 +21,8 @@
  *  org.bukkit.plugin.java.JavaPlugin
  */
 
+package com.rojel.wesv;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

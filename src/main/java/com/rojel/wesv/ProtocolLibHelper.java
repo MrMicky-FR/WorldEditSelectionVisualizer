@@ -19,6 +19,8 @@
  *  org.bukkit.plugin.java.JavaPlugin
  */
 
+package com.rojel.wesv;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.bukkit.Location;
@@ -30,6 +32,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.darkblade12.particleeffect.ParticleEffect;
 
 public class ProtocolLibHelper {
     private final JavaPlugin      plugin;

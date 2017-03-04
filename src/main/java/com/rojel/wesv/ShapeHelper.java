@@ -15,7 +15,7 @@
  *  org.bukkit.World
  */
 
-
+package com.rojel.wesv;
 
 import java.util.ArrayList;
 import java.util.Collection;

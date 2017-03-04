@@ -2,6 +2,8 @@
  * Reflection utilities test to make sure WESV remains cross-version compatible.
  */
 
+package com.rojel.wesv;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

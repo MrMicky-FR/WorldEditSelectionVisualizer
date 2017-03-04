@@ -6,7 +6,7 @@
  *  org.bukkit.plugin.java.JavaPlugin
  */
 
-
+package com.rojel.wesv;
 
 import java.io.IOException;
 

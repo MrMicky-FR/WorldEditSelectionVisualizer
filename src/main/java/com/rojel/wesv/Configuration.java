@@ -9,10 +9,14 @@
  *  org.bukkit.plugin.java.JavaPlugin
  */
 
+package com.rojel.wesv;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.darkblade12.particleeffect.ParticleEffect;
 
 public class Configuration {
     private final JavaPlugin  plugin;

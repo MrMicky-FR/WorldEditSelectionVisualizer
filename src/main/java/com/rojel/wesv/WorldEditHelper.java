@@ -26,7 +26,7 @@
  *  org.bukkit.scheduler.BukkitTask
  */
 
-
+package com.rojel.wesv;
 
 import java.util.HashMap;
 import java.util.Map;
