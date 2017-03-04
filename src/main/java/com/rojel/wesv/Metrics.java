@@ -159,7 +159,7 @@ public class Metrics {
     /***
      * Constructor.
      *
-     * @param plugin - The actual plugin Metrics will be sent for.
+     * @param plugin The actual plugin Metrics will be sent for.
      * @throws IOException if there is a problem with reading the configuration YAML file.
      */
     public Metrics(final Plugin plugin) throws IOException {
