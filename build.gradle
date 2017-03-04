@@ -29,6 +29,11 @@ sourceSets {
         java {
             srcDir 'src/main/java'
         }
+        resources {
+            srcDir '.'
+            include '*.yml'
+            exclude '.*.yml'
+        }
     }
     test {
         java {
