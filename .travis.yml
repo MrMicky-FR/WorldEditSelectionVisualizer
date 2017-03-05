@@ -27,6 +27,7 @@ after_success:
   - chmod +x generate-docs.sh
   - "./generate-docs.sh"
 before_deploy:
+  - rm -f build/com.rojel.wesv/libs/WorldEdit-ServerSide-Visualizer*
   - export RELEASE_PKG_FILE=$(ls build/com.rojel.wesv/libs/*.jar)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
