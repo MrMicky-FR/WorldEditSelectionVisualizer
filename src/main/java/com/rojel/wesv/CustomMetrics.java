@@ -89,8 +89,8 @@ public class CustomMetrics {
      */
     public void initMetrics() {
         try {
-            /**
-             * initialize MCStats metrics
+            /*
+             * Initialize MCStats metrics.
              */
             final Metrics metrics = new Metrics(this.plugin);
 
@@ -146,8 +146,8 @@ public class CustomMetrics {
             this.plugin.getLogger().info("Unable to submit statistics to MCStats :(");
         }
 
-        /**
-         * Initialize BStats metrics
+        /*
+         * Initialize BStats metrics.
          */
         final org.bstats.Metrics bmetrics = new org.bstats.Metrics(this.plugin);
 
