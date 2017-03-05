@@ -7,9 +7,9 @@ buildscript {
     }
 }
 
-/*plugins {
+plugins {
   id 'com.github.johnrengelman.shadow' version '1.2.4'
-}*/
+}
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -33,6 +33,7 @@ ext {
     BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
     PROTOCOLLIB_VERSION = '4.2.0'
+    BSTATS_VERSION = '1.1'
     BUILD_DIR = "build/$group"
     FINAL_DIR  = 'Plugins/'
     MAIN_CLASS = "${group}.WorldEditSelectionVisualizer".toString()
@@ -77,6 +78,10 @@ repositories {
     maven {
         name "MockitoBeta"
         url "https://mvnrepository.com/artifact/org.mockito/mockito-all/"
+    }
+    maven {
+        name "BStats"
+        url "http://repo.bstats.org/content/repositories/releases/"
     }
 }
 
@@ -160,6 +165,11 @@ dependencies {
             name: 'ProtocolLib',
             version: PROTOCOLLIB_VERSION
 
+    // BStats
+    compile group: 'org.bstats',
+            name: 'bstats-bukkit',
+            version: BSTATS_VERSION
+
     /*
     // Sentry remote logging
     compile group: 'com.getsentry.raven',
@@ -183,22 +193,24 @@ dependencies {
     */
 }
 
-jar {
+/*jar {
    baseName = 'wesv'
    includeEmptyDirs = false
-}
+}*/
 
-/*shadowJar {
+shadowJar {
     baseName = 'wesv'
     classifier = null
     dependencies {
+        include dependency('org.bstats:bstats-bukkit')
         //include dependency('com.getsentry.raven:raven')
         //include dependency('org.slf4j:slf4j-api')
         //include dependency('org.slf4j:slf4j-simple')
         //include dependency('com.fasterxml.jackson.core:jackson-core')
     }
+    relocate 'org.bstats', 'com.rojel.wesv.bstats'
     includeEmptyDirs = false
-}*/
+}
 
 task copy(type: Copy) {
     from "${buildDir}/libs"
@@ -234,7 +246,7 @@ test {
 }
 
 check.dependsOn jacocoTestReport
-//check.dependsOn shadowJar
+check.dependsOn shadowJar
 
 /*task templates(type: Copy) {
     delete "src/main/resources/config.yml"

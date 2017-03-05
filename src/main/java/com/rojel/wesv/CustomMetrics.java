@@ -52,156 +52,150 @@ public class CustomMetrics {
     }
 
     /**
+     * Adds a new Graph into MCStats metrics using the name and the value provided.
+     *
+     * @param metrics MCStats Metrics class instance.
+     * @param graphName Name of the graph to add.
+     * @param graphValue Value for the graph to send.
+     */
+    private void addMcstatsGraph(final Metrics metrics, final String graphName, final String graphValue) {
+        final Metrics.Graph cuboidGraph = metrics.createGraph(graphName);
+        cuboidGraph.addPlotter(new Metrics.AbstractPlotter(graphValue) {
+            @Override
+            public int getValue() {
+                return 1;
+            }
+        });
+    }
+
+    /**
+     * Adds a new Graph into BStats metrics using the name and the value provided.
+     *
+     * @param bmetrics BStats Metrics class instance.
+     * @param graphName Name of the graph to add.
+     * @param graphValue Value for the graph to send.
+     */
+    private void addBcstatsGraph(final org.bstats.Metrics bmetrics, final String graphName, final String graphValue) {
+        bmetrics.addCustomChart(new org.bstats.Metrics.SimplePie(graphName) {
+            @Override
+            public String getValue() {
+                return graphValue;
+            }
+        });
+    }
+
+    /**
      * Metrics initialization method.
      */
     public void initMetrics() {
         try {
-            // initialize metrics
+            /**
+             * initialize MCStats metrics
+             */
             final Metrics metrics = new Metrics(this.plugin);
 
             // create graph for Horizontal lines for cuboid selections
-            final Metrics.Graph cuboidGraph = metrics.createGraph("Horizontal lines for cuboid selections");
-            cuboidGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Horizontal lines for cuboid selections",
+                    this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for polygon selections
-            final Metrics.Graph polygonGraph = metrics.createGraph("Horizontal lines for polygon selections");
-            polygonGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Horizontal lines for polygon selections",
+                    this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for cylinder selections
-            final Metrics.Graph cylinderGraph = metrics.createGraph("Horizontal lines for cylinder selections");
-            cylinderGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Horizontal lines for cylinder selections",
+                    this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for ellipsoid selections
-            final Metrics.Graph ellipsoidGraph = metrics.createGraph("Horizontal lines for ellipsoid selections");
-            ellipsoidGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Horizontal lines for ellipsoid selections",
+                    this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Gap between points
-            final Metrics.Graph pointGapGraph = metrics.createGraph("Gap between points");
-            pointGapGraph.addPlotter(new Metrics.AbstractPlotter("" + this.config.gapBetweenPoints() + "") {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Gap between points", "" + this.config.gapBetweenPoints() + "");
 
             // create graph for Vertical gap between horizontal filling lines
-            final Metrics.Graph verticalGapGraph = metrics.createGraph("Vertical gap between horizontal filling lines");
-            verticalGapGraph.addPlotter(new Metrics.AbstractPlotter("" + this.config.verticalGap() + "") {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Vertical gap between horizontal filling lines",
+                    "" + this.config.verticalGap() + "");
 
             // create graph for Particle update interval
-            final Metrics.Graph particleIntervalGraph = metrics.createGraph("Particle update interval");
-            particleIntervalGraph
-                    .addPlotter(new Metrics.AbstractPlotter("" + this.config.updateParticlesInterval() + "") {
-
-                        @Override
-                        public int getValue() {
-                            return 1;
-                        }
-                    });
+            this.addMcstatsGraph(metrics, "Particle update interval", "" + this.config.updateParticlesInterval() + "");
 
             // create graph for Selection update interval
-            final Metrics.Graph selectionIntervalGraph = metrics.createGraph("Selection update interval");
-            selectionIntervalGraph
-                    .addPlotter(new Metrics.AbstractPlotter("" + this.config.updateSelectionInterval() + "") {
-
-                        @Override
-                        public int getValue() {
-                            return 1;
-                        }
-                    });
+            this.addMcstatsGraph(metrics, "Selection update interval", "" + this.config.updateSelectionInterval() + "");
 
             // create graph for Particle effect
-            final Metrics.Graph particleEffectGraph = metrics.createGraph("Particle effect");
-            particleEffectGraph.addPlotter(new Metrics.AbstractPlotter(this.config.particle().getName()) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Particle effect", this.config.particle().getName());
 
             // create graph for Check for axe
-            final Metrics.Graph checkForAxeGraph = metrics.createGraph("Check for axe");
-            checkForAxeGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Check for axe",
+                    this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Use ProtocolLib
-            final Metrics.Graph protocolLibGraph = metrics.createGraph("Use ProtocolLib");
-            protocolLibGraph.addPlotter(new Metrics.AbstractPlotter(
-                    this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue) {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Use ProtocolLib",
+                    this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Particle distance
-            final Metrics.Graph particleDistanceGraph = metrics.createGraph("Particle distance");
-            particleDistanceGraph.addPlotter(new Metrics.AbstractPlotter("" + this.config.particleDistance() + "") {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Particle distance", "" + this.config.particleDistance() + "");
 
             // create graph for Maximum selection size
-            final Metrics.Graph maxSizeGraph = metrics.createGraph("Maximum selection size");
-            maxSizeGraph.addPlotter(new Metrics.AbstractPlotter("" + this.config.maxSize() + "") {
-
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
+            this.addMcstatsGraph(metrics, "Maximum selection size", "" + this.config.maxSize() + "");
 
             // start collecting statistics
             metrics.start();
         } catch (final IOException e) {
             this.plugin.getLogger().info("Unable to submit statistics to MCStats :(");
         }
+
+        /**
+         * Initialize BStats metrics
+         */
+        final org.bstats.Metrics bmetrics = new org.bstats.Metrics(this.plugin);
+
+        // create graph for Horizontal lines for cuboid selections
+        this.addBcstatsGraph(bmetrics, "Horizontal lines for cuboid selections",
+                this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Horizontal lines for polygon selections
+        this.addBcstatsGraph(bmetrics, "Horizontal lines for polygon selections",
+                this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Horizontal lines for cylinder selections
+        this.addBcstatsGraph(bmetrics, "Horizontal lines for cylinder selections",
+                this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Horizontal lines for ellipsoid selections
+        this.addBcstatsGraph(bmetrics, "Horizontal lines for ellipsoid selections",
+                this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Gap between points
+        this.addBcstatsGraph(bmetrics, "Gap between points", "" + this.config.gapBetweenPoints() + "");
+
+        // create graph for Vertical gap between horizontal filling lines
+        this.addBcstatsGraph(bmetrics, "Vertical gap between horizontal filling lines",
+                "" + this.config.verticalGap() + "");
+
+        // create graph for Particle update interval
+        this.addBcstatsGraph(bmetrics, "Particle update interval", "" + this.config.updateParticlesInterval() + "");
+
+        // create graph for Selection update interval
+        this.addBcstatsGraph(bmetrics, "Selection update interval", "" + this.config.updateSelectionInterval() + "");
+
+        // create graph for Particle effect
+        this.addBcstatsGraph(bmetrics, "Particle effect", this.config.particle().getName());
+
+        // create graph for Check for axe
+        this.addBcstatsGraph(bmetrics, "Check for axe",
+                this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Use ProtocolLib
+        this.addBcstatsGraph(bmetrics, "Use ProtocolLib",
+                this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+
+        // create graph for Particle distance
+        this.addBcstatsGraph(bmetrics, "Particle distance", "" + this.config.particleDistance() + "");
+
+        // create graph for Maximum selection size
+        this.addBcstatsGraph(bmetrics, "Maximum selection size", "" + this.config.maxSize() + "");
     }
 
 }
