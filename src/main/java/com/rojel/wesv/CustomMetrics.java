@@ -72,11 +72,11 @@ public class CustomMetrics {
      * Adds a new Graph into BStats metrics using the name and the value provided.
      *
      * @param bmetrics BStats Metrics class instance.
-     * @param graphName Name of the graph to add.
+     * @param graphID ID of the graph to add.
      * @param graphValue Value for the graph to send.
      */
-    private void addBcstatsGraph(final org.bstats.Metrics bmetrics, final String graphName, final String graphValue) {
-        bmetrics.addCustomChart(new org.bstats.Metrics.SimplePie(graphName) {
+    private void addBcstatsGraph(final org.bstats.Metrics bmetrics, final String graphID, final String graphValue) {
+        bmetrics.addCustomChart(new org.bstats.Metrics.SimplePie(graphID) {
             @Override
             public String getValue() {
                 return graphValue;
@@ -152,50 +152,49 @@ public class CustomMetrics {
         final org.bstats.Metrics bmetrics = new org.bstats.Metrics(this.plugin);
 
         // create graph for Horizontal lines for cuboid selections
-        this.addBcstatsGraph(bmetrics, "Horizontal lines for cuboid selections",
+        this.addBcstatsGraph(bmetrics, "h_lines_cuboid",
                 this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for polygon selections
-        this.addBcstatsGraph(bmetrics, "Horizontal lines for polygon selections",
+        this.addBcstatsGraph(bmetrics, "h_lines_polygon",
                 this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for cylinder selections
-        this.addBcstatsGraph(bmetrics, "Horizontal lines for cylinder selections",
+        this.addBcstatsGraph(bmetrics, "h_lines_cylinder",
                 this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for ellipsoid selections
-        this.addBcstatsGraph(bmetrics, "Horizontal lines for ellipsoid selections",
+        this.addBcstatsGraph(bmetrics, "h_lines_ellipsoid",
                 this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Gap between points
-        this.addBcstatsGraph(bmetrics, "Gap between points", "" + this.config.gapBetweenPoints() + "");
+        this.addBcstatsGraph(bmetrics, "gap_between_points", "" + this.config.gapBetweenPoints() + "");
 
         // create graph for Vertical gap between horizontal filling lines
-        this.addBcstatsGraph(bmetrics, "Vertical gap between horizontal filling lines",
-                "" + this.config.verticalGap() + "");
+        this.addBcstatsGraph(bmetrics, "v_gap_horizontal_lines", "" + this.config.verticalGap() + "");
 
         // create graph for Particle update interval
-        this.addBcstatsGraph(bmetrics, "Particle update interval", "" + this.config.updateParticlesInterval() + "");
+        this.addBcstatsGraph(bmetrics, "particle_update_interval", "" + this.config.updateParticlesInterval() + "");
 
         // create graph for Selection update interval
-        this.addBcstatsGraph(bmetrics, "Selection update interval", "" + this.config.updateSelectionInterval() + "");
+        this.addBcstatsGraph(bmetrics, "selection_update_interval", "" + this.config.updateSelectionInterval() + "");
 
         // create graph for Particle effect
-        this.addBcstatsGraph(bmetrics, "Particle effect", this.config.particle().getName());
+        this.addBcstatsGraph(bmetrics, "particle_effect", this.config.particle().getName());
 
         // create graph for Check for axe
-        this.addBcstatsGraph(bmetrics, "Check for axe",
+        this.addBcstatsGraph(bmetrics, "check_for_axe",
                 this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Use ProtocolLib
-        this.addBcstatsGraph(bmetrics, "Use ProtocolLib",
+        this.addBcstatsGraph(bmetrics, "protocollib_use",
                 this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Particle distance
-        this.addBcstatsGraph(bmetrics, "Particle distance", "" + this.config.particleDistance() + "");
+        this.addBcstatsGraph(bmetrics, "particle_distance", "" + this.config.particleDistance() + "");
 
         // create graph for Maximum selection size
-        this.addBcstatsGraph(bmetrics, "Maximum selection size", "" + this.config.maxSize() + "");
+        this.addBcstatsGraph(bmetrics, "max_selection_size", "" + this.config.maxSize() + "");
     }
 
 }
