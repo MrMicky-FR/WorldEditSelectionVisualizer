@@ -14,9 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Plugin statistics that use Hidendra's MCStats Metrics library
- * and provides extended information for various online graphs.
+ * as well as Bastian's bStats Metrics library and provides extended
+ * information for various online graphs.
  *
  * @author Rojel
+ * @author martinambrus
  */
 public class CustomMetrics {
 
