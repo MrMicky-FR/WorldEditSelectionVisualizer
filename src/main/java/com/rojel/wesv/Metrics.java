@@ -61,7 +61,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * An external, MCStats (Minecraft plugins statistics) communication class.
+ * An external, MCStats + BStats (Minecraft plugins statistics) communication class.
  * This class will set up and send out data about how this plugin is used
  * unless the administrator opts-out of sending plugin statistics.
  *
@@ -70,6 +70,7 @@ import org.bukkit.scheduler.BukkitTask;
  * folder.
  *
  * @author  Hidendra
+ * @author  Martin Ambrus
  * @since   1.0a
  */
 public class Metrics {
