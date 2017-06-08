@@ -32,7 +32,7 @@ ext {
     println("$rootProject.name")
     BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
-    PROTOCOLLIB_VERSION = '4.2.0'
+    PROTOCOLLIB_VERSION = '4.2.1'
     BSTATS_VERSION = '1.1'
     BUILD_DIR = "build/$group"
     FINAL_DIR  = 'Plugins/'
@@ -73,7 +73,7 @@ repositories {
     }
     maven {
         name "ProtocolLib"
-    	url "http://repo.dmulloy2.net/content/groups/public/"
+    	url "http://repo.dmulloy2.net/nexus/repository/public/"
     }
     maven {
         name "MockitoBeta"
