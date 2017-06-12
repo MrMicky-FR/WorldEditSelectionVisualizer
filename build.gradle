@@ -217,6 +217,16 @@ task copy(type: Copy) {
     into "$FINAL_DIR"
 }
 
+task copyCompileDependencies(type: Copy) {
+   from configurations.compile
+   into 'dependencies'
+}
+
+task copyTestCompileDependencies(type: Copy) {
+   from configurations.testCompile
+   into 'dependencies'
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true
@@ -247,6 +257,8 @@ test {
 
 check.dependsOn jacocoTestReport
 check.dependsOn shadowJar
+assemble.dependsOn copyCompileDependencies
+assemble.dependsOn copyTestCompileDependencies
 
 /*task templates(type: Copy) {
     delete "src/main/resources/config.yml"
