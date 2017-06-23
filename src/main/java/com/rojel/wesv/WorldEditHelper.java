@@ -77,7 +77,7 @@ public class WorldEditHelper implements Listener {
                             .callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
                 }
             }
-        }.runTaskTimer(plugin, 0, config.updateSelectionInterval());
+        }.runTaskTimer(plugin, 0, config.getUpdateSelectionInterval());
     }
 
     public Region getSelectedRegion(final Player player) {

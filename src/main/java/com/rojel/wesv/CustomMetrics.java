@@ -98,49 +98,49 @@ public class CustomMetrics {
 
             // create graph for Horizontal lines for cuboid selections
             this.addMcstatsGraph(metrics, "Horizontal lines for cuboid selections",
-                    this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getCuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for polygon selections
             this.addMcstatsGraph(metrics, "Horizontal lines for polygon selections",
-                    this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getPolygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for cylinder selections
             this.addMcstatsGraph(metrics, "Horizontal lines for cylinder selections",
-                    this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getCylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for ellipsoid selections
             this.addMcstatsGraph(metrics, "Horizontal lines for ellipsoid selections",
-                    this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getEllipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Gap between points
-            this.addMcstatsGraph(metrics, "Gap between points", "" + this.config.gapBetweenPoints() + "");
+            this.addMcstatsGraph(metrics, "Gap between points", "" + this.config.getGapBetweenPoints() + "");
 
             // create graph for Vertical gap between horizontal filling lines
             this.addMcstatsGraph(metrics, "Vertical gap between horizontal filling lines",
-                    "" + this.config.verticalGap() + "");
+                    "" + this.config.getVerticalGap() + "");
 
             // create graph for Particle update interval
-            this.addMcstatsGraph(metrics, "Particle update interval", "" + this.config.updateParticlesInterval() + "");
+            this.addMcstatsGraph(metrics, "Particle update interval", "" + this.config.getUpdateParticlesInterval() + "");
 
             // create graph for Selection update interval
-            this.addMcstatsGraph(metrics, "Selection update interval", "" + this.config.updateSelectionInterval() + "");
+            this.addMcstatsGraph(metrics, "Selection update interval", "" + this.config.getUpdateSelectionInterval() + "");
 
             // create graph for Particle effect
-            this.addMcstatsGraph(metrics, "Particle effect", this.config.particle().getName());
+            this.addMcstatsGraph(metrics, "Particle effect", this.config.getParticle().getName());
 
             // create graph for Check for axe
             this.addMcstatsGraph(metrics, "Check for axe",
-                    this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getCheckForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Use ProtocolLib
             this.addMcstatsGraph(metrics, "Use ProtocolLib",
-                    this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.getUseProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Particle distance
-            this.addMcstatsGraph(metrics, "Particle distance", "" + this.config.particleDistance() + "");
+            this.addMcstatsGraph(metrics, "Particle distance", "" + this.config.getParticleDistance() + "");
 
             // create graph for Maximum selection size
-            this.addMcstatsGraph(metrics, "Maximum selection size", "" + this.config.maxSize() + "");
+            this.addMcstatsGraph(metrics, "Maximum selection size", "" + this.config.getMaxSize() + "");
 
             // start collecting statistics
             metrics.start();
@@ -155,48 +155,48 @@ public class CustomMetrics {
 
         // create graph for Horizontal lines for cuboid selections
         this.addBcstatsGraph(bmetrics, "h_lines_cuboid",
-                this.config.cuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getCuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for polygon selections
         this.addBcstatsGraph(bmetrics, "h_lines_polygon",
-                this.config.polygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getPolygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for cylinder selections
         this.addBcstatsGraph(bmetrics, "h_lines_cylinder",
-                this.config.cylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getCylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for ellipsoid selections
         this.addBcstatsGraph(bmetrics, "h_lines_ellipsoid",
-                this.config.ellipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getEllipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Gap between points
-        this.addBcstatsGraph(bmetrics, "gap_between_points", "" + this.config.gapBetweenPoints() + "");
+        this.addBcstatsGraph(bmetrics, "gap_between_points", "" + this.config.getGapBetweenPoints() + "");
 
         // create graph for Vertical gap between horizontal filling lines
-        this.addBcstatsGraph(bmetrics, "v_gap_horizontal_lines", "" + this.config.verticalGap() + "");
+        this.addBcstatsGraph(bmetrics, "v_gap_horizontal_lines", "" + this.config.getVerticalGap() + "");
 
         // create graph for Particle update interval
-        this.addBcstatsGraph(bmetrics, "particle_update_interval", "" + this.config.updateParticlesInterval() + "");
+        this.addBcstatsGraph(bmetrics, "particle_update_interval", "" + this.config.getUpdateParticlesInterval() + "");
 
         // create graph for Selection update interval
-        this.addBcstatsGraph(bmetrics, "selection_update_interval", "" + this.config.updateSelectionInterval() + "");
+        this.addBcstatsGraph(bmetrics, "selection_update_interval", "" + this.config.getUpdateSelectionInterval() + "");
 
         // create graph for Particle effect
-        this.addBcstatsGraph(bmetrics, "particle_effect", this.config.particle().getName());
+        this.addBcstatsGraph(bmetrics, "particle_effect", this.config.getParticle().getName());
 
         // create graph for Check for axe
         this.addBcstatsGraph(bmetrics, "check_for_axe",
-                this.config.checkForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getCheckForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Use ProtocolLib
         this.addBcstatsGraph(bmetrics, "protocollib_use",
-                this.config.useProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.getUseProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Particle distance
-        this.addBcstatsGraph(bmetrics, "particle_distance", "" + this.config.particleDistance() + "");
+        this.addBcstatsGraph(bmetrics, "particle_distance", "" + this.config.getParticleDistance() + "");
 
         // create graph for Maximum selection size
-        this.addBcstatsGraph(bmetrics, "max_selection_size", "" + this.config.maxSize() + "");
+        this.addBcstatsGraph(bmetrics, "max_selection_size", "" + this.config.getMaxSize() + "");
     }
 
 }

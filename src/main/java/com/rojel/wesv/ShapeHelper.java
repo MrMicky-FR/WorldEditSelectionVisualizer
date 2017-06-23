@@ -62,11 +62,11 @@ public class ShapeHelper {
                     vectors.addAll(this.plotLine(p1, p2));
                     vectors.addAll(this.plotLine(p3, p4));
                     vectors.addAll(this.plotLine(p1, p3));
-                    if (!this.config.cuboidLines()) {
+                    if (!this.config.getCuboidLines()) {
                         continue;
                     }
-                    for (double offset = this.config.verticalGap(); offset < height; offset += this.config
-                            .verticalGap()) {
+                    for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
+                            .getVerticalGap()) {
                         final Vector p5 = p1.add(0.0, offset, 0.0);
                         final Vector p6 = p2.add(0.0, offset, 0.0);
                         vectors.addAll(this.plotLine(p5, p6));
@@ -87,11 +87,11 @@ public class ShapeHelper {
                     vectors.addAll(this.plotLine(p1, p2));
                     vectors.addAll(this.plotLine(p3, p4));
                     vectors.addAll(this.plotLine(p1, p3));
-                    if (!this.config.polygonLines()) {
+                    if (!this.config.getPolygonLines()) {
                         continue;
                     }
-                    for (double offset = this.config.verticalGap(); offset < height; offset += this.config
-                            .verticalGap()) {
+                    for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
+                            .getVerticalGap()) {
                         final Vector p5 = p1.add(0.0, offset, 0.0);
                         final Vector p6 = p2.add(0.0, offset, 0.0);
                         vectors.addAll(this.plotLine(p5, p6));
@@ -116,9 +116,9 @@ public class ShapeHelper {
                 vectors.addAll(this.plotLine(p2, p2.add(0, height, 0)));
                 vectors.addAll(this.plotLine(p3, p3.add(0, height, 0)));
                 vectors.addAll(this.plotLine(p4, p4.add(0, height, 0)));
-                if (this.config.cylinderLines()) {
-                    for (double offset = this.config.verticalGap(); offset < height; offset += this.config
-                            .verticalGap()) {
+                if (this.config.getCylinderLines()) {
+                    for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
+                            .getVerticalGap()) {
                         for (final Vector vec2 : bottomCorners) {
                             vectors.add(vec2.add(0.0, offset, 0.0));
                         }
@@ -132,9 +132,9 @@ public class ShapeHelper {
                 vectors.addAll(this.plotEllipse(center, new Vector(0.0, ellRadius.getY(), ellRadius.getZ())));
                 vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), 0.0, ellRadius.getZ())));
                 vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), ellRadius.getY(), 0.0)));
-                if (this.config.ellipsoidLines()) {
-                    for (double offset = this.config.verticalGap(); offset < ellRadius.getY(); offset += this.config
-                            .verticalGap()) {
+                if (this.config.getEllipsoidLines()) {
+                    for (double offset = this.config.getVerticalGap(); offset < ellRadius.getY(); offset += this.config
+                            .getVerticalGap()) {
                         final Vector center1 = new Vector(center.getX(), center.getY() - offset, center.getZ());
                         final Vector center2 = new Vector(center.getX(), center.getY() + offset, center.getZ());
                         final double difference = Math.abs(center1.getY() - center.getY());
@@ -159,7 +159,7 @@ public class ShapeHelper {
 
     private List<Vector> plotLine(final Vector p1, final Vector p2) {
         final ArrayList<Vector> vectors = new ArrayList<Vector>();
-        final int points = (int) (p1.distance(p2) / this.config.gapBetweenPoints()) + 1;
+        final int points = (int) (p1.distance(p2) / this.config.getGapBetweenPoints()) + 1;
         final double length = p1.distance(p2);
         final double gap = length / (points - 1);
         final Vector gapVector = p2.subtract(p1).normalize().multiply(gap);
@@ -174,7 +174,7 @@ public class ShapeHelper {
         final ArrayList<Vector> vectors = new ArrayList<Vector>();
         final double biggestR = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
         final double circleCircumference = 2.0 * biggestR * 3.141592653589793;
-        final double deltaTheta = this.config.gapBetweenPoints() / circleCircumference;
+        final double deltaTheta = this.config.getGapBetweenPoints() / circleCircumference;
         for (double i = 0.0; i < 1.0; i += deltaTheta) {
             double x = center.getX();
             double y = center.getY();

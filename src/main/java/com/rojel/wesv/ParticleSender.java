@@ -59,7 +59,7 @@ public class ParticleSender implements Listener {
 
             @Override
             public void run() {
-                int particleDistance = ParticleSender.this.config.particleDistance();
+                int particleDistance = ParticleSender.this.config.getParticleDistance();
                 if (particleDistance > 16 && !ParticleSender.this.protocolLibHelper.canUseProtocolLib()) {
                     particleDistance = 16;
                 }
@@ -74,11 +74,11 @@ public class ParticleSender implements Listener {
                             ParticleSender.this.protocolLibHelper.sendParticle(player, loc);
                             continue;
                         }
-                        ParticleSender.this.config.particle().display(0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
+                        ParticleSender.this.config.getParticle().display(0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
                     }
                 }
             }
-        }.runTaskTimer(this.plugin, 0, this.config.updateParticlesInterval());
+        }.runTaskTimer(this.plugin, 0, this.config.getUpdateParticlesInterval());
     }
 
     @EventHandler

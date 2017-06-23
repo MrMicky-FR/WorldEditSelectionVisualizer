@@ -61,11 +61,11 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
         this.particleSender = new ParticleSender(this, this.config, this.protocolLibHelper);
         new CustomMetrics(this, this.config).initMetrics();
         this.getServer().getPluginManager().registerEvents(this, this);
-        if (this.config.useProtocolLib() && !this.protocolLibHelper.isProtocolLibInstalled()) {
+        if (this.config.getUseProtocolLib() && !this.protocolLibHelper.isProtocolLibInstalled()) {
             this.getLogger().info(
                     "ProtocolLib is enabled in the config but not installed. You need to install ProtocolLib if you want to use certain features.");
         }
-        if (this.config.particleDistance() > 16 && !this.protocolLibHelper.canUseProtocolLib()) {
+        if (this.config.getParticleDistance() > 16 && !this.protocolLibHelper.canUseProtocolLib()) {
             this.getLogger().info(
                     "Particle distances > 16 only work with ProtocolLib. Set \"useProtocolLib\" in the config to \"true\" and/or install ProtocolLib.");
         }
@@ -110,9 +110,9 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     @EventHandler
     private void onItemChange(final PlayerItemHeldEvent event) {
         final Player player = event.getPlayer();
-        if (this.config.checkForAxe() && this.config.isEnabled(player)) {
+        if (this.config.getCheckForAxe() && this.config.isEnabled(player)) {
             final ItemStack item = player.getInventory().getItem(event.getNewSlot());
-            if (item != null && item.getType() == this.config.selectionItem()) {
+            if (item != null && item.getType() == this.config.getSelectionItem()) {
                 this.showSelection(player);
             } else {
                 this.hideSelection(player);
@@ -129,7 +129,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     public boolean holdsSelectionItem(final Player player) {
         @SuppressWarnings("deprecation")
         final ItemStack item = player.getItemInHand();
-        return item != null && item.getType() == this.config.selectionItem();
+        return item != null && item.getType() == this.config.getSelectionItem();
     }
 
     public boolean isSelectionShown(final Player player) {
@@ -139,7 +139,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
 
     public boolean shouldShowSelection(final Player player) {
         return this.config.isEnabled(player)
-                && (!this.config.checkForAxe() || this.config.checkForAxe() && this.holdsSelectionItem(player));
+                && (!this.config.getCheckForAxe() || this.config.getCheckForAxe() && this.holdsSelectionItem(player));
     }
 
     public void showSelection(final Player player) {
@@ -147,12 +147,12 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
             return;
         }
         final Region region = this.worldEditHelper.getSelectedRegion(player);
-        if (region != null && region.getArea() > this.config.maxSize()) {
+        if (region != null && region.getArea() > this.config.getMaxSize()) {
             this.particleSender.setParticlesForPlayer(player, null);
             final UUID uniqueId = player.getUniqueId();
             if (this.lastSelectionTooLarge.containsKey(uniqueId)
                     && !this.lastSelectionTooLarge.get(uniqueId).booleanValue()) {
-                player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf() + this.config.maxSize()
+                player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf() + this.config.getMaxSize()
                         + this.config.getLangBlocks());
             }
             this.lastSelectionTooLarge.put(player.getUniqueId(), true);

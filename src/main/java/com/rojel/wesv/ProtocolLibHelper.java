@@ -47,7 +47,7 @@ public class ProtocolLibHelper {
         this.protocolLibInstalled = plugin.getServer().getPluginManager().getPlugin("ProtocolLib") != null;
         if (this.canUseProtocolLib()) {
             this.protocolManager = ProtocolLibrary.getProtocolManager();
-            this.particleType = this.fromParticleEffect(config.particle());
+            this.particleType = this.fromParticleEffect(config.getParticle());
         }
     }
 
@@ -74,7 +74,7 @@ public class ProtocolLibHelper {
     }
 
     public boolean canUseProtocolLib() {
-        return this.protocolLibInstalled && this.config.useProtocolLib();
+        return this.protocolLibInstalled && this.config.getUseProtocolLib();
     }
 
     public boolean isProtocolLibInstalled() {

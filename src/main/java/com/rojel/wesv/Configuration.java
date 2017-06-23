@@ -18,6 +18,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.darkblade12.particleeffect.ParticleEffect;
 
+/**
+ * YAML plugin configuration retrieval and manipulation class.
+ *
+ * @author  Martin Ambrus
+ * @since   1.0a
+ */
 public class Configuration {
     /**
      * WESV plugin instance.
@@ -214,7 +220,7 @@ public class Configuration {
      * Retrieves the "particle" property value.
      * @return Returns the "particle" property value.
      */
-    public ParticleEffect particle() {
+    public ParticleEffect getParticle() {
         return this.particle;
     }
 
@@ -222,7 +228,7 @@ public class Configuration {
      * Retrieves the "gapBetweenPoints" property value.
      * @return Returns the "gapBetweenPoints" property value.
      */
-    public double gapBetweenPoints() {
+    public double getGapBetweenPoints() {
         return this.gapBetweenPoints;
     }
 
@@ -230,7 +236,7 @@ public class Configuration {
      * Retrieves the "verticalGap" property value.
      * @return Returns the "verticalGap" property value.
      */
-    public double verticalGap() {
+    public double getVerticalGap() {
         return this.verticalGap;
     }
 
@@ -238,7 +244,7 @@ public class Configuration {
      * Retrieves the "updateParticlesInterval" property value.
      * @return Returns the "updateParticlesInterval" property value.
      */
-    public int updateParticlesInterval() {
+    public int getUpdateParticlesInterval() {
         return this.updateParticlesInterval;
     }
 
@@ -246,7 +252,7 @@ public class Configuration {
      * Retrieves the "updateSelectionInterval" property value.
      * @return Returns the "updateSelectionInterval" property value.
      */
-    public int updateSelectionInterval() {
+    public int getUpdateSelectionInterval() {
         return this.updateSelectionInterval;
     }
 
@@ -254,7 +260,7 @@ public class Configuration {
      * Retrieves the "cuboidLines" property value.
      * @return Returns the "cuboidLines" property value.
      */
-    public boolean cuboidLines() {
+    public boolean getCuboidLines() {
         return this.cuboidLines;
     }
 
@@ -262,7 +268,7 @@ public class Configuration {
      * Retrieves the "polygonLines" property value.
      * @return Returns the "polygonLines" property value.
      */
-    public boolean polygonLines() {
+    public boolean getPolygonLines() {
         return this.polygonLines;
     }
 
@@ -270,7 +276,7 @@ public class Configuration {
      * Retrieves the "cylinderLines" property value.
      * @return Returns the "cylinderLines" property value.
      */
-    public boolean cylinderLines() {
+    public boolean getCylinderLines() {
         return this.cylinderLines;
     }
 
@@ -278,7 +284,7 @@ public class Configuration {
      * Retrieves the "ellipsoidLines" property value.
      * @return Returns the "ellipsoidLines" property value.
      */
-    public boolean ellipsoidLines() {
+    public boolean getEllipsoidLines() {
         return this.ellipsoidLines;
     }
 
@@ -286,7 +292,7 @@ public class Configuration {
      * Retrieves the "checkForAxe" property value.
      * @return Returns the "checkForAxe" property value.
      */
-    public boolean checkForAxe() {
+    public boolean getCheckForAxe() {
         return this.checkForAxe;
     }
 
@@ -294,7 +300,7 @@ public class Configuration {
      * Retrieves the "selectionItem" property value.
      * @return Returns the "selectionItem" property value.
      */
-    public Material selectionItem() {
+    public Material getSelectionItem() {
         return this.selectionItem;
     }
 
@@ -302,7 +308,7 @@ public class Configuration {
      * Retrieves the "useProtocolLib" property value.
      * @return Returns the "useProtocolLib" property value.
      */
-    public boolean useProtocolLib() {
+    public boolean getUseProtocolLib() {
         return this.useProtocolLib;
     }
 
@@ -310,7 +316,7 @@ public class Configuration {
      * Retrieves the "particleDistance" property value.
      * @return Returns the "particleDistance" property value.
      */
-    public int particleDistance() {
+    public int getParticleDistance() {
         return this.particleDistance;
     }
 
@@ -318,7 +324,7 @@ public class Configuration {
      * Retrieves the "maxSize" property value.
      * @return Returns the "maxSize" property value.
      */
-    public int maxSize() {
+    public int getMaxSize() {
         return this.maxSize;
     }
 
