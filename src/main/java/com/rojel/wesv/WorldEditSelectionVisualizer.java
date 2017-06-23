@@ -81,19 +81,19 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
                     final boolean isEnabled = !this.config.isEnabled(player);
                     this.config.setEnabled(player, isEnabled);
                     if (isEnabled) {
-                        player.sendMessage(ChatColor.GREEN + "Your visualizer has been enabled.");
+                        player.sendMessage(ChatColor.GREEN + this.config.getLangVisualizerEnabled());
                         if (this.shouldShowSelection(player)) {
                             this.showSelection(player);
                         }
                     } else {
-                        player.sendMessage(ChatColor.RED + "Your visualizer has been disabled.");
+                        player.sendMessage(ChatColor.RED + this.config.getLangVisualizerDisabled());
                         this.hideSelection(player);
                     }
                 }
                 return true;
             }
         } else {
-            sender.sendMessage("Only a player can toggle his visualizer.");
+            sender.sendMessage(this.config.getLangPlayersOnly());
             return true;
         }
         return false;
@@ -126,8 +126,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
         this.lastSelectionTooLarge.remove(event.getPlayer().getUniqueId());
     }
 
-    @SuppressWarnings("deprecation")
     public boolean holdsSelectionItem(final Player player) {
+        @SuppressWarnings("deprecation")
         final ItemStack item = player.getItemInHand();
         return item != null && item.getType() == this.config.selectionItem();
     }
@@ -152,8 +152,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
             final UUID uniqueId = player.getUniqueId();
             if (this.lastSelectionTooLarge.containsKey(uniqueId)
                     && !this.lastSelectionTooLarge.get(uniqueId).booleanValue()) {
-                player.sendMessage(ChatColor.LIGHT_PURPLE + "The visualizer only works with selections up to a size of "
-                        + this.config.maxSize() + " blocks.");
+                player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf() + this.config.maxSize()
+                        + this.config.getLangBlocks());
             }
             this.lastSelectionTooLarge.put(player.getUniqueId(), true);
         } else {

@@ -36,6 +36,12 @@ public class Configuration {
     private boolean           useProtocolLib;
     private int               maxSize;
 
+    private String langVisualizerEnabled;
+    private String langVisualizerDisabled;
+    private String langPlayersOnly;
+    private String langSelectionSizeOf;
+    private String langBlocks;
+
     public Configuration(final JavaPlugin plugin) {
         this.plugin = plugin;
     }
@@ -58,6 +64,12 @@ public class Configuration {
         this.particleDistance = this.config.getInt("particleDistance");
         this.useProtocolLib = this.config.getBoolean("useProtocolLib");
         this.maxSize = this.config.getInt("maxSize");
+
+        this.langVisualizerEnabled = this.config.getString("lang.visualizerEnabled");
+        this.langVisualizerDisabled = this.config.getString("lang.visualizerDisabled");
+        this.langPlayersOnly = this.config.getString("lang.playersOnly");
+        this.langSelectionSizeOf = this.config.getString("lang.selectionSizeOf");
+        this.langBlocks = this.config.getString("lang.blocks");
     }
 
     public ParticleEffect getParticleEffect(final String name) {
@@ -143,5 +155,25 @@ public class Configuration {
 
     public int maxSize() {
         return this.maxSize;
+    }
+
+    public String getLangVisualizerEnabled() {
+        return this.langVisualizerEnabled;
+    }
+
+    public String getLangVisualizerDisabled() {
+        return this.langVisualizerDisabled;
+    }
+
+    public String getLangPlayersOnly() {
+        return this.langPlayersOnly;
+    }
+
+    public String getLangSelectionSizeOf() {
+        return this.langSelectionSizeOf;
+    }
+
+    public String getLangBlocks() {
+        return this.langBlocks;
     }
 }
