@@ -20,12 +20,12 @@ import com.darkblade12.particleeffect.ParticleEffect;
 
 public class Configuration {
     /**
-     * WESV plugin instance
+     * WESV plugin instance.
      */
     private final JavaPlugin plugin;
 
     /**
-     * WESV YAML configuration representation
+     * WESV YAML configuration representation.
      */
     private FileConfiguration config;
 
@@ -164,7 +164,7 @@ public class Configuration {
     /**
      * Retrieves ParticleEffect representation of the given name.
      * @param name Name of the particle effect from config.
-     * @return
+     * @return Returns a ParticleEffect representation of the given name.
      */
     public ParticleEffect getParticleEffect(final String name) {
         final ParticleEffect effect = ParticleEffect.fromName(name);
@@ -178,7 +178,7 @@ public class Configuration {
     /**
      * Retrieves material name for the chosen selection tool.
      * @param name Name of the tool from config.
-     * @return
+     * @return Returns the name of the tool from config.
      */
     public Material getSelectionItem(final String name) {
         final Material selectionItem = Material.getMaterial(name);
@@ -190,9 +190,9 @@ public class Configuration {
     }
 
     /**
-     * Returns true if WESV is enabled for the given player.
+     * Checks whether WESV is enabled for the given player.
      * @param player Player to check if WESV is enabled for.
-     * @return
+     * @return Returns true if WESV is enabled for the given player, false otherwise.
      */
     public boolean isEnabled(final Player player) {
         final String path = "players." + player.getUniqueId().toString();
@@ -203,7 +203,7 @@ public class Configuration {
     /**
      * Enables or disables WESV for the given player.
      * @param player Player to enable or disable WESV visualization for.
-     * @param enabled
+     * @param enabled Whether to enable (true) or disable (false) WESV for the given player.
      */
     public void setEnabled(final Player player, final boolean enabled) {
         this.config.set("players." + player.getUniqueId().toString(), enabled);
@@ -212,7 +212,7 @@ public class Configuration {
 
     /**
      * Retrieves the "particle" property value.
-     * @return
+     * @return Returns the "particle" property value.
      */
     public ParticleEffect particle() {
         return this.particle;
