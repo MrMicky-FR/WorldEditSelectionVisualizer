@@ -74,7 +74,7 @@ public class ProtocolLibHelper {
     }
 
     public boolean canUseProtocolLib() {
-        return this.protocolLibInstalled && this.config.getUseProtocolLib();
+        return this.protocolLibInstalled && this.config.isUsingProtocolLib();
     }
 
     public boolean isProtocolLibInstalled() {

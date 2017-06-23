@@ -62,7 +62,7 @@ public class ShapeHelper {
                     vectors.addAll(this.plotLine(p1, p2));
                     vectors.addAll(this.plotLine(p3, p4));
                     vectors.addAll(this.plotLine(p1, p3));
-                    if (!this.config.getCuboidLines()) {
+                    if (!this.config.isCuboidLinesEnabled()) {
                         continue;
                     }
                     for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
@@ -87,7 +87,7 @@ public class ShapeHelper {
                     vectors.addAll(this.plotLine(p1, p2));
                     vectors.addAll(this.plotLine(p3, p4));
                     vectors.addAll(this.plotLine(p1, p3));
-                    if (!this.config.getPolygonLines()) {
+                    if (!this.config.isPolygonLinesEnabled()) {
                         continue;
                     }
                     for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
@@ -116,7 +116,7 @@ public class ShapeHelper {
                 vectors.addAll(this.plotLine(p2, p2.add(0, height, 0)));
                 vectors.addAll(this.plotLine(p3, p3.add(0, height, 0)));
                 vectors.addAll(this.plotLine(p4, p4.add(0, height, 0)));
-                if (this.config.getCylinderLines()) {
+                if (this.config.isCylinderLinesEnabled()) {
                     for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
                             .getVerticalGap()) {
                         for (final Vector vec2 : bottomCorners) {
@@ -132,7 +132,7 @@ public class ShapeHelper {
                 vectors.addAll(this.plotEllipse(center, new Vector(0.0, ellRadius.getY(), ellRadius.getZ())));
                 vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), 0.0, ellRadius.getZ())));
                 vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), ellRadius.getY(), 0.0)));
-                if (this.config.getEllipsoidLines()) {
+                if (this.config.isEllipsoidLinesEnabled()) {
                     for (double offset = this.config.getVerticalGap(); offset < ellRadius.getY(); offset += this.config
                             .getVerticalGap()) {
                         final Vector center1 = new Vector(center.getX(), center.getY() - offset, center.getZ());

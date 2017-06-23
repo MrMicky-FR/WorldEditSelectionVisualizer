@@ -260,7 +260,7 @@ public class Configuration {
      * Retrieves the "cuboidLines" property value.
      * @return Returns the "cuboidLines" property value.
      */
-    public boolean getCuboidLines() {
+    public boolean isCuboidLinesEnabled() {
         return this.cuboidLines;
     }
 
@@ -268,7 +268,7 @@ public class Configuration {
      * Retrieves the "polygonLines" property value.
      * @return Returns the "polygonLines" property value.
      */
-    public boolean getPolygonLines() {
+    public boolean isPolygonLinesEnabled() {
         return this.polygonLines;
     }
 
@@ -276,7 +276,7 @@ public class Configuration {
      * Retrieves the "cylinderLines" property value.
      * @return Returns the "cylinderLines" property value.
      */
-    public boolean getCylinderLines() {
+    public boolean isCylinderLinesEnabled() {
         return this.cylinderLines;
     }
 
@@ -284,7 +284,7 @@ public class Configuration {
      * Retrieves the "ellipsoidLines" property value.
      * @return Returns the "ellipsoidLines" property value.
      */
-    public boolean getEllipsoidLines() {
+    public boolean isEllipsoidLinesEnabled() {
         return this.ellipsoidLines;
     }
 
@@ -292,7 +292,7 @@ public class Configuration {
      * Retrieves the "checkForAxe" property value.
      * @return Returns the "checkForAxe" property value.
      */
-    public boolean getCheckForAxe() {
+    public boolean isCheckForAxeEnabled() {
         return this.checkForAxe;
     }
 
@@ -300,7 +300,7 @@ public class Configuration {
      * Retrieves the "selectionItem" property value.
      * @return Returns the "selectionItem" property value.
      */
-    public Material getSelectionItem() {
+    public Material getSelectionItemConfigValue() {
         return this.selectionItem;
     }
 
@@ -308,7 +308,7 @@ public class Configuration {
      * Retrieves the "useProtocolLib" property value.
      * @return Returns the "useProtocolLib" property value.
      */
-    public boolean getUseProtocolLib() {
+    public boolean isUsingProtocolLib() {
         return this.useProtocolLib;
     }
 

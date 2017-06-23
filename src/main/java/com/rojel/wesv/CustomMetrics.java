@@ -98,19 +98,19 @@ public class CustomMetrics {
 
             // create graph for Horizontal lines for cuboid selections
             this.addMcstatsGraph(metrics, "Horizontal lines for cuboid selections",
-                    this.config.getCuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isCuboidLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for polygon selections
             this.addMcstatsGraph(metrics, "Horizontal lines for polygon selections",
-                    this.config.getPolygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isPolygonLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for cylinder selections
             this.addMcstatsGraph(metrics, "Horizontal lines for cylinder selections",
-                    this.config.getCylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isCylinderLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Horizontal lines for ellipsoid selections
             this.addMcstatsGraph(metrics, "Horizontal lines for ellipsoid selections",
-                    this.config.getEllipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isEllipsoidLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Gap between points
             this.addMcstatsGraph(metrics, "Gap between points", "" + this.config.getGapBetweenPoints() + "");
@@ -120,21 +120,23 @@ public class CustomMetrics {
                     "" + this.config.getVerticalGap() + "");
 
             // create graph for Particle update interval
-            this.addMcstatsGraph(metrics, "Particle update interval", "" + this.config.getUpdateParticlesInterval() + "");
+            this.addMcstatsGraph(metrics, "Particle update interval",
+                    "" + this.config.getUpdateParticlesInterval() + "");
 
             // create graph for Selection update interval
-            this.addMcstatsGraph(metrics, "Selection update interval", "" + this.config.getUpdateSelectionInterval() + "");
+            this.addMcstatsGraph(metrics, "Selection update interval",
+                    "" + this.config.getUpdateSelectionInterval() + "");
 
             // create graph for Particle effect
             this.addMcstatsGraph(metrics, "Particle effect", this.config.getParticle().getName());
 
             // create graph for Check for axe
             this.addMcstatsGraph(metrics, "Check for axe",
-                    this.config.getCheckForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isCheckForAxeEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Use ProtocolLib
             this.addMcstatsGraph(metrics, "Use ProtocolLib",
-                    this.config.getUseProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                    this.config.isUsingProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
             // create graph for Particle distance
             this.addMcstatsGraph(metrics, "Particle distance", "" + this.config.getParticleDistance() + "");
@@ -155,19 +157,19 @@ public class CustomMetrics {
 
         // create graph for Horizontal lines for cuboid selections
         this.addBcstatsGraph(bmetrics, "h_lines_cuboid",
-                this.config.getCuboidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isCuboidLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for polygon selections
         this.addBcstatsGraph(bmetrics, "h_lines_polygon",
-                this.config.getPolygonLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isPolygonLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for cylinder selections
         this.addBcstatsGraph(bmetrics, "h_lines_cylinder",
-                this.config.getCylinderLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isCylinderLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Horizontal lines for ellipsoid selections
         this.addBcstatsGraph(bmetrics, "h_lines_ellipsoid",
-                this.config.getEllipsoidLines() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isEllipsoidLinesEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Gap between points
         this.addBcstatsGraph(bmetrics, "gap_between_points", "" + this.config.getGapBetweenPoints() + "");
@@ -186,11 +188,11 @@ public class CustomMetrics {
 
         // create graph for Check for axe
         this.addBcstatsGraph(bmetrics, "check_for_axe",
-                this.config.getCheckForAxe() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isCheckForAxeEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Use ProtocolLib
         this.addBcstatsGraph(bmetrics, "protocollib_use",
-                this.config.getUseProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
+                this.config.isUsingProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Particle distance
         this.addBcstatsGraph(bmetrics, "particle_distance", "" + this.config.getParticleDistance() + "");

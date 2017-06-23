@@ -61,7 +61,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
         this.particleSender = new ParticleSender(this, this.config, this.protocolLibHelper);
         new CustomMetrics(this, this.config).initMetrics();
         this.getServer().getPluginManager().registerEvents(this, this);
-        if (this.config.getUseProtocolLib() && !this.protocolLibHelper.isProtocolLibInstalled()) {
+        if (this.config.isUsingProtocolLib() && !this.protocolLibHelper.isProtocolLibInstalled()) {
             this.getLogger().info(
                     "ProtocolLib is enabled in the config but not installed. You need to install ProtocolLib if you want to use certain features.");
         }
@@ -110,9 +110,9 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     @EventHandler
     private void onItemChange(final PlayerItemHeldEvent event) {
         final Player player = event.getPlayer();
-        if (this.config.getCheckForAxe() && this.config.isEnabled(player)) {
+        if (this.config.isCheckForAxeEnabled() && this.config.isEnabled(player)) {
             final ItemStack item = player.getInventory().getItem(event.getNewSlot());
-            if (item != null && item.getType() == this.config.getSelectionItem()) {
+            if (item != null && item.getType() == this.config.getSelectionItemConfigValue()) {
                 this.showSelection(player);
             } else {
                 this.hideSelection(player);
@@ -129,7 +129,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     public boolean holdsSelectionItem(final Player player) {
         @SuppressWarnings("deprecation")
         final ItemStack item = player.getItemInHand();
-        return item != null && item.getType() == this.config.getSelectionItem();
+        return item != null && item.getType() == this.config.getSelectionItemConfigValue();
     }
 
     public boolean isSelectionShown(final Player player) {
@@ -139,7 +139,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
 
     public boolean shouldShowSelection(final Player player) {
         return this.config.isEnabled(player)
-                && (!this.config.getCheckForAxe() || this.config.getCheckForAxe() && this.holdsSelectionItem(player));
+                && (!this.config.isCheckForAxeEnabled() || this.config.isCheckForAxeEnabled() && this.holdsSelectionItem(player));
     }
 
     public void showSelection(final Player player) {
