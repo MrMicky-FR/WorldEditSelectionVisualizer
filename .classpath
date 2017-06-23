@@ -1,84 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java">
-		<attributes>
-			<attribute name="FROM_GRADLE_MODEL" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="src/resources">
-		<attributes>
-			<attribute name="FROM_GRADLE_MODEL" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="src/test">
-		<attributes>
-			<attribute name="FROM_GRADLE_MODEL" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry kind="lib" path="dependencies/worldedit-bukkit-6.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/spigot-api-1.8.8-R0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="dependencies/ProtocolLib-4.2.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/dummypermscompat-1.8.jar"/>
-	<classpathentry kind="lib" path="dependencies/bukkit-1.7.9-R0.2.jar"/>
-	<classpathentry kind="lib" path="dependencies/worldedit-core-6.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/bukkit-classloader-check-1.7.9-R0.2.jar"/>
-	<classpathentry kind="lib" path="dependencies/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="dependencies/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/ebean-2.8.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/snakeyaml-1.15.jar"/>
-	<classpathentry kind="lib" path="dependencies/bungeecord-chat-1.8-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="dependencies/ProtocolLib-API-4.2.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/cglib-nodep-2.2.2.jar"/>
-	<classpathentry kind="lib" path="dependencies/BukkitExecutors-1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="dependencies/truezip-6.8.3.jar"/>
-	<classpathentry kind="lib" path="dependencies/js-1.7R2.jar"/>
-	<classpathentry kind="lib" path="dependencies/jsr305-1.3.9.jar"/>
-	<classpathentry kind="lib" path="dependencies/paranamer-2.6.jar"/>
-	<classpathentry kind="lib" path="dependencies/jlibnoise-1.0.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/jchronic-0.2.4a.jar"/>
-	<classpathentry kind="lib" path="dependencies/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/persistence-api-1.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/junit-4.10.jar"/>
-	<classpathentry kind="lib" path="dependencies/hamcrest-core-1.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/cglib-nodep-3.2.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/easymock-3.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/hamcrest-all-1.3.jar"/>
-	<classpathentry kind="lib" path="dependencies/javassist-3.22.0-CR1.jar"/>
-	<classpathentry kind="lib" path="dependencies/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="dependencies/mockito-all-2.0.2-beta.jar"/>
-	<classpathentry kind="lib" path="dependencies/objenesis-2.5.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-api-easymock-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-javaagent-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-rule-agent-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-testng-agent-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-api-support-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-api-support-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-core-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-core-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-common-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-common-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-testng-common-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-api-mockito-1.6.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-api-mockito-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-legacy-1.6.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-legacy-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit3-1.6.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit3-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-testng-1.6.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-testng-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-classloading-base-1.6.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-classloading-base-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/mockito-core-1.10.19.jar"/>
-	<classpathentry kind="lib" path="dependencies/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-module-junit4-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-reflect-1.6.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/powermock-reflect-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/testng-6.9.10.jar"/>
-	<classpathentry kind="lib" path="dependencies/jcommander-1.48.jar" sourcepath="/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.48/6deefcf90f144dfca29d4950c665a592ba029d42/jcommander-1.48-sources.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_121"/>
-	<classpathentry kind="output" path="bin"/>
+    <classpathentry kind="src" path="src/main/java">
+        <attributes>
+            <attribute name="FROM_GRADLE_MODEL" value="true"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="src" path="src/resources">
+        <attributes>
+            <attribute name="FROM_GRADLE_MODEL" value="true"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="src" path="src/test">
+        <attributes>
+            <attribute name="FROM_GRADLE_MODEL" value="true"/>
+        </attributes>
+    </classpathentry>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
+    <classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+    <classpathentry kind="output" path="bin"/>
 </classpath>
