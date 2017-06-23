@@ -30,7 +30,7 @@ version '%PLUGIN_VERSION%'
 
 ext {
     println("$rootProject.name")
-    BUKKIT_API_VERSION = '1.8.8-R0.1-SNAPSHOT'
+    BUKKIT_API_VERSION = '1.12-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
     PROTOCOLLIB_VERSION = '4.2.1'
     BSTATS_VERSION = '1.1'
@@ -73,7 +73,7 @@ repositories {
     }
     maven {
         name "ProtocolLib"
-    	url "http://repo.dmulloy2.net/nexus/repository/public/"
+        url "http://repo.dmulloy2.net/nexus/repository/public/"
     }
     maven {
         name "MockitoBeta"
@@ -199,6 +199,7 @@ dependencies {
 }*/
 
 shadowJar {
+    dependsOn jacocoTestReport
     baseName = 'wesv'
     classifier = null
     dependencies {
@@ -213,6 +214,7 @@ shadowJar {
 }
 
 task copy(type: Copy) {
+    dependsOn shadowJar
     from "${buildDir}/libs"
     into "$FINAL_DIR"
 }
@@ -255,8 +257,10 @@ test {
     }
 }
 
-check.dependsOn jacocoTestReport
-check.dependsOn shadowJar
+check.dependsOn clean
+check.dependsOn copy
+
+assemble.dependsOn clean
 assemble.dependsOn copyCompileDependencies
 assemble.dependsOn copyTestCompileDependencies
 
