@@ -156,7 +156,7 @@ public class Configuration {
 
         /**
          * Constructor for String ENUMs.
-         * @param value
+         * @param value String value for the ENUM.
          */
         CONFIG_VALUES(final String value) {
             this.configValue = value;
