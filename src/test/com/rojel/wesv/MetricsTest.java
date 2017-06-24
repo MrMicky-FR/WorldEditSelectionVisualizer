@@ -384,7 +384,16 @@ public class MetricsTest extends TestCase {
                 m.isOptOut(), is(true));
     }
 
-    static void setFinalStatic(final Field field, final Object newValue, final Object targetObject) throws Exception {
+    /**
+     * Removes the static modifier of a a final static field in the given object.
+     *
+     * @param field
+     * @param newValue
+     * @param targetObject
+     * @throws Exception
+     */
+    public static void setFinalStatic(final Field field, final Object newValue, final Object targetObject)
+            throws Exception {
         field.setAccessible(true);
         // remove final modifier from field
         final Field modifiersField = Field.class.getDeclaredField("modifiers");
