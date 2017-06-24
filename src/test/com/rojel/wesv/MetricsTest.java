@@ -44,6 +44,10 @@ import junit.framework.TestCase;
 @PrepareForTest({ Bukkit.class, Server.class, PluginManager.class, Plugin.class })
 public class MetricsTest extends TestCase {
 
+    /**
+     * Text representation for any object (AbstractPlotter, Graph...)
+     * that should be called "Default".
+     */
     private static String enabledItemName = "Enabled";
 
     /**
@@ -409,7 +413,8 @@ public class MetricsTest extends TestCase {
             // the expected exception thrown
         } catch (final Exception e) {
             fail("An unexpected exception (" + e.getClass().getSimpleName()
-                    + ") was thrown from Metrics.isOptOut() when getConfigFile() shoud have returned InvalidConfigurationException.");
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() "
+                    + "shoud have returned InvalidConfigurationException.");
         }
 
         assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config structure.",
@@ -446,7 +451,8 @@ public class MetricsTest extends TestCase {
             // the expected exception thrown
         } catch (final Exception e) {
             fail("An unexpected exception (" + e.getClass().getSimpleName()
-                    + ") was thrown from Metrics.isOptOut() when getConfigFile() should have returned InvalidConfigurationException.");
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() "
+                    + "should have returned InvalidConfigurationException.");
         }
 
         assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config structure.",
