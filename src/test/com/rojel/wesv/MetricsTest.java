@@ -357,7 +357,7 @@ public class MetricsTest extends TestCase {
         try {
             m = PowerMockito.spy(new Metrics(this.pluginMock));
             try {
-                setFinalStatic(Metrics.class.getDeclaredField("debug"), Boolean.valueOf(true), m);
+                setFinalStatic(Metrics.class.getDeclaredField("debug"), Boolean.TRUE, m);
             } catch (final SecurityException e) {
                 fail("Could not set debug flag to TRUE due to security exception.");
             } catch (final NoSuchFieldException e) {
