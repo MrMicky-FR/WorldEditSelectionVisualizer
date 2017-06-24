@@ -149,9 +149,16 @@ public class Configuration {
                 "lang.langBlocks"
         );
 
+        /**
+         * The string value of an ENUM.
+         */
         private final String configValue;
 
-        private CONFIG_VALUES(final String value) {
+        /**
+         * Constructor for String ENUMs.
+         * @param value
+         */
+        CONFIG_VALUES(final String value) {
             this.configValue = value;
         }
 
