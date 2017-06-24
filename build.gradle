@@ -89,7 +89,7 @@ dependencies {
     // CGLib
     testCompile group: 'cglib',
                 name: 'cglib-nodep',
-                version: '3.2.4'
+                version: '3.2.5'
 
     // EasyMock
     testCompile group: 'org.easymock',
@@ -119,32 +119,32 @@ dependencies {
     // Objenesis
     testCompile group: 'org.objenesis',
                 name: 'objenesis',
-                version: '2.5.1'
+                version: '2.6'
 
     // PowerMock-API-EasyMock
     testCompile group: 'org.powermock',
                 name: 'powermock-api-easymock',
-                version: '1.6.5'
+                version: '1.7.0'
     
     // PowerMock-Module-JavaAgenr
     testCompile group: 'org.powermock',
                 name: 'powermock-module-javaagent',
-                version: '1.6.5'
+                version: '1.7.0'
 
     // PowerMock-Module-JUnit4
     testCompile group: 'org.powermock',
                 name: 'powermock-module-junit4',
-                version: '1.6.5'
+                version: '1.7.0'
 
     // PowerMock-Module-JUnit4-Rule-Agent
     testCompile group: 'org.powermock',
                 name: 'powermock-module-junit4-rule-agent',
-                version: '1.6.5'
+                version: '1.7.0'
 
     // PowerMock-Module-testng-agent
     testCompile group: 'org.powermock',
                 name: 'powermock-module-testng-agent',
-                version: '1.6.5'
+                version: '1.7.0'
 
     // PowerMock-Mockito-Release
     testCompile group: 'org.powermock',
