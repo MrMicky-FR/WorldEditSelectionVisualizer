@@ -11,6 +11,8 @@
 
 package com.rojel.wesv;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -41,94 +43,73 @@ public class Configuration {
     private ParticleEffect particle;
 
     /**
-     * Size of a space left between 2 points.
+     * Configuration HashMap containing all configuration options and their values.
+     * This configuration comes from config.yml file.
      */
-    private double gapBetweenPoints;
+    private final HashMap<String, Object> configItems = new HashMap<String, Object>() {
 
-    /**
-     * Size of a vertical space left between 2 points.
-     */
-    private double verticalGap;
+        private static final long serialVersionUID = 634292893169729562L;
 
-    /**
-     * Interval (ms) in which particles should be updated for the MC client.
-     */
-    private int updateParticlesInterval;
+        {
 
-    /**
-     * Interval (ms) in which the selection should be updated for the MC client.
-     */
-    private int updateSelectionInterval;
+            // Size of a space left between 2 points.
+            this.put("gapBetweenPoints", 0.5d);
 
-    /**
-     * Whether or not to show cuboid lines.
-     */
-    private boolean cuboidLines;
+            // Size of a vertical space left between 2 points.
+            this.put("verticalGap", 1d);
 
-    /**
-     * Whether or not to show polygon lines.
-     */
-    private boolean polygonLines;
+            // Interval (ms) in which particles should be updated for the MC client.
+            this.put("updateParticlesInterval", 5);
 
-    /**
-     * Whether or not to show cylinder lines.
-     */
-    private boolean cylinderLines;
+            // Interval (ms) in which the selection should be updated for the MC client.
+            this.put("updateSelectionInterval", 20);
 
-    /**
-     * Whether or not to show ellipsoid lines.
-     */
-    private boolean ellipsoidLines;
+            // Whether or not to show cuboid lines.
+            this.put("cuboidLines", true);
 
-    /**
-     * Whether or not to check for the WorldEdit tool in hand.
-     */
-    private boolean checkForAxe;
+            // Whether or not to show polygon lines.
+            this.put("polygonLines", true);
+
+            // Whether or not to show cylinder lines.
+            this.put("cylinderLines", true);
+
+            // Whether or not to show ellipsoid lines.
+            this.put("ellipsoidLines", true);
+
+            // Whether or not to check for the WorldEdit tool in hand.
+            this.put("checkForAxe", true);
+
+            // Maximum distance to see selection particles from.
+            this.put("particleDistance", 16);
+
+            // Whether or not to use the ProtocolLib library (allows to see particles from longer distances).
+            this.put("useProtocolLib", false);
+
+            // Maximum size of the visualized selection itself.
+            this.put("maxSize", 10000);
+
+            // Language translation string from config.
+            this.put("langVisualizerEnabled", "Your visualizer has been enabled.");
+
+            // Language translation string from config.
+            this.put("langVisualizerDisabled", "Your visualizer has been disabled.");
+
+            // Language translation string from config.
+            this.put("langPlayersOnly", "Only a player can toggle his visualizer.");
+
+            // Language translation string from config.
+            this.put("langSelectionSizeOf", "The visualizer only works with selections up to a size of ");
+
+            // Language translation string from config.
+            this.put("langBlocks", "blocks");
+
+        }
+    };
 
     /**
      * The item used to perform selections in WorldEdit.
      */
     private Material selectionItem;
-
-    /**
-     * Maximum distance to see selection particles from.
-     */
-    private int particleDistance;
-
-    /**
-     * Whether or not to use the ProtocolLib library (allows to see particles from longer distances).
-     */
-    private boolean useProtocolLib;
-
-    /**
-     * Maximum size of the visualized selection itself.
-     */
-    private int maxSize;
-
-    /**
-     * Language translation string from config.
-     */
-    private String langVisualizerEnabled;
-
-    /**
-     * Language translation string from config.
-     */
-    private String langVisualizerDisabled;
-
-    /**
-     * Language translation string from config.
-     */
-    private String langPlayersOnly;
-
-    /**
-     * Language translation string from config.
-     */
-    private String langSelectionSizeOf;
-
-    /**
-     * Language translation string from config.
-     */
-    private String langBlocks;
 
     /**
      * Constructor, takes the WESV plugin instance as a parameter.
@@ -146,25 +127,25 @@ public class Configuration {
         this.config = this.plugin.getConfig();
         this.config.options().copyDefaults(true);
         this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
-        this.gapBetweenPoints = this.config.getDouble("gapBetweenPoints");
-        this.verticalGap = this.config.getDouble("verticalGap");
-        this.updateParticlesInterval = this.config.getInt("updateParticlesInterval");
-        this.updateSelectionInterval = this.config.getInt("updateSelectionInterval");
-        this.cuboidLines = this.config.getBoolean("horizontalLinesForCuboid");
-        this.polygonLines = this.config.getBoolean("horizontalLinesForPolygon");
-        this.cylinderLines = this.config.getBoolean("horizontalLinesForCylinder");
-        this.ellipsoidLines = this.config.getBoolean("horizontalLinesForEllipsoid");
-        this.checkForAxe = this.config.getBoolean("checkForAxe");
-        this.selectionItem = this.getSelectionItem(this.config.getString("selectionItem"));
-        this.particleDistance = this.config.getInt("particleDistance");
-        this.useProtocolLib = this.config.getBoolean("useProtocolLib");
-        this.maxSize = this.config.getInt("maxSize");
+        this.configItems.replace("gapBetweenPoints", this.config.getDouble("gapBetweenPoints"));
+        this.configItems.replace("verticalGap", this.config.getDouble("verticalGap"));
+        this.configItems.replace("updateParticlesInterval", this.config.getInt("updateParticlesInterval"));
+        this.configItems.replace("updateSelectionInterval", this.config.getInt("updateSelectionInterval"));
+        this.configItems.replace("cuboidLines", this.config.getBoolean("horizontalLinesForCuboid"));
+        this.configItems.replace("polygonLines", this.config.getBoolean("horizontalLinesForPolygon"));
+        this.configItems.replace("cylinderLines", this.config.getBoolean("horizontalLinesForCylinder"));
+        this.configItems.replace("ellipsoidLines", this.config.getBoolean("horizontalLinesForEllipsoid"));
+        this.configItems.replace("checkForAxe", this.config.getBoolean("checkForAxe"));
+        this.configItems.replace("selectionItem", this.getSelectionItem(this.config.getString("selectionItem")));
+        this.configItems.replace("particleDistance", this.config.getInt("particleDistance"));
+        this.configItems.replace("useProtocolLib", this.config.getBoolean("useProtocolLib"));
+        this.configItems.replace("maxSize", this.config.getInt("maxSize"));
 
-        this.langVisualizerEnabled = this.config.getString("lang.visualizerEnabled");
-        this.langVisualizerDisabled = this.config.getString("lang.visualizerDisabled");
-        this.langPlayersOnly = this.config.getString("lang.playersOnly");
-        this.langSelectionSizeOf = this.config.getString("lang.selectionSizeOf");
-        this.langBlocks = this.config.getString("lang.blocks");
+        this.configItems.replace("langVisualizerEnabled", this.config.getString("lang.visualizerEnabled"));
+        this.configItems.replace("langVisualizerDisabled", this.config.getString("lang.visualizerDisabled"));
+        this.configItems.replace("langPlayersOnly", this.config.getString("lang.playersOnly"));
+        this.configItems.replace("langSelectionSizeOf", this.config.getString("lang.selectionSizeOf"));
+        this.configItems.replace("langBlocks", this.config.getString("lang.blocks"));
     }
 
     /**
@@ -229,7 +210,7 @@ public class Configuration {
      * @return Returns the "gapBetweenPoints" property value.
      */
     public double getGapBetweenPoints() {
-        return this.gapBetweenPoints;
+        return (double) this.configItems.get("gapBetweenPoints");
     }
 
     /**
@@ -237,7 +218,7 @@ public class Configuration {
      * @return Returns the "verticalGap" property value.
      */
     public double getVerticalGap() {
-        return this.verticalGap;
+        return (double) this.configItems.get("verticalGap");
     }
 
     /**
@@ -245,7 +226,7 @@ public class Configuration {
      * @return Returns the "updateParticlesInterval" property value.
      */
     public int getUpdateParticlesInterval() {
-        return this.updateParticlesInterval;
+        return (int) this.configItems.get("updateParticlesInterval");
     }
 
     /**
@@ -253,7 +234,7 @@ public class Configuration {
      * @return Returns the "updateSelectionInterval" property value.
      */
     public int getUpdateSelectionInterval() {
-        return this.updateSelectionInterval;
+        return (int) this.configItems.get("updateSelectionInterval");
     }
 
     /**
@@ -261,7 +242,7 @@ public class Configuration {
      * @return Returns the "cuboidLines" property value.
      */
     public boolean isCuboidLinesEnabled() {
-        return this.cuboidLines;
+        return (boolean) this.configItems.get("cuboidLines");
     }
 
     /**
@@ -269,7 +250,7 @@ public class Configuration {
      * @return Returns the "polygonLines" property value.
      */
     public boolean isPolygonLinesEnabled() {
-        return this.polygonLines;
+        return (boolean) this.configItems.get("polygonLines");
     }
 
     /**
@@ -277,7 +258,7 @@ public class Configuration {
      * @return Returns the "cylinderLines" property value.
      */
     public boolean isCylinderLinesEnabled() {
-        return this.cylinderLines;
+        return (boolean) this.configItems.get("cylinderLines");
     }
 
     /**
@@ -285,7 +266,7 @@ public class Configuration {
      * @return Returns the "ellipsoidLines" property value.
      */
     public boolean isEllipsoidLinesEnabled() {
-        return this.ellipsoidLines;
+        return (boolean) this.configItems.get("ellipsoidLines");
     }
 
     /**
@@ -293,7 +274,7 @@ public class Configuration {
      * @return Returns the "checkForAxe" property value.
      */
     public boolean isCheckForAxeEnabled() {
-        return this.checkForAxe;
+        return (boolean) this.configItems.get("checkForAxe");
     }
 
     /**
@@ -309,7 +290,7 @@ public class Configuration {
      * @return Returns the "useProtocolLib" property value.
      */
     public boolean isUsingProtocolLib() {
-        return this.useProtocolLib;
+        return (boolean) this.configItems.get("useProtocolLib");
     }
 
     /**
@@ -317,7 +298,7 @@ public class Configuration {
      * @return Returns the "particleDistance" property value.
      */
     public int getParticleDistance() {
-        return this.particleDistance;
+        return (int) this.configItems.get("particleDistance");
     }
 
     /**
@@ -325,7 +306,7 @@ public class Configuration {
      * @return Returns the "maxSize" property value.
      */
     public int getMaxSize() {
-        return this.maxSize;
+        return (int) this.configItems.get("maxSize");
     }
 
     /**
@@ -333,7 +314,7 @@ public class Configuration {
      * @return Translation of "langVisualizerEnabled".
      */
     public String getLangVisualizerEnabled() {
-        return this.langVisualizerEnabled;
+        return (String) this.configItems.get("langVisualizerEnabled");
     }
 
     /**
@@ -341,7 +322,7 @@ public class Configuration {
      * @return Translation of "visualizerDisabled".
      */
     public String getLangVisualizerDisabled() {
-        return this.langVisualizerDisabled;
+        return (String) this.configItems.get("langVisualizerDisabled");
     }
 
     /**
@@ -349,7 +330,7 @@ public class Configuration {
      * @return Translation of "playersOnly".
      */
     public String getLangPlayersOnly() {
-        return this.langPlayersOnly;
+        return (String) this.configItems.get("langPlayersOnly");
     }
 
     /**
@@ -357,7 +338,7 @@ public class Configuration {
      * @return Translation of "selectionSizeOf".
      */
     public String getLangSelectionSizeOf() {
-        return this.langSelectionSizeOf;
+        return (String) this.configItems.get("langSelectionSizeOf");
     }
 
     /**
@@ -365,6 +346,6 @@ public class Configuration {
      * @return Translation of "langBlocks".
      */
     public String getLangBlocks() {
-        return this.langBlocks;
+        return (String) this.configItems.get("langBlocks");
     }
 }
