@@ -263,6 +263,7 @@ check.dependsOn copy
 assemble.dependsOn clean
 assemble.dependsOn copyCompileDependencies
 assemble.dependsOn copyTestCompileDependencies
+assemble.dependsOn copy
 
 /*task templates(type: Copy) {
     delete "src/main/resources/config.yml"
