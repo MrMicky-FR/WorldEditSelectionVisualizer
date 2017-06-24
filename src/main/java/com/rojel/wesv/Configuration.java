@@ -11,8 +11,7 @@
 
 package com.rojel.wesv;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -170,7 +169,7 @@ public class Configuration {
      * Configuration HashMap containing all configuration options and their values.
      * This configuration comes from config.yml file.
      */
-    private final Map<CONFIG_VALUES, Object> configItems = new HashMap<CONFIG_VALUES, Object>() {
+    private final EnumMap<CONFIG_VALUES, Object> configItems = new EnumMap<CONFIG_VALUES, Object>(CONFIG_VALUES.class) {
 
         private static final long serialVersionUID = 634292893169729562L;
 
