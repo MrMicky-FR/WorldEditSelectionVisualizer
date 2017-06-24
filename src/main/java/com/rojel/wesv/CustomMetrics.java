@@ -87,13 +87,10 @@ public class CustomMetrics {
     }
 
     /**
-     * Metrics initialization method.
+     * Initialization routine for MCStats.
      */
-    public void initMetrics() {
+    private void initMcStats() {
         try {
-            /*
-             * Initialize MCStats metrics.
-             */
             final Metrics metrics = new Metrics(this.plugin);
 
             // create graph for Horizontal lines for cuboid selections
@@ -149,10 +146,12 @@ public class CustomMetrics {
         } catch (final IOException e) {
             this.plugin.getLogger().info("Unable to submit statistics to MCStats :(");
         }
+    }
 
-        /*
-         * Initialize BStats metrics.
-         */
+    /**
+     * Initialization routine for BStats.
+     */
+    private void initBStats() {
         final org.bstats.Metrics bmetrics = new org.bstats.Metrics(this.plugin);
 
         // create graph for Horizontal lines for cuboid selections
@@ -199,6 +198,14 @@ public class CustomMetrics {
 
         // create graph for Maximum selection size
         this.addBcstatsGraph(bmetrics, "max_selection_size", "" + this.config.getMaxSize() + "");
+    }
+
+    /**
+     * Metrics initialization method.
+     */
+    public void initMetrics() {
+        this.initMcStats();
+        this.initBStats();
     }
 
 }
