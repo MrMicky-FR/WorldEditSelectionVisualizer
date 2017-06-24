@@ -12,6 +12,7 @@
 package com.rojel.wesv;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -43,65 +44,121 @@ public class Configuration {
     private ParticleEffect particle;
 
     /**
+     * ENUM of valid configuration values.
+     */
+    private enum CONFIG_VALUES {
+        GAPBETWEENPOINTS(
+                "gapBetweenPoints"
+        ), VERTICALGAP(
+                "verticalGap"
+        ), UPDATEPARTICLESINTERVAL(
+                "updateParticlesInterval"
+        ), UPDATESELECTIONINTERVAL(
+                "updateSelectionInterval"
+        ), CUBOIDLINES(
+                "horizontalLinesForCuboid"
+        ), POLYGONLINES(
+                "horizontalLinesForPolygon"
+        ), CYLINDERLINES(
+                "horizontalLinesForCylinder"
+        ), ELLIPSOIDLINES(
+                "horizontalLinesForEllipsoid"
+        ), CHECKFORAXE(
+                "checkForAxe"
+        ), PARTICLEDISTANCE(
+                "particleDistance"
+        ), USEPROTOCOLLIB(
+                "useProtocolLib"
+        ), MAXSIZE(
+                "maxSize"
+        ), LANGVISUALIZERENABLED(
+                "lang.langVisualizerEnabled"
+        ), LANGVISUALIZERDISABLED(
+                "lang.langVisualizerDisabled"
+        ), LANGPLAYERSONLY(
+                "lang.langPlayersOnly"
+        ), LANGSELECTIONSIZEOF(
+                "lang,langSelectionSizeOf"
+        ), LANGBLOCKS(
+                "lang.langBlocks"
+        );
+
+        private final String configValue;
+
+        private CONFIG_VALUES(final String value) {
+            this.configValue = value;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
+        @Override
+        public String toString() {
+            return this.configValue;
+        }
+
+    }
+
+    /**
      * Configuration HashMap containing all configuration options and their values.
      * This configuration comes from config.yml file.
      */
-    private final HashMap<String, Object> configItems = new HashMap<String, Object>() {
+    private final Map<CONFIG_VALUES, Object> configItems = new HashMap<CONFIG_VALUES, Object>() {
 
         private static final long serialVersionUID = 634292893169729562L;
 
         {
 
             // Size of a space left between 2 points.
-            this.put("gapBetweenPoints", 0.5d);
+            this.put(CONFIG_VALUES.GAPBETWEENPOINTS, 0.5d);
 
             // Size of a vertical space left between 2 points.
-            this.put("verticalGap", 1d);
+            this.put(CONFIG_VALUES.VERTICALGAP, 1d);
 
             // Interval (ms) in which particles should be updated for the MC client.
-            this.put("updateParticlesInterval", 5);
+            this.put(CONFIG_VALUES.UPDATEPARTICLESINTERVAL, 5);
 
             // Interval (ms) in which the selection should be updated for the MC client.
-            this.put("updateSelectionInterval", 20);
+            this.put(CONFIG_VALUES.UPDATESELECTIONINTERVAL, 20);
 
             // Whether or not to show cuboid lines.
-            this.put("cuboidLines", true);
+            this.put(CONFIG_VALUES.CUBOIDLINES, true);
 
             // Whether or not to show polygon lines.
-            this.put("polygonLines", true);
+            this.put(CONFIG_VALUES.POLYGONLINES, true);
 
             // Whether or not to show cylinder lines.
-            this.put("cylinderLines", true);
+            this.put(CONFIG_VALUES.CYLINDERLINES, true);
 
             // Whether or not to show ellipsoid lines.
-            this.put("ellipsoidLines", true);
+            this.put(CONFIG_VALUES.ELLIPSOIDLINES, true);
 
             // Whether or not to check for the WorldEdit tool in hand.
-            this.put("checkForAxe", true);
+            this.put(CONFIG_VALUES.CHECKFORAXE, true);
 
             // Maximum distance to see selection particles from.
-            this.put("particleDistance", 16);
+            this.put(CONFIG_VALUES.PARTICLEDISTANCE, 16);
 
             // Whether or not to use the ProtocolLib library (allows to see particles from longer distances).
-            this.put("useProtocolLib", false);
+            this.put(CONFIG_VALUES.USEPROTOCOLLIB, false);
 
             // Maximum size of the visualized selection itself.
-            this.put("maxSize", 10000);
+            this.put(CONFIG_VALUES.MAXSIZE, 10000);
 
             // Language translation string from config.
-            this.put("langVisualizerEnabled", "Your visualizer has been enabled.");
+            this.put(CONFIG_VALUES.LANGVISUALIZERENABLED, "Your visualizer has been enabled.");
 
             // Language translation string from config.
-            this.put("langVisualizerDisabled", "Your visualizer has been disabled.");
+            this.put(CONFIG_VALUES.LANGVISUALIZERDISABLED, "Your visualizer has been disabled.");
 
             // Language translation string from config.
-            this.put("langPlayersOnly", "Only a player can toggle his visualizer.");
+            this.put(CONFIG_VALUES.LANGPLAYERSONLY, "Only a player can toggle his visualizer.");
 
             // Language translation string from config.
-            this.put("langSelectionSizeOf", "The visualizer only works with selections up to a size of ");
+            this.put(CONFIG_VALUES.LANGSELECTIONSIZEOF, "The visualizer only works with selections up to a size of ");
 
             // Language translation string from config.
-            this.put("langBlocks", "blocks");
+            this.put(CONFIG_VALUES.LANGBLOCKS, "blocks");
 
         }
     };
@@ -126,26 +183,59 @@ public class Configuration {
         this.plugin.saveDefaultConfig();
         this.config = this.plugin.getConfig();
         this.config.options().copyDefaults(true);
-        this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
-        this.configItems.replace("gapBetweenPoints", this.config.getDouble("gapBetweenPoints"));
-        this.configItems.replace("verticalGap", this.config.getDouble("verticalGap"));
-        this.configItems.replace("updateParticlesInterval", this.config.getInt("updateParticlesInterval"));
-        this.configItems.replace("updateSelectionInterval", this.config.getInt("updateSelectionInterval"));
-        this.configItems.replace("cuboidLines", this.config.getBoolean("horizontalLinesForCuboid"));
-        this.configItems.replace("polygonLines", this.config.getBoolean("horizontalLinesForPolygon"));
-        this.configItems.replace("cylinderLines", this.config.getBoolean("horizontalLinesForCylinder"));
-        this.configItems.replace("ellipsoidLines", this.config.getBoolean("horizontalLinesForEllipsoid"));
-        this.configItems.replace("checkForAxe", this.config.getBoolean("checkForAxe"));
-        this.configItems.replace("selectionItem", this.getSelectionItem(this.config.getString("selectionItem")));
-        this.configItems.replace("particleDistance", this.config.getInt("particleDistance"));
-        this.configItems.replace("useProtocolLib", this.config.getBoolean("useProtocolLib"));
-        this.configItems.replace("maxSize", this.config.getInt("maxSize"));
 
-        this.configItems.replace("langVisualizerEnabled", this.config.getString("lang.visualizerEnabled"));
-        this.configItems.replace("langVisualizerDisabled", this.config.getString("lang.visualizerDisabled"));
-        this.configItems.replace("langPlayersOnly", this.config.getString("lang.playersOnly"));
-        this.configItems.replace("langSelectionSizeOf", this.config.getString("lang.selectionSizeOf"));
-        this.configItems.replace("langBlocks", this.config.getString("lang.blocks"));
+        this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
+        this.selectionItem = this.getSelectionItem(this.config.getString("selectionItem"));
+
+        this.configItems.replace(CONFIG_VALUES.GAPBETWEENPOINTS,
+                this.config.getDouble(CONFIG_VALUES.GAPBETWEENPOINTS.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.VERTICALGAP,
+                this.config.getDouble(CONFIG_VALUES.VERTICALGAP.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.UPDATEPARTICLESINTERVAL,
+                this.config.getInt(CONFIG_VALUES.UPDATEPARTICLESINTERVAL.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.UPDATESELECTIONINTERVAL,
+                this.config.getInt(CONFIG_VALUES.UPDATESELECTIONINTERVAL.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.CUBOIDLINES,
+                this.config.getBoolean(CONFIG_VALUES.CUBOIDLINES.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.POLYGONLINES,
+                this.config.getBoolean(CONFIG_VALUES.POLYGONLINES.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.CYLINDERLINES,
+                this.config.getBoolean(CONFIG_VALUES.CYLINDERLINES.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.ELLIPSOIDLINES,
+                this.config.getBoolean(CONFIG_VALUES.ELLIPSOIDLINES.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.CHECKFORAXE,
+                this.config.getBoolean(CONFIG_VALUES.CHECKFORAXE.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.PARTICLEDISTANCE,
+                this.config.getInt(CONFIG_VALUES.PARTICLEDISTANCE.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.USEPROTOCOLLIB,
+                this.config.getBoolean(CONFIG_VALUES.USEPROTOCOLLIB.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.MAXSIZE, this.config.getInt(CONFIG_VALUES.MAXSIZE.toString()));
+
+        // language config
+        this.configItems.replace(CONFIG_VALUES.LANGVISUALIZERENABLED,
+                this.config.getString(CONFIG_VALUES.LANGVISUALIZERENABLED.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.LANGVISUALIZERDISABLED,
+                this.config.getString(CONFIG_VALUES.LANGVISUALIZERDISABLED.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.LANGPLAYERSONLY,
+                this.config.getString(CONFIG_VALUES.LANGPLAYERSONLY.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.LANGSELECTIONSIZEOF,
+                this.config.getString(CONFIG_VALUES.LANGSELECTIONSIZEOF.toString()));
+
+        this.configItems.replace(CONFIG_VALUES.LANGBLOCKS, this.config.getString(CONFIG_VALUES.LANGBLOCKS.toString()));
     }
 
     /**
@@ -210,7 +300,7 @@ public class Configuration {
      * @return Returns the "gapBetweenPoints" property value.
      */
     public double getGapBetweenPoints() {
-        return (double) this.configItems.get("gapBetweenPoints");
+        return (double) this.configItems.get(CONFIG_VALUES.GAPBETWEENPOINTS);
     }
 
     /**
@@ -218,7 +308,7 @@ public class Configuration {
      * @return Returns the "verticalGap" property value.
      */
     public double getVerticalGap() {
-        return (double) this.configItems.get("verticalGap");
+        return (double) this.configItems.get(CONFIG_VALUES.VERTICALGAP);
     }
 
     /**
@@ -226,7 +316,7 @@ public class Configuration {
      * @return Returns the "updateParticlesInterval" property value.
      */
     public int getUpdateParticlesInterval() {
-        return (int) this.configItems.get("updateParticlesInterval");
+        return (int) this.configItems.get(CONFIG_VALUES.UPDATEPARTICLESINTERVAL);
     }
 
     /**
@@ -234,7 +324,7 @@ public class Configuration {
      * @return Returns the "updateSelectionInterval" property value.
      */
     public int getUpdateSelectionInterval() {
-        return (int) this.configItems.get("updateSelectionInterval");
+        return (int) this.configItems.get(CONFIG_VALUES.UPDATESELECTIONINTERVAL);
     }
 
     /**
@@ -242,7 +332,7 @@ public class Configuration {
      * @return Returns the "cuboidLines" property value.
      */
     public boolean isCuboidLinesEnabled() {
-        return (boolean) this.configItems.get("cuboidLines");
+        return (boolean) this.configItems.get(CONFIG_VALUES.CUBOIDLINES);
     }
 
     /**
@@ -250,7 +340,7 @@ public class Configuration {
      * @return Returns the "polygonLines" property value.
      */
     public boolean isPolygonLinesEnabled() {
-        return (boolean) this.configItems.get("polygonLines");
+        return (boolean) this.configItems.get(CONFIG_VALUES.POLYGONLINES);
     }
 
     /**
@@ -258,7 +348,7 @@ public class Configuration {
      * @return Returns the "cylinderLines" property value.
      */
     public boolean isCylinderLinesEnabled() {
-        return (boolean) this.configItems.get("cylinderLines");
+        return (boolean) this.configItems.get(CONFIG_VALUES.CYLINDERLINES);
     }
 
     /**
@@ -266,7 +356,7 @@ public class Configuration {
      * @return Returns the "ellipsoidLines" property value.
      */
     public boolean isEllipsoidLinesEnabled() {
-        return (boolean) this.configItems.get("ellipsoidLines");
+        return (boolean) this.configItems.get(CONFIG_VALUES.ELLIPSOIDLINES);
     }
 
     /**
@@ -274,7 +364,7 @@ public class Configuration {
      * @return Returns the "checkForAxe" property value.
      */
     public boolean isCheckForAxeEnabled() {
-        return (boolean) this.configItems.get("checkForAxe");
+        return (boolean) this.configItems.get(CONFIG_VALUES.CHECKFORAXE);
     }
 
     /**
@@ -290,7 +380,7 @@ public class Configuration {
      * @return Returns the "useProtocolLib" property value.
      */
     public boolean isUsingProtocolLib() {
-        return (boolean) this.configItems.get("useProtocolLib");
+        return (boolean) this.configItems.get(CONFIG_VALUES.USEPROTOCOLLIB);
     }
 
     /**
@@ -298,7 +388,7 @@ public class Configuration {
      * @return Returns the "particleDistance" property value.
      */
     public int getParticleDistance() {
-        return (int) this.configItems.get("particleDistance");
+        return (int) this.configItems.get(CONFIG_VALUES.PARTICLEDISTANCE);
     }
 
     /**
@@ -306,7 +396,7 @@ public class Configuration {
      * @return Returns the "maxSize" property value.
      */
     public int getMaxSize() {
-        return (int) this.configItems.get("maxSize");
+        return (int) this.configItems.get(CONFIG_VALUES.MAXSIZE);
     }
 
     /**
@@ -314,7 +404,7 @@ public class Configuration {
      * @return Translation of "langVisualizerEnabled".
      */
     public String getLangVisualizerEnabled() {
-        return (String) this.configItems.get("langVisualizerEnabled");
+        return (String) this.configItems.get(CONFIG_VALUES.LANGVISUALIZERENABLED);
     }
 
     /**
@@ -322,7 +412,7 @@ public class Configuration {
      * @return Translation of "visualizerDisabled".
      */
     public String getLangVisualizerDisabled() {
-        return (String) this.configItems.get("langVisualizerDisabled");
+        return (String) this.configItems.get(CONFIG_VALUES.LANGVISUALIZERDISABLED);
     }
 
     /**
@@ -330,7 +420,7 @@ public class Configuration {
      * @return Translation of "playersOnly".
      */
     public String getLangPlayersOnly() {
-        return (String) this.configItems.get("langPlayersOnly");
+        return (String) this.configItems.get(CONFIG_VALUES.LANGPLAYERSONLY);
     }
 
     /**
@@ -338,7 +428,7 @@ public class Configuration {
      * @return Translation of "selectionSizeOf".
      */
     public String getLangSelectionSizeOf() {
-        return (String) this.configItems.get("langSelectionSizeOf");
+        return (String) this.configItems.get(CONFIG_VALUES.LANGSELECTIONSIZEOF);
     }
 
     /**
@@ -346,6 +436,6 @@ public class Configuration {
      * @return Translation of "langBlocks".
      */
     public String getLangBlocks() {
-        return (String) this.configItems.get("langBlocks");
+        return (String) this.configItems.get(CONFIG_VALUES.LANGBLOCKS);
     }
 }
