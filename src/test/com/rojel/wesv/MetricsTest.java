@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
@@ -42,6 +43,8 @@ import junit.framework.TestCase;
 @PowerMockIgnore("org.mockito.*")
 @PrepareForTest({ Bukkit.class, Server.class, PluginManager.class, Plugin.class })
 public class MetricsTest extends TestCase {
+
+    private static String enabledItemName = "Enabled";
 
     /**
      * A mock of the Plugin class.
@@ -182,7 +185,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testAddPlotter() {
-        final AbstractPlotter aplotter = new Metrics.AbstractPlotter("Enabled") {
+        final AbstractPlotter aplotter = new Metrics.AbstractPlotter(enabledItemName) {
 
             @Override
             public int getValue() {
@@ -216,7 +219,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testRemovePlotter() {
-        final AbstractPlotter aplotter = new Metrics.AbstractPlotter("Enabled") {
+        final AbstractPlotter aplotter = new Metrics.AbstractPlotter(enabledItemName) {
 
             @Override
             public int getValue() {
@@ -234,7 +237,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testComparePlotters() {
-        final AbstractPlotter aplotter = new Metrics.AbstractPlotter("Enabled") {
+        final AbstractPlotter aplotter = new Metrics.AbstractPlotter(enabledItemName) {
 
             @Override
             public int getValue() {
@@ -250,7 +253,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testComparePlottersWithDifferentPlotters() {
-        final AbstractPlotter aplotter1 = new Metrics.AbstractPlotter("Enabled") {
+        final AbstractPlotter aplotter1 = new Metrics.AbstractPlotter(enabledItemName) {
 
             @Override
             public int getValue() {
@@ -273,7 +276,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testComparePlottersWithDifferentClasses() {
-        final AbstractPlotter aplotter1 = new Metrics.AbstractPlotter("Enabled") {
+        final AbstractPlotter aplotter1 = new Metrics.AbstractPlotter(enabledItemName) {
 
             @Override
             public int getValue() {
@@ -323,7 +326,7 @@ public class MetricsTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testOptOutThrowsWithoutValidConfig() {
+    public void testOptOutThrowsWithoutValidConfigFile() {
         Metrics m = null;
         try {
             // a spy is needed here because getConfigFile() is private in Metrics
@@ -340,7 +343,7 @@ public class MetricsTest extends TestCase {
             // the expected exception thrown
         } catch (final Exception e) {
             fail("An unexpected exception (" + e.getClass().getSimpleName()
-                    + ") was thrown from Metrics.isOptOut() when getConfigFile() returned IOException.");
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() shoud have returned IOException.");
         }
 
         assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config file.",
@@ -352,7 +355,7 @@ public class MetricsTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     @Test
-    public void testOptOutThrowsWithoutValidConfigWithDebugOn() {
+    public void testOptOutThrowsWithoutValidConfigFileWithDebugOn() {
         Metrics m = null;
         try {
             m = PowerMockito.spy(new Metrics(this.pluginMock));
@@ -377,7 +380,7 @@ public class MetricsTest extends TestCase {
             // the expected exception thrown
         } catch (final Exception e) {
             fail("An unexpected exception (" + e.getClass().getSimpleName()
-                    + ") was thrown from Metrics.isOptOut() when getConfigFile() returned IOException.");
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() shoud have returned IOException.");
         }
 
         assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config file.",
@@ -385,12 +388,78 @@ public class MetricsTest extends TestCase {
     }
 
     /**
-     * Removes the static modifier of a a final static field in the given object.
+     * Tests that the opt-out method throws for invalid configuration.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOptOutThrowsWithInvalidConfig() {
+        Metrics m = null;
+        try {
+            // a spy is needed here because getConfigFile() is private in Metrics
+            m = PowerMockito.spy(new Metrics(this.pluginMock));
+        } catch (final IOException e) {
+            fail("Couldn't create new spy for the Metrics class.");
+        }
+
+        try {
+            // fake the response of the private method getConfigFile()
+            PowerMockito.when(m, PowerMockito.method(Metrics.class, "getConfigFile")).withNoArguments()
+                    .thenThrow(InvalidConfigurationException.class);
+        } catch (final InvalidConfigurationException icEx) {
+            // the expected exception thrown
+        } catch (final Exception e) {
+            fail("An unexpected exception (" + e.getClass().getSimpleName()
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() shoud have returned InvalidConfigurationException.");
+        }
+
+        assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config structure.",
+                m.isOptOut(), is(true));
+    }
+
+    /**
+     * Tests that the opt-out method throws for invalid configuration (debug flag ON).
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOptOutThrowsWithInvalidConfigWithDebugOn() {
+        Metrics m = null;
+        try {
+            m = PowerMockito.spy(new Metrics(this.pluginMock));
+            try {
+                setFinalStatic(Metrics.class.getDeclaredField("debug"), Boolean.TRUE, m);
+            } catch (final SecurityException e) {
+                fail("Could not set debug flag to TRUE due to security exception.");
+            } catch (final NoSuchFieldException e) {
+                fail("Could not set debug flag to TRUE because the field was not found.");
+            } catch (final Exception e) {
+                fail("Could not set debug flag to TRUE because of an unexpected exception ("
+                        + e.getClass().getSimpleName() + ").");
+            }
+        } catch (final IOException e) {
+            fail("Couldn't create new spy for the Metrics class.");
+        }
+
+        try {
+            PowerMockito.when(m, PowerMockito.method(Metrics.class, "getConfigFile")).withNoArguments()
+                    .thenThrow(InvalidConfigurationException.class);
+        } catch (final InvalidConfigurationException ecEx) {
+            // the expected exception thrown
+        } catch (final Exception e) {
+            fail("An unexpected exception (" + e.getClass().getSimpleName()
+                    + ") was thrown from Metrics.isOptOut() when getConfigFile() should have returned InvalidConfigurationException.");
+        }
+
+        assertThat("The isOptOut() method of Metrics returned FALSE instead of TRUE without a valid config structure.",
+                m.isOptOut(), is(true));
+    }
+
+    /**
+     * Removes the final modifier of a a final static field in the given object.
      *
-     * @param field
-     * @param newValue
-     * @param targetObject
-     * @throws Exception
+     * @param field Field to remove final modifier for.
+     * @param newValue New value to set for the final field.
+     * @param targetObject Object on which to perform the adjustment.
+     * @throws Exception If there was a problem augmenting the final field, various exceptions may be thrown by Java.
      */
     public static void setFinalStatic(final Field field, final Object newValue, final Object targetObject)
             throws Exception {
