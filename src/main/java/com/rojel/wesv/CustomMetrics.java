@@ -38,12 +38,17 @@ public class CustomMetrics {
     private final JavaPlugin plugin;
 
     /**
-     * Plugin configuration, determines what data to capture.
+     * WESV configuration, determines what data to capture.
      */
     private final Configuration config;
 
     /**
      * Constructor. Saves references to plugin and its configuration.
+     *
+     * ```java
+     * final CustomMetrics customMetrics = new CustomMetrics(yourPluginInstance, WESVConfigurationInstance);
+     * customMetrics.initMetrics();
+     * ```
      *
      * @param plugin - The plugin for which statistics are being collected.
      * @param config - Configuration of this plugin.
@@ -55,6 +60,10 @@ public class CustomMetrics {
 
     /**
      * Adds a new Graph into MCStats metrics using the name and the value provided.
+     *
+     * ```java
+     * customMetrics.addMcstatsGraph(mcStatsMetricsInstance, "PluginVersion", 1.21);
+     * ```
      *
      * @param metrics MCStats Metrics class instance.
      * @param graphName Name of the graph to add.
@@ -73,6 +82,10 @@ public class CustomMetrics {
     /**
      * Adds a new Graph into BStats metrics using the name and the value provided.
      *
+     * ```java
+     * customMetrics.addBcstatsGraph(bcStatsMetricsInstance, "PluginVersion", 1.21);
+     * ```
+     *
      * @param bmetrics BStats Metrics class instance.
      * @param graphID ID of the graph to add.
      * @param graphValue Value for the graph to send.
@@ -88,6 +101,11 @@ public class CustomMetrics {
 
     /**
      * Initialization routine for MCStats.
+     *
+     * ```java
+     * final CustomMetrics customMetrics = new CustomMetrics(yourPluginInstance, WESVConfigurationInstance);
+     * customMetrics.initMcStats();
+     * ```
      */
     private void initMcStats() {
         try {
@@ -150,6 +168,11 @@ public class CustomMetrics {
 
     /**
      * Initialization routine for BStats.
+     *
+     * ```java
+     * final CustomMetrics customMetrics = new CustomMetrics(yourPluginInstance, WESVConfigurationInstance);
+     * customMetrics.initBStats();
+     * ```
      */
     private void initBStats() {
         final org.bstats.Metrics bmetrics = new org.bstats.Metrics(this.plugin);
@@ -201,7 +224,12 @@ public class CustomMetrics {
     }
 
     /**
-     * Metrics initialization method.
+     * Initialization method for all supported metrics.
+     *
+     * ```java
+     * final CustomMetrics customMetrics = new CustomMetrics(yourPluginInstance, WESVConfigurationInstance);
+     * customMetrics.initMetrics();
+     * ```
      */
     public void initMetrics() {
         this.initMcStats();
