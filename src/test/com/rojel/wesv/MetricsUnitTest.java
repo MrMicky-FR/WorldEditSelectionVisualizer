@@ -10,17 +10,22 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitTask;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,14 +40,14 @@ import com.rojel.wesv.Metrics.Graph;
 import junit.framework.TestCase;
 
 /**
-* Tests for the Metrics class.
+* Unit tests for the Metrics class.
 * @author martinambrus
 *
 */
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("org.mockito.*")
 @PrepareForTest({ Bukkit.class, Server.class, PluginManager.class, Plugin.class })
-public class MetricsTest extends TestCase {
+public class MetricsUnitTest extends TestCase {
 
     /**
      * Text representation for any object (AbstractPlotter, Graph...)
@@ -326,6 +331,22 @@ public class MetricsTest extends TestCase {
     }
 
     /**
+     * Tests that the gzip method works predictably.
+     */
+    @Test
+    public void testGzipWorksPredictably() {
+        final byte[] a = Metrics.gzip("test");
+        String b = null;
+        try {
+            b = MetricsUnitTest.gunzip(a);
+        } catch (final Exception e) {
+            fail("GUnzip failed to work for the GZipped string in this unit test.");
+        }
+
+        assertEquals("GZip method returned different outputs for the same input values.", "test", b);
+    }
+
+    /**
      * Tests that the opt-out method throws when no valid config file was set.
      */
     @SuppressWarnings("unchecked")
@@ -460,6 +481,64 @@ public class MetricsTest extends TestCase {
     }
 
     /**
+     * Tests that Metrics won't start if we opted out.
+     */
+    @Test
+    public void testStartAbortsWhenOptedOut() {
+        Metrics m = null;
+        try {
+            m = PowerMockito.spy(new Metrics(this.pluginMock));
+        } catch (final IOException e) {
+            fail("Couldn't create new spy for the Metrics class.");
+        }
+
+        // fake the response of isOptOut()
+        try {
+            PowerMockito.doReturn(true).when(m).isOptOut();
+        } catch (final Exception e) {
+            fail("Mock of the isOptOut() method failed with a " + e.getClass().getSimpleName() + " exception.");
+        }
+
+        assertThat("The start() method of Metrics returned TRUE instead of FALSE when opted out.", m.start(),
+                is(false));
+    }
+
+    /**
+     * Tests that Metrics won't run multiple times if already running.
+     */
+    @Test
+    public void testMetricsRunOnlyOnce() {
+        Metrics m = null;
+        Field f = null;
+        final BukkitTask bTask = PowerMockito.mock(BukkitTask.class);
+        BukkitTask fieldTask = null;
+
+        try {
+            m = new Metrics(this.pluginMock);
+        } catch (final IOException e1) {
+            fail("Could not create new Metrics instance.");
+        }
+
+        try {
+            // set the private task field to the mocked task
+            f = m.getClass().getDeclaredField("task");
+            f.setAccessible(true);
+            f.set(m, bTask);
+
+            // call start()
+            m.start();
+
+            // get the value of that same field again for comparison
+            fieldTask = (BukkitTask) f.get(m);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            fail("Getting private property \"task\" of a Metrics instance failed.");
+        }
+
+        assertEquals("The start() method of Metrics started a new task when one was already running.", fieldTask,
+                bTask);
+    }
+
+    /**
      * Removes the final modifier of a a final static field in the given object.
      *
      * @param field Field to remove final modifier for.
@@ -475,5 +554,21 @@ public class MetricsTest extends TestCase {
         modifiersField.setAccessible(true);
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(targetObject, newValue);
+    }
+
+    public static String gunzip(final byte[] bytes) throws Exception {
+        if (bytes == null || bytes.length == 0) {
+            return "";
+        }
+
+        final GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(bytes));
+        final BufferedReader bf = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
+        String outStr = "";
+        String line;
+        while ((line = bf.readLine()) != null) {
+            outStr += line;
+        }
+
+        return outStr;
     }
 }
