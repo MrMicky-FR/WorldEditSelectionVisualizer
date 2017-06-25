@@ -556,6 +556,13 @@ public class MetricsUnitTest extends TestCase {
         field.set(targetObject, newValue);
     }
 
+    /**
+     * Reverse method to GZIP to get the original string from its GZIPped counterpart.
+     *
+     * @param bytes The GZIPped input bytes array.
+     * @return Returns the original un-GZIPped string.
+     * @throws Exception If an unexpected error occurs during the GUNZIP operation.
+     */
     public static String gunzip(final byte[] bytes) throws Exception {
         if (bytes == null || bytes.length == 0) {
             return "";
