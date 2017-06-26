@@ -155,9 +155,15 @@ dependencies {
     compile group: 'com.sk89q.worldedit',
             name: 'worldedit-bukkit',
             version: WORLDEDIT_VERSION
+
     // Spigot API
     compile group: 'org.spigotmc',
             name: 'spigot-api',
+            version: BUKKIT_API_VERSION
+
+    // Bukkit API
+    compile group: 'org.bukkit',
+            name: 'bukkit',
             version: BUKKIT_API_VERSION
 
     // ProtocolLib
