@@ -47,7 +47,7 @@ import junit.framework.TestCase;
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("org.mockito.*")
 @PrepareForTest({ Bukkit.class, Server.class, PluginManager.class, Plugin.class })
-public class MetricsUnitTest extends TestCase {
+public class MetricsTest extends TestCase {
 
     /**
      * Text representation for any object (AbstractPlotter, Graph...)
@@ -338,7 +338,7 @@ public class MetricsUnitTest extends TestCase {
         final byte[] a = Metrics.gzip("test");
         String b = null;
         try {
-            b = MetricsUnitTest.gunzip(a);
+            b = MetricsTest.gunzip(a);
         } catch (final Exception e) {
             fail("GUnzip failed to work for the GZipped string in this unit test.");
         }
