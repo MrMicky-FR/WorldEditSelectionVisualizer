@@ -54,6 +54,11 @@ public class MetricsTest extends TestCase {
      * that should be called "Default".
      */
     private static String enabledItemName = "Enabled";
+    
+    /**
+     * Text representation for any test object that should have a name of testItemName.
+     */
+    private static String testItemName = testItemName;
 
     /**
      * A mock of the Plugin class.
@@ -99,7 +104,7 @@ public class MetricsTest extends TestCase {
         PowerMockito.when(this.pluginMock.getDataFolder()).thenReturn(new File("plugin.yml"));
 
         PowerMockito.mockStatic(Bukkit.class);
-        PowerMockito.when(Bukkit.getLogger()).thenReturn(Logger.getLogger("test"));
+        PowerMockito.when(Bukkit.getLogger()).thenReturn(Logger.getLogger(testItemName));
 
         // remove the PluginMetrics/config.yml file, so our tests will test its creation as well
         File f = new File("PluginMetrics/config.yml");
@@ -110,7 +115,7 @@ public class MetricsTest extends TestCase {
         f.delete();
 
         this.met = new Metrics(this.pluginMock);
-        this.graph = this.met.createGraph("test");
+        this.graph = this.met.createGraph(testItemName);
     }
 
     /**
@@ -186,7 +191,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testGraphName() {
-        assertThat("Test graph did not retain its given name.", this.graph.getName(), is("test"));
+        assertThat("Test graph did not retain its given name.", this.graph.getName(), is(testItemName));
     }
 
     /**
@@ -335,7 +340,7 @@ public class MetricsTest extends TestCase {
      */
     @Test
     public void testGzipWorksPredictably() {
-        final byte[] a = Metrics.gzip("test");
+        final byte[] a = Metrics.gzip(testItemName);
         String b = null;
         try {
             b = MetricsTest.gunzip(a);
@@ -343,7 +348,7 @@ public class MetricsTest extends TestCase {
             fail("GUnzip failed to work for the GZipped string in this unit test.");
         }
 
-        assertEquals("GZip method returned different outputs for the same input values.", "test", b);
+        assertEquals("GZip method returned different outputs for the same input values.", testItemName, b);
     }
 
     /**
