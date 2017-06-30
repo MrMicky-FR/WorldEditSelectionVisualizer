@@ -58,7 +58,7 @@ public class MetricsTest extends TestCase {
     /**
      * Text representation for any test object that should have a name of testItemName.
      */
-    private static String testItemName = testItemName;
+    private static String testItemName = "test";
 
     /**
      * A mock of the Plugin class.
