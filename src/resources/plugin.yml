@@ -10,15 +10,23 @@ commands:
     description: Toggles the visualizer.
     permission: wesv.toggle
     usage: /wesv
+  wesv_reload:
+    description: Reloads configuration of the plugin.
+    permission: wesv.reloadconfig
+    usage: /wesv_reload
 permissions:
   wesv.*:
     default: true
     children:
       wesv.use: true
       wesv.toggle: true
+      wesv.reloadconfig: op
   wesv.use:
     default: true
     description: Allows the visualizer to be used.
   wesv.toggle:
     default: true
     description: Allows the visualizer to be toggled.
+  wesv.reloadconfig:
+    default: op
+    description: Allows the configuration of this plugin to be reloaded from the config.yml file.

@@ -93,7 +93,15 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
                 return true;
             }
         } else {
-            sender.sendMessage(this.config.getLangPlayersOnly());
+            if (label.equals("wesv_reload")) {
+                if (sender.hasPermission("wesv.reloadconfig")) {
+                    this.config.reloadConfig();
+                    sender.sendMessage(this.config.getConfigReloaded());
+                }
+            } else {
+                sender.sendMessage(this.config.getLangPlayersOnly());
+            }
+
             return true;
         }
         return false;

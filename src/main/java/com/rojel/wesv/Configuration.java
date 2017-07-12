@@ -147,6 +147,12 @@ public class Configuration {
          */
         LANGBLOCKS(
                 "lang.langBlocks"
+        ),
+        /**
+         * Language translation string from config.
+         */
+        LANGCONFIGRELOADED(
+                "lang.configReloaded"
         );
 
         /**
@@ -232,6 +238,9 @@ public class Configuration {
 
             // Language translation string from config.
             this.put(CONFIG_VALUES.LANGBLOCKS, "blocks");
+            
+            // Language translation string from config.
+            this.put(CONFIG_VALUES.LANGCONFIGRELOADED, "Configuration for visualizer was reloaded from the disk.");
 
         }
     };
@@ -256,7 +265,13 @@ public class Configuration {
         this.plugin.saveDefaultConfig();
         this.config = this.plugin.getConfig();
         this.config.options().copyDefaults(true);
-
+        this.reloadConfig();
+    }
+    
+    /**
+     * Loads values from config.yml file into the internal config EnumMap.
+     */
+    public void reloadConfig() {
         this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
         this.selectionItem = this.getSelectionItem(this.config.getString("selectionItem"));
 
@@ -305,6 +320,8 @@ public class Configuration {
                 this.config.getString(CONFIG_VALUES.LANGSELECTIONSIZEOF.toString()));
 
         this.configItems.put(CONFIG_VALUES.LANGBLOCKS, this.config.getString(CONFIG_VALUES.LANGBLOCKS.toString()));
+        
+        this.configItems.put(CONFIG_VALUES.LANGCONFIGRELOADED, this.config.getString(CONFIG_VALUES.LANGCONFIGRELOADED.toString()));
     }
 
     /**
@@ -506,5 +523,13 @@ public class Configuration {
      */
     public String getLangBlocks() {
         return (String) this.configItems.get(CONFIG_VALUES.LANGBLOCKS);
+    }
+    
+    /**
+     * Retrieves translation for the "configReloaded" text.
+     * @return Translation of "configReloaded".
+     */
+    public String getConfigReloaded() {
+        return (String) this.configItems.get(CONFIG_VALUES.LANG);
     }
 }
