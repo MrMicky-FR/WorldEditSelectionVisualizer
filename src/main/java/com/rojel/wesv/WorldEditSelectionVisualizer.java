@@ -76,32 +76,26 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
             final String[] args) {
         if (sender instanceof Player) {
             final Player player = (Player) sender;
-            if (label.equals("wesv")) {
-                if (player.hasPermission("wesv.toggle")) {
-                    final boolean isEnabled = !this.config.isEnabled(player);
-                    this.config.setEnabled(player, isEnabled);
-                    if (isEnabled) {
-                        player.sendMessage(ChatColor.GREEN + this.config.getLangVisualizerEnabled());
-                        if (this.shouldShowSelection(player)) {
-                            this.showSelection(player);
-                        }
-                    } else {
-                        player.sendMessage(ChatColor.RED + this.config.getLangVisualizerDisabled());
-                        this.hideSelection(player);
+            if ("wesv".equals(label) && player.hasPermission("wesv.toggle")) {
+                final boolean isEnabled = !this.config.isEnabled(player);
+                this.config.setEnabled(player, isEnabled);
+                if (isEnabled) {
+                    player.sendMessage(ChatColor.GREEN + this.config.getLangVisualizerEnabled());
+                    if (this.shouldShowSelection(player)) {
+                        this.showSelection(player);
                     }
+                } else {
+                    player.sendMessage(ChatColor.RED + this.config.getLangVisualizerDisabled());
+                    this.hideSelection(player);
                 }
                 return true;
             }
+        } else if ("wesv_reload".equals(label) && sender.hasPermission("wesv.reloadconfig")) {
+            this.config.reloadConfig();
+            sender.sendMessage(this.config.getConfigReloaded());
+            return true;
         } else {
-            if (label.equals("wesv_reload")) {
-                if (sender.hasPermission("wesv.reloadconfig")) {
-                    this.config.reloadConfig();
-                    sender.sendMessage(this.config.getConfigReloaded());
-                }
-            } else {
-                sender.sendMessage(this.config.getLangPlayersOnly());
-            }
-
+            sender.sendMessage(this.config.getLangPlayersOnly());
             return true;
         }
         return false;

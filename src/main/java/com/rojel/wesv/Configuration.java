@@ -321,7 +321,8 @@ public class Configuration {
 
         this.configItems.put(CONFIG_VALUES.LANGBLOCKS, this.config.getString(CONFIG_VALUES.LANGBLOCKS.toString()));
         
-        this.configItems.put(CONFIG_VALUES.LANGCONFIGRELOADED, this.config.getString(CONFIG_VALUES.LANGCONFIGRELOADED.toString()));
+        this.configItems.put(CONFIG_VALUES.LANGCONFIGRELOADED,
+                this.config.getString(CONFIG_VALUES.LANGCONFIGRELOADED.toString()));
     }
 
     /**
