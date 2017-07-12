@@ -122,31 +122,31 @@ public class Configuration {
          * Language translation string from config.
          */
         LANGVISUALIZERENABLED(
-                "lang.langVisualizerEnabled"
+                "lang.visualizerEnabled"
         ),
         /**
          * Language translation string from config.
          */
         LANGVISUALIZERDISABLED(
-                "lang.langVisualizerDisabled"
+                "lang.visualizerDisabled"
         ),
         /**
          * Language translation string from config.
          */
         LANGPLAYERSONLY(
-                "lang.langPlayersOnly"
+                "lang.playersOnly"
         ),
         /**
          * Language translation string from config.
          */
         LANGSELECTIONSIZEOF(
-                "lang,langSelectionSizeOf"
+                "lang,selectionSizeOf"
         ),
         /**
          * Language translation string from config.
          */
         LANGBLOCKS(
-                "lang.langBlocks"
+                "lang.blocks"
         ),
         /**
          * Language translation string from config.
