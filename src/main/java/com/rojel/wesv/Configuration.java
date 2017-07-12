@@ -530,6 +530,6 @@ public class Configuration {
      * @return Translation of "configReloaded".
      */
     public String getConfigReloaded() {
-        return (String) this.configItems.get(CONFIG_VALUES.LANG);
+        return (String) this.configItems.get(CONFIG_VALUES.LANGCONFIGRELOADED);
     }
 }
