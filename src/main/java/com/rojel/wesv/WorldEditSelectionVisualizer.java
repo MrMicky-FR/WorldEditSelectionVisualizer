@@ -74,7 +74,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label,
             final String[] args) {
-        if (sender instanceof Player) {
+
+        System.out.println(label);
+
+        if (sender instanceof Player && "wesv".equals(label)) {
             final Player player = (Player) sender;
             if ("wesv".equals(label) && player.hasPermission("wesv.toggle")) {
                 final boolean isEnabled = !this.config.isEnabled(player);
@@ -140,8 +143,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     }
 
     public boolean shouldShowSelection(final Player player) {
-        return this.config.isEnabled(player)
-                && (!this.config.isCheckForAxeEnabled() || this.config.isCheckForAxeEnabled() && this.holdsSelectionItem(player));
+        return this.config.isEnabled(player) && (!this.config.isCheckForAxeEnabled()
+                || this.config.isCheckForAxeEnabled() && this.holdsSelectionItem(player));
     }
 
     public void showSelection(final Player player) {
@@ -154,8 +157,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
             final UUID uniqueId = player.getUniqueId();
             if (this.lastSelectionTooLarge.containsKey(uniqueId)
                     && !this.lastSelectionTooLarge.get(uniqueId).booleanValue()) {
-                player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf() + this.config.getMaxSize()
-                        + this.config.getLangBlocks());
+                player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf()
+                        + this.config.getMaxSize() + this.config.getLangBlocks());
             }
             this.lastSelectionTooLarge.put(player.getUniqueId(), true);
         } else {
