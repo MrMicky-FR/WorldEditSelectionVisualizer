@@ -1,5 +1,5 @@
 /***
- * Reflection utilities test to make sure WESV remains cross-version compatible.
+ * Unit tests for the Metrics class.
  */
 
 package com.rojel.wesv;
@@ -54,7 +54,7 @@ public class MetricsTest extends TestCase {
      * that should be called "Default".
      */
     private static String enabledItemName = "Enabled";
-    
+
     /**
      * Text representation for any test object that should have a name of testItemName.
      */
