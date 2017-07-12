@@ -74,7 +74,6 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label,
             final String[] args) {
-
         if (sender instanceof Player && "wesv".equals(label)) {
             final Player player = (Player) sender;
             if ("wesv".equals(label) && player.hasPermission("wesv.toggle")) {
