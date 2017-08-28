@@ -3,7 +3,7 @@ lang:
   visualizerDisabled: "Your visualizer has been disabled."
   playersOnly: "Only a player can toggle his visualizer."
   selectionSizeOf: "The visualizer only works with selections up to a size of "
-  blocks: "blocks"
+  blocks: " blocks"
   configReloaded: "Configuration for visualizer was reloaded from the disk."
 useProtocolLib: false
 particleDistance: 16
