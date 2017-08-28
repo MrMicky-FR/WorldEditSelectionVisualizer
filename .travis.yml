@@ -23,6 +23,8 @@ notifications:
     on_success: change
     on_failure: always
     on_start: never
+script:
+- ./gradlew clean assemble check --gradle-version 4.0.1
 after_success:
   - if [ "$TRAVIS_JDK_VERSION" == "openjdk7" ]; then bash <(curl -s https://codecov.io/bash); fi
   - chmod +x generate-docs.sh
