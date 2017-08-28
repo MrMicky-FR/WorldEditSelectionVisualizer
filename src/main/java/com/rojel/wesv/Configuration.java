@@ -140,7 +140,7 @@ public class Configuration {
          * Language translation string from config.
          */
         LANGSELECTIONSIZEOF(
-                "lang,selectionSizeOf"
+                "lang.selectionSizeOf"
         ),
         /**
          * Language translation string from config.
