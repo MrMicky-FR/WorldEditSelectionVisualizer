@@ -1,10 +1,7 @@
 language: java
 dist: trusty
 sudo: false
-before_install:
-  - rm -f build/com.rojel.wesv/libs/*
-  - 'export TRAVIS_TAG=wesv-$(grep ''version: '' src/resources/plugin.yml | awk ''{print$2}'')-build-$TRAVIS_BUILD_NUMBER'
-  - 'sed -i ''s/%PLUGIN_VERSION%/''$(grep ''version: '' src/resources/plugin.yml | awk ''{print $2}'')''/'' build.gradle'
+dist: trusty
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
@@ -23,8 +20,15 @@ notifications:
     on_success: change
     on_failure: always
     on_start: never
+before_install:
+  - rm -f build/com.rojel.wesv/libs/*
+  - 'export TRAVIS_TAG=wesv-$(grep ''version: '' src/resources/plugin.yml | awk ''{print$2}'')-build-$TRAVIS_BUILD_NUMBER'
+  - 'sed -i ''s/%PLUGIN_VERSION%/''$(grep ''version: '' src/resources/plugin.yml | awk ''{print $2}'')''/'' build.gradle'
+install:
+  - chmod +x ./gradlew
+  - JAVA_HOME=$(jdk_switcher home openjdk8) ./gradlew classes testClasses
 script:
-- ./gradlew clean assemble check --gradle-version 4.0.1
+- ./gradlew clean assemble check
 after_success:
   - if [ "$TRAVIS_JDK_VERSION" == "openjdk7" ]; then bash <(curl -s https://codecov.io/bash); fi
   - chmod +x generate-docs.sh
@@ -52,3 +56,4 @@ branches:
 env:
   global:
   - secure: K7YM4DYm+PJqWgHuv2n1hZq7RaCT5wfwoM+CeDk/OCmeVzJl15392fV69b6VUtrsSsarEL8rRomNBfEspCXsgtWMDTW1UzpjEfn+W3sH0LgqVA3cdF9D/oDuR+JLeEhDtQ6udQbM6eEfQEXsqtguR2R2vOuBGPJ6sbU71M/bhw0LA/l2y8AVYnCHBf0SU0Lnrxxoxmye9YHR+BDztfh9MCWe74CP0dUJ0QKH6RjkBMaExcxmcQP1jm0bqkTTnjAW5QEF3pZW7pCXafEizeHmeMwcQx06b9L4vm3X305exxzrbBn2VKqQIBoiK7iatyFXsE2qkWO5KGHJ9d/PvFQXLo/NSjOFtmg637HdkWS2iFhWF835nffZOQOxCqDsNQiK/0Nst6TYpjcD+rX1Kaawe9f0HSQjPRW8OUrm/rZcIAVTmAL4QU9VIzzzu3igQcwbaIcmLKvJkvhQ7iXzk9q3EuzSyWGxPNtBjXJtZHpfdPNAGEWDxyjZPorAjOlVTuc3WdEQp9BEZWt3a6ipo8KnqGpjrvjhB4m5Cp0qkhx/cry+QALr03Maty13j1iSp/lukSk/IwRr+fFox/6aXtMyQSSFLvTab8KQD8Ek7Xk92pn/L1rbqNhz0VuR2LNETbDBdq6BzEdMRpRAXC+VChm6KT1a43+erYCaQlO0DQxqGrI=
+
