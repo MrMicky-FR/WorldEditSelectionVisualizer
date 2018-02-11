@@ -56,7 +56,7 @@ public class ParticleSender implements Listener {
 
 			@Override
 			public void run() {
-				int particleDistance = ParticleSender.this.config.getParticleDistance();
+				final int particleDistance = ParticleSender.this.config.getParticleDistance();
 				for (final UUID uuid : ParticleSender.this.playerParticleMap.keySet()) {
 					final Player player = ParticleSender.this.plugin.getServer().getPlayer(uuid);
 					for (final Location loc : ParticleSender.this.playerParticleMap.get(uuid)) {
