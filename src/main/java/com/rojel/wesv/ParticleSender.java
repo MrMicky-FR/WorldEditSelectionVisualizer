@@ -37,12 +37,12 @@ public class ParticleSender implements Listener {
 	private final Map<UUID, Collection<Location>> playerParticleMap;
 
 	public ParticleSender(final JavaPlugin plugin, final Configuration config) {
-        this.plugin = plugin;
-        this.config = config;
-        this.playerParticleMap = new HashMap<UUID, Collection<Location>>();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        this.startSending();
-    }
+		this.plugin = plugin;
+		this.config = config;
+		this.playerParticleMap = new HashMap<UUID, Collection<Location>>();
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+		this.startSending();
+	}
 
 	public void setParticlesForPlayer(final Player player, final Collection<Location> locations) {
 		this.playerParticleMap.put(player.getUniqueId(), locations);
@@ -61,7 +61,7 @@ public class ParticleSender implements Listener {
 					final Player player = ParticleSender.this.plugin.getServer().getPlayer(uuid);
 					for (final Location loc : ParticleSender.this.playerParticleMap.get(uuid)) {
 						if (!loc.getWorld().equals(player.getLocation().getWorld())
-								|| loc.distance(player.getLocation()) > particleDistance) {
+								|| loc.distanceSquared(player.getLocation()) > particleDistance * particleDistance) {
 							continue;
 						}
 
