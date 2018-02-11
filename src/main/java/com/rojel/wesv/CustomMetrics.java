@@ -149,10 +149,6 @@ public class CustomMetrics {
             this.addMcstatsGraph(metrics, "Check for axe",
                     this.config.isCheckForAxeEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
-            // create graph for Use ProtocolLib
-            this.addMcstatsGraph(metrics, "Use ProtocolLib",
-                    this.config.isUsingProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
-
             // create graph for Particle distance
             this.addMcstatsGraph(metrics, "Particle distance", "" + this.config.getParticleDistance() + "");
 
@@ -211,10 +207,6 @@ public class CustomMetrics {
         // create graph for Check for axe
         this.addBcstatsGraph(bmetrics, "check_for_axe",
                 this.config.isCheckForAxeEnabled() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
-
-        // create graph for Use ProtocolLib
-        this.addBcstatsGraph(bmetrics, "protocollib_use",
-                this.config.isUsingProtocolLib() ? CustomMetrics.enabledValue : CustomMetrics.disabledValue);
 
         // create graph for Particle distance
         this.addBcstatsGraph(bmetrics, "particle_distance", "" + this.config.getParticleDistance() + "");

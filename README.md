@@ -18,16 +18,12 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous WorldEditCUI mod (
 - Use /wesv to toggle the visualizer
 - Only show the selection when holding the selection item
 - Configurable particle effect
-- Force large particle distances to see your selection from far away (requires ProtocolLib)
+- Force large particle distances to see your selection from far away
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
 - [Documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc)
 
 Detailed documentation about the available permissions and configuration options is available on the documentation page (http://dev.bukkit.org/bukkit-plugins/worldedit-selection-visualizer/pages/documentation/)
-
-**ProtocolLib**
-
-This plugin has optional support for ProtocolLib (http://dev.bukkit.org/bukkit-plugins/protocollib/). If you want to see particles from distances > 16, you need to have it installed and enabled in the configuration (see Documentation - http://dev.bukkit.org/bukkit-plugins/worldedit-selection-visualizer/pages/documentation/).
 
 **Downloads**
 
