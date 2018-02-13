@@ -4,7 +4,6 @@ version: 1.4.8
 authors: [Rojetto, ZathrusWriter]
 description: Shows WorldEdit selections with particles.
 depend: [WorldEdit]
-softdepend: [ProtocolLib]
 commands:
   wesv:
     description: Toggles the visualizer.

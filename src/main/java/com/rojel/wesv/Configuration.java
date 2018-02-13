@@ -107,12 +107,6 @@ public class Configuration {
                 "particleDistance"
         ),
         /**
-         * Whether or not to use the ProtocolLib library (allows to see particles from longer distances).
-         */
-        USEPROTOCOLLIB(
-                "useProtocolLib"
-        ),
-        /**
          * Maximum size of the visualized selection itself.
          */
         MAXSIZE(
@@ -218,9 +212,6 @@ public class Configuration {
             // Maximum distance to see selection particles from.
             this.put(CONFIG_VALUES.PARTICLEDISTANCE, 16);
 
-            // Whether or not to use the ProtocolLib library (allows to see particles from longer distances).
-            this.put(CONFIG_VALUES.USEPROTOCOLLIB, false);
-
             // Maximum size of the visualized selection itself.
             this.put(CONFIG_VALUES.MAXSIZE, 10000);
 
@@ -303,9 +294,6 @@ public class Configuration {
 
         this.configItems.put(CONFIG_VALUES.PARTICLEDISTANCE,
                 this.config.getInt(CONFIG_VALUES.PARTICLEDISTANCE.toString()));
-
-        this.configItems.put(CONFIG_VALUES.USEPROTOCOLLIB,
-                this.config.getBoolean(CONFIG_VALUES.USEPROTOCOLLIB.toString()));
 
         this.configItems.put(CONFIG_VALUES.MAXSIZE, this.config.getInt(CONFIG_VALUES.MAXSIZE.toString()));
 
@@ -463,14 +451,6 @@ public class Configuration {
      */
     public Material getSelectionItemConfigValue() {
         return this.selectionItem;
-    }
-
-    /**
-     * Retrieves the "useProtocolLib" property value.
-     * @return Returns the "useProtocolLib" property value.
-     */
-    public boolean isUsingProtocolLib() {
-        return (boolean) this.configItems.get(CONFIG_VALUES.USEPROTOCOLLIB);
     }
 
     /**

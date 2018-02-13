@@ -5,7 +5,6 @@ lang:
   selectionSizeOf: "The visualizer only works with selections up to a size of "
   blocks: " blocks"
   configReloaded: "Configuration for visualizer was reloaded from the disk."
-useProtocolLib: false
 particleDistance: 16
 maxSize: 10000
 checkForAxe: false

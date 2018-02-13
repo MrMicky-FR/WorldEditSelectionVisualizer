@@ -32,7 +32,6 @@ ext {
     println("$rootProject.name")
     BUKKIT_API_VERSION = '1.12-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '6.1'
-    PROTOCOLLIB_VERSION = '4.2.1'
     BSTATS_VERSION = '1.1'
     BUILD_DIR = "build/$group"
     FINAL_DIR  = 'Plugins/'
@@ -70,10 +69,6 @@ repositories {
     maven {
         name "WorldEdit"
         url "http://maven.sk89q.com/artifactory/repo/"
-    }
-    maven {
-        name "ProtocolLib"
-        url "http://repo.dmulloy2.net/nexus/repository/public/"
     }
     maven {
         name "MockitoBeta"
@@ -165,11 +160,6 @@ dependencies {
     compile group: 'org.bukkit',
             name: 'bukkit',
             version: BUKKIT_API_VERSION
-
-    // ProtocolLib
-    compile group: 'com.comphenix.protocol',
-            name: 'ProtocolLib',
-            version: PROTOCOLLIB_VERSION
 
     // BStats
     compile group: 'org.bstats',

@@ -122,7 +122,7 @@ public enum ParticleEffect {
 
     private static boolean isLongDistance(Location location, List<Player> players) {
         for (Player player : players) {
-            if (player.getLocation().distanceSquared(location) < 65536.0) {
+            if (player.getLocation().distanceSquared(location) < 256.0) {
 				continue;
 			}
             return true;
