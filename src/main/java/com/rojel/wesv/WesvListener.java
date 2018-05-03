@@ -21,7 +21,7 @@ public class WesvListener implements Listener {
 	}
 
 	@EventHandler
-	private void onWorldEditSelectionChange(final WorldEditSelectionChangeEvent event) {
+	public void onWorldEditSelectionChange(final WorldEditSelectionChangeEvent event) {
 		final Player player = event.getPlayer();
 		if (this.plugin.isSelectionShown(player)) {
 			this.plugin.showSelection(player);
@@ -29,7 +29,7 @@ public class WesvListener implements Listener {
 	}
 
 	@EventHandler
-	private void onItemChange(final PlayerItemHeldEvent event) {
+	public void onItemChange(final PlayerItemHeldEvent event) {
 		final Player player = event.getPlayer();
 		if (this.plugin.getCustomConfig().isCheckForAxeEnabled() && this.plugin.getCustomConfig().isEnabled(player)) {
 			
@@ -42,7 +42,7 @@ public class WesvListener implements Listener {
 	}
 
 	@EventHandler
-	private void onPlayerQuit(final PlayerQuitEvent event) {
+	public void onPlayerQuit(final PlayerQuitEvent event) {
 		plugin.removePlayer(event.getPlayer());
 	}
 }

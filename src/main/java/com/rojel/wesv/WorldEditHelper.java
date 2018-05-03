@@ -20,6 +20,8 @@ public class WorldEditHelper extends BukkitRunnable {
 	private final WorldEditPlugin we;
 
 	public WorldEditHelper(final WorldEditSelectionVisualizer plugin) {
+		super();
+
 		this.plugin = plugin;
 		this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 
@@ -30,17 +32,20 @@ public class WorldEditHelper extends BukkitRunnable {
 	public void run() {
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 			Region currentRegion;
-			if (!plugin.getCustomConfig().isEnabled(player) || !player.hasPermission("wesv.use")
-					|| WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
-							currentRegion = WorldEditHelper.this.getSelectedRegion(player))) {
+			if (!plugin.getCustomConfig().isEnabled(player) || !player.hasPermission("wesv.use")) {
 				continue;
 			}
 
-			if (currentRegion != null) {
-				plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
-			} else {
-				plugin.getLastSelectedRegions().remove(player.getUniqueId());
-			}
+			currentRegion = WorldEditHelper.this.getSelectedRegion(player);
+
+			if (WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
+					currentRegion))
+
+				if (currentRegion != null) {
+					plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
+				} else {
+					plugin.getLastSelectedRegions().remove(player.getUniqueId());
+				}
 
 			plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 		}
@@ -66,7 +71,7 @@ public class WorldEditHelper extends BukkitRunnable {
 			return true;
 		}
 
-		if ((r1 != null && r2 == null) || (r1 == null && r2 != null)) {
+		if (r1 != null && r2 == null || r1 == null && r2 != null) {
 			return false;
 		}
 

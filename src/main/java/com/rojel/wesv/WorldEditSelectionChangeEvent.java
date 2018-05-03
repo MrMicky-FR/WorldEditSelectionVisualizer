@@ -62,6 +62,8 @@ public class WorldEditSelectionChangeEvent extends Event {
 	 *            The region in which to listen to this event.
 	 */
 	public WorldEditSelectionChangeEvent(final Player player, final Region region) {
+		super();
+
 		this.player = player;
 		this.region = region;
 	}

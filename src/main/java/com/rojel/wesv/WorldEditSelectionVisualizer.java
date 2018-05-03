@@ -130,7 +130,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	public void setParticlesForPlayer(final Player player, final Collection<Location> locations) {
 		this.cancelAndRemoveFadeOutTask(player.getUniqueId());
 
-		if (locations == null || locations.size() == 0) {
+		if (locations == null || locations.isEmpty()) {
 			this.playerParticleMap.remove(player.getUniqueId());
 		} else {
 			this.playerParticleMap.put(player.getUniqueId(), locations);

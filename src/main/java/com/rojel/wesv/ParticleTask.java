@@ -15,6 +15,8 @@ public class ParticleTask extends BukkitRunnable {
 	private final WorldEditSelectionVisualizer plugin;
 
 	public ParticleTask(final WorldEditSelectionVisualizer plugin) {
+		super();
+		
 		this.plugin = plugin;
 
 		runTaskTimer(this.plugin, 1, plugin.getCustomConfig().getUpdateParticlesInterval());
