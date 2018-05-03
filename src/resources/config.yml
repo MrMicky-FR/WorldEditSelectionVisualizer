@@ -8,7 +8,6 @@ lang:
 particleDistance: 32
 maxSize: 10000
 checkForAxe: false
-selectionItem: WOOD_AXE
 particleEffect: reddust
 horizontalLinesForCuboid: true
 horizontalLinesForPolygon: true
