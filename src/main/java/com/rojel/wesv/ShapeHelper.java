@@ -1,18 +1,5 @@
 /*
  * Decompiled with CFR 0_110.
- *
- * Could not load the following classes:
- *  com.sk89q.worldedit.BlockVector2D
- *  com.sk89q.worldedit.Vector
- *  com.sk89q.worldedit.regions.CuboidRegion
- *  com.sk89q.worldedit.regions.CylinderRegion
- *  com.sk89q.worldedit.regions.EllipsoidRegion
- *  com.sk89q.worldedit.regions.Polygonal2DRegion
- *  com.sk89q.worldedit.regions.Region
- *  com.sk89q.worldedit.world.World
- *  org.bukkit.Bukkit
- *  org.bukkit.Location
- *  org.bukkit.World
  */
 
 package com.rojel.wesv;
@@ -33,6 +20,7 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 
 public class ShapeHelper {
+	
     private final Configuration config;
 
     public ShapeHelper(final Configuration config) {
@@ -192,6 +180,6 @@ public class ShapeHelper {
             final Vector loc = new Vector(x, y, z);
             vectors.add(loc);
         }
-        return vectors;
-    }
+		return vectors;
+	}
 }

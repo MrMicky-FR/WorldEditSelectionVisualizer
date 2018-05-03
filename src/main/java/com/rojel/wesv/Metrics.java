@@ -913,6 +913,6 @@ public class Metrics {
 
             final AbstractPlotter plotter = (AbstractPlotter) object;
             return plotter.name.equals(this.name) && plotter.getValue() == this.getValue();
-        }
-    }
+		}
+	}
 }

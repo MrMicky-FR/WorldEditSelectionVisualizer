@@ -1,75 +1,66 @@
 /*
  * Decompiled with CFR 0_110.
- *
- * Could not load the following classes:
- *  com.sk89q.worldedit.regions.Region
- *  org.bukkit.ChatColor
- *  org.bukkit.Location
- *  org.bukkit.Material
- *  org.bukkit.Server
- *  org.bukkit.command.Command
- *  org.bukkit.command.CommandSender
- *  org.bukkit.entity.Player
- *  org.bukkit.event.EventHandler
- *  org.bukkit.event.Listener
- *  org.bukkit.event.player.PlayerItemHeldEvent
- *  org.bukkit.event.player.PlayerQuitEvent
- *  org.bukkit.inventory.ItemStack
- *  org.bukkit.inventory.PlayerInventory
- *  org.bukkit.plugin.Plugin
- *  org.bukkit.plugin.PluginManager
- *  org.bukkit.plugin.java.JavaPlugin
  */
 
 package com.rojel.wesv;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.regions.Region;
 
-public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener {
+public class WorldEditSelectionVisualizer extends JavaPlugin {
+
 	private Configuration config;
 	private WorldEditHelper worldEditHelper;
 	private ShapeHelper shapeHelper;
-	private ParticleSender particleSender;
-	private Map<UUID, Boolean> shown;
-	private Map<UUID, Boolean> lastSelectionTooLarge;
+
+	private final List<UUID> shown = new ArrayList<>();
+	private final List<UUID> lastSelectionTooLarge = new ArrayList<>();
+	private final Map<UUID, Region> lastSelectedRegions = new HashMap<>();
+	private final Map<UUID, Integer> fadeOutTasks = new HashMap<>();
+	private final Map<UUID, Collection<Location>> playerParticleMap = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		this.shown = new HashMap<UUID, Boolean>();
-		this.lastSelectionTooLarge = new HashMap<UUID, Boolean>();
 		this.config = new Configuration(this);
 		this.config.load();
-		this.worldEditHelper = new WorldEditHelper(this, this.config);
+		this.worldEditHelper = new WorldEditHelper(this);
 		this.shapeHelper = new ShapeHelper(this.config);
-		this.particleSender = new ParticleSender(this, this.config);
-		this.getServer().getPluginManager().registerEvents(this, this);
-		new CustomMetrics(this, this.config).initMetrics();
 
+		new ParticleTask(this);
+
+		this.getServer().getPluginManager().registerEvents(new WesvListener(this), this);
+
+		for (final Player player : getServer().getOnlinePlayers()) {
+			addPlayer(player);
+		}
+
+		new CustomMetrics(this, this.config).initMetrics();
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label,
 			final String[] args) {
-		if (sender instanceof Player && "wesv".equals(label)) {
-			final Player player = (Player) sender;
-			if ("wesv".equals(label) && player.hasPermission("wesv.toggle")) {
+		if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
+			if (sender instanceof Player) {
+
+				final Player player = (Player) sender;
 				final boolean isEnabled = !this.config.isEnabled(player);
 				this.config.setEnabled(player, isEnabled);
+
 				if (isEnabled) {
 					player.sendMessage(ChatColor.GREEN + this.config.getLangVisualizerEnabled());
 					if (this.shouldShowSelection(player)) {
@@ -79,85 +70,120 @@ public class WorldEditSelectionVisualizer extends JavaPlugin implements Listener
 					player.sendMessage(ChatColor.RED + this.config.getLangVisualizerDisabled());
 					this.hideSelection(player);
 				}
-				return true;
+			} else {
+				sender.sendMessage(this.config.getLangPlayersOnly());
 			}
-		} else if ("wesv_reload".equals(label) && sender.hasPermission("wesv.reloadconfig")) {
+		} else {
 			this.config.reloadConfig();
 			sender.sendMessage(this.config.getConfigReloaded());
-			return true;
-		} else {
-			sender.sendMessage(this.config.getLangPlayersOnly());
-			return true;
 		}
-		return false;
+		return true;
 	}
 
-	@EventHandler
-	private void onWorldEditSelectionChange(final WorldEditSelectionChangeEvent event) {
-		final Player player = event.getPlayer();
-		if (this.isSelectionShown(player)) {
-			this.showSelection(player);
-		}
-	}
-
-	@EventHandler
-	private void onItemChange(final PlayerItemHeldEvent event) {
-		final Player player = event.getPlayer();
-		if (this.config.isCheckForAxeEnabled() && this.config.isEnabled(player)) {
-			final ItemStack item = player.getInventory().getItem(event.getNewSlot());
-			if (item != null && item.getType() == this.config.getSelectionItemConfigValue()) {
-				this.showSelection(player);
-			} else {
-				this.hideSelection(player);
-			}
-		}
-	}
-
-	@EventHandler
-	private void onPlayerQuit(final PlayerQuitEvent event) {
-		this.shown.remove(event.getPlayer().getUniqueId());
-		this.lastSelectionTooLarge.remove(event.getPlayer().getUniqueId());
-	}
-
-	public boolean holdsSelectionItem(final Player player) {
-		@SuppressWarnings("deprecation")
-		final ItemStack item = player.getItemInHand();
+	public boolean isSelectionItem(final ItemStack item) {
 		return item != null && item.getType() == this.config.getSelectionItemConfigValue();
 	}
 
+	@SuppressWarnings("deprecation")
+	public boolean isHoldingSelectionItem(final Player player) {
+		return isSelectionItem(player.getItemInHand());
+	}
+
 	public boolean isSelectionShown(final Player player) {
-		return this.shown.containsKey(player.getUniqueId()) ? this.shown.get(player.getUniqueId()).booleanValue()
-				: this.shouldShowSelection(player);
+		return this.shown.contains(player.getUniqueId()) && this.shouldShowSelection(player);
 	}
 
 	public boolean shouldShowSelection(final Player player) {
 		return this.config.isEnabled(player) && (!this.config.isCheckForAxeEnabled()
-				|| this.config.isCheckForAxeEnabled() && this.holdsSelectionItem(player));
+				|| this.config.isCheckForAxeEnabled() && this.isHoldingSelectionItem(player));
 	}
 
 	public void showSelection(final Player player) {
 		if (!player.hasPermission("wesv.use")) {
 			return;
 		}
+
 		final Region region = this.worldEditHelper.getSelectedRegion(player);
+		final UUID uuid = player.getUniqueId();
+
 		if (region != null && region.getArea() > this.config.getMaxSize()) {
-			this.particleSender.setParticlesForPlayer(player, null);
-			final UUID uniqueId = player.getUniqueId();
-			if (this.lastSelectionTooLarge.containsKey(uniqueId)
-					&& !this.lastSelectionTooLarge.get(uniqueId).booleanValue()) {
+			this.setParticlesForPlayer(player, null);
+
+			if (!this.lastSelectionTooLarge.contains(uuid)) {
 				player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf()
 						+ this.config.getMaxSize() + this.config.getLangBlocks());
+				this.lastSelectionTooLarge.add(uuid);
 			}
-			this.lastSelectionTooLarge.put(player.getUniqueId(), true);
 		} else {
-			this.lastSelectionTooLarge.put(player.getUniqueId(), false);
-			this.particleSender.setParticlesForPlayer(player, this.shapeHelper.getLocationsFromRegion(region));
+			this.lastSelectionTooLarge.remove(player.getUniqueId());
+			this.setParticlesForPlayer(player, this.shapeHelper.getLocationsFromRegion(region));
 		}
-		this.shown.put(player.getUniqueId(), true);
+		this.shown.add(player.getUniqueId());
 	}
 
 	public void hideSelection(final Player player) {
-		this.shown.put(player.getUniqueId(), false);
-		this.particleSender.setParticlesForPlayer(player, null);
+		this.shown.remove(player.getUniqueId());
+		this.playerParticleMap.remove(player.getUniqueId());
+		this.cancelAndRemoveFadeOutTask(player.getUniqueId());
+	}
+
+	public void setParticlesForPlayer(final Player player, final Collection<Location> locations) {
+		this.cancelAndRemoveFadeOutTask(player.getUniqueId());
+
+		if (locations == null || locations.size() == 0) {
+			this.playerParticleMap.remove(player.getUniqueId());
+		} else {
+			this.playerParticleMap.put(player.getUniqueId(), locations);
+
+			final int fade = config.getParticleFadeDelay();
+
+			if (fade > 0) {
+				final int id = this.getServer().getScheduler().runTaskLater(this, new Runnable() {
+
+					@Override
+					public void run() {
+						WorldEditSelectionVisualizer.this.fadeOutTasks.remove(player.getUniqueId());
+						WorldEditSelectionVisualizer.this.playerParticleMap.remove(player.getUniqueId());
+					}
+				}, fade).getTaskId();
+
+				this.fadeOutTasks.put(player.getUniqueId(), id);
+			}
+		}
+	}
+
+	private void cancelAndRemoveFadeOutTask(final UUID uuid) {
+		if (this.fadeOutTasks.containsKey(uuid)) {
+			this.getServer().getScheduler().cancelTask(fadeOutTasks.get(uuid));
+			this.fadeOutTasks.remove(uuid);
+		}
+	}
+
+	public void addPlayer(final Player player) {
+		if (this.shouldShowSelection(player)) {
+			this.showSelection(player);
+		}
+	}
+
+	public void removePlayer(final Player player) {
+		final UUID uuid = player.getUniqueId();
+		this.shown.remove(uuid);
+		this.lastSelectionTooLarge.remove(uuid);
+		this.lastSelectedRegions.remove(uuid);
+		this.playerParticleMap.remove(uuid);
+
+		this.cancelAndRemoveFadeOutTask(uuid);
+	}
+
+	public Configuration getCustomConfig() {
+		return this.config;
+	}
+
+	public Map<UUID, Region> getLastSelectedRegions() {
+		return this.lastSelectedRegions;
+	}
+
+	public Map<UUID, Collection<Location>> getPlayerParticleMap() {
+		return this.playerParticleMap;
 	}
 }

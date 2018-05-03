@@ -5,7 +5,7 @@ lang:
   selectionSizeOf: "The visualizer only works with selections up to a size of "
   blocks: " blocks"
   configReloaded: "Configuration for visualizer was reloaded from the disk."
-particleDistance: 16
+particleDistance: 32
 maxSize: 10000
 checkForAxe: false
 selectionItem: WOOD_AXE
@@ -18,4 +18,5 @@ gapBetweenPoints: 0.5
 verticalGap: 1
 updateSelectionInterval: 20
 updateParticlesInterval: 5
+particleFadeDelay: 200
 players:
