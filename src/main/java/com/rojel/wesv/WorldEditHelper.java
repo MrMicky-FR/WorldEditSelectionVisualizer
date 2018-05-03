@@ -38,15 +38,16 @@ public class WorldEditHelper extends BukkitRunnable {
 
 			currentRegion = WorldEditHelper.this.getSelectedRegion(player);
 
-			if (WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
+			if (!WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
 					currentRegion)) {
 				if (currentRegion != null) {
 					plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
 				} else {
 					plugin.getLastSelectedRegions().remove(player.getUniqueId());
 				}
+				
+				plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 			}
-			plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 		}
 	}
 
