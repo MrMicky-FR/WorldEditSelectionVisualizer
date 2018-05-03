@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.sk89q.worldedit.WorldEdit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -80,8 +81,9 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isSelectionItem(final ItemStack item) {
-		return item != null && item.getType() == this.config.getSelectionItemConfigValue();
+		return item != null && item.getTypeId() == WorldEdit.getInstance().getConfiguration().wandItem;
 	}
 
 	@SuppressWarnings("deprecation")

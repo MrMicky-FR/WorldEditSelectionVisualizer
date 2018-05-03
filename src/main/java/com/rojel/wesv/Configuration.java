@@ -6,7 +6,6 @@ package com.rojel.wesv;
 
 import java.util.EnumMap;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -210,11 +209,6 @@ public class Configuration {
 	};
 
 	/**
-	 * The item used to perform selections in WorldEdit.
-	 */
-	private Material selectionItem;
-
-	/**
 	 * Constructor, takes the WESV plugin instance as a parameter.
 	 * 
 	 * @param plugin
@@ -242,7 +236,6 @@ public class Configuration {
 		this.config = this.plugin.getConfig();
 
 		this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
-		this.selectionItem = this.getSelectionItem(this.config.getString("selectionItem"));
 
 		this.configItems.put(CONFIG_VALUES.GAPBETWEENPOINTS,
 				this.config.getDouble(CONFIG_VALUES.GAPBETWEENPOINTS.toString()));
@@ -308,22 +301,6 @@ public class Configuration {
 		}
 		this.plugin.getLogger().warning("The particle effect set in the configuration file is invalid.");
 		return ParticleEffect.REDSTONE;
-	}
-
-	/**
-	 * Retrieves material name for the chosen selection tool.
-	 * 
-	 * @param name
-	 *            Name of the tool from config.
-	 * @return Returns the name of the tool from config.
-	 */
-	public Material getSelectionItem(final String name) {
-		final Material selectionItem = Material.getMaterial(name);
-		if (selectionItem != null) {
-			return selectionItem;
-		}
-		this.plugin.getLogger().warning("The selection item set in the configuration file is invalid.");
-		return Material.WOOD_AXE;
 	}
 
 	/**
@@ -442,15 +419,6 @@ public class Configuration {
 	 */
 	public boolean isCheckForAxeEnabled() {
 		return (boolean) this.configItems.get(CONFIG_VALUES.CHECKFORAXE);
-	}
-
-	/**
-	 * Retrieves the "selectionItem" property value.
-	 * 
-	 * @return Returns the "selectionItem" property value.
-	 */
-	public Material getSelectionItemConfigValue() {
-		return this.selectionItem;
 	}
 
 	/**
