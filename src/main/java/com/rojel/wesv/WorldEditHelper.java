@@ -31,12 +31,11 @@ public class WorldEditHelper extends BukkitRunnable {
 	@Override
 	public void run() {
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
-			Region currentRegion;
 			if (!plugin.getCustomConfig().isEnabled(player) || !player.hasPermission("wesv.use")) {
 				continue;
 			}
 
-			currentRegion = WorldEditHelper.this.getSelectedRegion(player);
+			Region currentRegion = WorldEditHelper.this.getSelectedRegion(player);
 
 			if (!WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
 					currentRegion)) {
@@ -45,8 +44,9 @@ public class WorldEditHelper extends BukkitRunnable {
 				} else {
 					plugin.getLastSelectedRegions().remove(player.getUniqueId());
 				}
-				
-				plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
+
+				plugin.getServer().getPluginManager()
+						.callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 			}
 		}
 	}

@@ -32,7 +32,7 @@ public class WesvListener implements Listener {
 	public void onItemChange(final PlayerItemHeldEvent event) {
 		final Player player = event.getPlayer();
 		if (this.plugin.getCustomConfig().isCheckForAxeEnabled() && this.plugin.getCustomConfig().isEnabled(player)) {
-			
+
 			if (this.plugin.isSelectionItem(player.getInventory().getItem(event.getNewSlot()))) {
 				this.plugin.showSelection(player);
 			} else {
