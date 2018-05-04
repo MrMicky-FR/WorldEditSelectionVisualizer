@@ -49,7 +49,7 @@ public class ShapeHelper {
 
 				for (int i = 0; i < bottomCorners.size(); ++i) {
 					final Vector p1 = bottomCorners.get(i);
-					final Vector p2 = i + 1 < bottomCorners.size() ? bottomCorners.get(i + 1) : bottomCorners.get(0);
+					final Vector p2 = bottomCorners.get(i + 1 < bottomCorners.size() ? i + 1 : 0);
 					final Vector p3 = p1.add(0, height, 0);
 					final Vector p4 = p2.add(0, height, 0);
 
@@ -156,14 +156,14 @@ public class ShapeHelper {
 				final ConvexPolyhedralRegion convexRegion = (ConvexPolyhedralRegion) region;
 				final List<Vector> corners = new ArrayList<>();
 
-				for (Triangle triangle : convexRegion.getTriangles()) {
+				for (final Triangle triangle : convexRegion.getTriangles()) {
 					for (int i = 0; i < 3; i++) {
 						corners.add(triangle.getVertex(i).add(0.5, 0.5, 0.5));
 					}
 				}
 
 				for (int i = 0; i < corners.size(); i++) {
-					vectors.addAll(plotLine(corners.get(i), corners.get((corners.size() > (i + 1)) ? i + 1 : 0)));
+					vectors.addAll(plotLine(corners.get(i), corners.get(i + 1 < corners.size() ? i + 1 : 0)));
 				}
 			}
 		}
