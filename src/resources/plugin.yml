@@ -12,7 +12,7 @@ commands:
   wesv_reload:
     description: Old command to reload the configuration
     permission: wesv.reloadconfig
-    usage: This command has been replace by /wesv reload
+    usage: This command has been replaced by /wesv reload
 
 permissions:
   wesv.*:
