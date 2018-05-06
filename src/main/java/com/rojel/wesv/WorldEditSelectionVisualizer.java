@@ -55,9 +55,12 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label,
 			final String[] args) {
+		if (!command.getName().equalsIgnoreCase("wesv")) {
+			return false;
+		}
+		
 		if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
 			if (sender instanceof Player) {
-
 				final Player player = (Player) sender;
 				final boolean isEnabled = !this.config.isEnabled(player);
 				this.config.setEnabled(player, isEnabled);

@@ -203,7 +203,7 @@ public class Configuration {
 			// Language translation string from config.
 			this.put(CONFIG_VALUES.LANGCONFIGRELOADED, "Configuration for visualizer was reloaded from the disk.");
 			
-			this.put(CONFIG_VALUES.FADE_DELAY, 200);
+			this.put(CONFIG_VALUES.FADE_DELAY, 0);
 
 		}
 	};

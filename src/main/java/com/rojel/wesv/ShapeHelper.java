@@ -78,7 +78,7 @@ public class ShapeHelper {
 
 				for (int i = 0; i < bottomCorners.size(); ++i) {
 					final Vector p1 = bottomCorners.get(i);
-					final Vector p2 = i + 1 < bottomCorners.size() ? bottomCorners.get(i + 1) : bottomCorners.get(0);
+					final Vector p2 = bottomCorners.get(i + 1 < bottomCorners.size() ? i + 1 : 0);
 					final Vector p3 = p1.add(0, height, 0);
 					final Vector p4 = p2.add(0, height, 0);
 
@@ -169,7 +169,7 @@ public class ShapeHelper {
 		}
 
 		final List<Location> locations = new ArrayList<>();
-		if (vectors.size() > 0 && region != null && region.getWorld() != null) {
+		if (!vectors.isEmpty() && region != null && region.getWorld() != null) {
 			final World world = Bukkit.getWorld(region.getWorld().getName());
 			for (final Vector vector : vectors) {
 				locations.add(new Location(world, vector.getX(), vector.getY(), vector.getZ()));
@@ -202,6 +202,7 @@ public class ShapeHelper {
 			double x = center.getX();
 			double y = center.getY();
 			double z = center.getZ();
+			
 			if (radius.getX() == 0.0) {
 				y = center.getY() + Math.cos(i * 2.0 * 3.141592653589793) * radius.getY();
 				z = center.getZ() + Math.sin(i * 2.0 * 3.141592653589793) * radius.getZ();
@@ -212,6 +213,7 @@ public class ShapeHelper {
 				x = center.getX() + Math.cos(i * 2.0 * 3.141592653589793) * radius.getX();
 				y = center.getY() + Math.sin(i * 2.0 * 3.141592653589793) * radius.getY();
 			}
+			
 			final Vector loc = new Vector(x, y, z);
 			vectors.add(loc);
 		}
