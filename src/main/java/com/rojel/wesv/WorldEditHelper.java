@@ -1,42 +1,10 @@
 /*
  * Decompiled with CFR 0_110.
- *
- * Could not load the following classes:
- *  com.sk89q.worldedit.BlockVector2D
- *  com.sk89q.worldedit.IncompleteRegionException
- *  com.sk89q.worldedit.LocalSession
- *  com.sk89q.worldedit.Vector
- *  com.sk89q.worldedit.WorldEdit
- *  com.sk89q.worldedit.bukkit.WorldEditPlugin
- *  com.sk89q.worldedit.regions.Polygonal2DRegion
- *  com.sk89q.worldedit.regions.Region
- *  com.sk89q.worldedit.regions.RegionSelector
- *  com.sk89q.worldedit.session.SessionManager
- *  com.sk89q.worldedit.world.World
- *  org.bukkit.Server
- *  org.bukkit.entity.Player
- *  org.bukkit.event.Event
- *  org.bukkit.event.EventHandler
- *  org.bukkit.event.Listener
- *  org.bukkit.event.player.PlayerQuitEvent
- *  org.bukkit.plugin.Plugin
- *  org.bukkit.plugin.PluginManager
- *  org.bukkit.plugin.java.JavaPlugin
- *  org.bukkit.scheduler.BukkitRunnable
- *  org.bukkit.scheduler.BukkitTask
  */
 
 package com.rojel.wesv;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldedit.IncompleteRegionException;
@@ -46,92 +14,90 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 
-public class WorldEditHelper implements Listener {
-    private final JavaPlugin        plugin;
-    private final WorldEditPlugin   we;
-    private final Map<UUID, Region> lastSelectedRegions;
+public class WorldEditHelper extends BukkitRunnable {
 
-    public WorldEditHelper(final JavaPlugin plugin, final Configuration config) {
-        this.plugin = plugin;
-        this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
-        this.lastSelectedRegions = new HashMap<UUID, Region>();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        new BukkitRunnable() {
+	private final WorldEditSelectionVisualizer plugin;
+	private final WorldEditPlugin we;
 
-            @Override
-            public void run() {
-                for (final Player player : plugin.getServer().getOnlinePlayers()) {
-                    Region currentRegion;
-                    if (!config.isEnabled(player) || !player.hasPermission("wesv.use")
-                            || WorldEditHelper.this.compareRegion(
-                                    WorldEditHelper.this.lastSelectedRegions.get(player.getUniqueId()),
-                                    currentRegion = WorldEditHelper.this.getSelectedRegion(player))) {
-                        continue;
-                    }
-                    if (currentRegion != null) {
-                        WorldEditHelper.this.lastSelectedRegions.put(player.getUniqueId(), currentRegion.clone());
-                    } else {
-                        WorldEditHelper.this.lastSelectedRegions.remove(player.getUniqueId());
-                    }
-                    plugin.getServer().getPluginManager()
-                            .callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
-                }
-            }
-        }.runTaskTimer(plugin, 0, config.getUpdateSelectionInterval());
-    }
+	public WorldEditHelper(final WorldEditSelectionVisualizer plugin) {
+		super();
 
-    public Region getSelectedRegion(final Player player) {
-        RegionSelector selector;
-        final LocalSession session = this.we.getWorldEdit().getSessionManager().findByName(player.getName());
-        if (session != null && session.getSelectionWorld() != null
-                && (selector = session.getRegionSelector(session.getSelectionWorld())).isDefined()) {
-            try {
-                return selector.getRegion();
-            } catch (final IncompleteRegionException e) {
-                this.plugin.getServer().getLogger().info("Region still incomplete.");
-            }
-        }
-        return null;
-    }
+		this.plugin = plugin;
+		this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 
-    public boolean compareRegion(final Region r1, final Region r2) {
-        boolean points;
-        if (r1 == null && r2 == null) {
-            return true;
-        }
-        if (r1 != null && r2 == null) {
-            return false;
-        }
-        if (r1 == null && r2 != null) {
-            return false;
-        }
-        points = r1.getMinimumPoint().equals(r2.getMinimumPoint()) && r1.getMaximumPoint().equals(r2.getMaximumPoint())
-                && r1.getCenter().equals(r2.getCenter());
-        final boolean worlds = r1.getWorld() != null ? r1.getWorld().equals(r2.getWorld()) : r2.getWorld() == null;
-        final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight()
-                && r1.getLength() == r2.getLength();
-        final boolean type = r1.getClass().equals(r2.getClass());
-        boolean polyPoints = true;
-        if (r1 instanceof Polygonal2DRegion && r2 instanceof Polygonal2DRegion) {
-            final Polygonal2DRegion r1Poly = (Polygonal2DRegion) r1;
-            final Polygonal2DRegion r2Poly = (Polygonal2DRegion) r2;
-            if (r1Poly.getPoints().size() != r2Poly.getPoints().size()) {
-                polyPoints = false;
-            } else {
-                for (int i = 0; i < r1Poly.getPoints().size(); ++i) {
-                    if (r1Poly.getPoints().get(i).equals(r2Poly.getPoints().get(i))) {
-                        continue;
-                    }
-                    polyPoints = false;
-                }
-            }
-        }
-        return points && worlds && dimensions && type && polyPoints;
-    }
+		runTaskTimer(plugin, 0, plugin.getCustomConfig().getUpdateSelectionInterval());
+	}
 
-    @EventHandler
-    private void onPlayerQuit(final PlayerQuitEvent event) {
-        this.lastSelectedRegions.remove(event.getPlayer().getUniqueId());
-    }
+	@Override
+	public void run() {
+		for (final Player player : plugin.getServer().getOnlinePlayers()) {
+			if (!plugin.getCustomConfig().isEnabled(player) || !player.hasPermission("wesv.use")) {
+				continue;
+			}
 
+			final Region currentRegion = WorldEditHelper.this.getSelectedRegion(player);
+
+			if (!WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
+					currentRegion)) {
+				if (currentRegion != null) {
+					plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
+				} else {
+					plugin.getLastSelectedRegions().remove(player.getUniqueId());
+				}
+
+				plugin.getServer().getPluginManager()
+						.callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
+			}
+		}
+	}
+
+	public Region getSelectedRegion(final Player player) {
+		RegionSelector selector;
+		final LocalSession session = this.we.getWorldEdit().getSessionManager().findByName(player.getName());
+
+		if (session != null && session.getSelectionWorld() != null
+				&& (selector = session.getRegionSelector(session.getSelectionWorld())).isDefined()) {
+			try {
+				return selector.getRegion();
+			} catch (final IncompleteRegionException e) {
+				this.plugin.getServer().getLogger().info("Region still incomplete.");
+			}
+		}
+		return null;
+	}
+
+	public boolean compareRegion(final Region r1, final Region r2) {
+		if (r1 == null && r2 == null) {
+			return true;
+		}
+
+		if (r1 != null && r2 == null || r1 == null && r2 != null) {
+			return false;
+		}
+
+		final boolean points = r1.getMinimumPoint().equals(r2.getMinimumPoint())
+				&& r1.getMaximumPoint().equals(r2.getMaximumPoint()) && r1.getCenter().equals(r2.getCenter());
+		final boolean worlds = r1.getWorld() != null ? r1.getWorld().equals(r2.getWorld()) : r2.getWorld() == null;
+		final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight()
+				&& r1.getLength() == r2.getLength();
+		final boolean type = r1.getClass().equals(r2.getClass());
+		boolean polyPoints = true;
+
+		if (r1 instanceof Polygonal2DRegion && r2 instanceof Polygonal2DRegion) {
+			final Polygonal2DRegion r1Poly = (Polygonal2DRegion) r1;
+			final Polygonal2DRegion r2Poly = (Polygonal2DRegion) r2;
+
+			if (r1Poly.getPoints().size() != r2Poly.getPoints().size()) {
+				polyPoints = false;
+			} else {
+				for (int i = 0; i < r1Poly.getPoints().size(); ++i) {
+					if (r1Poly.getPoints().get(i).equals(r2Poly.getPoints().get(i))) {
+						continue;
+					}
+					polyPoints = false;
+				}
+			}
+		}
+		return points && worlds && dimensions && type && polyPoints;
+	}
 }

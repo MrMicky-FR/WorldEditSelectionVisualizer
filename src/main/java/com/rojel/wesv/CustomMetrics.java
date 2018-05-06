@@ -1,9 +1,5 @@
 /*
  * Decompiled with CFR 0_110.
- *
- * Could not load the following classes:
- *  org.bukkit.plugin.Plugin
- *  org.bukkit.plugin.java.JavaPlugin
  */
 
 package com.rojel.wesv;

@@ -1,9 +1,10 @@
+# Mac
+.DS_Store
+
+# Gradle
+.gradle
 /bin/
-/.gradle/
 /build/
-/gradle/
-/PluginMetrics/
-/gradlew
-/gradlew.bat
-/dependencies/
-/Plugins
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache

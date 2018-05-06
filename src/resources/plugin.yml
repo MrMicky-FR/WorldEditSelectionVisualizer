@@ -1,18 +1,15 @@
 name: WorldEditSelectionVisualizer
 main: com.rojel.wesv.WorldEditSelectionVisualizer
-version: 1.4.8
+version: 1.5.0
 authors: [Rojetto, ZathrusWriter]
 description: Shows WorldEdit selections with particles.
 depend: [WorldEdit]
 commands:
   wesv:
-    description: Toggles the visualizer.
+    description: Toggles the visualizer or reload the config
     permission: wesv.toggle
-    usage: /wesv
-  wesv_reload:
-    description: Reloads configuration of the plugin.
-    permission: wesv.reloadconfig
-    usage: /wesv_reload
+    usage: /wesv [relaod]
+
 permissions:
   wesv.*:
     default: true
