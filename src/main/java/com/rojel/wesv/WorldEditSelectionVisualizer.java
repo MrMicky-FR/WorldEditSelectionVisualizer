@@ -6,12 +6,12 @@ package com.rojel.wesv;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.sk89q.worldedit.WorldEdit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -19,7 +19,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.StringUtil;
 
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.regions.Region;
 
 public class WorldEditSelectionVisualizer extends JavaPlugin {
@@ -58,7 +60,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		if (!command.getName().equalsIgnoreCase("wesv")) {
 			return false;
 		}
-		
+
 		if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
 			if (sender instanceof Player) {
 				final Player player = (Player) sender;
@@ -82,6 +84,16 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 			sender.sendMessage(this.config.getConfigReloaded());
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias,
+			final String[] args) {
+		if (args.length == 1 && sender.hasPermission("wesv.reloadconfig")) {
+			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<String>());
+		}
+
+		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("deprecation")

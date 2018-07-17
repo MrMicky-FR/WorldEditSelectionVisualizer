@@ -60,7 +60,7 @@ public class WorldEditHelper extends BukkitRunnable {
 			try {
 				return selector.getRegion();
 			} catch (final IncompleteRegionException e) {
-				this.plugin.getServer().getLogger().info("Region still incomplete.");
+				this.plugin.getLogger().warning("Region still incomplete.");
 			}
 		}
 		return null;
@@ -71,7 +71,7 @@ public class WorldEditHelper extends BukkitRunnable {
 			return true;
 		}
 
-		if (r1 != null && r2 == null || r1 == null && r2 != null) {
+		if (r1 == null || r2 == null) {
 			return false;
 		}
 
