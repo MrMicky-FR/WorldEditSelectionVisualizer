@@ -273,12 +273,12 @@ public class Configuration {
 					final int b = Integer.parseInt(split[2]);
 
 					return new OrdinaryColor(r, g, b);
-				} catch (Exception e) {
+				} catch (IllegalArgumentException e) {
 					this.plugin.getLogger().warning("'" + name + "' is not a valid color: " + e.getMessage());
 				}
 			}
 		} else if (this.particle.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-			Material material = Material.matchMaterial(name);
+			final Material material = Material.matchMaterial(name);
 			if (material != null) {
 				if (this.particle == ParticleEffect.ITEM_CRACK) {
 					return new ItemData(material, (byte) 0);
@@ -495,7 +495,7 @@ public class Configuration {
 		return this.configItems.get(ConfigValue.PARTICLE_DATA);
 	}
 
-	private String color(String msg) {
-		return ChatColor.translateAlternateColorCodes('&', msg);
+	private String color(final String s) {
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 }
