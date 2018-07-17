@@ -99,8 +99,7 @@ public class ShapeHelper {
 				}
 			} else if (region instanceof CylinderRegion) {
 				final CylinderRegion cylRegion = (CylinderRegion) region;
-				final Vector center = new Vector(cylRegion.getCenter().getX() + 0.5, min.getY(),
-						cylRegion.getCenter().getZ() + 0.5);
+				final Vector center = cylRegion.getCenter().add(0.5, 0.5, 0.5);
 				final double rx = width / 2.0;
 				final double rz = length / 2.0;
 				final List<Vector> bottomCorners = this.plotEllipse(center, new Vector(rx, 0.0, rz));
@@ -132,8 +131,7 @@ public class ShapeHelper {
 			} else if (region instanceof EllipsoidRegion) {
 				final EllipsoidRegion ellRegion = (EllipsoidRegion) region;
 				final Vector ellRadius = ellRegion.getRadius().add(0.5, 0.5, 0.5);
-				final Vector center = new Vector(min.getX() + width / 2.0, min.getY() + height / 2.0,
-						min.getZ() + length / 2.0);
+				final Vector center = ellRegion.getCenter().add(0.5, 0.5, 0.5);
 
 				vectors.addAll(this.plotEllipse(center, new Vector(0.0, ellRadius.getY(), ellRadius.getZ())));
 				vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), 0.0, ellRadius.getZ())));
@@ -202,18 +200,18 @@ public class ShapeHelper {
 			double x = center.getX();
 			double y = center.getY();
 			double z = center.getZ();
-			
+
 			if (radius.getX() == 0.0) {
-				y = center.getY() + Math.cos(i * 2.0 * 3.141592653589793) * radius.getY();
-				z = center.getZ() + Math.sin(i * 2.0 * 3.141592653589793) * radius.getZ();
+				y = center.getY() + Math.cos(i * 2.0 * Math.PI) * radius.getY();
+				z = center.getZ() + Math.sin(i * 2.0 * Math.PI) * radius.getZ();
 			} else if (radius.getY() == 0.0) {
-				x = center.getX() + Math.cos(i * 2.0 * 3.141592653589793) * radius.getX();
-				z = center.getZ() + Math.sin(i * 2.0 * 3.141592653589793) * radius.getZ();
+				x = center.getX() + Math.cos(i * 2.0 * Math.PI) * radius.getX();
+				z = center.getZ() + Math.sin(i * 2.0 * Math.PI) * radius.getZ();
 			} else if (radius.getZ() == 0.0) {
-				x = center.getX() + Math.cos(i * 2.0 * 3.141592653589793) * radius.getX();
-				y = center.getY() + Math.sin(i * 2.0 * 3.141592653589793) * radius.getY();
+				x = center.getX() + Math.cos(i * 2.0 * Math.PI) * radius.getX();
+				y = center.getY() + Math.sin(i * 2.0 * Math.PI) * radius.getY();
 			}
-			
+
 			final Vector loc = new Vector(x, y, z);
 			vectors.add(loc);
 		}

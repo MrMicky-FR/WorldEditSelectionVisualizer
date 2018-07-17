@@ -35,10 +35,9 @@ public class WorldEditHelper extends BukkitRunnable {
 				continue;
 			}
 
-			final Region currentRegion = WorldEditHelper.this.getSelectedRegion(player);
+			final Region currentRegion = getSelectedRegion(player);
 
-			if (!WorldEditHelper.this.compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()),
-					currentRegion)) {
+			if (!compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()), currentRegion)) {
 				if (currentRegion != null) {
 					plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
 				} else {
