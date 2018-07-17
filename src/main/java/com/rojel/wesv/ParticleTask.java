@@ -10,13 +10,17 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.darkblade12.particleeffect.ParticleEffect;
+import com.darkblade12.particleeffect.ParticleEffect.ParticleColor;
+import com.darkblade12.particleeffect.ParticleEffect.ParticleData;
+
 public class ParticleTask extends BukkitRunnable {
 
 	private final WorldEditSelectionVisualizer plugin;
 
 	public ParticleTask(final WorldEditSelectionVisualizer plugin) {
 		super();
-		
+
 		this.plugin = plugin;
 
 		runTaskTimer(this.plugin, 1, plugin.getCustomConfig().getUpdateParticlesInterval());
@@ -33,7 +37,16 @@ public class ParticleTask extends BukkitRunnable {
 					continue;
 				}
 
-				plugin.getCustomConfig().getParticle().display(0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
+				final ParticleEffect particle = plugin.getCustomConfig().getParticle();
+				final Object particleData = plugin.getCustomConfig().getParticleData();
+
+				if (particleData instanceof ParticleColor) {
+					plugin.getCustomConfig().getParticle().display((ParticleColor) particleData, loc, player);
+				} else if (particleData instanceof ParticleData) {
+					particle.display((ParticleData) particleData, 0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
+				} else {
+					particle.display(0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
+				}
 			}
 		}
 	}
