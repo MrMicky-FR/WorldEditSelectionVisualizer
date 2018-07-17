@@ -90,7 +90,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias,
 			final String[] args) {
 		if (args.length == 1 && sender.hasPermission("wesv.reloadconfig")) {
-			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<>());
+			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<String>());
 		}
 
 		return Collections.emptyList();
