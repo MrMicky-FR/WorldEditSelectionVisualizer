@@ -4,7 +4,7 @@
 [![Stories in Ready](https://badge.waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer.svg?label=ready&title=Ready)](http://waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer)
 [![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/WorldEdit-ServerSide-Visualizer/Lobby) 
 [![Gratipay User](https://img.shields.io/gratipay/user/martinambrus.svg?style=plastic)](https://gratipay.com/~martinambrus/)
-[![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 
 **Overview**
 
