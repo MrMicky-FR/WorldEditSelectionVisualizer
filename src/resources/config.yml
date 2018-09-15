@@ -8,8 +8,8 @@ lang:
 particleDistance: 32
 maxSize: 10000
 checkForAxe: false
-particleEffect: reddust
-particleData: "255,255,255"
+particleEffect: REDSTONE
+particleData: "255,0,0"
 horizontalLinesForCuboid: true
 horizontalLinesForPolygon: true
 horizontalLinesForCylinder: true

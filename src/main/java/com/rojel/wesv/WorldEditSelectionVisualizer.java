@@ -4,6 +4,7 @@
 
 package com.rojel.wesv;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,8 +23,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
 
+import com.sk89q.worldedit.LocalConfiguration;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.util.HandSide;
 
 public class WorldEditSelectionVisualizer extends JavaPlugin {
 
@@ -47,7 +52,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
 		this.getServer().getPluginManager().registerEvents(new WesvListener(this), this);
 
-		for (final Player player : getServer().getOnlinePlayers()) {
+		for (final Player player : this.getServer().getOnlinePlayers()) {
 			addPlayer(player);
 		}
 
@@ -90,20 +95,32 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias,
 			final String[] args) {
 		if (args.length == 1 && sender.hasPermission("wesv.reloadconfig")) {
-			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<String>());
+			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<>());
 		}
 
 		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean isSelectionItem(final ItemStack item) {
-		return item != null && item.getTypeId() == WorldEdit.getInstance().getConfiguration().wandItem;
-	}
-
-	@SuppressWarnings("deprecation")
 	public boolean isHoldingSelectionItem(final Player player) {
-		return isSelectionItem(player.getItemInHand());
+		// return isSelectionItem(player.getItemInHand());
+		ItemStack item = player.getItemInHand();
+		if (item != null) {
+			try {
+				final Field wandItemField = LocalConfiguration.class.getDeclaredField("wandItem");
+
+				if (wandItemField.getType() == int.class) {
+					return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
+				} else if (wandItemField.getType() == String.class) {
+					String itemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.MAIN_HAND).getType().getId();
+					return itemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()));
+				}
+			} catch (ReflectiveOperationException e) {
+				this.getLogger().log(Level.WARNING, "An error occured on isSelectionItem", e);
+			}
+		}
+
+		return false;
 	}
 
 	public boolean isSelectionShown(final Player player) {
@@ -111,8 +128,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	}
 
 	public boolean shouldShowSelection(final Player player) {
-		return this.config.isEnabled(player) && (!this.config.isCheckForAxeEnabled()
-				|| this.config.isCheckForAxeEnabled() && this.isHoldingSelectionItem(player));
+		return this.config.isEnabled(player)
+				&& (!this.config.isCheckForAxeEnabled() || this.isHoldingSelectionItem(player));
 	}
 
 	public void showSelection(final Player player) {
@@ -155,13 +172,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 			final int fade = config.getParticleFadeDelay();
 
 			if (fade > 0) {
-				final int id = this.getServer().getScheduler().runTaskLater(this, new Runnable() {
+				final int id = this.getServer().getScheduler().runTaskLater(this, () -> {
 
-					@Override
-					public void run() {
-						WorldEditSelectionVisualizer.this.fadeOutTasks.remove(player.getUniqueId());
-						WorldEditSelectionVisualizer.this.playerParticleMap.remove(player.getUniqueId());
-					}
+					this.fadeOutTasks.remove(player.getUniqueId());
+					this.playerParticleMap.remove(player.getUniqueId());
 				}, fade).getTaskId();
 
 				this.fadeOutTasks.put(player.getUniqueId(), id);

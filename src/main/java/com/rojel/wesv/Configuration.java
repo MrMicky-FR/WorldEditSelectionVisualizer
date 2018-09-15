@@ -7,16 +7,15 @@ package com.rojel.wesv;
 import java.util.EnumMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.darkblade12.particleeffect.ParticleEffect;
-import com.darkblade12.particleeffect.ParticleEffect.BlockData;
-import com.darkblade12.particleeffect.ParticleEffect.ItemData;
-import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
-import com.darkblade12.particleeffect.ParticleEffect.ParticleProperty;
+import fr.mrmicky.fastparticle.ParticleType;
 
 /**
  * YAML plugin configuration retrieval and manipulation class.
@@ -24,6 +23,7 @@ import com.darkblade12.particleeffect.ParticleEffect.ParticleProperty;
  * @author Martin Ambrus
  * @since 1.0a
  */
+@SuppressWarnings("deprecation")
 public class Configuration {
 	/**
 	 * WESV plugin instance.
@@ -39,7 +39,7 @@ public class Configuration {
 	 * ENUM value of a particle effect used to visually display current
 	 * WorldEdit selection.
 	 */
-	private ParticleEffect particle;
+	private ParticleType particle;
 
 	/**
 	 * ENUM of valid configuration values.
@@ -81,7 +81,7 @@ public class Configuration {
 		/**
 		 * Whether or not to check for the WorldEdit tool in hand.
 		 */
-		CHECKFORAXE("checkForAxe", true),
+		CHECKFORAXE("checkForAxe", false),
 		/**
 		 * Maximum distance to see selection particles from.
 		 */
@@ -123,7 +123,7 @@ public class Configuration {
 		/**
 		 * Additional data for some particles (can be a color or a material)
 		 */
-		PARTICLE_DATA("particleData", "255,255,255");
+		PARTICLE_DATA("particleData", "255,0,0");
 
 		/**
 		 * The string value of an ENUM.
@@ -254,17 +254,17 @@ public class Configuration {
 	 *            Name of the particle effect from config.
 	 * @return Returns a ParticleEffect representation of the given name.
 	 */
-	public ParticleEffect getParticleEffect(final String name) {
-		final ParticleEffect effect = ParticleEffect.fromName(name);
-		if (effect != null && effect.isSupported() && !effect.hasProperty(ParticleProperty.REQUIRES_WATER)) {
+	public ParticleType getParticleEffect(final String name) {
+		final ParticleType effect = ParticleType.getParticle(name);
+		if (effect != null && effect.isCompatibleWithServerVersion()) {
 			return effect;
 		}
 		this.plugin.getLogger().warning("The particle effect set in the configuration file is invalid.");
-		return ParticleEffect.REDSTONE;
+		return ParticleType.REDSTONE;
 	}
 
 	public Object getParticleData(final String name) {
-		if (this.particle.hasProperty(ParticleProperty.COLORABLE) && !name.isEmpty()) {
+		if (this.particle.getDataType() == Color.class && !name.isEmpty()) {
 			final String[] split = name.split(",");
 			if (split.length == 3) {
 				try {
@@ -272,28 +272,31 @@ public class Configuration {
 					final int g = Integer.parseInt(split[1]);
 					final int b = Integer.parseInt(split[2]);
 
-					return new OrdinaryColor(r, g, b);
+					return Color.fromRGB(r, g, b);
 				} catch (IllegalArgumentException e) {
 					this.plugin.getLogger().warning("'" + name + "' is not a valid color: " + e.getMessage());
 				}
 			}
-		} else if (this.particle.hasProperty(ParticleProperty.REQUIRES_DATA)) {
-			final Material material = Material.matchMaterial(name);
+		} else if (this.particle.getDataType() == MaterialData.class) {
+			final Material material = getMaterial(name);
 			if (material != null) {
-				if (this.particle == ParticleEffect.ITEM_CRACK) {
-					return new ItemData(material, (byte) 0);
-				} else {
-					return new BlockData(material, (byte) 0);
-				}
-			} else {
-				this.plugin.getLogger().warning(
-						"You need to set 'particleData' in the config to a valid material to use the particle effect '"
-								+ this.particle.getName() + "'");
-
-				this.particle = ParticleEffect.REDSTONE;
+				return new MaterialData(material);
+			}
+		} else if (this.particle.getDataType() == ItemStack.class) {
+			final Material material = getMaterial(name);
+			if (material != null) {
+				return new ItemStack(material);
 			}
 		}
 		return null;
+	}
+
+	private Material getMaterial(String mat) {
+		final Material material = Material.matchMaterial(mat);
+		if (material == null) {
+			this.plugin.getLogger().warning("'" + mat + "' is not a valid material");
+		}
+		return material;
 	}
 
 	/**
@@ -329,7 +332,7 @@ public class Configuration {
 	 * 
 	 * @return Returns the "particle" property value.
 	 */
-	public ParticleEffect getParticle() {
+	public ParticleType getParticle() {
 		return this.particle;
 	}
 
