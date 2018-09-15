@@ -2,6 +2,7 @@ package fr.mrmicky.fastparticle.compatibility;
 
 import fr.mrmicky.fastparticle.FastParticle;
 import fr.mrmicky.fastparticle.ParticleType;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.material.MaterialData;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 /**
  * Legacy particle sender with NMS for 1.7/1.8 servers
@@ -82,7 +84,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
             playerConnection = playerClass.getField("playerConnection");
             sendPacket = playerConnectionClass.getMethod("sendPacket", packetClass);
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            logException("Error during initialisation", e);
         }
 
         PACKET_PARTICLE = packetParticle;
@@ -128,7 +130,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
             Object playerConnection = PLAYER_CONNECTION.get(entityPlayer);
             SEND_PACKET.invoke(playerConnection, packet);
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            logException("Error on sending particle", e);
         }
     }
 
@@ -158,7 +160,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
                         count, offsetX, offsetY, offsetZ, extra);
             }
         } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            logException("Error on sending particle", e);
         }
     }
 
@@ -210,6 +212,10 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
         }
 
         return new int[0];
+    }
+
+    private static void logException(String errorMessage, Exception ex) {
+        Bukkit.getLogger().log(Level.SEVERE, "[FastParticle] " + errorMessage, ex);
     }
 
     private static Class<?> getClassNMS(String name) throws ClassNotFoundException {

@@ -68,6 +68,6 @@ public class ParticleSender extends AbstractParticleSender {
     }
 
     public boolean isValidDataBukkit(Particle particle, Object data) {
-        return particle.getDataType().getClass().equals(Void.class) || particle.getDataType().isInstance(data);
+        return particle.getDataType() == Void.class || particle.getDataType().isInstance(data);
     }
 }

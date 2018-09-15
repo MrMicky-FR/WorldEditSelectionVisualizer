@@ -104,7 +104,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	@SuppressWarnings("deprecation")
 	public boolean isHoldingSelectionItem(final Player player) {
 		// return isSelectionItem(player.getItemInHand());
-		ItemStack item = player.getItemInHand();
+		final ItemStack item = player.getItemInHand();
 		if (item != null) {
 			try {
 				final Field wandItemField = LocalConfiguration.class.getDeclaredField("wandItem");
@@ -112,7 +112,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 				if (wandItemField.getType() == int.class) {
 					return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
 				} else if (wandItemField.getType() == String.class) {
-					String itemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.MAIN_HAND).getType().getId();
+					final String itemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.MAIN_HAND).getType().getId();
 					return itemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()));
 				}
 			} catch (ReflectiveOperationException e) {

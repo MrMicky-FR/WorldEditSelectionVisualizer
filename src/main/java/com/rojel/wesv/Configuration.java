@@ -291,7 +291,7 @@ public class Configuration {
 		return null;
 	}
 
-	private Material getMaterial(String mat) {
+	private Material getMaterial(final String mat) {
 		final Material material = Material.matchMaterial(mat);
 		if (material == null) {
 			this.plugin.getLogger().warning("'" + mat + "' is not a valid material");
