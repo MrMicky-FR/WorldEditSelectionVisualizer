@@ -33,7 +33,7 @@ ext {
     println("$rootProject.name")
     BUKKIT_API_VERSION = '1.13-R0.1-SNAPSHOT'
     WORLDEDIT_VERSION = '7.0.0-SNAPSHOT'
-    BSTATS_VERSION = '1.1'
+    BSTATS_VERSION = '1.2'
     BUILD_DIR = "build/$group"
     FINAL_DIR  = 'Plugins/'
     MAIN_CLASS = "${group}.WorldEditSelectionVisualizer".toString()
@@ -121,7 +121,7 @@ dependencies {
     testCompile group: 'org.powermock',
                 name: 'powermock-api-easymock',
                 version: '1.7.0'
-    
+
     // PowerMock-Module-JavaAgenr
     testCompile group: 'org.powermock',
                 name: 'powermock-module-javaagent',
@@ -177,7 +177,7 @@ dependencies {
     compile group: 'org.slf4j',
             name: 'slf4j-api',
             version: '1.7.24'
-    
+
     // slf4j simple implementation used by Sentry
     compile group: 'org.slf4j',
             name: 'slf4j-simple',
@@ -201,7 +201,7 @@ shadowJar {
         //include dependency('org.slf4j:slf4j-simple')
         //include dependency('com.fasterxml.jackson.core:jackson-core')
     }
-    relocate 'org.bstats', 'com.rojel.wesv.bstats'
+    relocate 'org.bstats.bukkit', 'com.rojel.wesv.bstats'
     includeEmptyDirs = false
 }
 

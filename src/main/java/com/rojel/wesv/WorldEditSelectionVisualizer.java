@@ -56,7 +56,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 			addPlayer(player);
 		}
 
-		new CustomMetrics(this, this.config).initMetrics();
+		MetricsUtils.register(this);
 	}
 
 	@Override
