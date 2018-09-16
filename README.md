@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer.svg?branch=master)](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer) 
-[![codecov](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/martinambrus/WorldEdit-ServerSide-Visualizer) 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9e43833af9e1428580111b7ea25c8e32)](https://www.codacy.com/app/martinambrus/WorldEdit-ServerSide-Visualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=martinambrus/WorldEdit-ServerSide-Visualizer&amp;utm_campaign=Badge_Grade) 
-[![Stories in Ready](https://badge.waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer.svg?label=ready&title=Ready)](http://waffle.io/martinambrus/WorldEdit-ServerSide-Visualizer)
+[![codecov](https://codecov.io/gh/MrMicky-FR/WorldEditSelectionVisualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/MrMicky-FR/WorldEditSelectionVisualizer)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrMicky-FR/WorldEditSelectionVisualizer&amp;utm_campaign=Badge_Grade) 
 [![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 
 # WorldEditSelectionVisualizer
