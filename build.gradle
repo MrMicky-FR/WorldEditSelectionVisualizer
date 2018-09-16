@@ -26,12 +26,13 @@ version '%PLUGIN_VERSION%'
 
 //import org.apache.tools.ant.filters.ReplaceTokens
 
-//sourceCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 ext {
     println("$rootProject.name")
-    BUKKIT_API_VERSION = '1.12-R0.1-SNAPSHOT'
-    WORLDEDIT_VERSION = '6.1'
+    BUKKIT_API_VERSION = '1.13-R0.1-SNAPSHOT'
+    WORLDEDIT_VERSION = '7.0.0-SNAPSHOT'
     BSTATS_VERSION = '1.1'
     BUILD_DIR = "build/$group"
     FINAL_DIR  = 'Plugins/'
@@ -68,7 +69,7 @@ repositories {
     }
     maven {
         name "WorldEdit"
-        url "http://maven.sk89q.com/artifactory/repo/"
+        url "https://repository.enigmar.de/"
     }
     maven {
         name "MockitoBeta"
@@ -154,11 +155,6 @@ dependencies {
     // Spigot API
     compile group: 'org.spigotmc',
             name: 'spigot-api',
-            version: BUKKIT_API_VERSION
-
-    // Bukkit API
-    compile group: 'org.bukkit',
-            name: 'bukkit',
             version: BUKKIT_API_VERSION
 
     // BStats

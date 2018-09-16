@@ -33,11 +33,13 @@ public class WesvListener implements Listener {
 		final Player player = event.getPlayer();
 		if (this.plugin.getCustomConfig().isCheckForAxeEnabled() && this.plugin.getCustomConfig().isEnabled(player)) {
 
-			if (this.plugin.isSelectionItem(player.getInventory().getItem(event.getNewSlot()))) {
-				this.plugin.showSelection(player);
-			} else {
-				this.plugin.hideSelection(player);
-			}
+			this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
+				if (this.plugin.isHoldingSelectionItem(player)) {
+					this.plugin.showSelection(player);
+				} else {
+					this.plugin.hideSelection(player);
+				}
+			});
 		}
 	}
 

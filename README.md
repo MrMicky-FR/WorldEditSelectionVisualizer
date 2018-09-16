@@ -39,4 +39,4 @@ A [JavaDoc documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Vis
 
 **Credits and Metrics**
 
-This plugin uses darkblade12's ParticleEffect library (https://forums.bukkit.org/threads/lib-1-7-particleeffect-v1-4.154406/) to spawn the particles. It also anonymously collects statistics via MCStats Plugin Metrics. You can read about the data that is being collected here: https://forums.bukkit.org/threads/mcstats-plugin-metrics-r7-easy-advanced-plugin-statistics.77352/. You can see the statistics here: http://mcstats.org/plugin/WorldEditSelectionVisualizer
+This plugin uses MrMicky's FastParticles library (https://github.com/MrMicky-FR/FastParticles) to spawn the particles. It also anonymously collects statistics via MCStats Plugin Metrics. You can read about the data that is being collected here: https://forums.bukkit.org/threads/mcstats-plugin-metrics-r7-easy-advanced-plugin-statistics.77352/. You can see the statistics here: http://mcstats.org/plugin/WorldEditSelectionVisualizer

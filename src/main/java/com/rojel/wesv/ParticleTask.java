@@ -10,9 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.darkblade12.particleeffect.ParticleEffect;
-import com.darkblade12.particleeffect.ParticleEffect.ParticleColor;
-import com.darkblade12.particleeffect.ParticleEffect.ParticleData;
+import fr.mrmicky.fastparticle.FastParticle;
+import fr.mrmicky.fastparticle.ParticleType;
 
 public class ParticleTask extends BukkitRunnable {
 
@@ -37,16 +36,10 @@ public class ParticleTask extends BukkitRunnable {
 					continue;
 				}
 
-				final ParticleEffect particle = plugin.getCustomConfig().getParticle();
+				final ParticleType particle = plugin.getCustomConfig().getParticle();
 				final Object particleData = plugin.getCustomConfig().getParticleData();
-
-				if (particleData instanceof ParticleColor) {
-					plugin.getCustomConfig().getParticle().display((ParticleColor) particleData, loc, player);
-				} else if (particleData instanceof ParticleData) {
-					particle.display((ParticleData) particleData, 0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
-				} else {
-					particle.display(0.0f, 0.0f, 0.0f, 0.0f, 1, loc, player);
-				}
+				
+				FastParticle.spawnParticle(player, particle, loc, 1, 0.0, 0.0, 0.0, 0.0, particleData);
 			}
 		}
 	}
