@@ -51,54 +51,13 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		new ParticleTask(this);
 
 		this.getServer().getPluginManager().registerEvents(new WesvListener(this), this);
+		getCommand("wesv").setExecutor(new CommandWesv(this));
 
 		for (final Player player : this.getServer().getOnlinePlayers()) {
 			addPlayer(player);
 		}
 
 		MetricsUtils.register(this);
-	}
-
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
-		if (!command.getName().equalsIgnoreCase("wesv")) {
-			return false;
-		}
-
-		if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
-			if (sender instanceof Player) {
-				final Player player = (Player) sender;
-				final boolean isEnabled = !this.config.isEnabled(player);
-				this.config.setEnabled(player, isEnabled);
-
-				if (isEnabled) {
-					player.sendMessage(ChatColor.GREEN + this.config.getLangVisualizerEnabled());
-					if (this.shouldShowSelection(player)) {
-						this.showSelection(player);
-					}
-				} else {
-					player.sendMessage(ChatColor.RED + this.config.getLangVisualizerDisabled());
-					this.hideSelection(player);
-				}
-			} else {
-				sender.sendMessage(this.config.getLangPlayersOnly());
-			}
-		} else {
-			this.config.reloadConfig();
-			sender.sendMessage(this.config.getConfigReloaded());
-		}
-		return true;
-	}
-
-	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias,
-			final String[] args) {
-		if (args.length == 1 && sender.hasPermission("wesv.reloadconfig")) {
-			return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<>());
-		}
-
-		return Collections.emptyList();
 	}
 
 	@SuppressWarnings("deprecation")
