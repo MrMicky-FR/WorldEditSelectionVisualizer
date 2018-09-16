@@ -1,20 +1,17 @@
+# WorldEditSelectionVisualizer
 [![Build Status](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer.svg?branch=master)](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer) 
 [![codecov](https://codecov.io/gh/MrMicky-FR/WorldEditSelectionVisualizer/branch/master/graph/badge.svg)](https://codecov.io/gh/MrMicky-FR/WorldEditSelectionVisualizer)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrMicky-FR/WorldEditSelectionVisualizer&amp;utm_campaign=Badge_Grade) 
 [![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 
-# WorldEditSelectionVisualizer
-
-## Overview
-
-WorldEditSelectionVisualizer (WESV) is essentially the famous WorldEditCUI mod (http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) in the form of a bukkit plugin, which means that players don't need to install anything on their client.
+WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) mod in the form of a bukkit plugin, which means that players don't need to install anything on their client.
 
 ## Features
 
 - Spawns particles around WorldEdit selections so players can see them
 - No client mod required
-- Supports cuboid, sphere, ellipsoid, cylinder and polygon selections
-- Use /wesv to toggle the visualizer
+- Supports cuboid, sphere, ellipsoid, cylinder, polygon and convex selections
+- Use `/wesv` to toggle the visualizer
 - Only show the selection when holding the selection item
 - Configurable particle effect
 - Force large particle distances to see your selection from far away
@@ -22,15 +19,9 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous WorldEditCUI mod (
 - Highly customizable for the performance of your server
 - [Documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc)
 
-Detailed documentation about the available permissions and configuration options is available on the documentation page (http://dev.bukkit.org/bukkit-plugins/worldedit-selection-visualizer/pages/documentation/)
-
 ## Downloads
 
-This plugin can be downloaded from the [Spigot plugin page](https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/).
-
-## Documentation
-
-A [JavaDoc documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc) is available, in case you'd feel the need to hack into the plugin :-P
+You can download releases and find more information on SpigotMC: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
 
 ## Screenshots
 
@@ -39,4 +30,4 @@ A [JavaDoc documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Vis
 ## Metrics
 
 WorldEditSelectionVisualizer collects statistics anonymously via [bStats](https://bstats.org/). You can see the statistics here: https://bstats.org/plugin/bukkit/WorldEditSelectionVisualizer
-If you want to disable bStats, you just need to set `enabled` to `false` in `plugins/bStats/config.yml`, but statistics are really for developers.
+If you want to disable bStats, you just need to set `enabled` to `false` in `plugins/bStats/config.yml`, but statistics are really useful for developers.
