@@ -54,7 +54,7 @@ public class ParticleSender extends AbstractParticleSender {
     }
 
     @Override
-    public Particle getParticle(ParticleType particle) {
+    public Particle getParticle(final ParticleType particle) {
         try {
             return Particle.valueOf(particle.toString());
         } catch (IllegalArgumentException e) {
@@ -63,11 +63,11 @@ public class ParticleSender extends AbstractParticleSender {
     }
 
     @Override
-    public boolean isValidData(Object particle, Object data) {
+    public boolean isValidData(final Object particle, final Object data) {
         return isValidDataBukkit((Particle) particle, data);
     }
 
-    public boolean isValidDataBukkit(Particle particle, Object data) {
+    public boolean isValidDataBukkit(final Particle particle, final Object data) {
         return particle.getDataType() == Void.class || particle.getDataType().isInstance(data);
     }
 }

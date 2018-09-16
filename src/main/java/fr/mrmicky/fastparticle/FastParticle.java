@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 /**
  * An API for display particles on all server versions from 1.7 to 1.13
- *
+ * <p>
  * The project is on <a href="https://github.com/MrMicky-FR/FastParticles">GitHub</a>
  *
  * @author MrMicky
@@ -21,27 +21,27 @@ public class FastParticle {
     public static final String SERVER_VERSION;
 
     static {
-        String name = Bukkit.getServer().getClass().getPackage().getName();
+    	final String name = Bukkit.getServer().getClass().getPackage().getName();
         SERVER_VERSION = name.substring(name.lastIndexOf('.') + 1);
     }
-    
-    private static AbstractParticleSender particleSender = getSender();
 
+    private static AbstractParticleSender particleSender = getSender();
 
     private static AbstractParticleSender getSender() {
         try {
             Class.forName("org.bukkit.Particle$DustOptions");
             return new ParticleSender1_13();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e1) {
+            try {
+                Class.forName("org.bukkit.Particle");
+                return new ParticleSender();
+            } catch (ClassNotFoundException e2) {
+                return new ParticleSenderLegacy();
+            }
         }
-
-        try {
-            Class.forName("org.bukkit.Particle");
-            return new ParticleSender();
-        } catch (ClassNotFoundException e) {
-        }
-
-        return new ParticleSenderLegacy();
+    }
+    
+    private FastParticle() {
     }
 
     /*

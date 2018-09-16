@@ -39,7 +39,7 @@ public class ParticleTask extends BukkitRunnable {
 				final ParticleType particle = plugin.getCustomConfig().getParticle();
 				final Object particleData = plugin.getCustomConfig().getParticleData();
 				
-				FastParticle.spawnParticle(player, particle, loc, 1, 0.0, 0.0, 0.0, particleData);
+				FastParticle.spawnParticle(player, particle, loc, 1, 0.0, 0.0, 0.0, 0.0, particleData);
 			}
 		}
 	}

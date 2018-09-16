@@ -54,15 +54,15 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
         Method sendPacket = null;
 
         try {
-            Class<?> packetParticleClass = getClassNMS("PacketPlayOutWorldParticles");
-            Class<?> playerClass = getClassNMS("EntityPlayer");
-            Class<?> playerConnectionClass = getClassNMS("PlayerConnection");
-            Class<?> packetClass = getClassNMS("Packet");
-            Class<?> worldClass = getClassNMS("WorldServer");
-            Class<?> entityPlayerClass = getClassNMS("EntityPlayer");
+        	final Class<?> packetParticleClass = getClassNMS("PacketPlayOutWorldParticles");
+        	final Class<?> playerClass = getClassNMS("EntityPlayer");
+        	final Class<?> playerConnectionClass = getClassNMS("PlayerConnection");
+        	final Class<?> packetClass = getClassNMS("Packet");
+        	final Class<?> worldClass = getClassNMS("WorldServer");
+        	final Class<?> entityPlayerClass = getClassNMS("EntityPlayer");
 
-            Class<?> craftPlayerClass = getClassOCB("entity.CraftPlayer");
-            Class<?> craftWorldClass = getClassOCB("CraftWorld");
+        	final Class<?> craftPlayerClass = getClassOCB("entity.CraftPlayer");
+        	final Class<?> craftWorldClass = getClassOCB("CraftWorld");
 
             if (SERVER_IS_1_8) {
                 enumParticle = getClassNMS("EnumParticle");
@@ -105,7 +105,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
             int[] datas = toData(particle, data);
 
             if (data instanceof Color) {
-                Color color = (Color) data;
+            	final Color color = (Color) data;
                 if (particle.getDataType() == Color.class) {
                     count = 0;
                     offsetX = color(color.getRed());
@@ -141,7 +141,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
             int[] datas = toData(particle, data);
 
             if (data instanceof Color) {
-                Color color = (Color) data;
+            	final Color color = (Color) data;
                 if (particle.getDataType() == Color.class) {
                     count = 0;
                     offsetX = color(color.getRed());
@@ -165,12 +165,12 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
     }
 
     @Override
-    public boolean isValidData(Object particle, Object data) {
+    public boolean isValidData(final Object particle, final Object data) {
         return true;
     }
 
     @Override
-    public Object getParticle(ParticleType particle) {
+    public Object getParticle(final ParticleType particle) {
         if (!SERVER_IS_1_8) {
             return particle.getName();
         }
@@ -183,15 +183,15 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private Object enumParticleValueOf(ParticleType particle) {
+    private Object enumParticleValueOf(final ParticleType particle) {
         return Enum.valueOf((Class<Enum>) ENUM_PARTICLE, particle.toString().toUpperCase());
     }
 
-    private int[] toData(ParticleType particle, Object data) {
+    private int[] toData(final ParticleType particle, final Object data) {
         Class<?> dataType = particle.getDataType();
         if (dataType == ItemStack.class) {
             if (data == null) {
-                return new int[2];
+                return SERVER_IS_1_8 ? new int[2] : new int[]{1, 0};
             }
 
             ItemStack itemStack = (ItemStack) data;
@@ -200,7 +200,7 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
 
         if (dataType == MaterialData.class) {
             if (data == null) {
-                return new int[1];
+                return SERVER_IS_1_8 ? new int[1] : new int[]{1, 0};
             }
 
             MaterialData materialData = (MaterialData) data;
@@ -214,15 +214,15 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
         return new int[0];
     }
 
-    private static void logException(String errorMessage, Exception ex) {
+    private static void logException(final String errorMessage, final Exception ex) {
         Bukkit.getLogger().log(Level.SEVERE, "[FastParticle] " + errorMessage, ex);
     }
 
-    private static Class<?> getClassNMS(String name) throws ClassNotFoundException {
+    private static Class<?> getClassNMS(final String name) throws ClassNotFoundException {
         return Class.forName(PACKAGE_NAME_NMS + "." + name);
     }
 
-    private static Class<?> getClassOCB(String name) throws ClassNotFoundException {
+    private static Class<?> getClassOCB(final String name) throws ClassNotFoundException {
         return Class.forName(PACKAGE_NAME_OCB + "." + name);
     }
 }

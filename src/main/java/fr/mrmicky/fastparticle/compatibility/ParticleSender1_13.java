@@ -44,7 +44,7 @@ public class ParticleSender1_13 extends ParticleSender {
     }
 
     @Override
-    public boolean isValidDataBukkit(Particle particle, Object data) {
+    public boolean isValidDataBukkit(final Particle particle, final Object data) {
         if (particle.getDataType() == Void.class) {
             return true;
         }

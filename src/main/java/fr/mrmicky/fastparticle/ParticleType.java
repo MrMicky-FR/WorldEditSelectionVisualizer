@@ -66,7 +66,7 @@ public enum ParticleType {
     FALLING_DUST("fallingdust", 10),
 
     // 1.11+
-    TOTEM("TOTEM", 11),
+    TOTEM("totem", 11),
     SPIT("spit", 11),
 
     // 1.13+
@@ -84,14 +84,14 @@ public enum ParticleType {
         SERVER_VERSION_ID = Integer.parseInt(ver.charAt(4) == '_' ? Character.toString(ver.charAt(3)) : ver.substring(3, 5));
     }
 
-    private String name;
-    private int minimalVersion;
+    private final String name;
+    private final int minimalVersion;
 
-    ParticleType(String minecraftName) {
+    ParticleType(final String minecraftName) {
         this(minecraftName, -1);
     }
 
-    ParticleType(String minecraftName, int minimalVersion) {
+    ParticleType(final String minecraftName, final int minimalVersion) {
         this.name = minecraftName;
         this.minimalVersion = minimalVersion;
     }
@@ -101,7 +101,7 @@ public enum ParticleType {
     }
 
     public boolean isCompatibleWithServerVersion() {
-        return minimalVersion > 0 || SERVER_VERSION_ID >= minimalVersion;
+        return minimalVersion <= 0 || SERVER_VERSION_ID >= minimalVersion;
     }
 
     public Class<?> getDataType() {
@@ -123,11 +123,10 @@ public enum ParticleType {
         try {
             return ParticleType.valueOf(particleName.toUpperCase());
         } catch (IllegalArgumentException e) {
-        }
-
-        for (ParticleType particle : values()) {
-            if (particle.getName().equalsIgnoreCase(particleName)) {
-                return particle;
+            for (ParticleType particle : values()) {
+                if (particle.getName().equalsIgnoreCase(particleName)) {
+                    return particle;
+                }
             }
         }
         return null;
