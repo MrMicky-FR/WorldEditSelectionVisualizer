@@ -1,57 +1,11 @@
-language: java
-dist: trusty
 sudo: false
-dist: trusty
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+language: java
+jdk: oraclejdk8
+
 cache:
   directories:
-    - "$HOME/.gradle/caches/"
-    - "$HOME/.gradle/wrapper/"
-jdk:
-  - oraclejdk8
-notifications:
-  email: false
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/4c7784d29ca9a5f339e7
-    on_success: change
-    on_failure: always
-    on_start: never
-before_install:
-  - rm -f build/com.rojel.wesv/libs/*
-  - 'export TRAVIS_TAG=wesv-$(grep ''version: '' src/resources/plugin.yml | awk ''{print$2}'')-build-$TRAVIS_BUILD_NUMBER'
-  - 'sed -i ''s/%PLUGIN_VERSION%/''$(grep ''version: '' src/resources/plugin.yml | awk ''{print $2}'')''/'' build.gradle'
-install:
-  - chmod +x ./gradlew
-  - JAVA_HOME=$(jdk_switcher home openjdk8) ./gradlew classes testClasses
+    - '$HOME/.m2/repository'
+
 script:
-- ./gradlew clean assemble check
-after_success:
-  - if [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ]; then bash <(curl -s https://codecov.io/bash); fi
-  - chmod +x generate-docs.sh
-  - "./generate-docs.sh"
-before_deploy:
-  - rm -f build/com.rojel.wesv/libs/WorldEdit-ServerSide-Visualizer*
-  - export RELEASE_PKG_FILE=$(ls build/com.rojel.wesv/libs/*.jar)
-  - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
-deploy:
-  provider: releases
-  overwrite: true
-  api_key:
-    secure: U2iBjSqvUHmnXuY4lPBU4B7vqwI91nG3rVOmYHzNTZRUyDidjtcgx+mGFe6il9sq/HM2WfpPugMex+ycMvenTDh0O/ooosC1Ru8zc3zjmQgkPPJ1Fb0TCizV51e5siN1K+ln6HNbEZzgwQitG6TDdnrg5dNCrFDOZ47u5Hk2NYWtB0r4O7r+ph+Pp4Mch2tAm/YZgKhNWDSDjGVNCkhZ/LdGVCmLRWGP+2o9VdTNka9BpqMfwSREyHUkiJJ0q6IsZznxlPWRNlarpbcYVsMghMn7wIPYv4HmWKotBOfhYNI0LyJWOS2DpNITYEe7MGPaXkjnCb3phz/1WXkov1Q3w+Y7780QGNVmlBoVBrvCY1LJ0/viAVVBJlqHl85zD9gInQc6iQrXQh+3IXwiPrC28ftBn518hig1OcQ+RRoQrcfWGDbeD4yeykaum9dGxHihXRDZ4Q2PObIjogH/+2KzmEZGZ2nJBv3zcUCqklyLZ/uNOqizppHfgrcC5b7eCu9nYTB0z//3ag6XMErnah9Y2gbdGbdstfuXNigX/2U+20ecQs5aCcrkGveU9bInTG99l7OTxj39uVvs1LBphTEpXL9P2+7Z7Rp+AEyVytJcqv4VQw+/JCjmmtHCn5Q848okfE+QSQU3z2jmY3UwHgkgQ++vdUTHGd1ng4wFUjL8BIw=
-  file_glob: true
-  file: "${RELEASE_PKG_FILE}"
-  skip_cleanup: true
-  on:
-    repo: martinambrus/WorldEdit-ServerSide-Visualizer
-    branch: master
-    jdk: oraclejdk8
-    condition: "$TRAVIS_PULL_REQUEST = false"
-branches:
-  only:
-    - master
-env:
-  global:
-  - secure: K7YM4DYm+PJqWgHuv2n1hZq7RaCT5wfwoM+CeDk/OCmeVzJl15392fV69b6VUtrsSsarEL8rRomNBfEspCXsgtWMDTW1UzpjEfn+W3sH0LgqVA3cdF9D/oDuR+JLeEhDtQ6udQbM6eEfQEXsqtguR2R2vOuBGPJ6sbU71M/bhw0LA/l2y8AVYnCHBf0SU0Lnrxxoxmye9YHR+BDztfh9MCWe74CP0dUJ0QKH6RjkBMaExcxmcQP1jm0bqkTTnjAW5QEF3pZW7pCXafEizeHmeMwcQx06b9L4vm3X305exxzrbBn2VKqQIBoiK7iatyFXsE2qkWO5KGHJ9d/PvFQXLo/NSjOFtmg637HdkWS2iFhWF835nffZOQOxCqDsNQiK/0Nst6TYpjcD+rX1Kaawe9f0HSQjPRW8OUrm/rZcIAVTmAL4QU9VIzzzu3igQcwbaIcmLKvJkvhQ7iXzk9q3EuzSyWGxPNtBjXJtZHpfdPNAGEWDxyjZPorAjOlVTuc3WdEQp9BEZWt3a6ipo8KnqGpjrvjhB4m5Cp0qkhx/cry+QALr03Maty13j1iSp/lukSk/IwRr+fFox/6aXtMyQSSFLvTab8KQD8Ek7Xk92pn/L1rbqNhz0VuR2LNETbDBdq6BzEdMRpRAXC+VChm6KT1a43+erYCaQlO0DQxqGrI=
+  - mvn clean install
