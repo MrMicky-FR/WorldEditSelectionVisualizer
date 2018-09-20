@@ -1,7 +1,3 @@
-/*
- * Decompiled with CFR 0_110.
- */
-
 package com.rojel.wesv;
 
 import org.bukkit.entity.Player;
@@ -31,7 +27,7 @@ public class WorldEditHelper extends BukkitRunnable {
 	@Override
 	public void run() {
 		for (final Player player : plugin.getServer().getOnlinePlayers()) {
-			if (!plugin.getCustomConfig().isEnabled(player) || !player.hasPermission("wesv.use")) {
+			if (!plugin.getCustomConfig().isEnabled(player)) {
 				continue;
 			}
 
@@ -44,8 +40,7 @@ public class WorldEditHelper extends BukkitRunnable {
 					plugin.getLastSelectedRegions().remove(player.getUniqueId());
 				}
 
-				plugin.getServer().getPluginManager()
-						.callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
+				plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 
 				if (this.plugin.isSelectionShown(player)) {
 					this.plugin.showSelection(player);

@@ -1,6 +1,6 @@
 package com.rojel.wesv;
 
-import java.util.UUID;
+import java.util.Collection;
 
 import com.sk89q.worldedit.Vector;
 import org.bukkit.Location;
@@ -26,18 +26,22 @@ public class ParticleTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		final int particleDistance = plugin.getCustomConfig().getParticleDistance();
-		for (final UUID uuid : plugin.getPlayerParticleMap().keySet()) {
-			final Player player = this.plugin.getServer().getPlayer(uuid);
+		for (final Player player : plugin.getServer().getOnlinePlayers()) {
 			final Location loc = player.getLocation();
+			final Collection<Vector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
 
-			for (final Vector vec : this.plugin.getPlayerParticleMap().get(uuid)) {
-				if (distance(loc, vec) > particleDistance * particleDistance) {
+			if (vectors == null || vectors.isEmpty()) {
+				continue;
+			}
+
+			for (final Vector vec : vectors) {
+				if (distance(loc, vec) > NumberConversions.square(particleDistance)) {
 					continue;
 				}
 
 				final ParticleType particle = plugin.getCustomConfig().getParticle();
 				final Object particleData = plugin.getCustomConfig().getParticleData();
-				
+
 				FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
 			}
 		}

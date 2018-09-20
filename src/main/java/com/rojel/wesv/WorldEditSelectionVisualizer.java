@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import com.sk89q.worldedit.Vector;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.LocalConfiguration;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;

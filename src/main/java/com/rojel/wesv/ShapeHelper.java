@@ -170,8 +170,7 @@ public class ShapeHelper {
 		final Vector gapVector = p2.subtract(p1).normalize().multiply(gap);
 
 		for (int i = 0; i < points; ++i) {
-			final Vector currentPoint = p1.add(gapVector.multiply(i));
-			vectors.add(currentPoint);
+			vectors.add(p1.add(gapVector.multiply(i)));
 		}
 		return vectors;
 	}
@@ -179,7 +178,7 @@ public class ShapeHelper {
 	private List<Vector> plotEllipse(final Vector center, final Vector radius) {
 		final List<Vector> vectors = new ArrayList<>();
 		final double biggestR = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
-		final double circleCircumference = 2.0 * biggestR * 3.141592653589793;
+		final double circleCircumference = biggestR *  2.0 * Math.PI;
 		final double deltaTheta = this.config.getGapBetweenPoints() / circleCircumference;
 
 		for (double i = 0.0; i < 1.0; i += deltaTheta) {
