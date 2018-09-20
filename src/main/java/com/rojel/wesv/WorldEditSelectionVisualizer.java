@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -94,8 +93,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 			this.setParticlesForPlayer(player, null);
 
 			if (!this.lastSelectionTooLarge.contains(uuid)) {
-				player.sendMessage(ChatColor.LIGHT_PURPLE + this.config.getLangSelectionSizeOf()
-						+ this.config.getMaxSize() + this.config.getLangBlocks());
+				player.sendMessage(this.config.getLangMaxSelection().replace("%blocks%", Integer.toString(this.config.getMaxSize())));
 				this.lastSelectionTooLarge.add(uuid);
 			}
 		} else {

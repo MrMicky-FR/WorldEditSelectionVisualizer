@@ -8,11 +8,9 @@ depend: [WorldEdit]
 commands:
   wesv:
     description: Toggles the visualizer or reload the config
-    permission: wesv.toggle
     usage: /wesv [relaod]
   wesv_reload:
     description: Old command to reload the configuration
-    permission: wesv.reloadconfig
     usage: This command has been replaced by /wesv reload
 
 permissions:

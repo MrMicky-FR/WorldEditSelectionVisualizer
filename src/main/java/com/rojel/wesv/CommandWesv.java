@@ -21,6 +21,11 @@ public class CommandWesv implements TabExecutor {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+        if (!sender.hasPermission("wesv.use")) {
+            sender.sendMessage(plugin.getCustomConfig().getLangNoPermission());
+            return true;
+        }
+
         if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;

@@ -1,7 +1,3 @@
-/*
- * Decompiled with CFR 0_110.
- */
-
 package com.rojel.wesv;
 
 import java.util.EnumMap;
@@ -93,27 +89,27 @@ public class Configuration {
 		/**
 		 * Language translation string from config.
 		 */
-		LANGVISUALIZERENABLED("lang.visualizerEnabled", "Your visualizer has been enabled."),
+		LANG_VISUALIZERENABLED("lang.visualizerEnabled", "&aYour visualizer has been enabled."),
 		/**
 		 * Language translation string from config.
 		 */
-		LANGVISUALIZERDISABLED("lang.visualizerDisabled", "Your visualizer has been disabled."),
+		LANG_VISUALIZERDISABLED("lang.visualizerDisabled", "&cYour visualizer has been disabled."),
 		/**
 		 * Language translation string from config.
 		 */
-		LANGPLAYERSONLY("lang.playersOnly", "Only a player can toggle his visualizer."),
+		LANG_PLAYERSONLY("lang.playersOnly", "&cOnly a player can toggle his visualizer."),
 		/**
 		 * Language translation string from config.
 		 */
-		LANGSELECTIONSIZEOF("lang.selectionSizeOf", "The visualizer only works with selections up to a size of "),
+		LANG_MAX_SELECTION("lang.maxSelection", "&6The visualizer only works with selections up to a size of %blocks% blocks"),
 		/**
 		 * Language translation string from config.
 		 */
-		LANGBLOCKS("lang.blocks", "blocks"),
+		LANG_CONFIGRELOADED("lang.configReloaded", "&aConfiguration for visualizer was reloaded from the disk."),
 		/**
 		 * Language translation string from config.
 		 */
-		LANGCONFIGRELOADED("lang.configReloaded", "Configuration for visualizer was reloaded from the disk."),
+		LANG_NO_PERMISSION("lang.noPermission", "&cYou don't have the permission to use this command."),
 
 		/**
 		 * Hide particles after a confgured amount of time
@@ -224,22 +220,23 @@ public class Configuration {
 		this.configItems.put(ConfigValue.MAXSIZE, this.config.getInt(ConfigValue.MAXSIZE.toString()));
 
 		// language config
-		this.configItems.put(ConfigValue.LANGVISUALIZERENABLED,
-				this.config.getString(ConfigValue.LANGVISUALIZERENABLED.toString()));
+		this.configItems.put(ConfigValue.LANG_VISUALIZERENABLED,
+				this.config.getString(ConfigValue.LANG_VISUALIZERENABLED.toString()));
 
-		this.configItems.put(ConfigValue.LANGVISUALIZERDISABLED,
-				this.config.getString(ConfigValue.LANGVISUALIZERDISABLED.toString()));
+		this.configItems.put(ConfigValue.LANG_VISUALIZERDISABLED,
+				this.config.getString(ConfigValue.LANG_VISUALIZERDISABLED.toString()));
 
-		this.configItems.put(ConfigValue.LANGPLAYERSONLY,
-				this.config.getString(ConfigValue.LANGPLAYERSONLY.toString()));
+		this.configItems.put(ConfigValue.LANG_PLAYERSONLY,
+				this.config.getString(ConfigValue.LANG_PLAYERSONLY.toString()));
 
-		this.configItems.put(ConfigValue.LANGSELECTIONSIZEOF,
-				this.config.getString(ConfigValue.LANGSELECTIONSIZEOF.toString()));
+		this.configItems.put(ConfigValue.LANG_MAX_SELECTION,
+				this.config.getString(ConfigValue.LANG_MAX_SELECTION.toString()));
 
-		this.configItems.put(ConfigValue.LANGBLOCKS, this.config.getString(ConfigValue.LANGBLOCKS.toString()));
+		this.configItems.put(ConfigValue.LANG_CONFIGRELOADED,
+				this.config.getString(ConfigValue.LANG_CONFIGRELOADED.toString()));
 
-		this.configItems.put(ConfigValue.LANGCONFIGRELOADED,
-				this.config.getString(ConfigValue.LANGCONFIGRELOADED.toString()));
+		this.configItems.put(ConfigValue.LANG_NO_PERMISSION,
+				this.config.getString(ConfigValue.LANG_NO_PERMISSION.toString()));
 
 		this.configItems.put(ConfigValue.FADE_DELAY, this.config.getInt(ConfigValue.FADE_DELAY.toString()));
 
@@ -441,7 +438,7 @@ public class Configuration {
 	 * @return Translation of "langVisualizerEnabled".
 	 */
 	public String getLangVisualizerEnabled() {
-		return color((String) this.configItems.get(ConfigValue.LANGVISUALIZERENABLED));
+		return color((String) this.configItems.get(ConfigValue.LANG_VISUALIZERENABLED));
 	}
 
 	/**
@@ -450,7 +447,7 @@ public class Configuration {
 	 * @return Translation of "visualizerDisabled".
 	 */
 	public String getLangVisualizerDisabled() {
-		return color((String) this.configItems.get(ConfigValue.LANGVISUALIZERDISABLED));
+		return color((String) this.configItems.get(ConfigValue.LANG_VISUALIZERDISABLED));
 	}
 
 	/**
@@ -459,25 +456,25 @@ public class Configuration {
 	 * @return Translation of "playersOnly".
 	 */
 	public String getLangPlayersOnly() {
-		return color((String) this.configItems.get(ConfigValue.LANGPLAYERSONLY));
+		return color((String) this.configItems.get(ConfigValue.LANG_PLAYERSONLY));
 	}
 
 	/**
-	 * Retrieves translation for the "selectionSizeOf" text.
+	 * Retrieves translation for the "maxSelection" text.
 	 * 
-	 * @return Translation of "selectionSizeOf".
+	 * @return Translation of "maxSelection".
 	 */
-	public String getLangSelectionSizeOf() {
-		return color((String) this.configItems.get(ConfigValue.LANGSELECTIONSIZEOF));
+	public String getLangMaxSelection() {
+		return color((String) this.configItems.get(ConfigValue.LANG_MAX_SELECTION));
 	}
 
 	/**
-	 * Retrieves translation for the "langBlocks" text.
-	 * 
-	 * @return Translation of "langBlocks".
+	 * Retrieves translation for the "maxSelection" text.
+	 *
+	 * @return Translation of "maxSelection".
 	 */
-	public String getLangBlocks() {
-		return color((String) this.configItems.get(ConfigValue.LANGBLOCKS));
+	public String getLangNoPermission() {
+		return color((String) this.configItems.get(ConfigValue.LANG_NO_PERMISSION));
 	}
 
 	/**
@@ -486,7 +483,7 @@ public class Configuration {
 	 * @return Translation of "configReloaded".
 	 */
 	public String getConfigReloaded() {
-		return (String) this.configItems.get(ConfigValue.LANGCONFIGRELOADED);
+		return (String) this.configItems.get(ConfigValue.LANG_CONFIGRELOADED);
 	}
 
 	// TODO JavaDoc
