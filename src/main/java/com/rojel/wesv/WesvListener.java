@@ -3,6 +3,7 @@ package com.rojel.wesv;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -21,7 +22,7 @@ public class WesvListener implements Listener {
 	}
 
 	@EventHandler
-	public void onWorldEditSelectionChange(final WorldEditSelectionChangeEvent event) {
+	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
 		final Player player = event.getPlayer();
 		if (this.plugin.isSelectionShown(player)) {
 			this.plugin.showSelection(player);
@@ -29,7 +30,7 @@ public class WesvListener implements Listener {
 	}
 
 	@EventHandler
-	public void onItemChange(final PlayerItemHeldEvent event) {
+	public void onPlayerItemChange(final PlayerItemHeldEvent event) {
 		final Player player = event.getPlayer();
 		if (this.plugin.getCustomConfig().isCheckForAxeEnabled() && this.plugin.getCustomConfig().isEnabled(player)) {
 

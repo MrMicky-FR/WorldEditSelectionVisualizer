@@ -46,6 +46,10 @@ public class WorldEditHelper extends BukkitRunnable {
 
 				plugin.getServer().getPluginManager()
 						.callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
+
+				if (this.plugin.isSelectionShown(player)) {
+					this.plugin.showSelection(player);
+				}
 			}
 		}
 	}
@@ -66,7 +70,7 @@ public class WorldEditHelper extends BukkitRunnable {
 	}
 
 	public boolean compareRegion(final Region r1, final Region r2) {
-		if (r1 == null && r2 == null) {
+		if (r1 == r2) {
 			return true;
 		}
 

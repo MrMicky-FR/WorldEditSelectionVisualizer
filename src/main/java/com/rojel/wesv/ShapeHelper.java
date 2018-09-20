@@ -1,16 +1,8 @@
-/*
- * Decompiled with CFR 0_110.
- */
-
 package com.rojel.wesv;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 
 import com.sk89q.worldedit.BlockVector2D;
 import com.sk89q.worldedit.Vector;
@@ -30,9 +22,10 @@ public class ShapeHelper {
 		this.config = config;
 	}
 
-	public Collection<Location> getLocationsFromRegion(final Region region) {
-		final List<Vector> vectors = new ArrayList<>();
+	public Collection<Vector> getVectorsFromRegion(final Region region) {
 		if (region != null) {
+			final List<Vector> vectors = new ArrayList<>();
+
 			final Vector min = region.getMinimumPoint();
 			final Vector max = region.getMaximumPoint().add(1, 1, 1);
 			final int width = region.getWidth();
@@ -164,16 +157,9 @@ public class ShapeHelper {
 					vectors.addAll(plotLine(corners.get(i), corners.get(i + 1 < corners.size() ? i + 1 : 0)));
 				}
 			}
+            return vectors;
 		}
-
-		final List<Location> locations = new ArrayList<>();
-		if (!vectors.isEmpty() && region != null && region.getWorld() != null) {
-			final World world = Bukkit.getWorld(region.getWorld().getName());
-			for (final Vector vector : vectors) {
-				locations.add(new Location(world, vector.getX(), vector.getY(), vector.getZ()));
-			}
-		}
-		return locations;
+		return null;
 	}
 
 	private List<Vector> plotLine(final Vector p1, final Vector p2) {

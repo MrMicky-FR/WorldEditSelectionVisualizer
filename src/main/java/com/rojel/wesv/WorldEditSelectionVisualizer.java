@@ -1,27 +1,19 @@
-/*
- * Decompiled with CFR 0_110.
- */
-
 package com.rojel.wesv;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.sk89q.worldedit.Vector;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.StringUtil;
 
 import com.sk89q.worldedit.LocalConfiguration;
 import com.sk89q.worldedit.WorldEdit;
@@ -39,7 +31,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	private final List<UUID> lastSelectionTooLarge = new ArrayList<>();
 	private final Map<UUID, Region> lastSelectedRegions = new HashMap<>();
 	private final Map<UUID, Integer> fadeOutTasks = new HashMap<>();
-	private final Map<UUID, Collection<Location>> playerParticleMap = new HashMap<>();
+	private final Map<UUID, Collection<Vector>> playerParticleMap = new HashMap<>();
 
 	@Override
 	public void onEnable() {
@@ -62,7 +54,6 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
 	@SuppressWarnings("deprecation")
 	public boolean isHoldingSelectionItem(final Player player) {
-		// return isSelectionItem(player.getItemInHand());
 		final ItemStack item = player.getItemInHand();
 		if (item != null) {
 			try {
@@ -109,7 +100,12 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 			}
 		} else {
 			this.lastSelectionTooLarge.remove(player.getUniqueId());
-			this.setParticlesForPlayer(player, this.shapeHelper.getLocationsFromRegion(region));
+
+			if (region != null && region.getWorld() != null && region.getWorld().getName().equals(player.getWorld().getName())) {
+				this.setParticlesForPlayer(player, this.shapeHelper.getVectorsFromRegion(region));
+			} else {
+				this.setParticlesForPlayer(player, null);
+			}
 		}
 		this.shown.add(player.getUniqueId());
 	}
@@ -120,13 +116,13 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		this.cancelAndRemoveFadeOutTask(player.getUniqueId());
 	}
 
-	public void setParticlesForPlayer(final Player player, final Collection<Location> locations) {
+	public void setParticlesForPlayer(final Player player, final Collection<Vector> vectors) {
 		this.cancelAndRemoveFadeOutTask(player.getUniqueId());
 
-		if (locations == null || locations.isEmpty()) {
+		if (vectors == null || vectors.isEmpty()) {
 			this.playerParticleMap.remove(player.getUniqueId());
 		} else {
-			this.playerParticleMap.put(player.getUniqueId(), locations);
+			this.playerParticleMap.put(player.getUniqueId(), vectors);
 
 			final int fade = config.getParticleFadeDelay();
 
@@ -173,7 +169,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		return this.lastSelectedRegions;
 	}
 
-	public Map<UUID, Collection<Location>> getPlayerParticleMap() {
+	public Map<UUID, Collection<Vector>> getPlayerParticleMap() {
 		return this.playerParticleMap;
 	}
 }
