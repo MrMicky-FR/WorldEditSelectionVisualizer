@@ -1,9 +1,10 @@
 package com.rojel.wesv;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+import com.boydti.fawe.object.regions.FuzzyRegion;
+import com.boydti.fawe.object.regions.PolyhedralRegion;
+import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.BlockVector2D;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
@@ -17,9 +18,11 @@ import com.sk89q.worldedit.regions.polyhedron.Triangle;
 public class ShapeHelper {
 
 	private final Configuration config;
+	private final boolean useFAWE;
 
-	public ShapeHelper(final Configuration config) {
-		this.config = config;
+	public ShapeHelper(final WorldEditSelectionVisualizer plugin) {
+		config = plugin.getCustomConfig();
+		useFAWE = plugin.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 	}
 
 	public Collection<Vector> getVectorsFromRegion(final Region region) {
@@ -156,10 +159,44 @@ public class ShapeHelper {
 				for (int i = 0; i < corners.size(); i++) {
 					vectors.addAll(plotLine(corners.get(i), corners.get(i + 1 < corners.size() ? i + 1 : 0)));
 				}
+			} else if (useFAWE) {
+				handleFaweRegions(region, vectors);
 			}
             return vectors;
 		}
 		return null;
+	}
+
+	private void handleFaweRegions(Region region, List<Vector> vectors) {
+		if (region instanceof PolyhedralRegion) {
+			final PolyhedralRegion polyhedralRegion = (PolyhedralRegion) region;
+			final List<Vector> corners = new ArrayList<>();
+
+			for (final com.boydti.fawe.object.regions.Triangle triangle : polyhedralRegion.getTriangles()) {
+				for (int i = 0; i < 3; i++) {
+					corners.add(triangle.getVertex(i).add(0.5, 0.5, 0.5));
+				}
+			}
+
+			for (int i = 0; i < corners.size(); i++) {
+				vectors.addAll(plotLine(corners.get(i), corners.get(i + 1 < corners.size() ? i + 1 : 0)));
+			}
+		} else if (region instanceof FuzzyRegion) {
+			final FuzzyRegion fuzzyRegion = (FuzzyRegion) region;
+			Set<Vector> vectorSet = new HashSet<>();
+
+			for (BlockVector vector : fuzzyRegion) {
+				for (int x = 0; x <= 1; x++) {
+					for (int y = 0; y <= 1; y++) {
+						for (int z = 0; z <= 1; z++) {
+							vectorSet.add(vector.add(x, y, z));
+						}
+					}
+				}
+			}
+
+			vectors.addAll(vectorSet);
+		}
 	}
 
 	private List<Vector> plotLine(final Vector p1, final Vector p2) {

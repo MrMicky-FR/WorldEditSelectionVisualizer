@@ -41,7 +41,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		this.config = new Configuration(this);
 		this.config.load();
 		this.worldEditHelper = new WorldEditHelper(this);
-		this.shapeHelper = new ShapeHelper(this.config);
+		this.shapeHelper = new ShapeHelper(this);
 
 		new ParticleTask(this);
 

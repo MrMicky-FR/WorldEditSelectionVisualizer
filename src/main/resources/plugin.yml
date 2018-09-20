@@ -6,6 +6,7 @@ prefix: WESV
 website: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
 main: com.rojel.wesv.WorldEditSelectionVisualizer
 depend: [WorldEdit]
+softdepend: [FastAsyncWorldEdit]
 commands:
   wesv:
     description: Toggles the visualizer or reload the config
