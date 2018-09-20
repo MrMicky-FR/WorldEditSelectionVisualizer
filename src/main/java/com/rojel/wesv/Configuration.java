@@ -41,6 +41,7 @@ public class Configuration {
 	 * ENUM of valid configuration values.
 	 */
 	private enum ConfigValue {
+	    UPDATE_CHECKER("updateChecker", true),
 		/**
 		 * Size of a space left between 2 points.
 		 */
@@ -194,6 +195,9 @@ public class Configuration {
 
 		this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
 
+        this.configItems.put(ConfigValue.UPDATE_CHECKER,
+                this.config.getBoolean(ConfigValue.UPDATE_CHECKER.toString()));
+
 		this.configItems.put(ConfigValue.GAPBETWEENPOINTS,
 				this.config.getDouble(ConfigValue.GAPBETWEENPOINTS.toString()));
 
@@ -332,6 +336,15 @@ public class Configuration {
 	public ParticleType getParticle() {
 		return this.particle;
 	}
+
+    /**
+     * Retrieves the "gapBetweenPoints" property value.
+     *
+     * @return Returns the "gapBetweenPoints" property value.
+     */
+    public boolean isUpdateCheckerEnabled() {
+        return (boolean) this.configItems.get(ConfigValue.UPDATE_CHECKER);
+    }
 
 	/**
 	 * Retrieves the "gapBetweenPoints" property value.

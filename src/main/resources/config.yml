@@ -5,6 +5,7 @@ lang:
   maxSelection: "&6The visualizer only works with selections up to a size of %blocks% blocks"
   configReloaded: "&aConfiguration for visualizer was reloaded from the disk."
   noPermission: "&cYou don't have the permission to use this command."
+updateChecker: true
 particleDistance: 32
 maxSize: 10000
 checkForAxe: false
