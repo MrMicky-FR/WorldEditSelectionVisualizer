@@ -95,10 +95,10 @@ public class ShapeHelper {
 				}
 			} else if (region instanceof CylinderRegion) {
 				final CylinderRegion cylRegion = (CylinderRegion) region;
-				final Vector center = cylRegion.getCenter().add(0.5, 0.5, 0.5);
+				final Vector centerDown = cylRegion.getCenter().setY(min.getY()).add(0.5, 0.0, 0.5);
 				final double rx = width / 2.0;
 				final double rz = length / 2.0;
-				final List<Vector> bottomCorners = this.plotEllipse(center, new Vector(rx, 0.0, rz));
+				final List<Vector> bottomCorners = this.plotEllipse(centerDown, new Vector(rx, 0.0, rz));
 
 				vectors.addAll(bottomCorners);
 
