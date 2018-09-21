@@ -28,7 +28,7 @@ public class MetricsUtils {
     }
 
     private static void addCustomChartObject(Metrics metrics, String name, Callable<Object> value) {
-        addCustomChartString(metrics, name, () -> String.valueOf(value));
+        addCustomChartString(metrics, name, () -> String.valueOf(value.call()));
     }
 
     private static void addCustomChartString(Metrics metrics, String name, Callable<String> value) {
