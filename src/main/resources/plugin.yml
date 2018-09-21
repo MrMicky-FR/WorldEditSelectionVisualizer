@@ -10,7 +10,7 @@ softdepend: [FastAsyncWorldEdit]
 commands:
   wesv:
     description: Toggles the visualizer or reload the config
-    usage: /wesv [relaod]
+    usage: /wesv [reload]
   wesv_reload:
     description: Old command to reload the configuration
     usage: This command has been replaced by /wesv reload

@@ -45,7 +45,7 @@ public class CommandWesv implements TabExecutor {
                 sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());
             }
         } else {
-            plugin.getCustomConfig().reloadConfig();
+            plugin.getCustomConfig().reloadConfig(true);
             sender.sendMessage(plugin.getCustomConfig().getConfigReloaded());
         }
         return true;

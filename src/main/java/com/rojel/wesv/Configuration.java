@@ -19,7 +19,6 @@ import fr.mrmicky.fastparticle.ParticleType;
  * @author Martin Ambrus
  * @since 1.0a
  */
-@SuppressWarnings("deprecation")
 public class Configuration {
 	/**
 	 * WESV plugin instance.
@@ -32,125 +31,110 @@ public class Configuration {
 	private FileConfiguration config;
 
 	/**
-	 * ENUM value of a particle effect used to visually display current
-	 * WorldEdit selection.
-	 */
-	private ParticleType particle;
-
-	/**
 	 * ENUM of valid configuration values.
 	 */
 	private enum ConfigValue {
-	    UPDATE_CHECKER("updateChecker", true),
+	    UPDATE_CHECKER("updateChecker", true, boolean.class),
 		/**
 		 * Size of a space left between 2 points.
 		 */
-		GAPBETWEENPOINTS("gapBetweenPoints", 0.5d),
+		GAPBETWEENPOINTS("gapBetweenPoints", 0.5d, double.class),
 		/**
 		 * Size of a vertical space left between 2 points.
 		 */
-		VERTICALGAP("verticalGap", 1d),
+		VERTICALGAP("verticalGap", 1d, double.class),
 		/**
 		 * Interval in which particles should be updated for the MC client.
 		 */
-		UPDATEPARTICLESINTERVAL("updateParticlesInterval", 5),
+		UPDATEPARTICLESINTERVAL("updateParticlesInterval", 5, int.class),
 		/**
 		 * Interval (ms) in which the selection should be updated for the MC
 		 * client.
 		 */
-		UPDATESELECTIONINTERVAL("updateSelectionInterval", 20),
+		UPDATESELECTIONINTERVAL("updateSelectionInterval", 20, int.class),
 		/**
 		 * Whether or not to show cuboid lines.
 		 */
-		CUBOIDLINES("horizontalLinesForCuboid", true),
+		CUBOIDLINES("horizontalLinesForCuboid", true, boolean.class),
 		/**
 		 * Whether or not to show polygon lines.
 		 */
-		POLYGONLINES("horizontalLinesForPolygon", true),
+		POLYGONLINES("horizontalLinesForPolygon", true, boolean.class),
 		/**
 		 * Whether or not to show cylinder lines.
 		 */
-		CYLINDERLINES("horizontalLinesForCylinder", true),
+		CYLINDERLINES("horizontalLinesForCylinder", true, boolean.class),
 		/**
 		 * Whether or not to show ellipsoid lines.
 		 */
-		ELLIPSOIDLINES("horizontalLinesForEllipsoid", true),
+		ELLIPSOIDLINES("horizontalLinesForEllipsoid", true, boolean.class),
 		/**
 		 * Whether or not to check for the WorldEdit tool in hand.
 		 */
-		CHECKFORAXE("checkForAxe", false),
+		CHECKFORAXE("checkForAxe", false, boolean.class),
+
+		PARTICLE_TYPE("particleEffect", ParticleType.REDSTONE, ParticleType.class),
 		/**
 		 * Maximum distance to see selection particles from.
 		 */
-		PARTICLEDISTANCE("particleDistance", 32),
+		PARTICLEDISTANCE("particleDistance", 32, int.class),
 		/**
 		 * Maximum size of the visualized selection itself.
 		 */
-		MAXSIZE("maxSize", 10000),
+		MAXSIZE("maxSize", 10000, int.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_VISUALIZERENABLED("lang.visualizerEnabled", "&aYour visualizer has been enabled."),
+		LANG_VISUALIZERENABLED("lang.visualizerEnabled", "&aYour visualizer has been enabled.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_VISUALIZERDISABLED("lang.visualizerDisabled", "&cYour visualizer has been disabled."),
+		LANG_VISUALIZERDISABLED("lang.visualizerDisabled", "&cYour visualizer has been disabled.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_PLAYERSONLY("lang.playersOnly", "&cOnly a player can toggle his visualizer."),
+		LANG_PLAYERSONLY("lang.playersOnly", "&cOnly a player can toggle his visualizer.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_MAX_SELECTION("lang.maxSelection", "&6The visualizer only works with selections up to a size of %blocks% blocks"),
+		LANG_MAX_SELECTION("lang.maxSelection", "&6The visualizer only works with selections up to a size of %blocks% blocks", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_CONFIGRELOADED("lang.configReloaded", "&aConfiguration for visualizer was reloaded from the disk."),
+		LANG_CONFIGRELOADED("lang.configReloaded", "&aConfiguration for visualizer was reloaded from the disk.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_NO_PERMISSION("lang.noPermission", "&cYou don't have the permission to use this command."),
-
+		LANG_NO_PERMISSION("lang.noPermission", "&cYou don't have the permission to use this command.", String.class),
 		/**
 		 * Hide particles after a confgured amount of time
 		 */
-		FADE_DELAY("particleFadeDelay", 0),
-
+		FADE_DELAY("particleFadeDelay", 0, int.class),
 		/**
 		 * Additional data for some particles (can be a color or a material)
 		 */
-		PARTICLE_DATA("particleData", "255,0,0");
+		PARTICLE_DATA("particleData", "255,0,0", String.class);
 
-		/**
-		 * The string value of an ENUM.
-		 */
 		private final String configValue;
 		private final Object defaultValue;
+		private Class<?> type;
 
-		/**
-		 * Constructor for String ENUMs.
-		 * 
-		 * @param value
-		 *            String value for the ENUM.
-		 */
-		ConfigValue(final String value, final Object defaultValue) {
+		ConfigValue(final String value, final Object defaultValue, final Class<?> type) {
 			this.configValue = value;
 			this.defaultValue = defaultValue;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Enum#toString()
-		 */
-		@Override
-		public String toString() {
-			return this.configValue;
+			this.type = type;
 		}
 
 		public Object getDefaultValue() {
 			return defaultValue;
+		}
+
+		public String getConfigValue() {
+			return configValue;
+		}
+
+		public Class<?> getType() {
+			return type;
 		}
 	}
 
@@ -164,10 +148,6 @@ public class Configuration {
 	 */
 	public Configuration(final JavaPlugin plugin) {
 		this.plugin = plugin;
-
-		for (final ConfigValue values : ConfigValue.values()) {
-			configItems.put(values, values.getDefaultValue());
-		}
 	}
 
 	/**
@@ -177,85 +157,60 @@ public class Configuration {
 		this.plugin.saveDefaultConfig();
 		this.config = this.plugin.getConfig();
 
+		boolean found = false;
 		for (final ConfigValue values : ConfigValue.values()) {
-			this.config.addDefault(values.toString(), values.getDefaultValue());
+			this.config.addDefault(values.getConfigValue(), values.getDefaultValue());
+
+			if (!this.config.contains(values.getConfigValue(), true)) {
+				found = true;
+				break;
+			}
 		}
 
-		this.config.options().copyDefaults(true);
-		this.plugin.saveConfig();
-		this.reloadConfig();
+		if (found) {
+			this.config.options().copyDefaults(true);
+			this.plugin.saveConfig();
+		}
+
+		this.reloadConfig(false);
 	}
 
 	/**
 	 * Loads values from config.yml file into the internal config EnumMap.
 	 */
-	public void reloadConfig() {
-		this.plugin.reloadConfig();
-		this.config = this.plugin.getConfig();
+	public void reloadConfig(boolean reload) {
+		if (reload) {
+			this.plugin.reloadConfig();
+			this.config = this.plugin.getConfig();
+		}
 
-		this.particle = this.getParticleEffect(this.config.getString("particleEffect"));
+        for (ConfigValue value : ConfigValue.values()) {
+        	if (value.getType() == String.class) {
+        		configItems.put(value, ChatColor.translateAlternateColorCodes('&', this.config.getString(value.getConfigValue())));
+			} else if (value.getType() == boolean.class) {
+				configItems.put(value, this.config.getBoolean(value.getConfigValue()));
+			} else if (value.getType() == int.class) {
+				configItems.put(value, this.config.getInt(value.getConfigValue()));
+			} else if (value.getType() == double.class) {
+				configItems.put(value, this.config.getDouble(value.getConfigValue()));
+			} else if (value.getType() == ParticleType.class) {
+				configItems.put(value, this.getParticleType(this.config.getString(value.getConfigValue())));
+			} else {
+				configItems.put(value, this.config.get(value.getConfigValue()));
+			}
+		}
 
-        this.configItems.put(ConfigValue.UPDATE_CHECKER,
-                this.config.getBoolean(ConfigValue.UPDATE_CHECKER.toString()));
-
-		this.configItems.put(ConfigValue.GAPBETWEENPOINTS,
-				this.config.getDouble(ConfigValue.GAPBETWEENPOINTS.toString()));
-
-		this.configItems.put(ConfigValue.VERTICALGAP, this.config.getDouble(ConfigValue.VERTICALGAP.toString()));
-
-		this.configItems.put(ConfigValue.UPDATEPARTICLESINTERVAL,
-				this.config.getInt(ConfigValue.UPDATEPARTICLESINTERVAL.toString()));
-
-		this.configItems.put(ConfigValue.UPDATESELECTIONINTERVAL,
-				this.config.getInt(ConfigValue.UPDATESELECTIONINTERVAL.toString()));
-
-		this.configItems.put(ConfigValue.CUBOIDLINES, this.config.getBoolean(ConfigValue.CUBOIDLINES.toString()));
-
-		this.configItems.put(ConfigValue.POLYGONLINES, this.config.getBoolean(ConfigValue.POLYGONLINES.toString()));
-
-		this.configItems.put(ConfigValue.CYLINDERLINES, this.config.getBoolean(ConfigValue.CYLINDERLINES.toString()));
-
-		this.configItems.put(ConfigValue.ELLIPSOIDLINES, this.config.getBoolean(ConfigValue.ELLIPSOIDLINES.toString()));
-
-		this.configItems.put(ConfigValue.CHECKFORAXE, this.config.getBoolean(ConfigValue.CHECKFORAXE.toString()));
-
-		this.configItems.put(ConfigValue.PARTICLEDISTANCE, this.config.getInt(ConfigValue.PARTICLEDISTANCE.toString()));
-
-		this.configItems.put(ConfigValue.MAXSIZE, this.config.getInt(ConfigValue.MAXSIZE.toString()));
-
-		// language config
-		this.configItems.put(ConfigValue.LANG_VISUALIZERENABLED,
-				this.config.getString(ConfigValue.LANG_VISUALIZERENABLED.toString()));
-
-		this.configItems.put(ConfigValue.LANG_VISUALIZERDISABLED,
-				this.config.getString(ConfigValue.LANG_VISUALIZERDISABLED.toString()));
-
-		this.configItems.put(ConfigValue.LANG_PLAYERSONLY,
-				this.config.getString(ConfigValue.LANG_PLAYERSONLY.toString()));
-
-		this.configItems.put(ConfigValue.LANG_MAX_SELECTION,
-				this.config.getString(ConfigValue.LANG_MAX_SELECTION.toString()));
-
-		this.configItems.put(ConfigValue.LANG_CONFIGRELOADED,
-				this.config.getString(ConfigValue.LANG_CONFIGRELOADED.toString()));
-
-		this.configItems.put(ConfigValue.LANG_NO_PERMISSION,
-				this.config.getString(ConfigValue.LANG_NO_PERMISSION.toString()));
-
-		this.configItems.put(ConfigValue.FADE_DELAY, this.config.getInt(ConfigValue.FADE_DELAY.toString()));
-
-		this.configItems.put(ConfigValue.PARTICLE_DATA,
-				getParticleData(this.config.getString(ConfigValue.PARTICLE_DATA.toString())));
+		configItems.put(ConfigValue.PARTICLE_DATA, this.getParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
 	}
 
 	/**
-	 * Retrieves ParticleEffect representation of the given name.
+	 * Retrieves ParticleType representation of the given name.
 	 * 
 	 * @param name
-	 *            Name of the particle effect from config.
-	 * @return Returns a ParticleEffect representation of the given name.
+	 *            Name of the particle type from config.
+	 * @return Returns a ParticleType representation of the given name.
 	 */
-	public ParticleType getParticleEffect(final String name) {
+	public ParticleType getParticleType(final String name) {
 		final ParticleType effect = ParticleType.getParticle(name);
 		if (effect != null && effect.isCompatibleWithServerVersion()) {
 			return effect;
@@ -264,8 +219,10 @@ public class Configuration {
 		return ParticleType.REDSTONE;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Object getParticleData(final String name) {
-		if (this.particle.getDataType() == Color.class && !name.isEmpty()) {
+		ParticleType particle = getParticle();
+		if (particle.getDataType() == Color.class && !name.isEmpty()) {
 			final String[] split = name.split(",");
 			if (split.length == 3) {
 				try {
@@ -278,12 +235,12 @@ public class Configuration {
 					this.plugin.getLogger().warning("'" + name + "' is not a valid color: " + e.getMessage());
 				}
 			}
-		} else if (this.particle.getDataType() == MaterialData.class) {
+		} else if (particle.getDataType() == MaterialData.class) {
 			final Material material = getMaterial(name);
 			if (material != null) {
 				return new MaterialData(material);
 			}
-		} else if (this.particle.getDataType() == ItemStack.class) {
+		} else if (particle.getDataType() == ItemStack.class) {
 			final Material material = getMaterial(name);
 			if (material != null) {
 				return new ItemStack(material);
@@ -334,7 +291,7 @@ public class Configuration {
 	 * @return Returns the "particle" property value.
 	 */
 	public ParticleType getParticle() {
-		return this.particle;
+		return (ParticleType) this.configItems.get(ConfigValue.PARTICLE_TYPE);
 	}
 
     /**
@@ -451,7 +408,7 @@ public class Configuration {
 	 * @return Translation of "langVisualizerEnabled".
 	 */
 	public String getLangVisualizerEnabled() {
-		return color((String) this.configItems.get(ConfigValue.LANG_VISUALIZERENABLED));
+		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZERENABLED);
 	}
 
 	/**
@@ -460,7 +417,7 @@ public class Configuration {
 	 * @return Translation of "visualizerDisabled".
 	 */
 	public String getLangVisualizerDisabled() {
-		return color((String) this.configItems.get(ConfigValue.LANG_VISUALIZERDISABLED));
+		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZERDISABLED);
 	}
 
 	/**
@@ -469,7 +426,7 @@ public class Configuration {
 	 * @return Translation of "playersOnly".
 	 */
 	public String getLangPlayersOnly() {
-		return color((String) this.configItems.get(ConfigValue.LANG_PLAYERSONLY));
+		return (String) this.configItems.get(ConfigValue.LANG_PLAYERSONLY);
 	}
 
 	/**
@@ -478,7 +435,7 @@ public class Configuration {
 	 * @return Translation of "maxSelection".
 	 */
 	public String getLangMaxSelection() {
-		return color((String) this.configItems.get(ConfigValue.LANG_MAX_SELECTION));
+		return (String) this.configItems.get(ConfigValue.LANG_MAX_SELECTION);
 	}
 
 	/**
@@ -487,7 +444,7 @@ public class Configuration {
 	 * @return Translation of "maxSelection".
 	 */
 	public String getLangNoPermission() {
-		return color((String) this.configItems.get(ConfigValue.LANG_NO_PERMISSION));
+		return (String) this.configItems.get(ConfigValue.LANG_NO_PERMISSION);
 	}
 
 	/**
@@ -506,9 +463,5 @@ public class Configuration {
 
 	public Object getParticleData() {
 		return this.configItems.get(ConfigValue.PARTICLE_DATA);
-	}
-
-	private String color(final String s) {
-		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 }
