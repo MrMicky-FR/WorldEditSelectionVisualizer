@@ -15,6 +15,8 @@ horizontalLinesForCuboid: true
 horizontalLinesForPolygon: true
 horizontalLinesForCylinder: true
 horizontalLinesForEllipsoid: true
+topAndBottomForCuboid: true
+topAndBottomForCylinder: true
 gapBetweenPoints: 0.5
 verticalGap: 1
 updateSelectionInterval: 20

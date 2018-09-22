@@ -38,62 +38,66 @@ public class Configuration {
 		/**
 		 * Size of a space left between 2 points.
 		 */
-		GAPBETWEENPOINTS("gapBetweenPoints", 0.5d, double.class),
+		GAP_BETWEEN_POINTS("gapBetweenPoints", 0.5d, double.class),
 		/**
 		 * Size of a vertical space left between 2 points.
 		 */
-		VERTICALGAP("verticalGap", 1d, double.class),
+		VERTICAL_GAP("verticalGap", 1d, double.class),
 		/**
 		 * Interval in which particles should be updated for the MC client.
 		 */
-		UPDATEPARTICLESINTERVAL("updateParticlesInterval", 5, int.class),
+		UPDATE_PARTICLES_INTERVAL("updateParticlesInterval", 5, int.class),
 		/**
 		 * Interval (ms) in which the selection should be updated for the MC
 		 * client.
 		 */
-		UPDATESELECTIONINTERVAL("updateSelectionInterval", 20, int.class),
+		UPDATE_SELECTION_INTERVAL("updateSelectionInterval", 20, int.class),
 		/**
 		 * Whether or not to show cuboid lines.
 		 */
-		CUBOIDLINES("horizontalLinesForCuboid", true, boolean.class),
+		CUBOID_LINES("horizontalLinesForCuboid", true, boolean.class),
 		/**
 		 * Whether or not to show polygon lines.
 		 */
-		POLYGONLINES("horizontalLinesForPolygon", true, boolean.class),
+		POLYGON_LINES("horizontalLinesForPolygon", true, boolean.class),
 		/**
 		 * Whether or not to show cylinder lines.
 		 */
-		CYLINDERLINES("horizontalLinesForCylinder", true, boolean.class),
+		CYLINDER_LINES("horizontalLinesForCylinder", true, boolean.class),
 		/**
 		 * Whether or not to show ellipsoid lines.
 		 */
-		ELLIPSOIDLINES("horizontalLinesForEllipsoid", true, boolean.class),
+		ELLIPSOID_LINES("horizontalLinesForEllipsoid", true, boolean.class),
+
+		CUBOID_TOP_BOTTOM("topAndBottomForCuboid", true, boolean.class),
+
+		CYLINDER_TOP_BOTTOM("topAndBottomForCylinder", true, boolean.class),
 		/**
 		 * Whether or not to check for the WorldEdit tool in hand.
 		 */
-		CHECKFORAXE("checkForAxe", false, boolean.class),
+		CHECK_FOR_AXE("checkForAxe", false, boolean.class),
 
 		PARTICLE_TYPE("particleEffect", ParticleType.REDSTONE, ParticleType.class),
 		/**
 		 * Maximum distance to see selection particles from.
 		 */
-		PARTICLEDISTANCE("particleDistance", 32, int.class),
+		PARTICLE_DISTANCE("particleDistance", 32, int.class),
 		/**
 		 * Maximum size of the visualized selection itself.
 		 */
-		MAXSIZE("maxSize", 10000, int.class),
+		MAX_SIZE("maxSize", 10000, int.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_VISUALIZERENABLED("lang.visualizerEnabled", "&aYour visualizer has been enabled.", String.class),
+		LANG_VISUALIZER_ENABLED("lang.visualizerEnabled", "&aYour visualizer has been enabled.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_VISUALIZERDISABLED("lang.visualizerDisabled", "&cYour visualizer has been disabled.", String.class),
+		LANG_VISUALIZER_DISABLED("lang.visualizerDisabled", "&cYour visualizer has been disabled.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
-		LANG_PLAYERSONLY("lang.playersOnly", "&cOnly a player can toggle his visualizer.", String.class),
+		LANG_PLAYERS_ONLY("lang.playersOnly", "&cOnly a player can toggle his visualizer.", String.class),
 		/**
 		 * Language translation string from config.
 		 */
@@ -309,7 +313,7 @@ public class Configuration {
 	 * @return Returns the "gapBetweenPoints" property value.
 	 */
 	public double getGapBetweenPoints() {
-		return (double) this.configItems.get(ConfigValue.GAPBETWEENPOINTS);
+		return (double) this.configItems.get(ConfigValue.GAP_BETWEEN_POINTS);
 	}
 
 	/**
@@ -318,7 +322,7 @@ public class Configuration {
 	 * @return Returns the "verticalGap" property value.
 	 */
 	public double getVerticalGap() {
-		return (double) this.configItems.get(ConfigValue.VERTICALGAP);
+		return (double) this.configItems.get(ConfigValue.VERTICAL_GAP);
 	}
 
 	/**
@@ -327,7 +331,7 @@ public class Configuration {
 	 * @return Returns the "updateParticlesInterval" property value.
 	 */
 	public int getUpdateParticlesInterval() {
-		return (int) this.configItems.get(ConfigValue.UPDATEPARTICLESINTERVAL);
+		return (int) this.configItems.get(ConfigValue.UPDATE_PARTICLES_INTERVAL);
 	}
 
 	/**
@@ -336,7 +340,7 @@ public class Configuration {
 	 * @return Returns the "updateSelectionInterval" property value.
 	 */
 	public int getUpdateSelectionInterval() {
-		return (int) this.configItems.get(ConfigValue.UPDATESELECTIONINTERVAL);
+		return (int) this.configItems.get(ConfigValue.UPDATE_SELECTION_INTERVAL);
 	}
 
 	/**
@@ -345,7 +349,7 @@ public class Configuration {
 	 * @return Returns the "cuboidLines" property value.
 	 */
 	public boolean isCuboidLinesEnabled() {
-		return (boolean) this.configItems.get(ConfigValue.CUBOIDLINES);
+		return (boolean) this.configItems.get(ConfigValue.CUBOID_LINES);
 	}
 
 	/**
@@ -354,7 +358,7 @@ public class Configuration {
 	 * @return Returns the "polygonLines" property value.
 	 */
 	public boolean isPolygonLinesEnabled() {
-		return (boolean) this.configItems.get(ConfigValue.POLYGONLINES);
+		return (boolean) this.configItems.get(ConfigValue.POLYGON_LINES);
 	}
 
 	/**
@@ -363,7 +367,7 @@ public class Configuration {
 	 * @return Returns the "cylinderLines" property value.
 	 */
 	public boolean isCylinderLinesEnabled() {
-		return (boolean) this.configItems.get(ConfigValue.CYLINDERLINES);
+		return (boolean) this.configItems.get(ConfigValue.CYLINDER_LINES);
 	}
 
 	/**
@@ -372,7 +376,15 @@ public class Configuration {
 	 * @return Returns the "ellipsoidLines" property value.
 	 */
 	public boolean isEllipsoidLinesEnabled() {
-		return (boolean) this.configItems.get(ConfigValue.ELLIPSOIDLINES);
+		return (boolean) this.configItems.get(ConfigValue.ELLIPSOID_LINES);
+	}
+
+	public boolean isCuboidTopAndBottomEnabled() {
+		return (boolean) this.configItems.get(ConfigValue.CUBOID_TOP_BOTTOM);
+	}
+
+	public boolean isCylinderTopAndBottomEnabled() {
+		return (boolean) this.configItems.get(ConfigValue.CYLINDER_TOP_BOTTOM);
 	}
 
 	/**
@@ -381,7 +393,7 @@ public class Configuration {
 	 * @return Returns the "checkForAxe" property value.
 	 */
 	public boolean isCheckForAxeEnabled() {
-		return (boolean) this.configItems.get(ConfigValue.CHECKFORAXE);
+		return (boolean) this.configItems.get(ConfigValue.CHECK_FOR_AXE);
 	}
 
 	/**
@@ -390,7 +402,7 @@ public class Configuration {
 	 * @return Returns the "particleDistance" property value.
 	 */
 	public int getParticleDistance() {
-		return (int) this.configItems.get(ConfigValue.PARTICLEDISTANCE);
+		return (int) this.configItems.get(ConfigValue.PARTICLE_DISTANCE);
 	}
 
 	/**
@@ -399,7 +411,7 @@ public class Configuration {
 	 * @return Returns the "maxSize" property value.
 	 */
 	public int getMaxSize() {
-		return (int) this.configItems.get(ConfigValue.MAXSIZE);
+		return (int) this.configItems.get(ConfigValue.MAX_SIZE);
 	}
 
 	/**
@@ -408,7 +420,7 @@ public class Configuration {
 	 * @return Translation of "langVisualizerEnabled".
 	 */
 	public String getLangVisualizerEnabled() {
-		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZERENABLED);
+		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZER_ENABLED);
 	}
 
 	/**
@@ -417,7 +429,7 @@ public class Configuration {
 	 * @return Translation of "visualizerDisabled".
 	 */
 	public String getLangVisualizerDisabled() {
-		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZERDISABLED);
+		return (String) this.configItems.get(ConfigValue.LANG_VISUALIZER_DISABLED);
 	}
 
 	/**
@@ -426,7 +438,7 @@ public class Configuration {
 	 * @return Translation of "playersOnly".
 	 */
 	public String getLangPlayersOnly() {
-		return (String) this.configItems.get(ConfigValue.LANG_PLAYERSONLY);
+		return (String) this.configItems.get(ConfigValue.LANG_PLAYERS_ONLY);
 	}
 
 	/**

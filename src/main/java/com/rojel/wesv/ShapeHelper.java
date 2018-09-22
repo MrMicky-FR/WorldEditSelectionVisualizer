@@ -43,7 +43,7 @@ public class ShapeHelper {
 				bottomCorners.add(new Vector(max.getX(), min.getY(), max.getZ()));
 				bottomCorners.add(new Vector(min.getX(), min.getY(), max.getZ()));
 
-				for (int i = 0; i < bottomCorners.size(); ++i) {
+				for (int i = 0; i < bottomCorners.size(); i++) {
 					final Vector p1 = bottomCorners.get(i);
 					final Vector p2 = bottomCorners.get(i + 1 < bottomCorners.size() ? i + 1 : 0);
 					final Vector p3 = p1.add(0, height, 0);
@@ -53,15 +53,19 @@ public class ShapeHelper {
 					vectors.addAll(this.plotLine(p3, p4));
 					vectors.addAll(this.plotLine(p1, p3));
 
-					if (!this.config.isCuboidLinesEnabled()) {
-						continue;
+					if (this.config.isCuboidLinesEnabled()) {
+						for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config.getVerticalGap()) {
+							final Vector p5 = p1.add(0.0, offset, 0.0);
+							final Vector p6 = p2.add(0.0, offset, 0.0);
+							vectors.addAll(this.plotLine(p5, p6));
+						}
 					}
+				}
 
-					for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
-							.getVerticalGap()) {
-						final Vector p5 = p1.add(0.0, offset, 0.0);
-						final Vector p6 = p2.add(0.0, offset, 0.0);
-						vectors.addAll(this.plotLine(p5, p6));
+				if (this.config.isCuboidTopAndBottomEnabled()) {
+					for (double offset = this.config.getVerticalGap(); offset < width; offset += this.config.getVerticalGap()) {
+						vectors.addAll(this.plotLine(min.add(offset, 0, 0), min.add(offset, 0, length)));
+						vectors.addAll(this.plotLine(min.add(offset, height, 0), min.add(offset, height, length)));
 					}
 				}
 			} else if (region instanceof Polygonal2DRegion) {
@@ -82,15 +86,12 @@ public class ShapeHelper {
 					vectors.addAll(this.plotLine(p3, p4));
 					vectors.addAll(this.plotLine(p1, p3));
 
-					if (!this.config.isPolygonLinesEnabled()) {
-						continue;
-					}
-
-					for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
-							.getVerticalGap()) {
-						final Vector p5 = p1.add(0.0, offset, 0.0);
-						final Vector p6 = p2.add(0.0, offset, 0.0);
-						vectors.addAll(this.plotLine(p5, p6));
+					if (this.config.isPolygonLinesEnabled()) {
+						for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config.getVerticalGap()) {
+							final Vector p5 = p1.add(0.0, offset, 0.0);
+							final Vector p6 = p2.add(0.0, offset, 0.0);
+							vectors.addAll(this.plotLine(p5, p6));
+						}
 					}
 				}
 			} else if (region instanceof CylinderRegion) {
@@ -99,12 +100,20 @@ public class ShapeHelper {
 				final double rx = width / 2.0;
 				final double rz = length / 2.0;
 				final List<Vector> bottomCorners = this.plotEllipse(centerDown, new Vector(rx, 0.0, rz));
+				final List<Vector> bottomRadius = new ArrayList<>();
+
+				if (this.config.isCylinderTopAndBottomEnabled()) {
+				    final boolean xHigherZ = rx > rz;
+				    final double multiplier = xHigherZ ? width / (double) length: length / (double) width;
+				    for (double offset = (xHigherZ ? rz : rx) - this.config.getVerticalGap(); offset > 0; offset -= this.config.getVerticalGap()) {
+					    final double offset1 = offset * multiplier;
+					    final  Vector vec = new Vector(xHigherZ ? offset1 : offset, 0.0, xHigherZ ? offset : offset1);
+						bottomRadius.addAll(this.plotEllipse(centerDown, vec));
+					}
+					vectors.addAll(bottomRadius);
+				}
 
 				vectors.addAll(bottomCorners);
-
-				for (final Vector vec : bottomCorners) {
-					vectors.add(vec.add(0, height, 0));
-				}
 
 				final Vector p1 = new Vector((max.getX() + min.getX()) / 2.0, min.getY(), min.getZ());
 				final Vector p2 = new Vector((max.getX() + min.getX()) / 2.0, min.getY(), max.getZ());
@@ -117,12 +126,17 @@ public class ShapeHelper {
 				vectors.addAll(this.plotLine(p4, p4.add(0, height, 0)));
 
 				if (this.config.isCylinderLinesEnabled()) {
-					for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config
-							.getVerticalGap()) {
+					for (double offset = this.config.getVerticalGap(); offset < height; offset += this.config.getVerticalGap()) {
 						for (final Vector vec2 : bottomCorners) {
 							vectors.add(vec2.add(0.0, offset, 0.0));
 						}
 					}
+				}
+
+				bottomCorners.addAll(bottomRadius);
+
+				for (final Vector vec : bottomCorners) {
+					vectors.add(vec.add(0, height, 0));
 				}
 			} else if (region instanceof EllipsoidRegion) {
 				final EllipsoidRegion ellRegion = (EllipsoidRegion) region;
@@ -134,8 +148,7 @@ public class ShapeHelper {
 				vectors.addAll(this.plotEllipse(center, new Vector(ellRadius.getX(), ellRadius.getY(), 0.0)));
 
 				if (this.config.isEllipsoidLinesEnabled()) {
-					for (double offset = this.config.getVerticalGap(); offset < ellRadius.getY(); offset += this.config
-							.getVerticalGap()) {
+					for (double offset = this.config.getVerticalGap(); offset < ellRadius.getY(); offset += this.config.getVerticalGap()) {
 						final Vector center1 = new Vector(center.getX(), center.getY() - offset, center.getZ());
 						final Vector center2 = new Vector(center.getX(), center.getY() + offset, center.getZ());
 						final double difference = Math.abs(center1.getY() - center.getY());
