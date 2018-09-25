@@ -14,8 +14,7 @@ import org.bukkit.entity.Player;
 public class ParticleSender extends AbstractParticleSender {
 
     @Override
-    public void spawnParticle(Player player, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
+    public void spawnParticle(Object receiver, ParticleType particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, Object data) {
         Particle bukkitParticle = Particle.valueOf(particle.toString());
 
         if (data instanceof Color) {
@@ -30,31 +29,15 @@ public class ParticleSender extends AbstractParticleSender {
             data = null;
         }
 
-        player.spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
-    }
-
-    @Override
-    public void spawnParticle(World world, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
-        Particle bukkitParticle = Particle.valueOf(particle.toString());
-
-        if (data instanceof Color) {
-            Color color = (Color) data;
-            if (particle.getDataType() == Color.class) {
-                count = 0;
-                offsetX = color(color.getRed());
-                offsetY = color(color.getGreen());
-                offsetZ = color(color.getBlue());
-                extra = 1.0;
-            }
-            data = null;
+        if (receiver instanceof World) {
+            ((World) receiver).spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
+        } else if (receiver instanceof Player) {
+            ((Player) receiver).spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
         }
-
-        world.spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
     }
 
     @Override
-    public Particle getParticle(final ParticleType particle) {
+    public Particle getParticle(ParticleType particle) {
         try {
             return Particle.valueOf(particle.toString());
         } catch (IllegalArgumentException e) {
@@ -63,11 +46,11 @@ public class ParticleSender extends AbstractParticleSender {
     }
 
     @Override
-    public boolean isValidData(final Object particle, final Object data) {
+    public boolean isValidData(Object particle, Object data) {
         return isValidDataBukkit((Particle) particle, data);
     }
 
-    public boolean isValidDataBukkit(final Particle particle, final Object data) {
+    public boolean isValidDataBukkit(Particle particle, Object data) {
         return particle.getDataType() == Void.class || particle.getDataType().isInstance(data);
     }
 }

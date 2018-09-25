@@ -5,7 +5,6 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.World;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
 /**
@@ -16,35 +15,22 @@ import org.bukkit.entity.Player;
 public class ParticleSender1_13 extends ParticleSender {
 
     @Override
-    public void spawnParticle(Player player, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
-        Particle bukkitParticle = Particle.valueOf(particle.toString());
-
-        if (bukkitParticle.getDataType() == BlockData.class) {
-            bukkitParticle = Particle.valueOf("LEGACY_" + bukkitParticle.toString());
-        }
-
-        if (bukkitParticle.getDataType() == DustOptions.class && data instanceof Color) {
-            data = new DustOptions((Color) data, 1);
-        }
-
-        player.spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
-    }
-
-    @Override
-    public void spawnParticle(World world, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
+    public void spawnParticle(Object receiver, ParticleType particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, Object data) {
         Particle bukkitParticle = Particle.valueOf(particle.toString());
 
         if (bukkitParticle.getDataType() == DustOptions.class && data instanceof Color) {
             data = new DustOptions((Color) data, 1);
         }
 
-        world.spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
+        if (receiver instanceof World) {
+            ((World) receiver).spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
+        } else if (receiver instanceof Player) {
+            ((Player) receiver).spawnParticle(bukkitParticle, x, y, z, count, offsetX, offsetY, offsetZ, extra, data);
+        }
     }
 
     @Override
-    public boolean isValidDataBukkit(final Particle particle, final Object data) {
+    public boolean isValidDataBukkit(Particle particle, Object data) {
         if (particle.getDataType() == Void.class) {
             return true;
         }

@@ -43,69 +43,50 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
         PACKAGE_NAME_OCB = "org.bukkit.craftbukkit." + ver;
         SERVER_IS_1_8 = ver.startsWith("v1_8_");
 
-        Constructor<?> packetParticle = null;
-        Class<?> enumParticle = null;
-
-        Method worldGetHandle = null;
-        Method worldSendParticle = null;
-
-        Method playerGetHandle = null;
-        Field playerConnection = null;
-        Method sendPacket = null;
-
         try {
-        	final Class<?> packetParticleClass = getClassNMS("PacketPlayOutWorldParticles");
-        	final Class<?> playerClass = getClassNMS("EntityPlayer");
-        	final Class<?> playerConnectionClass = getClassNMS("PlayerConnection");
-        	final Class<?> packetClass = getClassNMS("Packet");
-        	final Class<?> worldClass = getClassNMS("WorldServer");
-        	final Class<?> entityPlayerClass = getClassNMS("EntityPlayer");
+            Class<?> packetParticleClass = getClassNMS("PacketPlayOutWorldParticles");
+            Class<?> playerClass = getClassNMS("EntityPlayer");
+            Class<?> playerConnectionClass = getClassNMS("PlayerConnection");
+            Class<?> packetClass = getClassNMS("Packet");
+            Class<?> worldClass = getClassNMS("WorldServer");
+            Class<?> entityPlayerClass = getClassNMS("EntityPlayer");
 
-        	final Class<?> craftPlayerClass = getClassOCB("entity.CraftPlayer");
-        	final Class<?> craftWorldClass = getClassOCB("CraftWorld");
+            Class<?> craftPlayerClass = getClassOCB("entity.CraftPlayer");
+            Class<?> craftWorldClass = getClassOCB("CraftWorld");
 
             if (SERVER_IS_1_8) {
-                enumParticle = getClassNMS("EnumParticle");
-                packetParticle = packetParticleClass.getConstructor(enumParticle, boolean.class, float.class,
+                ENUM_PARTICLE = getClassNMS("EnumParticle");
+                PACKET_PARTICLE = packetParticleClass.getConstructor(ENUM_PARTICLE, boolean.class, float.class,
                         float.class, float.class, float.class, float.class, float.class, float.class, int.class,
                         int[].class);
-                worldSendParticle = worldClass.getDeclaredMethod("sendParticles", entityPlayerClass, enumParticle,
+                WORLD_SEND_PARTICLE = worldClass.getDeclaredMethod("sendParticles", entityPlayerClass, ENUM_PARTICLE,
                         boolean.class, double.class, double.class, double.class, int.class, double.class, double.class,
                         double.class, double.class, int[].class);
             } else {
-                packetParticle = packetParticleClass.getConstructor(String.class, float.class, float.class, float.class,
+                ENUM_PARTICLE = null;
+                PACKET_PARTICLE = packetParticleClass.getConstructor(String.class, float.class, float.class, float.class,
                         float.class, float.class, float.class, float.class, int.class);
-                worldSendParticle = worldClass.getDeclaredMethod("a", String.class, double.class, double.class,
+                WORLD_SEND_PARTICLE = worldClass.getDeclaredMethod("a", String.class, double.class, double.class,
                         double.class, int.class, double.class, double.class, double.class, double.class);
             }
 
-            worldGetHandle = craftWorldClass.getDeclaredMethod("getHandle");
-            playerGetHandle = craftPlayerClass.getDeclaredMethod("getHandle");
-            playerConnection = playerClass.getField("playerConnection");
-            sendPacket = playerConnectionClass.getMethod("sendPacket", packetClass);
+            WORLD_GET_HANDLE = craftWorldClass.getDeclaredMethod("getHandle");
+            PLAYER_GET_HANDLE = craftPlayerClass.getDeclaredMethod("getHandle");
+            PLAYER_CONNECTION = playerClass.getField("playerConnection");
+            SEND_PACKET = playerConnectionClass.getMethod("sendPacket", packetClass);
         } catch (ReflectiveOperationException e) {
-            logException("Error during initialisation", e);
+            throw new ExceptionInInitializerError(e);
         }
-
-        PACKET_PARTICLE = packetParticle;
-        ENUM_PARTICLE = enumParticle;
-
-        WORLD_GET_HANDLE = worldGetHandle;
-        WORLD_SEND_PARTICLE = worldSendParticle;
-
-        PLAYER_GET_HANDLE = playerGetHandle;
-        PLAYER_CONNECTION = playerConnection;
-        SEND_PACKET = sendPacket;
     }
 
     @Override
-    public void spawnParticle(Player player, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
+    public void spawnParticle(Object receiver, ParticleType particle, double x, double y, double z, int count, double offsetX, double offsetY,
+                              double offsetZ, double extra, Object data) {
         try {
             int[] datas = toData(particle, data);
 
             if (data instanceof Color) {
-            	final Color color = (Color) data;
+                Color color = (Color) data;
                 if (particle.getDataType() == Color.class) {
                     count = 0;
                     offsetX = color(color.getRed());
@@ -115,62 +96,43 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
                 }
             }
 
-            Object packet;
+            if (receiver instanceof World) {
+                Object worldServer = WORLD_GET_HANDLE.invoke(receiver);
 
-            if (SERVER_IS_1_8) {
-                packet = PACKET_PARTICLE.newInstance(enumParticleValueOf(particle), true, (float) x, (float) y,
-                        (float) z, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, datas);
-            } else {
-                packet = PACKET_PARTICLE.newInstance(
-                        particle.getName() + (datas.length != 2 ? "" : "_" + datas[0] + "_" + datas[1]),
-                        (float) x, (float) y, (float) z, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count);
-            }
-
-            Object entityPlayer = PLAYER_GET_HANDLE.invoke(player);
-            Object playerConnection = PLAYER_CONNECTION.get(entityPlayer);
-            SEND_PACKET.invoke(playerConnection, packet);
-        } catch (ReflectiveOperationException e) {
-            logException("Error on sending particle", e);
-        }
-    }
-
-    @Override
-    public void spawnParticle(World world, ParticleType particle, double x, double y, double z, int count,
-                              double offsetX, double offsetY, double offsetZ, double extra, Object data) {
-        try {
-            int[] datas = toData(particle, data);
-
-            if (data instanceof Color) {
-            	final Color color = (Color) data;
-                if (particle.getDataType() == Color.class) {
-                    count = 0;
-                    offsetX = color(color.getRed());
-                    offsetY = color(color.getGreen());
-                    offsetZ = color(color.getBlue());
-                    extra = 1.0;
+                if (SERVER_IS_1_8) {
+                    WORLD_SEND_PARTICLE.invoke(worldServer, null, enumParticleValueOf(particle), true, x, y, z, count, offsetX, offsetY, offsetZ, extra, datas);
+                } else {
+                    WORLD_SEND_PARTICLE.invoke(worldServer, particle.getName() + (datas.length != 2 ? "" : "_" + datas[0] + "_" + datas[1]), x, y, z,
+                            count, offsetX, offsetY, offsetZ, extra);
                 }
-            }
+            } else if (receiver instanceof Player) {
+                Object packet;
 
-            Object worldServer = WORLD_GET_HANDLE.invoke(world);
+                if (SERVER_IS_1_8) {
+                    packet = PACKET_PARTICLE.newInstance(enumParticleValueOf(particle), true, (float) x, (float) y,
+                            (float) z, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count, datas);
+                } else {
+                    packet = PACKET_PARTICLE.newInstance(
+                            particle.getName() + (datas.length != 2 ? "" : "_" + datas[0] + "_" + datas[1]),
+                            (float) x, (float) y, (float) z, (float) offsetX, (float) offsetY, (float) offsetZ, (float) extra, count);
+                }
 
-            if (SERVER_IS_1_8) {
-                WORLD_SEND_PARTICLE.invoke(worldServer, null, enumParticleValueOf(particle), true, x, y, z, count, offsetX, offsetY, offsetZ, extra, datas);
-            } else {
-                WORLD_SEND_PARTICLE.invoke(worldServer, particle.getName() + (datas.length != 2 ? "" : "_" + datas[0] + "_" + datas[1]), x, y, z,
-                        count, offsetX, offsetY, offsetZ, extra);
+                Object entityPlayer = PLAYER_GET_HANDLE.invoke(receiver);
+                Object playerConnection = PLAYER_CONNECTION.get(entityPlayer);
+                SEND_PACKET.invoke(playerConnection, packet);
             }
         } catch (ReflectiveOperationException e) {
-            logException("Error on sending particle", e);
+            Bukkit.getLogger().log(Level.SEVERE, "[FastParticle] Error on sending particle", e);
         }
     }
 
     @Override
-    public boolean isValidData(final Object particle, final Object data) {
+    public boolean isValidData(Object particle, Object data) {
         return true;
     }
 
     @Override
-    public Object getParticle(final ParticleType particle) {
+    public Object getParticle(ParticleType particle) {
         if (!SERVER_IS_1_8) {
             return particle.getName();
         }
@@ -183,11 +145,11 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private Object enumParticleValueOf(final ParticleType particle) {
+    private Object enumParticleValueOf(ParticleType particle) {
         return Enum.valueOf((Class<Enum>) ENUM_PARTICLE, particle.toString().toUpperCase());
     }
 
-    private int[] toData(final ParticleType particle, final Object data) {
+    private int[] toData(ParticleType particle, Object data) {
         Class<?> dataType = particle.getDataType();
         if (dataType == ItemStack.class) {
             if (data == null) {
@@ -214,15 +176,11 @@ public class ParticleSenderLegacy extends AbstractParticleSender {
         return new int[0];
     }
 
-    private static void logException(final String errorMessage, final Exception ex) {
-        Bukkit.getLogger().log(Level.SEVERE, "[FastParticle] " + errorMessage, ex);
-    }
-
-    private static Class<?> getClassNMS(final String name) throws ClassNotFoundException {
+    private static Class<?> getClassNMS(String name) throws ClassNotFoundException {
         return Class.forName(PACKAGE_NAME_NMS + "." + name);
     }
 
-    private static Class<?> getClassOCB(final String name) throws ClassNotFoundException {
+    private static Class<?> getClassOCB(String name) throws ClassNotFoundException {
         return Class.forName(PACKAGE_NAME_OCB + "." + name);
     }
 }

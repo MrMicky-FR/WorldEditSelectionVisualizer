@@ -84,14 +84,14 @@ public enum ParticleType {
         SERVER_VERSION_ID = Integer.parseInt(ver.charAt(4) == '_' ? Character.toString(ver.charAt(3)) : ver.substring(3, 5));
     }
 
-    private final String name;
-    private final int minimalVersion;
+    private String name;
+    private int minimalVersion;
 
-    ParticleType(final String minecraftName) {
+    ParticleType(String minecraftName) {
         this(minecraftName, -1);
     }
 
-    ParticleType(final String minecraftName, final int minimalVersion) {
+    ParticleType(String minecraftName, int minimalVersion) {
         this.name = minecraftName;
         this.minimalVersion = minimalVersion;
     }
