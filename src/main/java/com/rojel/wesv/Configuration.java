@@ -19,6 +19,7 @@ import fr.mrmicky.fastparticle.ParticleType;
  * @author Martin Ambrus
  * @since 1.0a
  */
+@SuppressWarnings("deprecation")
 public class Configuration {
 	/**
 	 * WESV plugin instance.
@@ -223,7 +224,6 @@ public class Configuration {
 		return ParticleType.REDSTONE;
 	}
 
-	@SuppressWarnings("deprecation")
 	public Object getParticleData(final String name) {
 		ParticleType particle = getParticle();
 		if (particle.getDataType() == Color.class && !name.isEmpty()) {

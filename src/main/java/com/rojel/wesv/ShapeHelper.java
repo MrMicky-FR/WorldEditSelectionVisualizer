@@ -17,12 +17,13 @@ import com.sk89q.worldedit.regions.polyhedron.Triangle;
 
 public class ShapeHelper {
 
+    private final WorldEditSelectionVisualizer plugin;
 	private final Configuration config;
-	private final boolean useFAWE;
 
 	public ShapeHelper(final WorldEditSelectionVisualizer plugin) {
+	    this.plugin = plugin;
+
 		config = plugin.getCustomConfig();
-		useFAWE = plugin.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 	}
 
 	public Collection<Vector> getVectorsFromRegion(final Region region) {
@@ -172,7 +173,7 @@ public class ShapeHelper {
 				for (int i = 0; i < corners.size(); i++) {
 					vectors.addAll(plotLine(corners.get(i), corners.get(i + 1 < corners.size() ? i + 1 : 0)));
 				}
-			} else if (useFAWE) {
+			} else if (this.plugin.isFaweEnabled()) {
 				handleFaweRegions(region, vectors);
 			}
             return vectors;
@@ -196,7 +197,7 @@ public class ShapeHelper {
 			}
 		} else if (region instanceof FuzzyRegion) {
 			final FuzzyRegion fuzzyRegion = (FuzzyRegion) region;
-			Set<Vector> vectorSet = new HashSet<>();
+			final Set<Vector> vectorSet = new HashSet<>();
 
 			for (BlockVector vector : fuzzyRegion) {
 				for (int x = 0; x <= 1; x++) {

@@ -6,6 +6,9 @@ import java.util.concurrent.Callable;
 
 public class MetricsUtils {
 
+    private MetricsUtils() {
+    }
+
     public static void register(WorldEditSelectionVisualizer plugin) {
         Metrics metrics = new Metrics(plugin);
 
@@ -13,6 +16,8 @@ public class MetricsUtils {
         addCustomChartBoolean(metrics, "h_lines_polygon", plugin.getCustomConfig()::isPolygonLinesEnabled);
         addCustomChartBoolean(metrics, "h_lines_cylinder", plugin.getCustomConfig()::isCylinderLinesEnabled);
         addCustomChartBoolean(metrics, "h_lines_ellipsoid", plugin.getCustomConfig()::isEllipsoidLinesEnabled);
+        addCustomChartBoolean(metrics, "top_bottom_cuboid", plugin.getCustomConfig()::isCuboidTopAndBottomEnabled);
+        addCustomChartBoolean(metrics, "top_bottom_ellipsoid", plugin.getCustomConfig()::isCuboidTopAndBottomEnabled);
         addCustomChartObject(metrics, "gap_between_points", plugin.getCustomConfig()::getGapBetweenPoints);
         addCustomChartObject(metrics, "v_gap_horizontal_lines", plugin.getCustomConfig()::getVerticalGap);
         addCustomChartObject(metrics, "particle_update_interval", plugin.getCustomConfig()::getUpdateParticlesInterval);
@@ -21,6 +26,7 @@ public class MetricsUtils {
         addCustomChartBoolean(metrics, "check_for_axe", plugin.getCustomConfig()::isCheckForAxeEnabled);
         addCustomChartObject(metrics, "particle_distance", plugin.getCustomConfig()::getParticleDistance);
         addCustomChartObject(metrics, "max_selection_size", plugin.getCustomConfig()::getMaxSize);
+        addCustomChartBoolean(metrics, "fawe_enabled", plugin::isFaweEnabled);
     }
 
     private static void addCustomChartBoolean(Metrics metrics, String name, Callable<Boolean> value) {

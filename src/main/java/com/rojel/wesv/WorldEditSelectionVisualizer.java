@@ -29,6 +29,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 	private Configuration config;
 	private WorldEditHelper worldEditHelper;
 	private ShapeHelper shapeHelper;
+	private boolean faweEnabled;
 
 	private final List<UUID> shown = new ArrayList<>();
 	private final List<UUID> lastSelectionTooLarge = new ArrayList<>();
@@ -51,6 +52,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		for (final Player player : this.getServer().getOnlinePlayers()) {
 			addPlayer(player);
 		}
+
+		faweEnabled = this.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 
 		MetricsUtils.register(this);
 
@@ -165,6 +168,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		this.playerParticleMap.remove(uuid);
 
 		this.cancelAndRemoveFadeOutTask(uuid);
+	}
+
+	public boolean isFaweEnabled() {
+		return faweEnabled;
 	}
 
 	public Configuration getCustomConfig() {
