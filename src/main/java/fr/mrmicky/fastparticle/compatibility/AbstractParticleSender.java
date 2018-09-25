@@ -1,8 +1,6 @@
 package fr.mrmicky.fastparticle.compatibility;
 
 import fr.mrmicky.fastparticle.ParticleType;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public abstract class AbstractParticleSender {
 

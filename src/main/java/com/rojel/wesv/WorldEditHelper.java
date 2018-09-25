@@ -16,8 +16,6 @@ public class WorldEditHelper extends BukkitRunnable {
 	private final WorldEditPlugin we;
 
 	public WorldEditHelper(final WorldEditSelectionVisualizer plugin) {
-		super();
-
 		this.plugin = plugin;
 		this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 

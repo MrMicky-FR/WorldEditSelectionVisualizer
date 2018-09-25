@@ -124,8 +124,8 @@ public class Configuration {
 		private final Object defaultValue;
 		private Class<?> type;
 
-		ConfigValue(final String value, final Object defaultValue, final Class<?> type) {
-			this.configValue = value;
+		ConfigValue(final String configValue, final Object defaultValue, final Class<?> type) {
+			this.configValue = configValue;
 			this.defaultValue = defaultValue;
 			this.type = type;
 		}
