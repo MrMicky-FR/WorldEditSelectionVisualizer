@@ -147,7 +147,7 @@ public class Configuration {
 
 	/**
 	 * Constructor, takes the WESV plugin instance as a parameter.
-	 * 
+	 *
 	 * @param plugin
 	 *            WESV plugin instance.
 	 */
@@ -163,12 +163,10 @@ public class Configuration {
 		this.config = this.plugin.getConfig();
 
 		boolean found = false;
-		for (final ConfigValue values : ConfigValue.values()) {
-			this.config.addDefault(values.getConfigValue(), values.getDefaultValue());
-
-			if (!this.config.contains(values.getConfigValue(), true)) {
+		for (final ConfigValue value : ConfigValue.values()) {
+		    if (this.config.get(value.getConfigValue(), null) == null) {
+				plugin.getLogger().info("Adding '" + value.getConfigValue() + "' to the config");
 				found = true;
-				break;
 			}
 		}
 
@@ -210,7 +208,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves ParticleType representation of the given name.
-	 * 
+	 *
 	 * @param name
 	 *            Name of the particle type from config.
 	 * @return Returns a ParticleType representation of the given name.
@@ -263,7 +261,7 @@ public class Configuration {
 
 	/**
 	 * Checks whether WESV is enabled for the given player.
-	 * 
+	 *
 	 * @param player
 	 *            Player to check if WESV is enabled for.
 	 * @return Returns true if WESV is enabled for the given player, false
@@ -277,7 +275,7 @@ public class Configuration {
 
 	/**
 	 * Enables or disables WESV for the given player.
-	 * 
+	 *
 	 * @param player
 	 *            Player to enable or disable WESV visualization for.
 	 * @param enabled
@@ -291,7 +289,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "particle" property value.
-	 * 
+	 *
 	 * @return Returns the "particle" property value.
 	 */
 	public ParticleType getParticle() {
@@ -309,7 +307,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "gapBetweenPoints" property value.
-	 * 
+	 *
 	 * @return Returns the "gapBetweenPoints" property value.
 	 */
 	public double getGapBetweenPoints() {
@@ -318,7 +316,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "verticalGap" property value.
-	 * 
+	 *
 	 * @return Returns the "verticalGap" property value.
 	 */
 	public double getVerticalGap() {
@@ -327,7 +325,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "updateParticlesInterval" property value.
-	 * 
+	 *
 	 * @return Returns the "updateParticlesInterval" property value.
 	 */
 	public int getUpdateParticlesInterval() {
@@ -336,7 +334,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "updateSelectionInterval" property value.
-	 * 
+	 *
 	 * @return Returns the "updateSelectionInterval" property value.
 	 */
 	public int getUpdateSelectionInterval() {
@@ -345,7 +343,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "cuboidLines" property value.
-	 * 
+	 *
 	 * @return Returns the "cuboidLines" property value.
 	 */
 	public boolean isCuboidLinesEnabled() {
@@ -354,7 +352,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "polygonLines" property value.
-	 * 
+	 *
 	 * @return Returns the "polygonLines" property value.
 	 */
 	public boolean isPolygonLinesEnabled() {
@@ -363,7 +361,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "cylinderLines" property value.
-	 * 
+	 *
 	 * @return Returns the "cylinderLines" property value.
 	 */
 	public boolean isCylinderLinesEnabled() {
@@ -372,7 +370,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "ellipsoidLines" property value.
-	 * 
+	 *
 	 * @return Returns the "ellipsoidLines" property value.
 	 */
 	public boolean isEllipsoidLinesEnabled() {
@@ -389,7 +387,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "checkForAxe" property value.
-	 * 
+	 *
 	 * @return Returns the "checkForAxe" property value.
 	 */
 	public boolean isCheckForAxeEnabled() {
@@ -398,7 +396,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "particleDistance" property value.
-	 * 
+	 *
 	 * @return Returns the "particleDistance" property value.
 	 */
 	public int getParticleDistance() {
@@ -407,7 +405,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves the "maxSize" property value.
-	 * 
+	 *
 	 * @return Returns the "maxSize" property value.
 	 */
 	public int getMaxSize() {
@@ -416,7 +414,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves translation for the "langVisualizerEnabled" text.
-	 * 
+	 *
 	 * @return Translation of "langVisualizerEnabled".
 	 */
 	public String getLangVisualizerEnabled() {
@@ -425,7 +423,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves translation for the "visualizerDisabled" text.
-	 * 
+	 *
 	 * @return Translation of "visualizerDisabled".
 	 */
 	public String getLangVisualizerDisabled() {
@@ -434,7 +432,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves translation for the "playersOnly" text.
-	 * 
+	 *
 	 * @return Translation of "playersOnly".
 	 */
 	public String getLangPlayersOnly() {
@@ -443,7 +441,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves translation for the "maxSelection" text.
-	 * 
+	 *
 	 * @return Translation of "maxSelection".
 	 */
 	public String getLangMaxSelection() {
@@ -461,7 +459,7 @@ public class Configuration {
 
 	/**
 	 * Retrieves translation for the "configReloaded" text.
-	 * 
+	 *
 	 * @return Translation of "configReloaded".
 	 */
 	public String getConfigReloaded() {

@@ -58,7 +58,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 		MetricsUtils.register(this);
 
 		if (config.isUpdateCheckerEnabled()) {
-            this.getServer().getScheduler().runTaskLaterAsynchronously(this, this::checkUpdate, 40);
+            this.getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
 	}
 
@@ -192,11 +192,11 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
             String lastVersion = new BufferedReader(new InputStreamReader(url.openStream())).readLine();
 
             if (!getDescription().getVersion().equals(lastVersion)) {
-                getLogger().info("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
-                getLogger().info("You can download it on: " + getDescription().getWebsite());
+                getLogger().warning("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
+                getLogger().warning("You can download it on: " + getDescription().getWebsite());
             }
         } catch (IOException e) {
-            getLogger().log(Level.WARNING, "Failed to check for update on SpigotMC", e);
+        	// Don't display an error
         }
     }
 }
