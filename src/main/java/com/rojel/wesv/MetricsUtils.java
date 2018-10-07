@@ -26,7 +26,7 @@ public class MetricsUtils {
         addCustomChartBoolean(metrics, "check_for_axe", plugin.getCustomConfig()::isCheckForAxeEnabled);
         addCustomChartObject(metrics, "particle_distance", plugin.getCustomConfig()::getParticleDistance);
         addCustomChartObject(metrics, "max_selection_size", plugin.getCustomConfig()::getMaxSize);
-        addCustomChartBoolean(metrics, "fawe_enabled", plugin::isFaweEnabled);
+        addCustomChartBoolean(metrics, "use_fawe", plugin::isFaweEnabled);
     }
 
     private static void addCustomChartBoolean(Metrics metrics, String name, Callable<Boolean> value) {
