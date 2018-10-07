@@ -17,7 +17,6 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Force large particle distances to see your selection from far away
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
-- [Documentation](http://martinambrus.github.io/WorldEdit-ServerSide-Visualizer/javadoc)
 
 ## Downloads
 
@@ -25,7 +24,10 @@ You can download releases and find more information on SpigotMC: https://www.spi
 
 ## Screenshots
 
-![Cuboid selection](https://proxy.spigotmc.org/2d092800fc87fc4cae09cb4191207971ef8a002a?url=http%3A%2F%2Fi.imgur.com%2F0MAcN3o.png) ![Polygon selection](https://proxy.spigotmc.org/5a6ad5f03fe42e43b289d84a16c429d369868451?url=http%3A%2F%2Fi.imgur.com%2FOqSQQr7.png) ![Ellipsoid selection](https://proxy.spigotmc.org/814c230f1f30bd9b4a20743c473074ade8b7510d?url=http%3A%2F%2Fi.imgur.com%2FpOwYY62.png) ![Customizable particle effect, large particle distance](https://proxy.spigotmc.org/a3a2b2fe96a312f3a5d8bdfe8b36c07134037e97?url=http%3A%2F%2Fi.imgur.com%2FVcR0IMA.png)
+![Cuboid selection](http://i.imgur.com/0MAcN3o.png)
+![Polygon selection](http://i.imgur.com/OqSQQr7.png)
+![Ellipsoid selection](http://i.imgur.com/pOwYY62.png)
+![Customizable particle effect and particle distance](http://i.imgur.com/VcR0IMA.png)
 
 ## Metrics
 
