@@ -10,6 +10,8 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 
+import java.util.Objects;
+
 public class WorldEditHelper extends BukkitRunnable {
 
 	private final WorldEditSelectionVisualizer plugin;
@@ -63,7 +65,7 @@ public class WorldEditHelper extends BukkitRunnable {
 	}
 
 	public boolean compareRegion(final Region r1, final Region r2) {
-		if (r1 == r2) {
+		if (Objects.equals(r1, r2)) {
 			return true;
 		}
 
@@ -71,29 +73,19 @@ public class WorldEditHelper extends BukkitRunnable {
 			return false;
 		}
 
-		final boolean points = r1.getMinimumPoint().equals(r2.getMinimumPoint())
-				&& r1.getMaximumPoint().equals(r2.getMaximumPoint()) && r1.getCenter().equals(r2.getCenter());
-		final boolean worlds = r1.getWorld() != null ? r1.getWorld().equals(r2.getWorld()) : r2.getWorld() == null;
-		final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight()
-				&& r1.getLength() == r2.getLength();
+		final boolean points = r1.getMinimumPoint().equals(r2.getMinimumPoint()) && r1.getMaximumPoint().equals(r2.getMaximumPoint());
+		final boolean worlds = Objects.equals(r1.getWorld(), r2.getWorld());
+		final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight() && r1.getLength() == r2.getLength();
 		final boolean type = r1.getClass().equals(r2.getClass());
-		boolean polyPoints = true;
 
 		if (r1 instanceof Polygonal2DRegion && r2 instanceof Polygonal2DRegion) {
 			final Polygonal2DRegion r1Poly = (Polygonal2DRegion) r1;
 			final Polygonal2DRegion r2Poly = (Polygonal2DRegion) r2;
 
-			if (r1Poly.getPoints().size() != r2Poly.getPoints().size()) {
-				polyPoints = false;
-			} else {
-				for (int i = 0; i < r1Poly.getPoints().size(); ++i) {
-					if (r1Poly.getPoints().get(i).equals(r2Poly.getPoints().get(i))) {
-						continue;
-					}
-					polyPoints = false;
-				}
+			if (r1Poly.getPoints().size() != r2Poly.getPoints().size() || !r1Poly.getPoints().equals(r2Poly.getPoints())) {
+				return false;
 			}
 		}
-		return points && worlds && dimensions && type && polyPoints;
+		return points && worlds && dimensions && type;
 	}
 }
