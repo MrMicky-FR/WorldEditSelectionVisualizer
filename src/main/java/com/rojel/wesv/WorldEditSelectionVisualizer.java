@@ -189,12 +189,13 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private void checkUpdate() {
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=17311");
-            String lastVersion = new BufferedReader(new InputStreamReader(url.openStream())).readLine();
-
-            if (!getDescription().getVersion().equals(lastVersion)) {
-                getLogger().warning("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
-                getLogger().warning("You can download it on: " + getDescription().getWebsite());
-            }
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+				String lastVersion = reader.readLine();
+				if (!getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
+					getLogger().warning("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
+					getLogger().warning("You can download it on: " + getDescription().getWebsite());
+				}
+			}
         } catch (IOException e) {
         	// Don't display an error
         }

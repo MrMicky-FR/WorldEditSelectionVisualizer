@@ -19,7 +19,8 @@ public class WorldEditHelper extends BukkitRunnable {
 
 	public WorldEditHelper(final WorldEditSelectionVisualizer plugin) {
 		this.plugin = plugin;
-		this.we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
+
+		we = (WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit");
 
 		runTaskTimer(plugin, 0, plugin.getCustomConfig().getUpdateSelectionInterval());
 	}
@@ -69,14 +70,18 @@ public class WorldEditHelper extends BukkitRunnable {
 			return true;
 		}
 
-		if (r1 == null || r2 == null) {
+		if (r1 == null || r2 == null || !Objects.equals(r1.getWorld(), r2.getWorld()) || !r1.getClass().equals(r2.getClass())) {
 			return false;
 		}
 
-		final boolean points = r1.getMinimumPoint().equals(r2.getMinimumPoint()) && r1.getMaximumPoint().equals(r2.getMaximumPoint());
-		final boolean worlds = Objects.equals(r1.getWorld(), r2.getWorld());
-		final boolean dimensions = r1.getWidth() == r2.getWidth() && r1.getHeight() == r2.getHeight() && r1.getLength() == r2.getLength();
-		final boolean type = r1.getClass().equals(r2.getClass());
+		if (!r1.getMinimumPoint().equals(r2.getMinimumPoint()) || !r1.getMaximumPoint().equals(r2.getMaximumPoint())
+                || !r1.getCenter().equals(r2.getCenter())) {
+		    return false;
+        }
+
+        if (r1.getWidth() != r2.getWidth() || r1.getHeight() != r2.getHeight() || r1.getLength() != r2.getLength()) {
+            return false;
+        }
 
 		if (r1 instanceof Polygonal2DRegion && r2 instanceof Polygonal2DRegion) {
 			final Polygonal2DRegion r1Poly = (Polygonal2DRegion) r1;
@@ -86,6 +91,6 @@ public class WorldEditHelper extends BukkitRunnable {
 				return false;
 			}
 		}
-		return points && worlds && dimensions && type;
+		return true;
 	}
 }
