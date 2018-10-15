@@ -10,42 +10,42 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class WesvListener implements Listener {
 
-	private final WorldEditSelectionVisualizer plugin;
+    private final WorldEditSelectionVisualizer plugin;
 
-	public WesvListener(final WorldEditSelectionVisualizer plugin) {
-		this.plugin = plugin;
-	}
+    public WesvListener(final WorldEditSelectionVisualizer plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		this.plugin.addPlayer(event.getPlayer());
-	}
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        plugin.addPlayer(event.getPlayer());
+    }
 
-	@EventHandler
-	public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
-		final Player player = event.getPlayer();
-		if (this.plugin.isSelectionShown(player)) {
-			this.plugin.showSelection(player);
-		}
-	}
+    @EventHandler
+    public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
+        final Player player = event.getPlayer();
+        if (plugin.isSelectionShown(player)) {
+            plugin.showSelection(player);
+        }
+    }
 
-	@EventHandler
-	public void onPlayerItemChange(final PlayerItemHeldEvent event) {
-		final Player player = event.getPlayer();
-		if (this.plugin.getCustomConfig().isCheckForAxeEnabled() && this.plugin.getCustomConfig().isEnabled(player)) {
+    @EventHandler
+    public void onPlayerItemChange(final PlayerItemHeldEvent event) {
+        final Player player = event.getPlayer();
+        if (plugin.getCustomConfig().isCheckForAxeEnabled() && plugin.getCustomConfig().isEnabled(player)) {
 
-			this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
-				if (this.plugin.isHoldingSelectionItem(player)) {
-					this.plugin.showSelection(player);
-				} else {
-					this.plugin.hideSelection(player);
-				}
-			});
-		}
-	}
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                if (plugin.isHoldingSelectionItem(player)) {
+                    plugin.showSelection(player);
+                } else {
+                    plugin.hideSelection(player);
+                }
+            });
+        }
+    }
 
-	@EventHandler
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-		plugin.removePlayer(event.getPlayer());
-	}
+    @EventHandler
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        plugin.removePlayer(event.getPlayer());
+    }
 }
