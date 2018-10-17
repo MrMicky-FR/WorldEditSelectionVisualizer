@@ -72,7 +72,12 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
                     return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
                 } else if (wandItemField.getType() == String.class) {
                     final String itemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.MAIN_HAND).getType().getId();
-                    return itemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()));
+                    if (itemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()))) {
+                        return true;
+                    }
+                    HandSide offhand = (HandSide)HandSide.class.getDeclaredField("OFF_HAND").get(null);
+                    final String secondItemTypeId = BukkitAdapter.adapt(player).getItemInHand(offhand).getType().getId();
+                    return secondItemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()));
                 }
             } catch (ReflectiveOperationException e) {
                 getLogger().log(Level.WARNING, "An error occured on isSelectionItem", e);
