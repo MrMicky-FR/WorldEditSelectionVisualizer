@@ -5,9 +5,10 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.util.HandSide;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private WorldEditHelper worldEditHelper;
     private ShapeHelper shapeHelper;
     private boolean faweEnabled;
+    private boolean useOffHand;
 
     private final List<UUID> shown = new ArrayList<>();
     private final List<UUID> lastSelectionTooLarge = new ArrayList<>();
@@ -54,6 +56,13 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
         faweEnabled = getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 
+        try {
+            PlayerInventory.class.getDeclaredMethod("getItemInOffHand");
+            useOffHand = true;  // 1.9+ server
+        } catch (NoSuchMethodException e) {
+            useOffHand = false; // 1.7-1.8 server
+        }
+
         MetricsUtils.register(this);
 
         if (config.isUpdateCheckerEnabled()) {
@@ -64,25 +73,31 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     @SuppressWarnings("deprecation")
     public boolean isHoldingSelectionItem(final Player player) {
         final ItemStack item = player.getItemInHand();
-        if (item != null) {
-            try {
-                final Field wandItemField = LocalConfiguration.class.getDeclaredField("wandItem");
+        final ItemStack offHandItem = useOffHand ? player.getInventory().getItemInOffHand() : null;
 
-                if (wandItemField.getType() == int.class) {
-                    return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
-                } else if (wandItemField.getType() == String.class) {
-                    final String itemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.MAIN_HAND).getType().getId();
-                    if (itemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()))) {
-                        return true;
-                    }
-                    final String secondItemTypeId = BukkitAdapter.adapt(player).getItemInHand(HandSide.OFF_HAND).getType().getId();
-                    return secondItemTypeId.equals(wandItemField.get(WorldEdit.getInstance().getConfiguration()));
-                }
-            } catch (ReflectiveOperationException e) {
-                getLogger().log(Level.WARNING, "An error occured on isSelectionItem", e);
-            }
+        if ((item == null || item.getType() == Material.AIR) && (offHandItem == null || offHandItem.getType() == Material.AIR)) {
+            return false;
         }
 
+        try {
+            final Field wandItemField = LocalConfiguration.class.getDeclaredField("wandItem");
+
+            if (wandItemField.getType() == int.class) { // Legacy servers (under 1.13)
+                final int wandItemId = wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
+
+                return (item != null && item.getType().getId() == wandItemId) || (offHandItem != null && offHandItem.getType().getId() == wandItemId);
+            } else if (wandItemField.getType() == String.class) { // 1.13+ servers
+                final String wandItem = (String) wandItemField.get(WorldEdit.getInstance().getConfiguration());
+
+                if (item != null && BukkitAdapter.adapt(item).getType().getId().equals(wandItem)) {
+                    return true;
+                }
+
+                return offHandItem != null && BukkitAdapter.adapt(offHandItem).getType().getId().equals(wandItem);
+            }
+        } catch (ReflectiveOperationException e) {
+            getLogger().log(Level.WARNING, "An error occurred on isHoldingSelectionItem", e);
+        }
         return false;
     }
 
