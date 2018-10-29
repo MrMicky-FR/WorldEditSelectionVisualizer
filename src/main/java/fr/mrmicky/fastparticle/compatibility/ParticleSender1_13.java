@@ -31,10 +31,10 @@ public class ParticleSender1_13 extends ParticleSender {
 
     @Override
     public boolean isValidDataBukkit(Particle particle, Object data) {
-        if (particle.getDataType() == Void.class) {
+        if (particle.getDataType() == DustOptions.class && data instanceof Color) {
             return true;
         }
 
-        return particle.getDataType().isInstance(data) || (particle.getDataType() == DustOptions.class && data instanceof Color);
+        return super.isValidDataBukkit(particle, data);
     }
 }

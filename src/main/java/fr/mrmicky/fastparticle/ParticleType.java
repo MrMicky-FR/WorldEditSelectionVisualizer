@@ -87,12 +87,12 @@ public enum ParticleType {
     private String name;
     private int minimalVersion;
 
-    ParticleType(String minecraftName) {
-        this(minecraftName, -1);
+    ParticleType(String name) {
+        this(name, -1);
     }
 
-    ParticleType(String minecraftName, int minimalVersion) {
-        this.name = minecraftName;
+    ParticleType(String name, int minimalVersion) {
+        this.name = name;
         this.minimalVersion = minimalVersion;
     }
 
