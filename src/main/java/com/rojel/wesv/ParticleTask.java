@@ -1,12 +1,12 @@
 package com.rojel.wesv;
 
-import com.sk89q.worldedit.Vector;
 import fr.mrmicky.fastparticle.FastParticle;
 import fr.mrmicky.fastparticle.ParticleType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 
 import java.util.Collection;
 

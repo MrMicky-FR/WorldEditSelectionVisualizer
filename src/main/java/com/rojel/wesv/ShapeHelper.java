@@ -5,19 +5,11 @@ import com.boydti.fawe.object.regions.PolyhedralRegion;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.BlockVector2D;
 import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.CylinderRegion;
-import com.sk89q.worldedit.regions.EllipsoidRegion;
-import com.sk89q.worldedit.regions.Polygonal2DRegion;
-import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.*;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ShapeHelper {
 
@@ -30,9 +22,9 @@ public class ShapeHelper {
         config = plugin.getCustomConfig();
     }
 
-    public Collection<Vector> getVectorsFromRegion(final Region region) {
+    public Collection<org.bukkit.util.Vector> getVectorsFromRegion(final Region region) {
         if (region != null) {
-            final List<Vector> vectors = new ArrayList<>();
+            final Set<Vector> vectors = new LinkedHashSet<>();
 
             final Vector min = region.getMinimumPoint();
             final Vector max = region.getMaximumPoint().add(1, 1, 1);
@@ -180,12 +172,15 @@ public class ShapeHelper {
             } else if (plugin.isFaweEnabled()) {
                 handleFaweRegions(region, vectors);
             }
-            return vectors;
+            return vectors
+                    .stream()
+                    .map(vec -> new org.bukkit.util.Vector(vec.getX(), vec.getY(), vec.getZ()))
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         }
         return null;
     }
 
-    private void handleFaweRegions(Region region, List<Vector> vectors) {
+    private void handleFaweRegions(Region region, Collection<Vector> vectors) {
         if (region instanceof PolyhedralRegion) {
             final PolyhedralRegion polyhedralRegion = (PolyhedralRegion) region;
             final List<Vector> corners = new ArrayList<>();
