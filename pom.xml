@@ -63,8 +63,8 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>worldedit-repo</id>
-            <url>https://repository.enigmar.de/</url>
+            <id>sk89k-repo</id>
+            <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
             <id>fawe-repo</id>
@@ -86,7 +86,13 @@
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
+            <version>7.0.0-20181031.045353-19</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-core</artifactId>
+            <version>7.0.0-20181031.045353-19</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
