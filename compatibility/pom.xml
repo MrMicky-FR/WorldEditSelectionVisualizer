@@ -11,6 +11,7 @@
 
     <artifactId>wesv-compatibility</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>commons</module>
         <module>v6</module>

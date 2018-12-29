@@ -104,7 +104,6 @@ public class RegionWrapper7 implements RegionWrapper {
         return new ImmutableVector(vec.getX(), vec.getY(), vec.getZ());
     }
 
-
     private ImmutableVector[] triangleToImmutableVectors(Triangle triangle) {
         ImmutableVector[] vectors = new ImmutableVector[3];
 
