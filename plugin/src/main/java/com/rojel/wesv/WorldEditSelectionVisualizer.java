@@ -21,8 +21,8 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private boolean faweEnabled;
     private boolean legacyWorldEdit;
 
-    private final List<UUID> shown = new ArrayList<>();
-    private final List<UUID> lastSelectionTooLarge = new ArrayList<>();
+    private final Set<UUID> shown = new HashSet<>();
+    private final Set<UUID> lastSelectionTooLarge = new HashSet<>();
     private final Map<UUID, Region> lastSelectedRegions = new HashMap<>();
     private final Map<UUID, Integer> fadeOutTasks = new HashMap<>();
     private final Map<UUID, Collection<ImmutableVector>> playerParticleMap = new HashMap<>();
@@ -42,17 +42,9 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new WesvListener(this), this);
         getCommand("wesv").setExecutor(new CommandWesv(this));
 
-        for (final Player player : getServer().getOnlinePlayers()) {
-            addPlayer(player);
-        }
-
         faweEnabled = getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 
         MetricsUtils.register(this);
-
-        if (config.isUpdateCheckerEnabled()) {
-            getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
-        }
 
         try {
             Class.forName("com.sk89q.worldedit.math.Vector3");
@@ -66,6 +58,14 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
         if (faweEnabled) {
             getLogger().info("FastAsyncWorldEdit support enabled");
+        }
+
+        if (config.isUpdateCheckerEnabled()) {
+            getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
+        }
+
+        for (final Player player : getServer().getOnlinePlayers()) {
+            addPlayer(player);
         }
     }
 

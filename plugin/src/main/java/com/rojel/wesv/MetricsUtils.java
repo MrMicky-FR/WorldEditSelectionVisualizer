@@ -11,21 +11,22 @@ public class MetricsUtils {
 
     public static void register(WorldEditSelectionVisualizer plugin) {
         Metrics metrics = new Metrics(plugin);
+        Configuration config = plugin.getCustomConfig();
 
-        addCustomChartBoolean(metrics, "h_lines_cuboid", plugin.getCustomConfig()::isCuboidLinesEnabled);
-        addCustomChartBoolean(metrics, "h_lines_polygon", plugin.getCustomConfig()::isPolygonLinesEnabled);
-        addCustomChartBoolean(metrics, "h_lines_cylinder", plugin.getCustomConfig()::isCylinderLinesEnabled);
-        addCustomChartBoolean(metrics, "h_lines_ellipsoid", plugin.getCustomConfig()::isEllipsoidLinesEnabled);
-        addCustomChartBoolean(metrics, "top_bottom_cuboid", plugin.getCustomConfig()::isCuboidTopAndBottomEnabled);
-        addCustomChartBoolean(metrics, "top_bottom_ellipsoid", plugin.getCustomConfig()::isCuboidTopAndBottomEnabled);
-        addCustomChartObject(metrics, "gap_between_points", plugin.getCustomConfig()::getGapBetweenPoints);
-        addCustomChartObject(metrics, "v_gap_horizontal_lines", plugin.getCustomConfig()::getVerticalGap);
-        addCustomChartObject(metrics, "particle_update_interval", plugin.getCustomConfig()::getUpdateParticlesInterval);
-        addCustomChartObject(metrics, "selection_update_interval", plugin.getCustomConfig()::getUpdateSelectionInterval);
-        addCustomChartString(metrics, "particle_effect", plugin.getCustomConfig().getParticle()::getName);
-        addCustomChartBoolean(metrics, "check_for_axe", plugin.getCustomConfig()::isCheckForAxeEnabled);
-        addCustomChartObject(metrics, "particle_distance", plugin.getCustomConfig()::getParticleDistance);
-        addCustomChartObject(metrics, "max_selection_size", plugin.getCustomConfig()::getMaxSize);
+        addCustomChartBoolean(metrics, "h_lines_cuboid", config::isCuboidLinesEnabled);
+        addCustomChartBoolean(metrics, "h_lines_polygon", config::isPolygonLinesEnabled);
+        addCustomChartBoolean(metrics, "h_lines_cylinder", config::isCylinderLinesEnabled);
+        addCustomChartBoolean(metrics, "h_lines_ellipsoid", config::isEllipsoidLinesEnabled);
+        addCustomChartBoolean(metrics, "top_bottom_cuboid", config::isCuboidTopAndBottomEnabled);
+        addCustomChartBoolean(metrics, "top_bottom_ellipsoid", config::isCuboidTopAndBottomEnabled);
+        addCustomChartObject(metrics, "gap_between_points", config::getGapBetweenPoints);
+        addCustomChartObject(metrics, "v_gap_horizontal_lines", config::getVerticalGap);
+        addCustomChartObject(metrics, "particle_update_interval", config::getUpdateParticlesInterval);
+        addCustomChartObject(metrics, "selection_update_interval", config::getUpdateSelectionInterval);
+        addCustomChartString(metrics, "particle_effect", config.getParticle()::getName);
+        addCustomChartBoolean(metrics, "check_for_axe", config::isCheckForAxeEnabled);
+        addCustomChartObject(metrics, "particle_distance", config::getParticleDistance);
+        addCustomChartObject(metrics, "max_selection_size", config::getMaxSize);
         addCustomChartBoolean(metrics, "use_fawe", plugin::isFaweEnabled);
     }
 

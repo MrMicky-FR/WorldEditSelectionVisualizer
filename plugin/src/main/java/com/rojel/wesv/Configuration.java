@@ -171,6 +171,8 @@ public class Configuration {
         ConfigurationSection disabledPlayers = config.getConfigurationSection("players");
 
         if (disabledPlayers != null) {
+            plugin.getLogger().warning("Migrating players from config.yml to players.yml ...");
+
             for (String key : disabledPlayers.getKeys(false)) {
                 if (!disabledPlayers.getBoolean(key)) {
                     try {
