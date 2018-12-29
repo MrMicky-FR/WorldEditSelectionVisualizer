@@ -29,8 +29,8 @@ public class CommandWesv implements TabExecutor {
         if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
-                final boolean isEnabled = !plugin.getCustomConfig().isEnabled(player);
-                plugin.getCustomConfig().setEnabled(player, isEnabled);
+                final boolean isEnabled = !plugin.getStorageManager().isEnabled(player);
+                plugin.getStorageManager().setEnable(player, isEnabled);
 
                 if (isEnabled) {
                     player.sendMessage(ChatColor.GREEN + plugin.getCustomConfig().getLangVisualizerEnabled());

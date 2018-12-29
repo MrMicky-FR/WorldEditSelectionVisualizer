@@ -50,7 +50,7 @@ public class WorldEditHelper extends BukkitRunnable {
     @Override
     public void run() {
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getCustomConfig().isEnabled(player)) {
+            if (!plugin.getStorageManager().isEnabled(player)) {
                 continue;
             }
 

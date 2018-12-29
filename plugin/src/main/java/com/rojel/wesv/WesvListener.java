@@ -32,7 +32,7 @@ public class WesvListener implements Listener {
     @EventHandler
     public void onPlayerItemChange(final PlayerItemHeldEvent event) {
         final Player player = event.getPlayer();
-        if (plugin.getCustomConfig().isCheckForAxeEnabled() && plugin.getCustomConfig().isEnabled(player)) {
+        if (plugin.getCustomConfig().isCheckForAxeEnabled() && plugin.getStorageManager().isEnabled(player)) {
 
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 if (plugin.isHoldingSelectionItem(player)) {

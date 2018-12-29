@@ -15,6 +15,7 @@ import java.util.*;
 public class WorldEditSelectionVisualizer extends JavaPlugin {
 
     private Configuration config;
+    private StorageManager storageManager;
     private WorldEditHelper worldEditHelper;
     private ShapeHelper shapeHelper;
     private boolean faweEnabled;
@@ -29,7 +30,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     @Override
     public void onEnable() {
         config = new Configuration(this);
+        storageManager = new StorageManager(this);
+
         config.load();
+
         worldEditHelper = new WorldEditHelper(this);
         shapeHelper = new ShapeHelper(this);
 
@@ -74,8 +78,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     }
 
     public boolean shouldShowSelection(final Player player) {
-        return config.isEnabled(player)
-                && (!config.isCheckForAxeEnabled() || isHoldingSelectionItem(player));
+        return storageManager.isEnabled(player) && (!config.isCheckForAxeEnabled() || isHoldingSelectionItem(player));
     }
 
     public void showSelection(final Player player) {
@@ -166,6 +169,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
     public Configuration getCustomConfig() {
         return config;
+    }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
     }
 
     public Map<UUID, Region> getLastSelectedRegions() {

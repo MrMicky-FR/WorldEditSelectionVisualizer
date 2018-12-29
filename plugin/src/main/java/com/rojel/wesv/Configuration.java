@@ -4,13 +4,13 @@ import fr.mrmicky.fastparticle.ParticleType;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-import org.bukkit.plugin.Plugin;
 
 import java.util.EnumMap;
+import java.util.UUID;
 
 /**
  * YAML plugin configuration retrieval and manipulation class.
@@ -23,7 +23,7 @@ public class Configuration {
     /**
      * WESV plugin instance.
      */
-    private final Plugin plugin;
+    private final WorldEditSelectionVisualizer plugin;
 
     /**
      * WESV YAML configuration representation.
@@ -149,7 +149,7 @@ public class Configuration {
      *
      * @param plugin WESV plugin instance.
      */
-    public Configuration(final Plugin plugin) {
+    public Configuration(final WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
     }
 
@@ -166,6 +166,24 @@ public class Configuration {
                 plugin.getLogger().info("Adding '" + value.getConfigValue() + "' to the config");
                 found = true;
             }
+        }
+
+        ConfigurationSection disabledPlayers = config.getConfigurationSection("players");
+
+        if (disabledPlayers != null) {
+            for (String key : disabledPlayers.getKeys(false)) {
+                if (!disabledPlayers.getBoolean(key)) {
+                    try {
+                        plugin.getStorageManager().getDisabledPlayers().add(UUID.fromString(key));
+                    } catch (IllegalArgumentException ignore) {
+                    }
+                }
+            }
+
+            plugin.getStorageManager().save();
+
+            config.set("players", null);
+            found = true;
         }
 
         if (found) {
@@ -254,31 +272,6 @@ public class Configuration {
             plugin.getLogger().warning("'" + mat + "' is not a valid material");
         }
         return material;
-    }
-
-    /**
-     * Checks whether WESV is enabled for the given player.
-     *
-     * @param player Player to check if WESV is enabled for.
-     * @return Returns true if WESV is enabled for the given player, false
-     * otherwise.
-     */
-    public boolean isEnabled(final Player player) {
-        final String path = "players." + player.getUniqueId().toString();
-        config.addDefault(path, true);
-        return config.getBoolean(path);
-    }
-
-    /**
-     * Enables or disables WESV for the given player.
-     *
-     * @param player  Player to enable or disable WESV visualization for.
-     * @param enabled Whether to enable (true) or disable (false) WESV for the given
-     *                player.
-     */
-    public void setEnabled(final Player player, final boolean enabled) {
-        config.set("players." + player.getUniqueId().toString(), enabled);
-        plugin.saveConfig();
     }
 
     /**
