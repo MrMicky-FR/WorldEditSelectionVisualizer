@@ -1,0 +1,30 @@
+name: WorldEditSelectionVisualizer
+version: ${project.version}
+authors: [MrMicky, ZathrusWriter, Rojetto]
+description: Visualize your WorldEdit selection with particles and without any mod
+prefix: WESV
+website: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
+main: com.rojel.wesv.WorldEditSelectionVisualizer
+depend: [WorldEdit]
+softdepend: [FastAsyncWorldEdit]
+commands:
+  wesv:
+    description: Toggles the visualizer or reload the config
+    usage: /wesv [reload]
+
+permissions:
+  wesv.*:
+    default: true
+    children:
+      wesv.use: true
+      wesv.toggle: true
+      wesv.reloadconfig: true
+  wesv.use:
+    default: true
+    description: Allows the visualizer to be used.
+  wesv.toggle:
+    default: true
+    description: Allows the visualizer to be toggled.
+  wesv.reloadconfig:
+    default: op
+    description: Allows the configuration of this plugin to be reloaded from the config.yml file.
