@@ -22,6 +22,7 @@ public class MetricsUtils {
         addCustomChartObject(metrics, "gap_between_points", config::getGapBetweenPoints);
         addCustomChartObject(metrics, "v_gap_horizontal_lines", config::getVerticalGap);
         addCustomChartObject(metrics, "particle_update_interval", config::getUpdateParticlesInterval);
+        addCustomChartObject(metrics, "clipboard_particle_update_interval", config::getUpdateClipboardParticlesInterval);
         addCustomChartObject(metrics, "selection_update_interval", config::getUpdateSelectionInterval);
         addCustomChartString(metrics, "particle_effect", config.getParticle()::getName);
         addCustomChartString(metrics, "clipboard_particle_effect", config.getClipboardParticle()::getName);

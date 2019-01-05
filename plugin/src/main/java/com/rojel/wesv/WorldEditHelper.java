@@ -4,20 +4,33 @@ import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseItem;
 import com.sk89q.worldedit.blocks.BaseItemStack;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionSelector;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.math.BlockVector2;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.Vector3;
+import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.math.transform.Transform;
+import com.sk89q.worldedit.regions.*;
+import com.sk89q.worldedit.regions.factory.CuboidRegionFactory;
+import com.sk89q.worldedit.regions.factory.SphereRegionFactory;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.world.World;
 import com.sk89q.worldedit.world.item.ItemTypes;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class WorldEditHelper extends BukkitRunnable {
@@ -71,8 +84,8 @@ public class WorldEditHelper extends BukkitRunnable {
 
             final Region currentClipboard = getClipboardRegion(player);
 
-            if(!compareRegion(plugin.getLastClipboardRegions().get(player.getUniqueId()), currentClipboard)) {
-                if (currentRegion != null) {
+            if (!compareRegion(plugin.getLastClipboardRegions().get(player.getUniqueId()), currentClipboard)) {
+                if (currentClipboard != null) {
                     plugin.getLastClipboardRegions().put(player.getUniqueId(), currentClipboard);
                 } else {
                     plugin.getLastClipboardRegions().remove(player.getUniqueId());
@@ -80,7 +93,7 @@ public class WorldEditHelper extends BukkitRunnable {
 
                 plugin.getServer().getPluginManager().callEvent(new WorldEditClipboardChangeEvent(player, currentClipboard));
 
-                if(plugin.isClipboardShown(player)) {
+                if (plugin.isClipboardShown(player)) {
                     plugin.showClipboard(player);
                 }
             }
@@ -112,10 +125,66 @@ public class WorldEditHelper extends BukkitRunnable {
                 ClipboardHolder holder = session.getClipboard();
                 if (holder != null) {
                     Clipboard clipboard = holder.getClipboard();
-                    //TODO: Check if Clipboard needs to be transformed
-                    return clipboard.getRegion();
+                    Region region = clipboard.getRegion().clone();
+
+                    BlockVector3 regionOrigin = clipboard.getOrigin();
+
+                    Location location = player.getLocation();
+                    BlockVector3 playerPosition = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+
+                    BlockVector3 translateVector = playerPosition.subtract(regionOrigin);
+
+                    region.shift(translateVector);
+
+                    if (!holder.getTransform().isIdentity()) {
+                        Transform transform = holder.getTransform();
+
+                        Region toTransform = region.clone();
+
+                        Vector3 relativeCenter = toTransform.getCenter().subtract(playerPosition.toVector3());
+
+                        Vector3 normalizeShift = relativeCenter.subtract(toTransform.getCenter());
+                        Vector3 originShift = toTransform.getCenter().subtract(relativeCenter);
+
+                        toTransform.shift(normalizeShift.toBlockPoint());
+
+                        TransformRegion transformRegion = new TransformRegion(toTransform, transform);
+
+                        if (region instanceof CuboidRegion) {
+                            region = CuboidRegion.makeCuboid(transformRegion);
+                            region.shift(originShift.toBlockPoint());
+                        } else if (region instanceof CylinderRegion) {
+                            CylinderRegion cylinderRegion = (CylinderRegion) region.clone();
+                            int newMinY;
+                            int newMaxY;
+
+                            if (cylinderRegion.getMinimumPoint() != transformRegion.getMinimumPoint() || cylinderRegion.getMaximumPoint() != transformRegion.getMaximumPoint()) {
+                                newMinY = cylinderRegion.getMinimumY();
+                                newMaxY = cylinderRegion.getMinimumY();
+                            } else {
+                                newMinY = cylinderRegion.getMinimumY();
+                                newMaxY = cylinderRegion.getMaximumY();
+                            }
+                            region = new CylinderRegion(transformRegion.getCenter().toBlockPoint(), cylinderRegion.getRadius(), newMinY, newMaxY);
+                            region.shift(originShift.toBlockPoint());
+                        } else if (region instanceof EllipsoidRegion) {
+                            EllipsoidRegion ellipsoidRegion = (EllipsoidRegion) region.clone();
+                            ellipsoidRegion.setCenter(transformRegion.getCenter().toBlockPoint());
+                            region = ellipsoidRegion;
+                            region.shift(originShift.toBlockPoint());
+                        } else {
+                            player.sendMessage("Can't display this kind of transformed region yet");
+                        }
+                    }
+
+                    region.setWorld(clipboard.getRegion().getWorld());
+
+                    return region;
                 }
             } catch (EmptyClipboardException e) {
+                return null;
+            } catch (RegionOperationException e) {
+                plugin.getLogger().warning("Error on clipboard's region shift: RegionOperationException");
                 return null;
             }
         }
@@ -133,6 +202,10 @@ public class WorldEditHelper extends BukkitRunnable {
 
         Iterator<?> regionIterator1 = region1.iterator();
         Iterator<?> regionIterator2 = region2.iterator();
+
+        if (region1.getCenter() == region2.getCenter()) {
+            return false;
+        }
 
         while (regionIterator1.hasNext()) {
             if (!regionIterator2.hasNext() || !regionIterator1.next().equals(regionIterator2.next())) {

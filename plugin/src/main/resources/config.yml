@@ -10,7 +10,9 @@ particleDistance: 32
 maxSize: 10000
 checkForAxe: false
 particleEffect: REDSTONE
+clipboardParticleEffect: FLAME
 particleData: "255,0,0"
+clipboardParticleData: 255,0,0
 horizontalLinesForCuboid: true
 horizontalLinesForPolygon: true
 horizontalLinesForCylinder: true
@@ -21,4 +23,5 @@ gapBetweenPoints: 0.5
 verticalGap: 1
 updateSelectionInterval: 20
 updateParticlesInterval: 5
+updateClipboardParticlesInterval: 10
 particleFadeDelay: 0

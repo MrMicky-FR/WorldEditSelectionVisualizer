@@ -48,6 +48,10 @@ public class Configuration {
          */
         UPDATE_PARTICLES_INTERVAL("updateParticlesInterval", 5, int.class),
         /**
+         * Interval in which particles should be updated for the MC client.
+         */
+        UPDATE_CLIPBOARD_PARTICLES_INTERVAL("updateClipboardParticlesInterval", 5, int.class),
+        /**
          * Interval (ms) in which the selection should be updated for the MC
          * client.
          */
@@ -228,7 +232,7 @@ public class Configuration {
         }
 
         configItems.put(ConfigValue.PARTICLE_DATA, getParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
-        configItems.put(ConfigValue.CLIPBOARD_PARTICLE_DATA, getClipboardParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
+        configItems.put(ConfigValue.CLIPBOARD_PARTICLE_DATA, getClipboardParticleData((String) configItems.get(ConfigValue.CLIPBOARD_PARTICLE_DATA)));
     }
 
     /**
@@ -378,6 +382,15 @@ public class Configuration {
      * @return Returns the "updateParticlesInterval" property value.
      */
     public int getUpdateParticlesInterval() {
+        return (int) configItems.get(ConfigValue.UPDATE_PARTICLES_INTERVAL);
+    }
+
+    /**
+     * Retrieves the "updateParticlesInterval" property value.
+     *
+     * @return Returns the "updateParticlesInterval" property value.
+     */
+    public int getUpdateClipboardParticlesInterval() {
         return (int) configItems.get(ConfigValue.UPDATE_PARTICLES_INTERVAL);
     }
 

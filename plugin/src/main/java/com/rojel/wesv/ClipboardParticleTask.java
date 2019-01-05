@@ -9,14 +9,14 @@ import org.bukkit.util.NumberConversions;
 
 import java.util.Collection;
 
-public class ParticleTask extends BukkitRunnable {
+public class ClipboardParticleTask extends BukkitRunnable {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    public ParticleTask(final WorldEditSelectionVisualizer plugin) {
+    public ClipboardParticleTask(final WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
-        runTaskTimer(plugin, 1, plugin.getCustomConfig().getUpdateParticlesInterval());
+        runTaskTimer(plugin, 1, plugin.getCustomConfig().getUpdateClipboardParticlesInterval());
     }
 
     @Override
@@ -25,22 +25,21 @@ public class ParticleTask extends BukkitRunnable {
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
             final Location loc = player.getLocation();
 
-            /** Handles normal selection particles */
-            final Collection<ImmutableVector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
+            /** Handles clipboard particles */
+            final Collection<ImmutableVector> clipboardVectors = plugin.getPlayerClipboardParticleMap().get(player.getUniqueId());
 
-            if (vectors == null || vectors.isEmpty()) {
+            if (clipboardVectors == null || clipboardVectors.isEmpty()) {
                 continue;
             }
 
-            for (final ImmutableVector vec : vectors) {
+            for (final ImmutableVector vec : clipboardVectors) {
                 if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
                     continue;
                 }
 
-                final ParticleType particle = plugin.getCustomConfig().getParticle();
-                final Object particleData = plugin.getCustomConfig().getParticleData();
+                final ParticleType particle = plugin.getCustomConfig().getClipboardParticle();
+                final Object particleData = plugin.getCustomConfig().getClipboardParticleData();
 
-                //TODO: create Option to spawn Particles for all players
                 FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
             }
         }

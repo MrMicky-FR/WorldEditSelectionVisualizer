@@ -17,7 +17,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private Configuration config;
     private StorageManager storageManager;
     private WorldEditHelper worldEditHelper;
-    private ShapeHelper shapeHelper;
+    public ShapeHelper shapeHelper;
     private boolean faweEnabled;
     private boolean legacyWorldEdit;
 
@@ -43,6 +43,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         shapeHelper = new ShapeHelper(this);
 
         new ParticleTask(this);
+        new ClipboardParticleTask(this);
 
         getServer().getPluginManager().registerEvents(new WesvListener(this), this);
         getCommand("wesv").setExecutor(new CommandWesv(this));
