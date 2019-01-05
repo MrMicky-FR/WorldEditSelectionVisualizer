@@ -36,10 +36,12 @@ public class CommandWesv implements TabExecutor {
                     player.sendMessage(ChatColor.GREEN + plugin.getCustomConfig().getLangVisualizerEnabled());
                     if (plugin.shouldShowSelection(player)) {
                         plugin.showSelection(player);
+                        plugin.showClipboard(player);
                     }
                 } else {
                     player.sendMessage(ChatColor.RED + plugin.getCustomConfig().getLangVisualizerDisabled());
                     plugin.hideSelection(player);
+                    plugin.hideClipboard(player);
                 }
             } else {
                 sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());

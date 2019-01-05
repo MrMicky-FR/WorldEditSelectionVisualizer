@@ -1,14 +1,13 @@
 package com.rojel.wesv;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalConfiguration;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseItem;
 import com.sk89q.worldedit.blocks.BaseItemStack;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.world.item.ItemTypes;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -69,6 +68,22 @@ public class WorldEditHelper extends BukkitRunnable {
                     plugin.showSelection(player);
                 }
             }
+
+            final Region currentClipboard = getClipboardRegion(player);
+
+            if(!compareRegion(plugin.getLastClipboardRegions().get(player.getUniqueId()), currentClipboard)) {
+                if (currentRegion != null) {
+                    plugin.getLastClipboardRegions().put(player.getUniqueId(), currentClipboard);
+                } else {
+                    plugin.getLastClipboardRegions().remove(player.getUniqueId());
+                }
+
+                plugin.getServer().getPluginManager().callEvent(new WorldEditClipboardChangeEvent(player, currentClipboard));
+
+                if(plugin.isClipboardShown(player)) {
+                    plugin.showClipboard(player);
+                }
+            }
         }
     }
 
@@ -84,6 +99,24 @@ public class WorldEditHelper extends BukkitRunnable {
                 } catch (final IncompleteRegionException e) {
                     plugin.getLogger().warning("Region still incomplete.");
                 }
+            }
+        }
+        return null;
+    }
+
+    public Region getClipboardRegion(final Player player) {
+        final LocalSession session = WorldEdit.getInstance().getSessionManager().findByName(player.getName());
+
+        if (session != null) {
+            try {
+                ClipboardHolder holder = session.getClipboard();
+                if (holder != null) {
+                    Clipboard clipboard = holder.getClipboard();
+                    //TODO: Check if Clipboard needs to be transformed
+                    return clipboard.getRegion();
+                }
+            } catch (EmptyClipboardException e) {
+                return null;
             }
         }
         return null;

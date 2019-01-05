@@ -24,6 +24,8 @@ public class ParticleTask extends BukkitRunnable {
         final int particleDistance = plugin.getCustomConfig().getParticleDistance();
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
             final Location loc = player.getLocation();
+
+            /** Handles normal selection particles */
             final Collection<ImmutableVector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
 
             if (vectors == null || vectors.isEmpty()) {
@@ -37,6 +39,24 @@ public class ParticleTask extends BukkitRunnable {
 
                 final ParticleType particle = plugin.getCustomConfig().getParticle();
                 final Object particleData = plugin.getCustomConfig().getParticleData();
+
+                FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
+            }
+
+            /** Handles clipboard particles */
+            final Collection<ImmutableVector> clipboardVectors = plugin.getPlayerClipboardParticleMap().get(player.getUniqueId());
+
+            if (clipboardVectors == null || clipboardVectors.isEmpty()) {
+                continue;
+            }
+
+            for (final ImmutableVector vec : clipboardVectors) {
+                if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
+                    continue;
+                }
+
+                final ParticleType particle = plugin.getCustomConfig().getClipboardParticle();
+                final Object particleData = plugin.getCustomConfig().getClipboardParticleData();
 
                 FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
             }

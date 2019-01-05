@@ -22,10 +22,15 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private boolean legacyWorldEdit;
 
     private final Set<UUID> shown = new HashSet<>();
+    private final Set<UUID> clipboardShown = new HashSet<>();
     private final Set<UUID> lastSelectionTooLarge = new HashSet<>();
+    private final Set<UUID> lastClipboardTooLarge = new HashSet<>();
     private final Map<UUID, Region> lastSelectedRegions = new HashMap<>();
+    private final Map<UUID, Region> lastClipboardRegions = new HashMap<>();
     private final Map<UUID, Integer> fadeOutTasks = new HashMap<>();
+    private final Map<UUID, Integer> fadeOutClipboardTasks = new HashMap<>();
     private final Map<UUID, Collection<ImmutableVector>> playerParticleMap = new HashMap<>();
+    private final Map<UUID, Collection<ImmutableVector>> playerClipboardParticleMap = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -77,6 +82,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         return shown.contains(player.getUniqueId()) && shouldShowSelection(player);
     }
 
+    public boolean isClipboardShown(final Player player) {
+        return clipboardShown.contains(player.getUniqueId()) && shouldShowSelection(player);
+    }
+
     public boolean shouldShowSelection(final Player player) {
         return storageManager.isEnabled(player) && (!config.isCheckForAxeEnabled() || isHoldingSelectionItem(player));
     }
@@ -108,10 +117,43 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         shown.add(player.getUniqueId());
     }
 
+    public void showClipboard(final Player player) {
+        if (!player.hasPermission("wesv.use")) {
+            return;
+        }
+
+        final Region region = worldEditHelper.getClipboardRegion(player);
+        final UUID uuid = player.getUniqueId();
+
+        if (region != null && region.getArea() > config.getMaxSize()) {
+            setClipboardParticlesForPlayer(player, null);
+
+            if (!lastClipboardTooLarge.contains(uuid)) {
+                player.sendMessage(config.getLangMaxSelection().replace("%blocks%", Integer.toString(config.getMaxSize())));
+                lastClipboardTooLarge.add(uuid);
+            }
+        } else {
+            lastClipboardTooLarge.remove(player.getUniqueId());
+
+            if (region != null && region.getWorld() != null && region.getWorld().getName().equals(player.getWorld().getName())) {
+                setClipboardParticlesForPlayer(player, shapeHelper.getVectorsFromRegion(wrapRegion(region)));
+            } else {
+                setClipboardParticlesForPlayer(player, null);
+            }
+        }
+        clipboardShown.add(player.getUniqueId());
+    }
+
     public void hideSelection(final Player player) {
         shown.remove(player.getUniqueId());
         playerParticleMap.remove(player.getUniqueId());
         cancelAndRemoveFadeOutTask(player.getUniqueId());
+    }
+
+    public void hideClipboard(final Player player) {
+        clipboardShown.remove(player.getUniqueId());
+        playerClipboardParticleMap.remove(player.getUniqueId());
+        cancelAndRemoveFadeOutClipboardTask(player.getUniqueId());
     }
 
     public void setParticlesForPlayer(final Player player, final Collection<ImmutableVector> vectors) {
@@ -136,6 +178,28 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         }
     }
 
+    public void setClipboardParticlesForPlayer(final Player player, final Collection<ImmutableVector> vectors) {
+        cancelAndRemoveFadeOutClipboardTask(player.getUniqueId());
+
+        if (vectors == null || vectors.isEmpty()) {
+            playerClipboardParticleMap.remove(player.getUniqueId());
+        } else {
+            playerClipboardParticleMap.put(player.getUniqueId(), vectors);
+
+            final int fade = config.getParticleFadeDelay();
+
+            if (fade > 0) {
+                final int id = getServer().getScheduler().runTaskLater(this, () -> {
+
+                    fadeOutClipboardTasks.remove(player.getUniqueId());
+                    playerClipboardParticleMap.remove(player.getUniqueId());
+                }, fade).getTaskId();
+
+                fadeOutClipboardTasks.put(player.getUniqueId(), id);
+            }
+        }
+    }
+
     private void cancelAndRemoveFadeOutTask(final UUID uuid) {
         if (fadeOutTasks.containsKey(uuid)) {
             getServer().getScheduler().cancelTask(fadeOutTasks.get(uuid));
@@ -143,20 +207,32 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         }
     }
 
+    private void cancelAndRemoveFadeOutClipboardTask(final UUID uuid) {
+        if (fadeOutClipboardTasks.containsKey(uuid)) {
+            getServer().getScheduler().cancelTask(fadeOutClipboardTasks.get(uuid));
+            fadeOutClipboardTasks.remove(uuid);
+        }
+    }
+
     public void addPlayer(final Player player) {
         if (shouldShowSelection(player)) {
             showSelection(player);
+            showClipboard(player);
         }
     }
 
     public void removePlayer(final Player player) {
         final UUID uuid = player.getUniqueId();
         shown.remove(uuid);
+        clipboardShown.remove(uuid);
         lastSelectionTooLarge.remove(uuid);
         lastSelectedRegions.remove(uuid);
+        lastClipboardRegions.remove(uuid);
         playerParticleMap.remove(uuid);
+        playerClipboardParticleMap.remove(uuid);
 
         cancelAndRemoveFadeOutTask(uuid);
+        cancelAndRemoveFadeOutClipboardTask(uuid);
     }
 
     public RegionWrapper wrapRegion(Region region) {
@@ -179,8 +255,16 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         return lastSelectedRegions;
     }
 
+    public Map<UUID, Region> getLastClipboardRegions() {
+        return lastClipboardRegions;
+    }
+
     public Map<UUID, Collection<ImmutableVector>> getPlayerParticleMap() {
         return playerParticleMap;
+    }
+
+    public Map<UUID, Collection<ImmutableVector>> getPlayerClipboardParticleMap() {
+        return playerClipboardParticleMap;
     }
 
     private void checkUpdate() {

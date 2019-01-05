@@ -78,6 +78,7 @@ public class Configuration {
         CHECK_FOR_AXE("checkForAxe", false, boolean.class),
 
         PARTICLE_TYPE("particleEffect", ParticleType.REDSTONE, ParticleType.class),
+        CLIPBOARD_PARTICLE_TYPE("clipboardParticleEffect", ParticleType.VILLAGER_HAPPY, ParticleType.class),
         /**
          * Maximum distance to see selection particles from.
          */
@@ -117,7 +118,8 @@ public class Configuration {
         /**
          * Additional data for some particles (can be a color or a material)
          */
-        PARTICLE_DATA("particleData", "255,0,0", String.class);
+        PARTICLE_DATA("particleData", "255,0,0", String.class),
+        CLIPBOARD_PARTICLE_DATA("clipboardParticleData", "255,0,0", String.class);
 
         private final String configValue;
         private final Object defaultValue;
@@ -215,13 +217,18 @@ public class Configuration {
             } else if (value.getType() == double.class) {
                 configItems.put(value, config.getDouble(value.getConfigValue()));
             } else if (value.getType() == ParticleType.class) {
-                configItems.put(value, getParticleType(config.getString(value.getConfigValue())));
+                if (value == ConfigValue.PARTICLE_TYPE) {
+                    configItems.put(value, getParticleType(config.getString(value.getConfigValue())));
+                } else if (value == ConfigValue.CLIPBOARD_PARTICLE_TYPE) {
+                    configItems.put(value, getClipboardParticleType(config.getString(value.getConfigValue())));
+                }
             } else {
                 configItems.put(value, config.get(value.getConfigValue()));
             }
         }
 
         configItems.put(ConfigValue.PARTICLE_DATA, getParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
+        configItems.put(ConfigValue.CLIPBOARD_PARTICLE_DATA, getClipboardParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
     }
 
     /**
@@ -239,8 +246,52 @@ public class Configuration {
         return ParticleType.REDSTONE;
     }
 
+    /**
+     * Retrieves ParticleType representation of the given name in terms of the clipboard.
+     *
+     * @param name Name of the particle type from config.
+     * @return Returns a ParticleType representation of the given name.
+     */
+    public ParticleType getClipboardParticleType(final String name) {
+        final ParticleType effect = ParticleType.getParticle(name);
+        if (effect != null && effect.isCompatibleWithServerVersion()) {
+            return effect;
+        }
+        plugin.getLogger().warning("The particle effect set for the clipboard in the configuration file is invalid.");
+        return ParticleType.VILLAGER_HAPPY;
+    }
+
     public Object getParticleData(final String name) {
         final ParticleType particle = getParticle();
+        if (particle.getDataType() == Color.class && !name.isEmpty()) {
+            final String[] split = name.split(",");
+            if (split.length == 3) {
+                try {
+                    final int r = Integer.parseInt(split[0]);
+                    final int g = Integer.parseInt(split[1]);
+                    final int b = Integer.parseInt(split[2]);
+
+                    return Color.fromRGB(r, g, b);
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("'" + name + "' is not a valid color: " + e.getMessage());
+                }
+            }
+        } else if (particle.getDataType() == MaterialData.class) {
+            final Material material = getMaterial(name);
+            if (material != null) {
+                return new MaterialData(material);
+            }
+        } else if (particle.getDataType() == ItemStack.class) {
+            final Material material = getMaterial(name);
+            if (material != null) {
+                return new ItemStack(material);
+            }
+        }
+        return null;
+    }
+
+    public Object getClipboardParticleData(final String name) {
+        final ParticleType particle = getClipboardParticle();
         if (particle.getDataType() == Color.class && !name.isEmpty()) {
             final String[] split = name.split(",");
             if (split.length == 3) {
@@ -283,6 +334,15 @@ public class Configuration {
      */
     public ParticleType getParticle() {
         return (ParticleType) configItems.get(ConfigValue.PARTICLE_TYPE);
+    }
+
+    /**
+     * Retrieves the "particleClipboard" property value.
+     *
+     * @return Returns the "particleClipboard" property value.
+     */
+    public ParticleType getClipboardParticle() {
+        return (ParticleType) configItems.get(ConfigValue.CLIPBOARD_PARTICLE_TYPE);
     }
 
     /**
@@ -462,5 +522,9 @@ public class Configuration {
 
     public Object getParticleData() {
         return configItems.get(ConfigValue.PARTICLE_DATA);
+    }
+
+    public Object getClipboardParticleData() {
+        return configItems.get(ConfigValue.CLIPBOARD_PARTICLE_DATA);
     }
 }

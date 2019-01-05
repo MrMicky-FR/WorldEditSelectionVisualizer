@@ -27,6 +27,9 @@ public class WesvListener implements Listener {
         if (plugin.isSelectionShown(player)) {
             plugin.showSelection(player);
         }
+        if (plugin.isClipboardShown(player)) {
+            plugin.showClipboard(player);
+        }
     }
 
     @EventHandler
@@ -37,8 +40,10 @@ public class WesvListener implements Listener {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 if (plugin.isHoldingSelectionItem(player)) {
                     plugin.showSelection(player);
+                    plugin.showClipboard(player);
                 } else {
                     plugin.hideSelection(player);
+                    plugin.hideClipboard(player);
                 }
             });
         }
