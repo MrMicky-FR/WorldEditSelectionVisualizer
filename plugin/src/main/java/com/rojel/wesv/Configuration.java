@@ -345,7 +345,7 @@ public class Configuration {
     /**
      * Sets the "particle" property value.
      */
-    public void setParticle(ParticleType var) {
+    public void setParticle(final ParticleType var) {
         configItems.put(ConfigValue.PARTICLE_TYPE, var);
     }
 
@@ -361,7 +361,7 @@ public class Configuration {
     /**
      * Sets the "particleClipboard" property value.
      */
-    public void setClipboardParticle(ParticleType var) {
+    public void setClipboardParticle(final ParticleType var) {
         configItems.put(ConfigValue.CLIPBOARD_PARTICLE_TYPE, var);
     }
 
@@ -377,7 +377,7 @@ public class Configuration {
     /**
      * Sets the "updateChecker" property value.
      */
-    public void setUpdateCheckerEnabled(boolean var) {
+    public void setUpdateCheckerEnabled(final boolean var) {
         configItems.put(ConfigValue.UPDATE_CHECKER, var);
     }
 
@@ -393,7 +393,7 @@ public class Configuration {
     /**
      * Sets the "gapBetweenPoints" property value.
      */
-    public void setGapBetweenPoints(double var) {
+    public void setGapBetweenPoints(final double var) {
         configItems.put(ConfigValue.GAP_BETWEEN_POINTS, var);
     }
 
@@ -409,7 +409,7 @@ public class Configuration {
     /**
      * Sets the "verticalGap" property value.
      */
-    public void setVerticalGap(double var) {
+    public void setVerticalGap(final double var) {
         configItems.put(ConfigValue.VERTICAL_GAP, var);
     }
 
@@ -425,7 +425,7 @@ public class Configuration {
     /**
      * Sets the "updateParticlesInterval" property value.
      */
-    public void setUpdateParticlesInterval(int var) {
+    public void setUpdateParticlesInterval(final int var) {
         configItems.put(ConfigValue.UPDATE_PARTICLES_INTERVAL, var);
     }
 
@@ -441,7 +441,7 @@ public class Configuration {
     /**
      * Sets the "updateParticlesInterval" property value.
      */
-    public void setUpdateClipboardParticlesInterval(int var) {
+    public void setUpdateClipboardParticlesInterval(final int var) {
         configItems.put(ConfigValue.UPDATE_PARTICLES_INTERVAL, var);
     }
 
@@ -457,7 +457,7 @@ public class Configuration {
     /**
      * Sets the "updateSelectionInterval" property value.
      */
-    public void setUpdateSelectionInterval(int var) {
+    public void setUpdateSelectionInterval(final int var) {
         configItems.put(ConfigValue.UPDATE_SELECTION_INTERVAL, var);
     }
 
@@ -473,7 +473,7 @@ public class Configuration {
     /**
      * Sets the "cuboidLines" property value.
      */
-    public void setCuboidLinesEnabled(boolean var) {
+    public void setCuboidLinesEnabled(final boolean var) {
         configItems.put(ConfigValue.CUBOID_LINES, var);
     }
 
@@ -489,7 +489,7 @@ public class Configuration {
     /**
      * Sets the "polygonLines" property value.
      */
-    public void setPolygonLinesEnabled(boolean var) {
+    public void setPolygonLinesEnabled(final boolean var) {
         configItems.put(ConfigValue.POLYGON_LINES, var);
     }
 
@@ -505,7 +505,7 @@ public class Configuration {
     /**
      * Sets the "cylinderLines" property value.
      */
-    public void setCylinderLinesEnabled(boolean var) {
+    public void setCylinderLinesEnabled(final boolean var) {
         configItems.put(ConfigValue.CYLINDER_LINES, var);
     }
 
@@ -521,7 +521,7 @@ public class Configuration {
     /**
      * Sets the "ellipsoidLines" property value.
      */
-    public void setEllipsoidLinesEnabled(boolean var) {
+    public void setEllipsoidLinesEnabled(final boolean var) {
         configItems.put(ConfigValue.ELLIPSOID_LINES, var);
     }
 
@@ -537,7 +537,7 @@ public class Configuration {
     /**
      * Sets the "topAndBottomForCuboid" property value.
      */
-    public void setCuboidTopAndBottomEnabled(boolean var) {
+    public void setCuboidTopAndBottomEnabled(final boolean var) {
         configItems.put(ConfigValue.CUBOID_TOP_BOTTOM, var);
     }
 
@@ -553,7 +553,7 @@ public class Configuration {
     /**
      * Sets the "topAndBottomForCylinder" property value.
      */
-    public void setCylinderTopAndBottomEnabled(boolean var) {
+    public void setCylinderTopAndBottomEnabled(final boolean var) {
         configItems.put(ConfigValue.CYLINDER_TOP_BOTTOM, var);
     }
 
@@ -569,7 +569,7 @@ public class Configuration {
     /**
      * Sets the "checkForAxe" property value.
      */
-    public void setCheckForAxeEnabled(boolean var) {
+    public void setCheckForAxeEnabled(final boolean var) {
         configItems.put(ConfigValue.CHECK_FOR_AXE, var);
     }
 
@@ -585,7 +585,7 @@ public class Configuration {
     /**
      * Sets the "showForAllPlayers" property value.
      */
-    public void setShowForAllPlayersEnabled(boolean var) {
+    public void setShowForAllPlayersEnabled(final boolean var) {
         configItems.put(ConfigValue.SHOW_FOR_ALL_PLAYERS, var);
     }
 
@@ -601,7 +601,7 @@ public class Configuration {
     /**
      * Sets the "particleDistance" property value.
      */
-    public void setParticleDsettance(int var) {
+    public void setParticleDsettance(final int var) {
         configItems.put(ConfigValue.PARTICLE_DISTANCE, var);
     }
 
@@ -617,7 +617,7 @@ public class Configuration {
     /**
      * Sets the "maxSize" property value.
      */
-    public void setMaxSize(int var) {
+    public void setMaxSize(final int var) {
         configItems.put(ConfigValue.MAX_SIZE, var);
     }
 
@@ -633,7 +633,7 @@ public class Configuration {
     /**
      * Sets translation for the "langVisualizerEnabled" text.
      */
-    public void setLangVsetualizerEnabled(String var) {
+    public void setLangVsetualizerEnabled(final String var) {
         configItems.put(ConfigValue.LANG_VISUALIZER_ENABLED, var);
     }
 
@@ -649,7 +649,7 @@ public class Configuration {
     /**
      * Sets translation for the "visualizerDisabled" text.
      */
-    public void setLangVsetualizerDsetabled(String var) {
+    public void setLangVsetualizerDsetabled(final String var) {
         configItems.put(ConfigValue.LANG_VISUALIZER_DISABLED, var);
     }
 
@@ -665,7 +665,7 @@ public class Configuration {
     /**
      * Sets translation for the "playersOnly" text.
      */
-    public void setLangPlayersOnly(String var) {
+    public void setLangPlayersOnly(final String var) {
         configItems.put(ConfigValue.LANG_PLAYERS_ONLY, var);
     }
 
@@ -681,7 +681,7 @@ public class Configuration {
     /**
      * Sets translation for the "maxSelection" text.
      */
-    public void setLangMaxSelection(String var) {
+    public void setLangMaxSelection(final String var) {
         configItems.put(ConfigValue.LANG_MAX_SELECTION, var);
     }
 
@@ -697,7 +697,7 @@ public class Configuration {
     /**
      * Sets translation for the "maxSelection" text.
      */
-    public void setLangNoPermsetsion(String var) {
+    public void setLangNoPermsetsion(final String var) {
         configItems.put(ConfigValue.LANG_NO_PERMISSION, var);
     }
 
@@ -713,7 +713,7 @@ public class Configuration {
     /**
      * Sets translation for the "configReloaded" text.
      */
-    public void setConfigReloaded(String var) {
+    public void setConfigReloaded(final String var) {
         configItems.put(ConfigValue.LANG_CONFIGRELOADED, var);
     }
 
@@ -729,7 +729,7 @@ public class Configuration {
     /**
      * Sets the "particleFadeDelay" property value.
      */
-    public void setParticleFadeDelay(int var) {
+    public void setParticleFadeDelay(final int var) {
         configItems.put(ConfigValue.FADE_DELAY, var);
     }
 
@@ -745,7 +745,7 @@ public class Configuration {
     /**
      * Sets the "particleData" property value.
      */
-    public void setParticleData(Object var) {
+    public void setParticleData(final Object var) {
         configItems.put(ConfigValue.PARTICLE_DATA, var);
     }
 
@@ -761,7 +761,7 @@ public class Configuration {
     /**
      * Sets the "clipboardParticleData" property value.
      */
-    public void setClipboardParticleData(Object var) {
+    public void setClipboardParticleData(final Object var) {
         configItems.put(ConfigValue.CLIPBOARD_PARTICLE_DATA, var);
     }
 }

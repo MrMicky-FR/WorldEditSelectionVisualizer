@@ -2,26 +2,13 @@ package com.rojel.wesv;
 
 import com.rojel.wesv.v6.RegionWrapper6;
 import com.rojel.wesv.v7.RegionWrapper7;
-import com.sk89q.worldedit.EmptyClipboardException;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.*;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldedit.util.io.Closer;
-import com.sk89q.worldedit.util.io.file.FilenameException;
-import com.sk89q.worldedit.util.io.file.FilenameResolutionException;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Level;
 
 public class WorldEditSelectionVisualizer extends JavaPlugin {
 

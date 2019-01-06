@@ -6,19 +6,13 @@ import com.sk89q.worldedit.blocks.BaseItemStack;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.math.BlockVector2;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.Vector3;
-import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.*;
-import com.sk89q.worldedit.regions.factory.CuboidRegionFactory;
-import com.sk89q.worldedit.regions.factory.SphereRegionFactory;
-import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.item.ItemTypes;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,12 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class WorldEditHelper extends BukkitRunnable {
@@ -70,10 +61,10 @@ public class WorldEditHelper extends BukkitRunnable {
             final Region currentRegion = getSelectedRegion(player);
 
             if (!compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()), currentRegion)) {
-                if (currentRegion != null) {
-                    plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
-                } else {
+                if (currentRegion == null) {
                     plugin.getLastSelectedRegions().remove(player.getUniqueId());
+                } else {
+                    plugin.getLastSelectedRegions().put(player.getUniqueId(), currentRegion.clone());
                 }
 
                 plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
@@ -86,10 +77,10 @@ public class WorldEditHelper extends BukkitRunnable {
             final Region currentClipboard = getClipboardRegion(player);
 
             if (!compareRegion(plugin.getLastClipboardRegions().get(player.getUniqueId()), currentClipboard)) {
-                if (currentClipboard != null) {
-                    plugin.getLastClipboardRegions().put(player.getUniqueId(), currentClipboard);
-                } else {
+                if (currentClipboard == null) {
                     plugin.getLastClipboardRegions().remove(player.getUniqueId());
+                } else {
+                    plugin.getLastClipboardRegions().put(player.getUniqueId(), currentClipboard);
                 }
 
                 plugin.getServer().getPluginManager().callEvent(new WorldEditClipboardChangeEvent(player, currentClipboard));
@@ -120,57 +111,56 @@ public class WorldEditHelper extends BukkitRunnable {
 
     public Region getClipboardRegion(final Player player) {
         final LocalSession session = WorldEdit.getInstance().getSessionManager().findByName(player.getName());
-        //final LocalSession session = ((WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit")).getSession(player);
 
         if (session != null) {
             try {
-                ClipboardHolder holder = session.getClipboard();
+                final ClipboardHolder holder = session.getClipboard();
                 if (holder != null) {
-                    Clipboard clipboard = holder.getClipboard();
+                    final Clipboard clipboard = holder.getClipboard();
                     Region region = clipboard.getRegion().clone();
 
-                    BlockVector3 regionOrigin = clipboard.getOrigin();
+                    final BlockVector3 regionOrigin = clipboard.getOrigin();
 
-                    Location location = player.getLocation();
-                    BlockVector3 playerPosition = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+                    final Location location = player.getLocation();
+                    final BlockVector3 playerPosition = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 
-                    BlockVector3 translateVector = playerPosition.subtract(regionOrigin);
+                    final BlockVector3 translateVector = playerPosition.subtract(regionOrigin);
 
                     region.shift(translateVector);
 
                     if (!holder.getTransform().isIdentity()) {
-                        Transform transform = holder.getTransform();
+                        final Transform transform = holder.getTransform();
 
-                        Region toTransform = region.clone();
+                        final Region toTransform = region.clone();
 
-                        Vector3 relativeCenter = toTransform.getCenter().subtract(playerPosition.toVector3());
+                        final Vector3 relativeCenter = toTransform.getCenter().subtract(playerPosition.toVector3());
 
-                        Vector3 normalizeShift = relativeCenter.subtract(toTransform.getCenter());
-                        Vector3 originShift = toTransform.getCenter().subtract(relativeCenter);
+                        final Vector3 normalizeShift = relativeCenter.subtract(toTransform.getCenter());
+                        final Vector3 originShift = toTransform.getCenter().subtract(relativeCenter);
 
                         toTransform.shift(normalizeShift.toBlockPoint());
 
-                        TransformRegion transformRegion = new TransformRegion(toTransform, transform);
+                        final TransformRegion transformRegion = new TransformRegion(toTransform, transform);
 
                         if (region instanceof CuboidRegion) {
                             region = CuboidRegion.makeCuboid(transformRegion);
                             region.shift(originShift.toBlockPoint());
                         } else if (region instanceof CylinderRegion) {
-                            CylinderRegion cylinderRegion = (CylinderRegion) region.clone();
-                            int newMinY;
-                            int newMaxY;
+                            final CylinderRegion cylinderRegion = (CylinderRegion) region.clone();
+                            /*int newMinY;
+                            int newMaxY;*/
 
-                            if (cylinderRegion.getMinimumPoint() != transformRegion.getMinimumPoint() || cylinderRegion.getMaximumPoint() != transformRegion.getMaximumPoint()) {
+                            /*if (cylinderRegion.getMinimumPoint() != transformRegion.getMinimumPoint() || cylinderRegion.getMaximumPoint() != transformRegion.getMaximumPoint()) {
                                 newMinY = cylinderRegion.getMinimumY();
                                 newMaxY = cylinderRegion.getMinimumY();
                             } else {
                                 newMinY = cylinderRegion.getMinimumY();
                                 newMaxY = cylinderRegion.getMaximumY();
-                            }
-                            region = new CylinderRegion(transformRegion.getCenter().toBlockPoint(), cylinderRegion.getRadius(), newMinY, newMaxY);
+                            }*/
+                            region = new CylinderRegion(transformRegion.getCenter().toBlockPoint(), cylinderRegion.getRadius(), cylinderRegion.getMinimumY(), cylinderRegion.getMaximumY());
                             region.shift(originShift.toBlockPoint());
                         } else if (region instanceof EllipsoidRegion) {
-                            EllipsoidRegion ellipsoidRegion = (EllipsoidRegion) region.clone();
+                            final EllipsoidRegion ellipsoidRegion = (EllipsoidRegion) region.clone();
                             ellipsoidRegion.setCenter(transformRegion.getCenter().toBlockPoint());
                             region = ellipsoidRegion;
                             region.shift(originShift.toBlockPoint());
@@ -188,7 +178,7 @@ public class WorldEditHelper extends BukkitRunnable {
                     }*/
 
                     if (region.getWorld() == null) {
-                        BukkitPlayer localPlayer = ((WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit")).wrapPlayer(player);
+                        final BukkitPlayer localPlayer = ((WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit")).wrapPlayer(player);
                         region.setWorld(localPlayer.getWorld());
                     }
 
@@ -213,12 +203,12 @@ public class WorldEditHelper extends BukkitRunnable {
             return false;
         }
 
-        Iterator<?> regionIterator1 = region1.iterator();
-        Iterator<?> regionIterator2 = region2.iterator();
-
         if (region1.getCenter() == region2.getCenter()) {
             return false;
         }
+
+        Iterator<?> regionIterator1 = region1.iterator();
+        Iterator<?> regionIterator2 = region2.iterator();
 
         while (regionIterator1.hasNext()) {
             if (!regionIterator2.hasNext() || !regionIterator1.next().equals(regionIterator2.next())) {

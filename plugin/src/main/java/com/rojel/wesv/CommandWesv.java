@@ -1,15 +1,11 @@
 package com.rojel.wesv;
 
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.worldedit.util.io.file.FilenameResolutionException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +13,9 @@ import java.util.List;
 public class CommandWesv implements TabExecutor {
 
     private WorldEditSelectionVisualizer plugin;
+
+    static final String RELOAD_CONFIG = "wesv.reloadconfig";
+    static final String WORLDEDIT_SELECTION = "worldedit.selection.*";
 
     public CommandWesv(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
@@ -49,10 +48,10 @@ public class CommandWesv implements TabExecutor {
             } else {
                 sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());
             }
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission("wesv.reloadconfig")) {
+        } else if (args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission(RELOAD_CONFIG)) {
             plugin.getCustomConfig().reloadConfig(true);
             sender.sendMessage(plugin.getCustomConfig().getConfigReloaded());
-        } else if (args.length == 1 && sender.hasPermission("worldedit.selection.*") && args[0].equalsIgnoreCase("showForAllPlayers")) {
+        } else if (args.length == 1 && sender.hasPermission(WORLDEDIT_SELECTION) && args[0].equalsIgnoreCase("showForAllPlayers")) {
             if(sender instanceof Player) {
                 final Player player = (Player) sender;
 
@@ -67,7 +66,7 @@ public class CommandWesv implements TabExecutor {
             if(sender instanceof Player) {
                 final Player player = (Player) sender;
 
-                if (args[0].equalsIgnoreCase("showForAllPlayers") && sender.hasPermission("worldedit.selection.*")) {
+                if (args[0].equalsIgnoreCase("showForAllPlayers") && sender.hasPermission(WORLDEDIT_SELECTION)) {
                         if (args[1].equalsIgnoreCase("enable") || args[1].equalsIgnoreCase("true")) {
                             plugin.getCustomConfig().setShowForAllPlayersEnabled(true);
                             player.sendMessage(ChatColor.GREEN  + "showForAllPlayers enabled");
@@ -87,16 +86,16 @@ public class CommandWesv implements TabExecutor {
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         if (args.length == 1) {
             ArrayList<String> arrayList = new ArrayList<>();
-            if (sender.hasPermission("wesv.reloadconfig")) {
+            if (sender.hasPermission(RELOAD_CONFIG)) {
                 arrayList.add("reload");
             }
-            if (sender.hasPermission("worldedit.selection.*")) {
+            if (sender.hasPermission(WORLDEDIT_SELECTION)) {
                 arrayList.add("showForAllPlayers");
             }
             return arrayList;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("showForAllPlayers")) {
             ArrayList<String> arrayList = new ArrayList<>();
-            if (sender.hasPermission("worldedit.selection.*")) {
+            if (sender.hasPermission(WORLDEDIT_SELECTION)) {
                 arrayList.add("enable");
                 arrayList.add("disable");
             }
