@@ -14,8 +14,8 @@ public class CommandWesv implements TabExecutor {
 
     private WorldEditSelectionVisualizer plugin;
 
-    static final String RELOAD_CONFIG = "wesv.reloadconfig";
-    static final String WORLDEDIT_SELECTION = "worldedit.selection.*";
+    private static final String RELOAD_CONFIG = "wesv.reloadconfig";
+    private static final String WORLDEDIT_SELECTION = "worldedit.selection.*";
 
     public CommandWesv(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
