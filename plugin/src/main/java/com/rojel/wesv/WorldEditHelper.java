@@ -4,6 +4,7 @@ import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseItem;
 import com.sk89q.worldedit.blocks.BaseItemStack;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector2;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -119,6 +120,7 @@ public class WorldEditHelper extends BukkitRunnable {
 
     public Region getClipboardRegion(final Player player) {
         final LocalSession session = WorldEdit.getInstance().getSessionManager().findByName(player.getName());
+        //final LocalSession session = ((WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit")).getSession(player);
 
         if (session != null) {
             try {
@@ -177,7 +179,18 @@ public class WorldEditHelper extends BukkitRunnable {
                         }
                     }
 
-                    region.setWorld(clipboard.getRegion().getWorld());
+/*                    if (region == null) {
+                        player.sendMessage("Region null");
+                    } else if (region.getWorld() != null) {
+                        player.sendMessage("Clipboard region world: " + region.getWorld().getName());
+                    } else {
+                        player.sendMessage("Clipboard region world: null");
+                    }*/
+
+                    if (region.getWorld() == null) {
+                        BukkitPlayer localPlayer = ((WorldEditPlugin) plugin.getServer().getPluginManager().getPlugin("WorldEdit")).wrapPlayer(player);
+                        region.setWorld(localPlayer.getWorld());
+                    }
 
                     return region;
                 }

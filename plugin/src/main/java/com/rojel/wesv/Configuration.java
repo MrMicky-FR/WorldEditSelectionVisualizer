@@ -81,6 +81,8 @@ public class Configuration {
          */
         CHECK_FOR_AXE("checkForAxe", false, boolean.class),
 
+        SHOW_FOR_ALL_PLAYERS("showForAllPlayers", false, boolean.class),
+
         PARTICLE_TYPE("particleEffect", ParticleType.REDSTONE, ParticleType.class),
         CLIPBOARD_PARTICLE_TYPE("clipboardParticleEffect", ParticleType.VILLAGER_HAPPY, ParticleType.class),
         /**
@@ -341,6 +343,13 @@ public class Configuration {
     }
 
     /**
+     * Sets the "particle" property value.
+     */
+    public void setParticle(ParticleType var) {
+        configItems.put(ConfigValue.PARTICLE_TYPE, var);
+    }
+
+    /**
      * Retrieves the "particleClipboard" property value.
      *
      * @return Returns the "particleClipboard" property value.
@@ -350,12 +359,26 @@ public class Configuration {
     }
 
     /**
-     * Retrieves the "gapBetweenPoints" property value.
+     * Sets the "particleClipboard" property value.
+     */
+    public void setClipboardParticle(ParticleType var) {
+        configItems.put(ConfigValue.CLIPBOARD_PARTICLE_TYPE, var);
+    }
+
+    /**
+     * Retrieves the "updateChecker" property value.
      *
-     * @return Returns the "gapBetweenPoints" property value.
+     * @return Returns the "updateChecker" property value.
      */
     public boolean isUpdateCheckerEnabled() {
         return (boolean) configItems.get(ConfigValue.UPDATE_CHECKER);
+    }
+
+    /**
+     * Sets the "updateChecker" property value.
+     */
+    public void setUpdateCheckerEnabled(boolean var) {
+        configItems.put(ConfigValue.UPDATE_CHECKER, var);
     }
 
     /**
@@ -368,12 +391,26 @@ public class Configuration {
     }
 
     /**
+     * Sets the "gapBetweenPoints" property value.
+     */
+    public void setGapBetweenPoints(double var) {
+        configItems.put(ConfigValue.GAP_BETWEEN_POINTS, var);
+    }
+
+    /**
      * Retrieves the "verticalGap" property value.
      *
      * @return Returns the "verticalGap" property value.
      */
     public double getVerticalGap() {
         return (double) configItems.get(ConfigValue.VERTICAL_GAP);
+    }
+
+    /**
+     * Sets the "verticalGap" property value.
+     */
+    public void setVerticalGap(double var) {
+        configItems.put(ConfigValue.VERTICAL_GAP, var);
     }
 
     /**
@@ -386,12 +423,26 @@ public class Configuration {
     }
 
     /**
+     * Sets the "updateParticlesInterval" property value.
+     */
+    public void setUpdateParticlesInterval(int var) {
+        configItems.put(ConfigValue.UPDATE_PARTICLES_INTERVAL, var);
+    }
+
+    /**
      * Retrieves the "updateParticlesInterval" property value.
      *
      * @return Returns the "updateParticlesInterval" property value.
      */
     public int getUpdateClipboardParticlesInterval() {
         return (int) configItems.get(ConfigValue.UPDATE_PARTICLES_INTERVAL);
+    }
+
+    /**
+     * Sets the "updateParticlesInterval" property value.
+     */
+    public void setUpdateClipboardParticlesInterval(int var) {
+        configItems.put(ConfigValue.UPDATE_PARTICLES_INTERVAL, var);
     }
 
     /**
@@ -404,12 +455,26 @@ public class Configuration {
     }
 
     /**
+     * Sets the "updateSelectionInterval" property value.
+     */
+    public void setUpdateSelectionInterval(int var) {
+        configItems.put(ConfigValue.UPDATE_SELECTION_INTERVAL, var);
+    }
+
+    /**
      * Retrieves the "cuboidLines" property value.
      *
      * @return Returns the "cuboidLines" property value.
      */
     public boolean isCuboidLinesEnabled() {
         return (boolean) configItems.get(ConfigValue.CUBOID_LINES);
+    }
+
+    /**
+     * Sets the "cuboidLines" property value.
+     */
+    public void setCuboidLinesEnabled(boolean var) {
+        configItems.put(ConfigValue.CUBOID_LINES, var);
     }
 
     /**
@@ -422,12 +487,26 @@ public class Configuration {
     }
 
     /**
+     * Sets the "polygonLines" property value.
+     */
+    public void setPolygonLinesEnabled(boolean var) {
+        configItems.put(ConfigValue.POLYGON_LINES, var);
+    }
+
+    /**
      * Retrieves the "cylinderLines" property value.
      *
      * @return Returns the "cylinderLines" property value.
      */
     public boolean isCylinderLinesEnabled() {
         return (boolean) configItems.get(ConfigValue.CYLINDER_LINES);
+    }
+
+    /**
+     * Sets the "cylinderLines" property value.
+     */
+    public void setCylinderLinesEnabled(boolean var) {
+        configItems.put(ConfigValue.CYLINDER_LINES, var);
     }
 
     /**
@@ -439,12 +518,43 @@ public class Configuration {
         return (boolean) configItems.get(ConfigValue.ELLIPSOID_LINES);
     }
 
+    /**
+     * Sets the "ellipsoidLines" property value.
+     */
+    public void setEllipsoidLinesEnabled(boolean var) {
+        configItems.put(ConfigValue.ELLIPSOID_LINES, var);
+    }
+
+    /**
+     * Retrieves the "topAndBottomForCuboid" property value.
+     *
+     * @return Returns the "topAndBottomForCuboid" property value.
+     */
     public boolean isCuboidTopAndBottomEnabled() {
         return (boolean) configItems.get(ConfigValue.CUBOID_TOP_BOTTOM);
     }
 
+    /**
+     * Sets the "topAndBottomForCuboid" property value.
+     */
+    public void setCuboidTopAndBottomEnabled(boolean var) {
+        configItems.put(ConfigValue.CUBOID_TOP_BOTTOM, var);
+    }
+
+    /**
+     * Retrieves the "topAndBottomForCylinder" property value.
+     *
+     * @return Returns the "topAndBottomForCylinder" property value.
+     */
     public boolean isCylinderTopAndBottomEnabled() {
         return (boolean) configItems.get(ConfigValue.CYLINDER_TOP_BOTTOM);
+    }
+
+    /**
+     * Sets the "topAndBottomForCylinder" property value.
+     */
+    public void setCylinderTopAndBottomEnabled(boolean var) {
+        configItems.put(ConfigValue.CYLINDER_TOP_BOTTOM, var);
     }
 
     /**
@@ -457,12 +567,42 @@ public class Configuration {
     }
 
     /**
+     * Sets the "checkForAxe" property value.
+     */
+    public void setCheckForAxeEnabled(boolean var) {
+        configItems.put(ConfigValue.CHECK_FOR_AXE, var);
+    }
+
+    /**
+     * Retrieves the "showForAllPlayers" property value.
+     *
+     * @return Returns the "showForAllPlayers" property value.
+     */
+    public boolean isShowForAllPlayersEnabled() {
+        return (boolean) configItems.get(ConfigValue.SHOW_FOR_ALL_PLAYERS);
+    }
+
+    /**
+     * Sets the "showForAllPlayers" property value.
+     */
+    public void setShowForAllPlayersEnabled(boolean var) {
+        configItems.put(ConfigValue.SHOW_FOR_ALL_PLAYERS, var);
+    }
+
+    /**
      * Retrieves the "particleDistance" property value.
      *
      * @return Returns the "particleDistance" property value.
      */
     public int getParticleDistance() {
         return (int) configItems.get(ConfigValue.PARTICLE_DISTANCE);
+    }
+
+    /**
+     * Sets the "particleDistance" property value.
+     */
+    public void setParticleDsettance(int var) {
+        configItems.put(ConfigValue.PARTICLE_DISTANCE, var);
     }
 
     /**
@@ -475,12 +615,26 @@ public class Configuration {
     }
 
     /**
+     * Sets the "maxSize" property value.
+     */
+    public void setMaxSize(int var) {
+        configItems.put(ConfigValue.MAX_SIZE, var);
+    }
+
+    /**
      * Retrieves translation for the "langVisualizerEnabled" text.
      *
      * @return Translation of "langVisualizerEnabled".
      */
     public String getLangVisualizerEnabled() {
         return (String) configItems.get(ConfigValue.LANG_VISUALIZER_ENABLED);
+    }
+
+    /**
+     * Sets translation for the "langVisualizerEnabled" text.
+     */
+    public void setLangVsetualizerEnabled(String var) {
+        configItems.put(ConfigValue.LANG_VISUALIZER_ENABLED, var);
     }
 
     /**
@@ -493,12 +647,26 @@ public class Configuration {
     }
 
     /**
+     * Sets translation for the "visualizerDisabled" text.
+     */
+    public void setLangVsetualizerDsetabled(String var) {
+        configItems.put(ConfigValue.LANG_VISUALIZER_DISABLED, var);
+    }
+
+    /**
      * Retrieves translation for the "playersOnly" text.
      *
      * @return Translation of "playersOnly".
      */
     public String getLangPlayersOnly() {
         return (String) configItems.get(ConfigValue.LANG_PLAYERS_ONLY);
+    }
+
+    /**
+     * Sets translation for the "playersOnly" text.
+     */
+    public void setLangPlayersOnly(String var) {
+        configItems.put(ConfigValue.LANG_PLAYERS_ONLY, var);
     }
 
     /**
@@ -511,12 +679,26 @@ public class Configuration {
     }
 
     /**
+     * Sets translation for the "maxSelection" text.
+     */
+    public void setLangMaxSelection(String var) {
+        configItems.put(ConfigValue.LANG_MAX_SELECTION, var);
+    }
+
+    /**
      * Retrieves translation for the "maxSelection" text.
      *
      * @return Translation of "maxSelection".
      */
     public String getLangNoPermission() {
         return (String) configItems.get(ConfigValue.LANG_NO_PERMISSION);
+    }
+
+    /**
+     * Sets translation for the "maxSelection" text.
+     */
+    public void setLangNoPermsetsion(String var) {
+        configItems.put(ConfigValue.LANG_NO_PERMISSION, var);
     }
 
     /**
@@ -528,16 +710,58 @@ public class Configuration {
         return (String) configItems.get(ConfigValue.LANG_CONFIGRELOADED);
     }
 
-    // TODO JavaDoc
+    /**
+     * Sets translation for the "configReloaded" text.
+     */
+    public void setConfigReloaded(String var) {
+        configItems.put(ConfigValue.LANG_CONFIGRELOADED, var);
+    }
+
+    /**
+     * Retrieves the "particleFadeDelay" property value.
+     *
+     * @return Returns the "particleFadeDelay" property value.
+     */
     public int getParticleFadeDelay() {
         return (int) configItems.get(ConfigValue.FADE_DELAY);
     }
 
+    /**
+     * Sets the "particleFadeDelay" property value.
+     */
+    public void setParticleFadeDelay(int var) {
+        configItems.put(ConfigValue.FADE_DELAY, var);
+    }
+
+    /**
+     * Retrieves the "particleData" property value.
+     *
+     * @return Returns the "particleData" property value.
+     */
     public Object getParticleData() {
         return configItems.get(ConfigValue.PARTICLE_DATA);
     }
 
+    /**
+     * Sets the "particleData" property value.
+     */
+    public void setParticleData(Object var) {
+        configItems.put(ConfigValue.PARTICLE_DATA, var);
+    }
+
+    /**
+     * Retrieves the "clipboardParticleData" property value.
+     *
+     * @return Returns the "clipboardParticleData" property value.
+     */
     public Object getClipboardParticleData() {
         return configItems.get(ConfigValue.CLIPBOARD_PARTICLE_DATA);
+    }
+
+    /**
+     * Sets the "clipboardParticleData" property value.
+     */
+    public void setClipboardParticleData(Object var) {
+        configItems.put(ConfigValue.CLIPBOARD_PARTICLE_DATA, var);
     }
 }

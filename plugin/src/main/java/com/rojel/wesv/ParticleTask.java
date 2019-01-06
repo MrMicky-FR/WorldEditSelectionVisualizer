@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.NumberConversions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ParticleTask extends BukkitRunnable {
@@ -22,6 +23,9 @@ public class ParticleTask extends BukkitRunnable {
     @Override
     public void run() {
         final int particleDistance = plugin.getCustomConfig().getParticleDistance();
+
+        ArrayList<Collection<ImmutableVector>> allParticles = new ArrayList<>();
+
         for (final Player player : plugin.getServer().getOnlinePlayers()) {
             final Location loc = player.getLocation();
 
@@ -32,16 +36,38 @@ public class ParticleTask extends BukkitRunnable {
                 continue;
             }
 
-            for (final ImmutableVector vec : vectors) {
-                if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
-                    continue;
+            if (plugin.getCustomConfig().isShowForAllPlayersEnabled()) {
+                allParticles.add(vectors);
+            } else {
+                for (final ImmutableVector vec : vectors) {
+                    if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
+                        continue;
+                    }
+
+                    final ParticleType particle = plugin.getCustomConfig().getParticle();
+                    final Object particleData = plugin.getCustomConfig().getParticleData();
+
+                    FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
                 }
+            }
+        }
 
-                final ParticleType particle = plugin.getCustomConfig().getParticle();
-                final Object particleData = plugin.getCustomConfig().getParticleData();
+        if (plugin.getCustomConfig().isShowForAllPlayersEnabled() && allParticles != null && !allParticles.isEmpty()) {
+            for (final Player player : plugin.getServer().getOnlinePlayers()) {
+                final Location loc = player.getLocation();
 
-                //TODO: create Option to spawn Particles for all players
-                FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
+                for (Collection<ImmutableVector> vectors : allParticles) {
+                    for (final ImmutableVector vec : vectors) {
+                        if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
+                            continue;
+                        }
+
+                        final ParticleType particle = plugin.getCustomConfig().getParticle();
+                        final Object particleData = plugin.getCustomConfig().getParticleData();
+
+                        FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
+                    }
+                }
             }
         }
     }

@@ -18,3 +18,6 @@
 log/
 target/
 dependency-reduced-pom.xml
+
+# Own schematics loader (not used currently but can be useful later; ugly as hell)
+plugin/src/main/java/com/rojel/wesv/SchematicsHandler.txt

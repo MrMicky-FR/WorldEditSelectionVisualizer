@@ -9,6 +9,7 @@ updateChecker: true
 particleDistance: 32
 maxSize: 10000
 checkForAxe: false
+showForAllPlayers: false
 particleEffect: REDSTONE
 clipboardParticleEffect: FLAME
 particleData: "255,0,0"
