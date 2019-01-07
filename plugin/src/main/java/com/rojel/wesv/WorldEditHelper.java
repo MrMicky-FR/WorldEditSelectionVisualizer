@@ -133,81 +133,7 @@ public class WorldEditHelper extends BukkitRunnable {
                     if (!holder.getTransform().isIdentity()) {
                         final Transform transform = holder.getTransform();
 
-                        BlockVector3 origCenter = region.getCenter().toBlockPoint();
-                        BlockVector3 origMinimumPoint = region.getMinimumPoint();
-                        BlockVector3 origMaximumPoint = region.getMaximumPoint();
-
-                        BlockVector3 newCenter = null;
-                        BlockVector3 newMinimumPoint = null;
-                        BlockVector3 newMaximumPoint = null;
-
-                        if (origCenter != null) {
-                            newCenter = origCenter.subtract(playerPosition);
-                            newCenter = transform.apply(newCenter.toVector3()).toBlockPoint();
-                            newCenter = newCenter.add(playerPosition);
-                        }
-
-                        if (origMinimumPoint != null) {
-                            newMinimumPoint = origMinimumPoint.subtract(playerPosition);
-                            newMinimumPoint = transform.apply(newMinimumPoint.toVector3()).toBlockPoint();
-                            newMinimumPoint = newMinimumPoint.add(playerPosition);
-                        }
-
-                        if (origMaximumPoint != null) {
-                            newMaximumPoint = origMaximumPoint.subtract(playerPosition);
-                            newMaximumPoint = transform.apply(newMaximumPoint.toVector3()).toBlockPoint();
-                            newMaximumPoint = newMaximumPoint.add(playerPosition);
-                        }
-
-                        if (region instanceof CuboidRegion) {
-                            region = new CuboidRegion(newMinimumPoint, newMaximumPoint);
-                        } else if (region instanceof CylinderRegion) {
-                            if (newMinimumPoint.getY() > newMaximumPoint.getY()) {
-                                BlockVector3 temp = newMinimumPoint;
-                                newMinimumPoint = newMaximumPoint;
-                                newMaximumPoint = temp;
-                            }
-
-                            region = new CylinderRegion(newCenter, ((CylinderRegion) region).getRadius(), newMinimumPoint.getY(), newMaximumPoint.getY());
-                        } else if (region instanceof EllipsoidRegion) {
-                            final EllipsoidRegion ellipsoidRegion = (EllipsoidRegion) region.clone();
-                            Vector3 normTransform = transform.apply(Vector3.at(1,1,1));
-                            if (normTransform.getX() * normTransform.getZ() < 0) {
-                                ellipsoidRegion.setRadius(Vector3.at(ellipsoidRegion.getRadius().getZ(), ellipsoidRegion.getRadius().getY(), ellipsoidRegion.getRadius().getX()));
-                            }
-                            ellipsoidRegion.setCenter(newCenter);
-                            region = ellipsoidRegion;
-                        } else if (region instanceof Polygonal2DRegion){
-                            final Polygonal2DRegion polygonal2DRegion = (Polygonal2DRegion) region.clone();
-
-                            List<BlockVector2> polygonPoints = polygonal2DRegion.getPoints();
-                            List<BlockVector2> newPolygonPoints = new ArrayList<>();
-
-                            for (BlockVector2 vector : polygonPoints) {
-                                BlockVector2 newVector = vector.subtract(playerPosition.toBlockVector2());
-                                newVector = transform.apply(newVector.toVector3()).toVector2().toBlockPoint();
-                                newVector = newVector.add(playerPosition.toBlockVector2());
-                                newPolygonPoints.add(newVector);
-                            }
-
-                            region = new Polygonal2DRegion(null, newPolygonPoints, newMinimumPoint.getY(), newMaximumPoint.getY());
-                        } else if (region instanceof ConvexPolyhedralRegion){
-                            ConvexPolyhedralRegion convexPolyhedralRegion = (ConvexPolyhedralRegion) region.clone();
-
-                            Collection<BlockVector3> vertices = convexPolyhedralRegion.getVertices();
-
-                            convexPolyhedralRegion = new ConvexPolyhedralRegion(convexPolyhedralRegion.getWorld());
-
-                            for (BlockVector3 vertex : vertices) {
-                                BlockVector3 newVector = vertex.subtract(playerPosition);
-                                newVector = transform.apply(newVector.toVector3()).toBlockPoint();
-                                newVector = newVector.add(playerPosition);
-                                convexPolyhedralRegion.addVertex(newVector);
-                            }
-
-                            region = convexPolyhedralRegion;
-                        } else {
-                        }
+                        region = transformClipboardRegion(region, transform, playerPosition);
                     }
 
                     if (region.getWorld() == null) {
@@ -225,6 +151,86 @@ public class WorldEditHelper extends BukkitRunnable {
             }
         }
         return null;
+    }
+
+    public Region transformClipboardRegion(Region region, Transform transform, BlockVector3 playerPosition) {
+        Region transformedRegion = null;
+
+        BlockVector3 origCenter = region.getCenter().toBlockPoint();
+        BlockVector3 origMinimumPoint = region.getMinimumPoint();
+        BlockVector3 origMaximumPoint = region.getMaximumPoint();
+
+        BlockVector3 newCenter = null;
+        BlockVector3 newMinimumPoint = null;
+        BlockVector3 newMaximumPoint = null;
+
+        if (origCenter != null) {
+            newCenter = origCenter.subtract(playerPosition);
+            newCenter = transform.apply(newCenter.toVector3()).toBlockPoint();
+            newCenter = newCenter.add(playerPosition);
+        }
+
+        if (origMinimumPoint != null) {
+            newMinimumPoint = origMinimumPoint.subtract(playerPosition);
+            newMinimumPoint = transform.apply(newMinimumPoint.toVector3()).toBlockPoint();
+            newMinimumPoint = newMinimumPoint.add(playerPosition);
+        }
+
+        if (origMaximumPoint != null) {
+            newMaximumPoint = origMaximumPoint.subtract(playerPosition);
+            newMaximumPoint = transform.apply(newMaximumPoint.toVector3()).toBlockPoint();
+            newMaximumPoint = newMaximumPoint.add(playerPosition);
+        }
+
+        if (region instanceof CuboidRegion) {
+            transformedRegion = new CuboidRegion(newMinimumPoint, newMaximumPoint);
+        } else if (region instanceof CylinderRegion) {
+            if (newMinimumPoint.getY() > newMaximumPoint.getY()) {
+                BlockVector3 temp = newMinimumPoint;
+                newMinimumPoint = newMaximumPoint;
+                newMaximumPoint = temp;
+            }
+
+            transformedRegion = new CylinderRegion(newCenter, ((CylinderRegion) region).getRadius(), newMinimumPoint.getY(), newMaximumPoint.getY());
+        } else if (region instanceof EllipsoidRegion) {
+            final EllipsoidRegion ellipsoidRegion = (EllipsoidRegion) region.clone();
+            Vector3 normTransform = transform.apply(Vector3.at(1,1,1));
+            if (normTransform.getX() * normTransform.getZ() < 0) {
+                ellipsoidRegion.setRadius(Vector3.at(ellipsoidRegion.getRadius().getZ(), ellipsoidRegion.getRadius().getY(), ellipsoidRegion.getRadius().getX()));
+            }
+            ellipsoidRegion.setCenter(newCenter);
+            transformedRegion = ellipsoidRegion;
+        } else if (region instanceof Polygonal2DRegion){
+            final Polygonal2DRegion polygonal2DRegion = (Polygonal2DRegion) region.clone();
+
+            List<BlockVector2> polygonPoints = polygonal2DRegion.getPoints();
+            List<BlockVector2> newPolygonPoints = new ArrayList<>();
+
+            for (BlockVector2 vector : polygonPoints) {
+                BlockVector2 newVector = vector.subtract(playerPosition.toBlockVector2());
+                newVector = transform.apply(newVector.toVector3()).toVector2().toBlockPoint();
+                newVector = newVector.add(playerPosition.toBlockVector2());
+                newPolygonPoints.add(newVector);
+            }
+
+            transformedRegion = new Polygonal2DRegion(null, newPolygonPoints, newMinimumPoint.getY(), newMaximumPoint.getY());
+        } else if (region instanceof ConvexPolyhedralRegion){
+            ConvexPolyhedralRegion convexPolyhedralRegion = (ConvexPolyhedralRegion) region.clone();
+
+            Collection<BlockVector3> vertices = convexPolyhedralRegion.getVertices();
+
+            convexPolyhedralRegion = new ConvexPolyhedralRegion(convexPolyhedralRegion.getWorld());
+
+            for (BlockVector3 vertex : vertices) {
+                BlockVector3 newVector = vertex.subtract(playerPosition);
+                newVector = transform.apply(newVector.toVector3()).toBlockPoint();
+                newVector = newVector.add(playerPosition);
+                convexPolyhedralRegion.addVertex(newVector);
+            }
+
+            transformedRegion = convexPolyhedralRegion;
+        }
+        return transformedRegion;
     }
 
     public boolean compareRegion(final Region region1, final Region region2) {
