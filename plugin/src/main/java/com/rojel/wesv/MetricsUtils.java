@@ -1,5 +1,6 @@
 package com.rojel.wesv;
 
+import com.rojel.wesv.config.Configuration;
 import org.bstats.bukkit.Metrics;
 
 import java.util.concurrent.Callable;

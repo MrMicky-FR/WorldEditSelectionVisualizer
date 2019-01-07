@@ -1,4 +1,4 @@
-package com.rojel.wesv;
+package com.rojel.wesv.event;
 
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.entity.Player;
@@ -6,13 +6,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * A custom "WorldEditSelectionChange" Bukkit event class.
+ * A custom "WorldEditClipboardChange" Bukkit event class.
  *
  * @author rojel
  * @author Martin Ambrus
  * @since 1.0a
  */
-public class WorldEditSelectionChangeEvent extends Event {
+public class WorldEditClipboardChangeEvent extends Event {
 
     /**
      * A list of all handlers that listen for this event.
@@ -30,12 +30,14 @@ public class WorldEditSelectionChangeEvent extends Event {
     private final Region region;
 
     /**
-     * Constructor. Creates a new custom "WorldEditSelectionChange" event.
+     * Constructor. Creates a new custom "WorldEditClipboardChange" event.
      *
      * @param player The player for who to listen to this event.
      * @param region The region in which to listen to this event.
      */
-    public WorldEditSelectionChangeEvent(final Player player, final Region region) {
+    public WorldEditClipboardChangeEvent(final Player player, final Region region) {
+        super();
+
         this.player = player;
         this.region = region;
     }

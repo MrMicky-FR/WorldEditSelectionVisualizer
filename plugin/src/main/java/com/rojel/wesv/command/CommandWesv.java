@@ -1,5 +1,6 @@
-package com.rojel.wesv;
+package com.rojel.wesv.command;
 
+import com.rojel.wesv.WorldEditSelectionVisualizer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -48,32 +49,26 @@ public class CommandWesv implements TabExecutor {
             } else {
                 sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());
             }
-        } else if (args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission(RELOAD_CONFIG)) {
+        } else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission(RELOAD_CONFIG)) {
             plugin.getCustomConfig().reloadConfig(true);
             sender.sendMessage(plugin.getCustomConfig().getConfigReloaded());
-        } else if (args.length == 1 && sender.hasPermission(WORLDEDIT_SELECTION) && args[0].equalsIgnoreCase("showForAllPlayers")) {
-            if(sender instanceof Player) {
+        } else if (sender.hasPermission(WORLDEDIT_SELECTION) && args[0].equalsIgnoreCase("showForAllPlayers")) {
+            if (sender instanceof Player) {
                 final Player player = (Player) sender;
 
-                plugin.getCustomConfig().setShowForAllPlayersEnabled(!plugin.getCustomConfig().isShowForAllPlayersEnabled());
-                player.sendMessage((plugin.getCustomConfig().isShowForAllPlayersEnabled() ? ChatColor.GREEN : ChatColor.RED)
-                        + "showForAllPlayers "
-                        + (plugin.getCustomConfig().isShowForAllPlayersEnabled() ? "enabled" : "disabled"));
-            } else {
-                sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());
-            }
-        } else if (args.length == 2) {
-            if(sender instanceof Player) {
-                final Player player = (Player) sender;
-
-                if (args[0].equalsIgnoreCase("showForAllPlayers") && sender.hasPermission(WORLDEDIT_SELECTION)) {
-                        if (args[1].equalsIgnoreCase("enable") || args[1].equalsIgnoreCase("true")) {
-                            plugin.getCustomConfig().setShowForAllPlayersEnabled(true);
-                            player.sendMessage(ChatColor.GREEN  + "showForAllPlayers enabled");
-                        } else if (args[1].equalsIgnoreCase("disable") || args[1].equalsIgnoreCase("false")) {
-                            plugin.getCustomConfig().setShowForAllPlayersEnabled(false);
-                            player.sendMessage(ChatColor.RED + "showForAllPlayers disabled");
-                        }
+                if (args.length > 1) {
+                    if (args[1].equalsIgnoreCase("enable") || args[1].equalsIgnoreCase("true")) {
+                        plugin.getCustomConfig().setShowForAllPlayersEnabled(true);
+                        player.sendMessage(ChatColor.GREEN + "showForAllPlayers enabled");
+                    } else if (args[1].equalsIgnoreCase("disable") || args[1].equalsIgnoreCase("false")) {
+                        plugin.getCustomConfig().setShowForAllPlayersEnabled(false);
+                        player.sendMessage(ChatColor.RED + "showForAllPlayers disabled");
+                    }
+                } else {
+                    plugin.getCustomConfig().setShowForAllPlayersEnabled(!plugin.getCustomConfig().isShowForAllPlayersEnabled());
+                    player.sendMessage((plugin.getCustomConfig().isShowForAllPlayersEnabled() ? ChatColor.GREEN : ChatColor.RED)
+                            + "showForAllPlayers "
+                            + (plugin.getCustomConfig().isShowForAllPlayersEnabled() ? "enabled" : "disabled"));
                 }
             } else {
                 sender.sendMessage(plugin.getCustomConfig().getLangPlayersOnly());
@@ -85,7 +80,7 @@ public class CommandWesv implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         if (args.length == 1) {
-            ArrayList<String> arrayList = new ArrayList<>();
+            final ArrayList<String> arrayList = new ArrayList<>();
             if (sender.hasPermission(RELOAD_CONFIG)) {
                 arrayList.add("reload");
             }

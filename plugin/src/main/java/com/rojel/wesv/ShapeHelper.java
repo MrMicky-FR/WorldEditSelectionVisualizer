@@ -3,6 +3,7 @@ package com.rojel.wesv;
 import com.boydti.fawe.object.regions.FuzzyRegion;
 import com.boydti.fawe.object.regions.PolyhedralRegion;
 import com.boydti.fawe.object.regions.Triangle;
+import com.rojel.wesv.config.Configuration;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.regions.*;
 

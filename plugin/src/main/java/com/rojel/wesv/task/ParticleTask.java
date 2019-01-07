@@ -1,5 +1,7 @@
-package com.rojel.wesv;
+package com.rojel.wesv.task;
 
+import com.rojel.wesv.ImmutableVector;
+import com.rojel.wesv.WorldEditSelectionVisualizer;
 import fr.mrmicky.fastparticle.FastParticle;
 import fr.mrmicky.fastparticle.ParticleType;
 import org.bukkit.Location;
@@ -15,6 +17,8 @@ public class ParticleTask extends BukkitRunnable {
     private final WorldEditSelectionVisualizer plugin;
 
     public ParticleTask(final WorldEditSelectionVisualizer plugin) {
+        super();
+
         this.plugin = plugin;
 
         runTaskTimer(plugin, 1, plugin.getCustomConfig().getUpdateParticlesInterval());

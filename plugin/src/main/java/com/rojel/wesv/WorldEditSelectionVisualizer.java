@@ -1,5 +1,11 @@
 package com.rojel.wesv;
 
+import com.rojel.wesv.command.CommandWesv;
+import com.rojel.wesv.config.Configuration;
+import com.rojel.wesv.config.StorageManager;
+import com.rojel.wesv.listener.WesvListener;
+import com.rojel.wesv.task.ClipboardParticleTask;
+import com.rojel.wesv.task.ParticleTask;
 import com.rojel.wesv.v6.RegionWrapper6;
 import com.rojel.wesv.v7.RegionWrapper7;
 import com.sk89q.worldedit.regions.Region;
@@ -28,7 +34,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     private final Map<UUID, Integer> fadeOutTasks = new HashMap<>();
     private final Map<UUID, Integer> fadeOutClipboardTasks = new HashMap<>();
     private final Map<UUID, Collection<ImmutableVector>> playerParticleMap = new HashMap<>();
-    private final Map<UUID, Collection<ImmutableVector>> playerClipboardParticleMap = new HashMap<>();
+    private final Map<UUID, Collection<ImmutableVector>> playerClipParticleMap = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -151,7 +157,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
 
     public void hideClipboard(final Player player) {
         clipboardShown.remove(player.getUniqueId());
-        playerClipboardParticleMap.remove(player.getUniqueId());
+        playerClipParticleMap.remove(player.getUniqueId());
         cancelAndRemoveFadeOutClipboardTask(player.getUniqueId());
     }
 
@@ -181,9 +187,9 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         cancelAndRemoveFadeOutClipboardTask(player.getUniqueId());
 
         if (vectors == null || vectors.isEmpty()) {
-            playerClipboardParticleMap.remove(player.getUniqueId());
+            playerClipParticleMap.remove(player.getUniqueId());
         } else {
-            playerClipboardParticleMap.put(player.getUniqueId(), vectors);
+            playerClipParticleMap.put(player.getUniqueId(), vectors);
 
             final int fade = config.getParticleFadeDelay();
 
@@ -191,7 +197,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
                 final int id = getServer().getScheduler().runTaskLater(this, () -> {
 
                     fadeOutClipboardTasks.remove(player.getUniqueId());
-                    playerClipboardParticleMap.remove(player.getUniqueId());
+                    playerClipParticleMap.remove(player.getUniqueId());
                 }, fade).getTaskId();
 
                 fadeOutClipboardTasks.put(player.getUniqueId(), id);
@@ -228,7 +234,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         lastSelectedRegions.remove(uuid);
         lastClipboardRegions.remove(uuid);
         playerParticleMap.remove(uuid);
-        playerClipboardParticleMap.remove(uuid);
+        playerClipParticleMap.remove(uuid);
 
         cancelAndRemoveFadeOutTask(uuid);
         cancelAndRemoveFadeOutClipboardTask(uuid);
@@ -263,7 +269,7 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
     }
 
     public Map<UUID, Collection<ImmutableVector>> getPlayerClipboardParticleMap() {
-        return playerClipboardParticleMap;
+        return playerClipParticleMap;
     }
 
     private void checkUpdate() {

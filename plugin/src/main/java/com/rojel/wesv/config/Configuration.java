@@ -1,5 +1,6 @@
-package com.rojel.wesv;
+package com.rojel.wesv.config;
 
+import com.rojel.wesv.WorldEditSelectionVisualizer;
 import fr.mrmicky.fastparticle.ParticleType;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;

@@ -1,5 +1,6 @@
-package com.rojel.wesv;
+package com.rojel.wesv.listener;
 
+import com.rojel.wesv.WorldEditSelectionVisualizer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
