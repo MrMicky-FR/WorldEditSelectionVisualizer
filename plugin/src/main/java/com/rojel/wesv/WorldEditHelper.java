@@ -106,7 +106,7 @@ public class WorldEditHelper extends BukkitRunnable {
                 return false;
             }
         }
-        return true;
+        return !regionIterator2.hasNext();
     }
 
     @SuppressWarnings("deprecation")
