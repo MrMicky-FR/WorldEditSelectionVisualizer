@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wesv-compatibility</artifactId>
         <groupId>com.rojel</groupId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
 
     <artifactId>wesv-compatibility-v6</artifactId>

@@ -4,6 +4,7 @@ authors: [MrMicky, ZathrusWriter, Rojetto]
 description: Visualize your WorldEdit selection with particles and without any mod
 prefix: WESV
 website: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
+api-version: 1.13
 main: com.rojel.wesv.WorldEditSelectionVisualizer
 depend: [WorldEdit]
 softdepend: [FastAsyncWorldEdit]

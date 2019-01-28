@@ -224,24 +224,18 @@ public class Configuration {
         configItems.put(ConfigValue.PARTICLE_DATA, getParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
     }
 
-    /**
-     * Retrieves ParticleType representation of the given name.
-     *
-     * @param name Name of the particle type from config.
-     * @return Returns a ParticleType representation of the given name.
-     */
-    public ParticleType getParticleType(final String name) {
+    private ParticleType getParticleType(final String name) {
         final ParticleType effect = ParticleType.getParticle(name);
         if (effect != null && effect.isCompatibleWithServerVersion()) {
             return effect;
         }
-        plugin.getLogger().warning("The particle effect set in the configuration file is invalid.");
+        plugin.getLogger().warning("The particle effect in the config is invalid.");
         return ParticleType.REDSTONE;
     }
 
-    public Object getParticleData(final String name) {
+    private Object getParticleData(final String name) {
         final ParticleType particle = getParticle();
-        if (particle.getDataType() == Color.class && !name.isEmpty()) {
+        if (particle.getDataType() == Color.class) {
             final String[] split = name.split(",");
             if (split.length == 3) {
                 try {
@@ -254,24 +248,20 @@ public class Configuration {
                     plugin.getLogger().warning("'" + name + "' is not a valid color: " + e.getMessage());
                 }
             }
+            return Color.RED;
         } else if (particle.getDataType() == MaterialData.class) {
-            final Material material = getMaterial(name);
-            if (material != null) {
-                return new MaterialData(material);
-            }
+            return new MaterialData(getMaterial(name, true));
         } else if (particle.getDataType() == ItemStack.class) {
-            final Material material = getMaterial(name);
-            if (material != null) {
-                return new ItemStack(material);
-            }
+            return new ItemStack(getMaterial(name, false));
         }
         return null;
     }
 
-    private Material getMaterial(final String mat) {
+    private Material getMaterial(final String mat, final boolean needBlock) {
         final Material material = Material.matchMaterial(mat);
-        if (material == null) {
-            plugin.getLogger().warning("'" + mat + "' is not a valid material");
+        if (material == null || (needBlock && !material.isBlock())) {
+            plugin.getLogger().warning("'" + mat + "' is not a valid material" + (needBlock ? " or is not a block" : ""));
+            return Material.STONE;
         }
         return material;
     }
