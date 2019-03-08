@@ -30,20 +30,12 @@ public class StorageManager {
 
         playersFile = new File(plugin.getDataFolder(), "players.yml");
 
-        try {
-            if (!playersFile.exists()) {
-                playersFile.createNewFile();
-            }
+        playerConfig = YamlConfiguration.loadConfiguration(playersFile);
 
-            playerConfig = YamlConfiguration.loadConfiguration(playersFile);
-
-            playerConfig.getStringList("disabled-players").stream()
-                    .map(this::parseUUID)
-                    .filter(Objects::nonNull)
-                    .forEach(disabledPlayers::add);
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Error while loading players.yml", e);
-        }
+        playerConfig.getStringList("disabled-players").stream()
+                .map(this::parseUUID)
+                .filter(Objects::nonNull)
+                .forEach(disabledPlayers::add);
     }
 
     public boolean isEnabled(Player p) {

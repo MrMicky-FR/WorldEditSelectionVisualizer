@@ -6,7 +6,7 @@
 
     <groupId>com.rojel</groupId>
     <artifactId>wesv</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
     <packaging>pom</packaging>
 
     <modules>
