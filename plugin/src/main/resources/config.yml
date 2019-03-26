@@ -6,7 +6,7 @@ lang:
   configReloaded: "&aConfiguration for visualizer was reloaded from the disk."
   noPermission: "&cYou don't have the permission to use this command."
 updateChecker: true
-particleDistance: 32
+particleDistance: 24
 maxSize: 10000
 checkForAxe: false
 particleEffect: REDSTONE
@@ -15,9 +15,9 @@ horizontalLinesForCuboid: true
 horizontalLinesForPolygon: true
 horizontalLinesForCylinder: true
 horizontalLinesForEllipsoid: true
-topAndBottomForCuboid: true
-topAndBottomForCylinder: true
-gapBetweenPoints: 0.5
+topAndBottomForCuboid: false
+topAndBottomForCylinder: false
+gapBetweenPoints: 0.75
 verticalGap: 1
 updateSelectionInterval: 20
 updateParticlesInterval: 5
