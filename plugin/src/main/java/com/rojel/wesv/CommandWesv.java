@@ -20,7 +20,7 @@ public class CommandWesv implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("wesv.use")) {
             sender.sendMessage(plugin.getCustomConfig().getLangNoPermission());
             return true;
@@ -28,8 +28,8 @@ public class CommandWesv implements TabExecutor {
 
         if (args.length == 0 || !args[0].equalsIgnoreCase("reload") || !sender.hasPermission("wesv.reloadconfig")) {
             if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                final boolean isEnabled = !plugin.getStorageManager().isEnabled(player);
+                Player player = (Player) sender;
+                boolean isEnabled = !plugin.getStorageManager().isEnabled(player);
                 plugin.getStorageManager().setEnable(player, isEnabled);
 
                 if (isEnabled) {
@@ -52,7 +52,7 @@ public class CommandWesv implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1 && sender.hasPermission("wesv.reloadconfig")) {
             return StringUtil.copyPartialMatches(args[0], Collections.singletonList("reload"), new ArrayList<>());
         }

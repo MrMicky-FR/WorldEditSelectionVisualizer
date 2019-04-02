@@ -27,7 +27,7 @@ public class WorldEditHelper extends BukkitRunnable {
     private Field wandItemField;
     private boolean useOffHand;
 
-    public WorldEditHelper(final WorldEditSelectionVisualizer plugin) {
+    public WorldEditHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
         runTaskTimer(plugin, 0, plugin.getCustomConfig().getUpdateSelectionInterval());
@@ -48,12 +48,12 @@ public class WorldEditHelper extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (final Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!plugin.getStorageManager().isEnabled(player)) {
                 continue;
             }
 
-            final Region currentRegion = getSelectedRegion(player);
+            Region currentRegion = getSelectedRegion(player);
 
             if (!compareRegion(plugin.getLastSelectedRegions().get(player.getUniqueId()), currentRegion)) {
                 if (currentRegion != null) {
@@ -71,16 +71,16 @@ public class WorldEditHelper extends BukkitRunnable {
         }
     }
 
-    public Region getSelectedRegion(final Player player) {
-        final LocalSession session = WorldEdit.getInstance().getSessionManager().findByName(player.getName());
+    public Region getSelectedRegion(Player player) {
+        LocalSession session = WorldEdit.getInstance().getSessionManager().findByName(player.getName());
 
         if (session != null && session.getSelectionWorld() != null) {
-            final RegionSelector selector = session.getRegionSelector(session.getSelectionWorld());
+            RegionSelector selector = session.getRegionSelector(session.getSelectionWorld());
 
             if (selector.isDefined()) {
                 try {
                     return selector.getRegion();
-                } catch (final IncompleteRegionException e) {
+                } catch (IncompleteRegionException e) {
                     plugin.getLogger().warning("Region still incomplete.");
                 }
             }
@@ -88,7 +88,7 @@ public class WorldEditHelper extends BukkitRunnable {
         return null;
     }
 
-    public boolean compareRegion(final Region region1, final Region region2) {
+    public boolean compareRegion(Region region1, Region region2) {
         if (Objects.equals(region1, region2)) {
             return true;
         }
@@ -101,9 +101,9 @@ public class WorldEditHelper extends BukkitRunnable {
     }
 
     @SuppressWarnings("deprecation")
-    public boolean isHoldingSelectionItem(final Player player) {
-        final ItemStack item = player.getItemInHand();
-        final ItemStack offHandItem = useOffHand ? player.getInventory().getItemInOffHand() : null;
+    public boolean isHoldingSelectionItem(Player player) {
+        ItemStack item = player.getItemInHand();
+        ItemStack offHandItem = useOffHand ? player.getInventory().getItemInOffHand() : null;
 
         return isSelectionItem(item) || isSelectionItem(offHandItem);
     }
@@ -119,11 +119,11 @@ public class WorldEditHelper extends BukkitRunnable {
 
                 return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
             } else if (wandItemField.getType() == String.class) { // WorldEdit 1.13+
-                final String wandItem = (String) wandItemField.get(WorldEdit.getInstance().getConfiguration());
+                String wandItem = (String) wandItemField.get(WorldEdit.getInstance().getConfiguration());
 
                 return BukkitAdapter.adapt(item).getType().getId().equals(wandItem);
             } else if (wandItemField.getType() == ItemTypes.class) { // FAWE 1.13+
-                final Object wandItemType = wandItemField.get(WorldEdit.getInstance().getConfiguration());
+                Object wandItemType = wandItemField.get(WorldEdit.getInstance().getConfiguration());
 
                 BaseItemStack baseItem = BukkitAdapter.adapt(item);
 

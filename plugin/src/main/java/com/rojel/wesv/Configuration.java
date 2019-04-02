@@ -121,9 +121,9 @@ public class Configuration {
 
         private final String configValue;
         private final Object defaultValue;
-        private Class<?> type;
+        private final Class<?> type;
 
-        ConfigValue(final String configValue, final Object defaultValue, final Class<?> type) {
+        ConfigValue(String configValue, Object defaultValue, Class<?> type) {
             this.configValue = configValue;
             this.defaultValue = defaultValue;
             this.type = type;
@@ -149,7 +149,7 @@ public class Configuration {
      *
      * @param plugin WESV plugin instance.
      */
-    public Configuration(final WorldEditSelectionVisualizer plugin) {
+    public Configuration(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
     }
 
@@ -161,7 +161,7 @@ public class Configuration {
         config = plugin.getConfig();
 
         boolean found = false;
-        for (final ConfigValue value : ConfigValue.values()) {
+        for (ConfigValue value : ConfigValue.values()) {
             if (config.get(value.getConfigValue(), null) == null) {
                 plugin.getLogger().info("Adding '" + value.getConfigValue() + "' to the config");
                 found = true;
@@ -199,13 +199,13 @@ public class Configuration {
     /**
      * Loads values from config.yml file into the internal config EnumMap.
      */
-    public void reloadConfig(final boolean reload) {
+    public void reloadConfig(boolean reload) {
         if (reload) {
             plugin.reloadConfig();
             config = plugin.getConfig();
         }
 
-        for (final ConfigValue value : ConfigValue.values()) {
+        for (ConfigValue value : ConfigValue.values()) {
             if (value.getType() == String.class) {
                 configItems.put(value, ChatColor.translateAlternateColorCodes('&', config.getString(value.getConfigValue())));
             } else if (value.getType() == boolean.class) {
@@ -224,8 +224,8 @@ public class Configuration {
         configItems.put(ConfigValue.PARTICLE_DATA, getParticleData((String) configItems.get(ConfigValue.PARTICLE_DATA)));
     }
 
-    private ParticleType getParticleType(final String name) {
-        final ParticleType effect = ParticleType.getParticle(name);
+    private ParticleType getParticleType(String name) {
+        ParticleType effect = ParticleType.getParticle(name);
         if (effect != null && effect.isCompatibleWithServerVersion()) {
             return effect;
         }
@@ -233,15 +233,15 @@ public class Configuration {
         return ParticleType.REDSTONE;
     }
 
-    private Object getParticleData(final String name) {
-        final ParticleType particle = getParticle();
+    private Object getParticleData(String name) {
+        ParticleType particle = getParticle();
         if (particle.getDataType() == Color.class) {
-            final String[] split = name.split(",");
+            String[] split = name.split(",");
             if (split.length == 3) {
                 try {
-                    final int r = Integer.parseInt(split[0]);
-                    final int g = Integer.parseInt(split[1]);
-                    final int b = Integer.parseInt(split[2]);
+                    int r = Integer.parseInt(split[0]);
+                    int g = Integer.parseInt(split[1]);
+                    int b = Integer.parseInt(split[2]);
 
                     return Color.fromRGB(r, g, b);
                 } catch (IllegalArgumentException e) {
@@ -257,8 +257,8 @@ public class Configuration {
         return null;
     }
 
-    private Material getMaterial(final String mat, final boolean needBlock) {
-        final Material material = Material.matchMaterial(mat);
+    private Material getMaterial(String mat, boolean needBlock) {
+        Material material = Material.matchMaterial(mat);
         if (material == null || (needBlock && !material.isBlock())) {
             plugin.getLogger().warning("'" + mat + "' is not a valid material" + (needBlock ? " or is not a block" : ""));
             return Material.STONE;

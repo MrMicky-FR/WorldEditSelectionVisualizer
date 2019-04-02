@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class WorldEditSelectionVisualizer extends JavaPlugin {
+public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
     private Configuration config;
     private StorageManager storageManager;
@@ -69,30 +69,30 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
 
-        for (final Player player : getServer().getOnlinePlayers()) {
+        for (Player player : getServer().getOnlinePlayers()) {
             addPlayer(player);
         }
     }
 
-    public boolean isHoldingSelectionItem(final Player player) {
+    public boolean isHoldingSelectionItem(Player player) {
         return worldEditHelper.isHoldingSelectionItem(player);
     }
 
-    public boolean isSelectionShown(final Player player) {
+    public boolean isSelectionShown(Player player) {
         return shown.contains(player.getUniqueId()) && shouldShowSelection(player);
     }
 
-    public boolean shouldShowSelection(final Player player) {
+    public boolean shouldShowSelection(Player player) {
         return storageManager.isEnabled(player) && (!config.isCheckForAxeEnabled() || isHoldingSelectionItem(player));
     }
 
-    public void showSelection(final Player player) {
+    public void showSelection(Player player) {
         if (!player.hasPermission("wesv.use")) {
             return;
         }
 
-        final Region region = worldEditHelper.getSelectedRegion(player);
-        final UUID uuid = player.getUniqueId();
+        Region region = worldEditHelper.getSelectedRegion(player);
+        UUID uuid = player.getUniqueId();
 
         if (region != null && region.getArea() > config.getMaxSize()) {
             setParticlesForPlayer(player, null);
@@ -113,13 +113,13 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         shown.add(player.getUniqueId());
     }
 
-    public void hideSelection(final Player player) {
+    public void hideSelection(Player player) {
         shown.remove(player.getUniqueId());
         playerParticleMap.remove(player.getUniqueId());
         cancelAndRemoveFadeOutTask(player.getUniqueId());
     }
 
-    public void setParticlesForPlayer(final Player player, final Collection<ImmutableVector> vectors) {
+    public void setParticlesForPlayer(Player player, Collection<ImmutableVector> vectors) {
         cancelAndRemoveFadeOutTask(player.getUniqueId());
 
         if (vectors == null || vectors.isEmpty()) {
@@ -127,10 +127,10 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         } else {
             playerParticleMap.put(player.getUniqueId(), vectors);
 
-            final int fade = config.getParticleFadeDelay();
+            int fade = config.getParticleFadeDelay();
 
             if (fade > 0) {
-                final int id = getServer().getScheduler().runTaskLater(this, () -> {
+                int id = getServer().getScheduler().runTaskLater(this, () -> {
 
                     fadeOutTasks.remove(player.getUniqueId());
                     playerParticleMap.remove(player.getUniqueId());
@@ -141,21 +141,21 @@ public class WorldEditSelectionVisualizer extends JavaPlugin {
         }
     }
 
-    private void cancelAndRemoveFadeOutTask(final UUID uuid) {
+    private void cancelAndRemoveFadeOutTask(UUID uuid) {
         if (fadeOutTasks.containsKey(uuid)) {
             getServer().getScheduler().cancelTask(fadeOutTasks.get(uuid));
             fadeOutTasks.remove(uuid);
         }
     }
 
-    public void addPlayer(final Player player) {
+    public void addPlayer(Player player) {
         if (shouldShowSelection(player)) {
             showSelection(player);
         }
     }
 
-    public void removePlayer(final Player player) {
-        final UUID uuid = player.getUniqueId();
+    public void removePlayer(Player player) {
+        UUID uuid = player.getUniqueId();
         shown.remove(uuid);
         lastSelectionTooLarge.remove(uuid);
         lastSelectedRegions.remove(uuid);

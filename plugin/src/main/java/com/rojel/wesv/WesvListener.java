@@ -12,26 +12,26 @@ public class WesvListener implements Listener {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    public WesvListener(final WorldEditSelectionVisualizer plugin) {
+    public WesvListener(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         plugin.addPlayer(event.getPlayer());
     }
 
     @EventHandler
-    public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
-        final Player player = event.getPlayer();
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
         if (plugin.isSelectionShown(player)) {
             plugin.showSelection(player);
         }
     }
 
     @EventHandler
-    public void onPlayerItemChange(final PlayerItemHeldEvent event) {
-        final Player player = event.getPlayer();
+    public void onPlayerItemChange(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
         if (plugin.getCustomConfig().isCheckForAxeEnabled() && plugin.getStorageManager().isEnabled(player)) {
 
             plugin.getServer().getScheduler().runTask(plugin, () -> {
@@ -45,7 +45,7 @@ public class WesvListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(final PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         plugin.removePlayer(event.getPlayer());
     }
 }

@@ -13,7 +13,7 @@ public class ParticleTask extends BukkitRunnable {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    public ParticleTask(final WorldEditSelectionVisualizer plugin) {
+    public ParticleTask(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
         runTaskTimer(plugin, 1, plugin.getCustomConfig().getUpdateParticlesInterval());
@@ -21,22 +21,22 @@ public class ParticleTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        final int particleDistance = plugin.getCustomConfig().getParticleDistance();
-        for (final Player player : plugin.getServer().getOnlinePlayers()) {
-            final Location loc = player.getLocation();
-            final Collection<ImmutableVector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
+        int particleDistance = plugin.getCustomConfig().getParticleDistance();
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            Location loc = player.getLocation();
+            Collection<ImmutableVector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
 
             if (vectors == null || vectors.isEmpty()) {
                 continue;
             }
 
-            for (final ImmutableVector vec : vectors) {
+            for (ImmutableVector vec : vectors) {
                 if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
                     continue;
                 }
 
-                final ParticleType particle = plugin.getCustomConfig().getParticle();
-                final Object particleData = plugin.getCustomConfig().getParticleData();
+                ParticleType particle = plugin.getCustomConfig().getParticle();
+                Object particleData = plugin.getCustomConfig().getParticleData();
 
                 FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
             }

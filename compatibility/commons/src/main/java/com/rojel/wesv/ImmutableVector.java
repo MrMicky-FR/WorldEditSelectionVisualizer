@@ -14,11 +14,11 @@ public class ImmutableVector {
     private final double y;
     private final double z;
 
-    public ImmutableVector(final Vector vector) {
+    public ImmutableVector(Vector vector) {
         this(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public ImmutableVector(final double x, final double y, final double z) {
+    public ImmutableVector(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -89,7 +89,7 @@ public class ImmutableVector {
     }
 
     public ImmutableVector normalize() {
-        return divide(lenght());
+        return divide(length());
     }
 
     public double distance(ImmutableVector vec) {
@@ -108,7 +108,7 @@ public class ImmutableVector {
         return NumberConversions.square(this.x - x) + NumberConversions.square(this.y - y) + NumberConversions.square(this.z - z);
     }
 
-    public double lenght() {
+    public double length() {
         return Math.sqrt(lengthSquared());
     }
 
