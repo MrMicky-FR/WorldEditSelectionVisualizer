@@ -14,8 +14,8 @@ public class ImmutableVector {
     private final double y;
     private final double z;
 
-    public ImmutableVector(Vector vector) {
-        this(vector.getX(), vector.getY(), vector.getZ());
+    public ImmutableVector(Vector vec) {
+        this(vec.getX(), vec.getY(), vec.getZ());
     }
 
     public ImmutableVector(double x, double y, double z) {
@@ -116,6 +116,10 @@ public class ImmutableVector {
         return NumberConversions.square(x) + NumberConversions.square(y) + NumberConversions.square(z);
     }
 
+    public Vector toVector() {
+        return new Vector(x, y, z);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -126,8 +130,8 @@ public class ImmutableVector {
             return false;
         }
 
-        ImmutableVector vector = (ImmutableVector) o;
-        return x == vector.getX() && y == vector.getY() && z == vector.getZ();
+        ImmutableVector vec = (ImmutableVector) o;
+        return x == vec.getX() && y == vec.getY() && z == vec.getZ();
     }
 
     @Override

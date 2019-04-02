@@ -20,6 +20,8 @@ import java.util.Set;
 
 public class ShapeHelper {
 
+    private static final double RADIAN_MULT = Math.PI * 2;
+
     private final WorldEditSelectionVisualizer plugin;
     private final Configuration config;
 
@@ -100,15 +102,15 @@ public class ShapeHelper {
                 }
             } else if (region instanceof CylinderRegion) {
                 ImmutableVector centerDown = regionWrapper.getCenter().withY(min.getY()).add(0.5, 0.0, 0.5);
-                double rx = width / 2.0;
-                double rz = length / 2.0;
-                List<ImmutableVector> bottomCorners = plotEllipse(centerDown, new ImmutableVector(rx, 0.0, rz));
+                double radiusX = width / 2.0;
+                double radiusZ = length / 2.0;
+                List<ImmutableVector> bottomCorners = plotEllipse(centerDown, new ImmutableVector(radiusX, 0.0, radiusZ));
                 List<ImmutableVector> bottomRadius = new ArrayList<>();
 
                 if (config.isCylinderTopAndBottomEnabled()) {
-                    boolean xHigherZ = rx > rz;
+                    boolean xHigherZ = radiusX > radiusZ;
                     double multiplier = xHigherZ ? width / (double) length : length / (double) width;
-                    for (double offset = (xHigherZ ? rz : rx) - config.getVerticalGap(); offset > 0; offset -= config.getVerticalGap()) {
+                    for (double offset = (xHigherZ ? radiusZ : radiusX) - config.getVerticalGap(); offset > 0; offset -= config.getVerticalGap()) {
                         double offset1 = offset * multiplier;
                         ImmutableVector vec = new ImmutableVector(xHigherZ ? offset1 : offset, 0.0, xHigherZ ? offset : offset1);
                         bottomRadius.addAll(plotEllipse(centerDown, vec));
@@ -142,21 +144,21 @@ public class ShapeHelper {
                     vectors.add(vec.add(0, height, 0));
                 }
             } else if (region instanceof EllipsoidRegion) {
-                ImmutableVector ellRadius = regionWrapper.getEllipsoidRegionRadius().add(0.5, 0.5, 0.5);
+                ImmutableVector radius = regionWrapper.getEllipsoidRegionRadius().add(0.5, 0.5, 0.5);
                 ImmutableVector center = regionWrapper.getCenter().add(0.5, 0.5, 0.5);
 
-                vectors.addAll(plotEllipse(center, new ImmutableVector(0.0, ellRadius.getY(), ellRadius.getZ())));
-                vectors.addAll(plotEllipse(center, new ImmutableVector(ellRadius.getX(), 0.0, ellRadius.getZ())));
-                vectors.addAll(plotEllipse(center, new ImmutableVector(ellRadius.getX(), ellRadius.getY(), 0.0)));
+                vectors.addAll(plotEllipse(center, new ImmutableVector(0.0, radius.getY(), radius.getZ())));
+                vectors.addAll(plotEllipse(center, new ImmutableVector(radius.getX(), 0.0, radius.getZ())));
+                vectors.addAll(plotEllipse(center, new ImmutableVector(radius.getX(), radius.getY(), 0.0)));
 
                 if (config.isEllipsoidLinesEnabled()) {
-                    for (double offset = config.getVerticalGap(); offset < ellRadius.getY(); offset += config.getVerticalGap()) {
+                    for (double offset = config.getVerticalGap(); offset < radius.getY(); offset += config.getVerticalGap()) {
                         ImmutableVector center1 = new ImmutableVector(center.getX(), center.getY() - offset, center.getZ());
                         ImmutableVector center2 = new ImmutableVector(center.getX(), center.getY() + offset, center.getZ());
                         double difference = Math.abs(center1.getY() - center.getY());
-                        double radiusRatio = Math.cos(Math.asin(difference / ellRadius.getY()));
-                        double rx = ellRadius.getX() * radiusRatio;
-                        double rz = ellRadius.getZ() * radiusRatio;
+                        double radiusRatio = Math.cos(Math.asin(difference / radius.getY()));
+                        double rx = radius.getX() * radiusRatio;
+                        double rz = radius.getZ() * radiusRatio;
                         vectors.addAll(plotEllipse(center1, new ImmutableVector(rx, 0.0, rz)));
                         vectors.addAll(plotEllipse(center2, new ImmutableVector(rx, 0.0, rz)));
                     }
@@ -230,9 +232,8 @@ public class ShapeHelper {
 
     private List<ImmutableVector> plotEllipse(ImmutableVector center, ImmutableVector radius) {
         List<ImmutableVector> vectors = new ArrayList<>();
-        double biggestR = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
-        double circleCircumference = biggestR * 2.0 * Math.PI;
-        double deltaTheta = config.getGapBetweenPoints() / circleCircumference;
+        double maxRadius = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
+        double deltaTheta = config.getGapBetweenPoints() / (maxRadius * RADIAN_MULT);
 
         for (double i = 0.0; i < 1.0; i += deltaTheta) {
             double x = center.getX();
@@ -240,18 +241,17 @@ public class ShapeHelper {
             double z = center.getZ();
 
             if (radius.getX() == 0.0) {
-                y = center.getY() + Math.cos(i * 2.0 * Math.PI) * radius.getY();
-                z = center.getZ() + Math.sin(i * 2.0 * Math.PI) * radius.getZ();
+                y = center.getY() + Math.cos(i * RADIAN_MULT) * radius.getY();
+                z = center.getZ() + Math.sin(i * RADIAN_MULT) * radius.getZ();
             } else if (radius.getY() == 0.0) {
-                x = center.getX() + Math.cos(i * 2.0 * Math.PI) * radius.getX();
-                z = center.getZ() + Math.sin(i * 2.0 * Math.PI) * radius.getZ();
+                x = center.getX() + Math.cos(i * RADIAN_MULT) * radius.getX();
+                z = center.getZ() + Math.sin(i * RADIAN_MULT) * radius.getZ();
             } else if (radius.getZ() == 0.0) {
-                x = center.getX() + Math.cos(i * 2.0 * Math.PI) * radius.getX();
-                y = center.getY() + Math.sin(i * 2.0 * Math.PI) * radius.getY();
+                x = center.getX() + Math.cos(i * RADIAN_MULT) * radius.getX();
+                y = center.getY() + Math.sin(i * RADIAN_MULT) * radius.getY();
             }
 
-            ImmutableVector loc = new ImmutableVector(x, y, z);
-            vectors.add(loc);
+            vectors.add(new ImmutableVector(x, y, z));
         }
         return vectors;
     }
