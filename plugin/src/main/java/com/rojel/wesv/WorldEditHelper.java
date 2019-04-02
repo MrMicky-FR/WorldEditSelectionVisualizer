@@ -17,7 +17,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -98,15 +97,7 @@ public class WorldEditHelper extends BukkitRunnable {
             return false;
         }
 
-        Iterator<?> regionIterator1 = region1.iterator();
-        Iterator<?> regionIterator2 = region2.iterator();
-
-        while (regionIterator1.hasNext()) {
-            if (!regionIterator2.hasNext() || !regionIterator1.next().equals(regionIterator2.next())) {
-                return false;
-            }
-        }
-        return !regionIterator2.hasNext();
+        return plugin.wrapRegion(region1).regionEquals(region2);
     }
 
     @SuppressWarnings("deprecation")

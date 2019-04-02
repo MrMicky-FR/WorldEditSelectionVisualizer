@@ -22,4 +22,6 @@ public interface RegionWrapper extends Iterable<ImmutableVector> {
     List<ImmutableVector[]> getConvexRegionTriangles();
 
     Region getRegion();
+
+    boolean regionEquals(Region region);
 }

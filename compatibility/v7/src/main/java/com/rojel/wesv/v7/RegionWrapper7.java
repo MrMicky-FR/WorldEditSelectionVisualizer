@@ -97,6 +97,20 @@ public class RegionWrapper7 implements RegionWrapper {
         return region;
     }
 
+    @Override
+    public boolean regionEquals(Region region1) {
+        return region1 != null
+                && region.getWidth() == region1.getWidth()
+                && region.getHeight() == region1.getHeight()
+                && region.getArea() == region1.getArea()
+                && region.getMinimumPoint().equals(region1.getMinimumPoint());
+    }
+
+    @Override
+    public String toString() {
+        return region.toString();
+    }
+
     private ImmutableVector toImmutableVector(Vector3 vec) {
         return new ImmutableVector(vec.getX(), vec.getY(), vec.getZ());
     }
