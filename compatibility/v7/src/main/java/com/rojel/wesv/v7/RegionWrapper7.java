@@ -13,6 +13,7 @@ import com.sk89q.worldedit.regions.polyhedron.Triangle;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +24,7 @@ public class RegionWrapper7 implements RegionWrapper {
     private final Region region;
 
     public RegionWrapper7(Region region) {
-        this.region = region;
+        this.region = Objects.requireNonNull(region, "region");
     }
 
     @Override
