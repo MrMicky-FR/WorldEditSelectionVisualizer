@@ -4,9 +4,19 @@ import com.boydti.fawe.object.regions.FuzzyRegion;
 import com.boydti.fawe.object.regions.PolyhedralRegion;
 import com.boydti.fawe.object.regions.Triangle;
 import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.regions.*;
+import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.CylinderRegion;
+import com.sk89q.worldedit.regions.EllipsoidRegion;
+import com.sk89q.worldedit.regions.Polygonal2DRegion;
+import com.sk89q.worldedit.regions.Region;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ShapeHelper {
 

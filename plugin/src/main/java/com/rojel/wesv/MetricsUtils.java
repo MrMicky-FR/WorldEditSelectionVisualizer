@@ -4,9 +4,10 @@ import org.bstats.bukkit.Metrics;
 
 import java.util.concurrent.Callable;
 
-public class MetricsUtils {
+public final class MetricsUtils {
 
     private MetricsUtils() {
+        throw new UnsupportedOperationException();
     }
 
     public static void register(WorldEditSelectionVisualizer plugin) {

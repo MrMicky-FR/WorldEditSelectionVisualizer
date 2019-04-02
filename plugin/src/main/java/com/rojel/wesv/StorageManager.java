@@ -23,7 +23,7 @@ public class StorageManager {
     private final Set<UUID> disabledPlayers = new HashSet<>();
 
     private final File playersFile;
-    private FileConfiguration playerConfig;
+    private final FileConfiguration playerConfig;
 
     public StorageManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;

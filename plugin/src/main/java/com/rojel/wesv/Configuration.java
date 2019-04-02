@@ -38,11 +38,11 @@ public class Configuration {
         /**
          * Size of a space left between 2 points.
          */
-        GAP_BETWEEN_POINTS("gapBetweenPoints", 0.5d, double.class),
+        GAP_BETWEEN_POINTS("gapBetweenPoints", 0.5, double.class),
         /**
          * Size of a vertical space left between 2 points.
          */
-        VERTICAL_GAP("verticalGap", 1d, double.class),
+        VERTICAL_GAP("verticalGap", 1.0, double.class),
         /**
          * Interval in which particles should be updated for the MC client.
          */

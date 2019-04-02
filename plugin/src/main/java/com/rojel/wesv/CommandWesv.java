@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CommandWesv implements TabExecutor {
 
-    private WorldEditSelectionVisualizer plugin;
+    private final WorldEditSelectionVisualizer plugin;
 
     public CommandWesv(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;

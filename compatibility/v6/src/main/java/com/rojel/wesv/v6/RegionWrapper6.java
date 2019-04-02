@@ -75,18 +75,18 @@ public class RegionWrapper6 implements RegionWrapper {
 
     @Override
     public Iterator<ImmutableVector> iterator() {
-        Iterator<BlockVector> blockImmutableVectorIterator = region.iterator();
+        Iterator<BlockVector> blockVectorIterator = region.iterator();
 
         return new Iterator<ImmutableVector>() {
 
             @Override
             public boolean hasNext() {
-                return blockImmutableVectorIterator.hasNext();
+                return blockVectorIterator.hasNext();
             }
 
             @Override
             public ImmutableVector next() {
-                return toImmutableVector(blockImmutableVectorIterator.next());
+                return toImmutableVector(blockVectorIterator.next());
             }
         };
     }

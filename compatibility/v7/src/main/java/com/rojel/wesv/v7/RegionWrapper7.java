@@ -77,17 +77,17 @@ public class RegionWrapper7 implements RegionWrapper {
 
     @Override
     public Iterator<ImmutableVector> iterator() {
-        Iterator<BlockVector3> blockImmutableVector3Iterator = region.iterator();
+        Iterator<BlockVector3> blockVectorIterator = region.iterator();
 
         return new Iterator<ImmutableVector>() {
             @Override
             public boolean hasNext() {
-                return blockImmutableVector3Iterator.hasNext();
+                return blockVectorIterator.hasNext();
             }
 
             @Override
             public ImmutableVector next() {
-                return toImmutableVector(blockImmutableVector3Iterator.next());
+                return toImmutableVector(blockVectorIterator.next());
             }
         };
     }
