@@ -49,6 +49,7 @@ public class StorageManager {
             disabledPlayers.add(p.getUniqueId());
         }
 
+        plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionToggleEvent(p, enable));
         save();
     }
 
