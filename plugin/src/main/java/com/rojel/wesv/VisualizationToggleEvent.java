@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class WorldEditSelectionToggleEvent extends Event {
+public class VisualizationToggleEvent extends Event {
 
     /**
      * A list of all handlers that listen for this event.
@@ -20,18 +20,18 @@ public class WorldEditSelectionToggleEvent extends Event {
      * A state representing whether or not a player has enabled
      * or disable their WorldEdit selection visualization.
      */
-    private final boolean toggle;
+    private final boolean isEnabled;
 
     /**
-     * Constructor. Creates a new custom "WorldEditSelectionToggleEvent" event.
+     * Constructor. Creates a new custom "VisualizationToggleEvent" event.
      * 
      * @param player The player who has toggled their WorldEdit selection visualization.
-     * @param toggle The state representing whether or not the player has enabled
-     *               or disable their WorldEdit selection visualization.
+     * @param isEnabled The state representing whether or not the player has enabled
+     *                  or disable their WorldEdit selection visualization.
      */
-    public WorldEditSelectionToggleEvent(Player player, boolean toggle) {
+    public VisualizationToggleEvent(Player player, boolean isEnabled) {
         this.player = player;
-        this.toggle = toggle;
+        this.isEnabled = isEnabled;
     }
 
     /**
@@ -68,7 +68,7 @@ public class WorldEditSelectionToggleEvent extends Event {
      * 
      * @return Returns true if a player has enabled visualizations, or false if disabled. 
      */
-    public boolean getToggleState() {
-        return toggle;
+    public boolean isEnabled() {
+        return isEnabled;
     }
 }
