@@ -6,57 +6,27 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * A custom "WorldEditSelectionChange" Bukkit event class.
+ * Called when the WorldEdit selection of a player changed
  *
  * @author rojel
  * @author Martin Ambrus
- * @since 1.0a
  */
 public class WorldEditSelectionChangeEvent extends Event {
 
-    /**
-     * A list of all handlers that listen for this event.
-     */
     private static final HandlerList handlers = new HandlerList();
 
-    /**
-     * A player for who to listen to this event.
-     */
     private final Player player;
-
-    /**
-     * WorldEdit region for this event.
-     */
     private final Region region;
 
     /**
-     * Constructor. Creates a new custom "WorldEditSelectionChange" event.
+     * Creates a new custom "WorldEditSelectionChange" event.
      *
      * @param player The player for who to listen to this event.
      * @param region The region in which to listen to this event.
      */
-    public WorldEditSelectionChangeEvent(final Player player, final Region region) {
+    public WorldEditSelectionChangeEvent(Player player, Region region) {
         this.player = player;
         this.region = region;
-    }
-
-    /**
-     * Gets a list of handlers for this event.
-     *
-     * @return Returns list of handlers which listen to this event.
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    /**
-     * Gets a list of handlers for this event.
-     *
-     * @return Returns list of handlers which listen to this event.
-     */
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
     }
 
     /**
@@ -75,5 +45,14 @@ public class WorldEditSelectionChangeEvent extends Event {
      */
     public Region getRegion() {
         return region;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

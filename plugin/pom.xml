@@ -88,6 +88,7 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!-- WorldEdit & FastAsyncWorldEdit -->
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
@@ -100,12 +101,14 @@
             <version>latest</version>
             <scope>provided</scope>
         </dependency>
+        <!-- bStats -->
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
             <scope>compile</scope>
         </dependency>
+        <!-- FastParticles -->
         <dependency>
             <groupId>fr.mrmicky</groupId>
             <artifactId>FastParticles</artifactId>

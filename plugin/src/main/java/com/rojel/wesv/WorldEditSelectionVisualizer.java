@@ -49,8 +49,6 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
         faweEnabled = getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") != null;
 
-        MetricsUtils.register(this);
-
         try {
             Class.forName("com.sk89q.worldedit.math.Vector3");
             legacyWorldEdit = false;
@@ -69,8 +67,15 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
 
-        for (Player player : getServer().getOnlinePlayers()) {
-            addPlayer(player);
+        getServer().getOnlinePlayers().forEach(this::addPlayer);
+
+        try {
+            // bStats use Gson, but Gson is not with Spigot < 1.8
+            Class.forName("com.google.gson.Gson");
+
+            MetricsUtils.register(this);
+        } catch (ClassNotFoundException e) {
+            // disable metrics
         }
     }
 

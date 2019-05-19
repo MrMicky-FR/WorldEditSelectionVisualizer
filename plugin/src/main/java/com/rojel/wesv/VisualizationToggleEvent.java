@@ -4,53 +4,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a player toggled his selection visualizer
+ */
 public class VisualizationToggleEvent extends Event {
 
-    /**
-     * A list of all handlers that listen for this event.
-     */
     private static final HandlerList handlers = new HandlerList();
 
-    /**
-     * A player who has toggled their WorldEdit selection visualization.
-     */
     private final Player player;
+    private final boolean enabled;
 
     /**
-     * A state representing whether or not a player has enabled
-     * or disable their WorldEdit selection visualization.
+     * Creates a new custom "VisualizationToggleEvent" event.
+     *
+     * @param player  The player who has toggled their WorldEdit selection visualization.
+     * @param enabled The state representing whether or not the player has enabled
+     *                or disable their WorldEdit selection visualization.
      */
-    private final boolean isEnabled;
-
-    /**
-     * Constructor. Creates a new custom "VisualizationToggleEvent" event.
-     * 
-     * @param player The player who has toggled their WorldEdit selection visualization.
-     * @param isEnabled The state representing whether or not the player has enabled
-     *                  or disable their WorldEdit selection visualization.
-     */
-    public VisualizationToggleEvent(Player player, boolean isEnabled) {
+    public VisualizationToggleEvent(Player player, boolean enabled) {
         this.player = player;
-        this.isEnabled = isEnabled;
-    }
-
-    /**
-     * Gets a list of handlers for this event.
-     *
-     * @return Returns list of handlers which listen to this event.
-     */
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    /**
-     * Gets a list of handlers for this event.
-     *
-     * @return Returns list of handlers which listen to this event.
-     */
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
+        this.enabled = enabled;
     }
 
     /**
@@ -65,10 +38,19 @@ public class VisualizationToggleEvent extends Event {
     /**
      * Gets a state representing whether or not a player has enabled
      * or disable their WorldEdit selection visualization.
-     * 
-     * @return Returns true if a player has enabled visualizations, or false if disabled. 
+     *
+     * @return Returns true if a player has enabled visualizations, or false if disabled.
      */
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }
