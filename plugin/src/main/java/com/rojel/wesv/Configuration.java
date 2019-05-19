@@ -226,11 +226,15 @@ public class Configuration {
 
     private ParticleType getParticleType(String name) {
         ParticleType effect = ParticleType.getParticle(name);
-        if (effect != null && effect.isCompatibleWithServerVersion()) {
+        if (effect != null && effect.isSupported()) {
             return effect;
         }
         plugin.getLogger().warning("The particle effect in the config is invalid.");
         return ParticleType.REDSTONE;
+    }
+
+    public String getParticleName() {
+        return getParticle().hasLegacyName() ? getParticle().getLegacyName() : getParticle().toString().toLowerCase();
     }
 
     private Object getParticleData(String name) {
