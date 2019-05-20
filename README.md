@@ -24,10 +24,9 @@ You can download releases and find more information on SpigotMC: https://www.spi
 
 ## Screenshots
 
-![Cuboid selection](http://i.imgur.com/0MAcN3o.png)
-![Polygon selection](http://i.imgur.com/OqSQQr7.png)
-![Ellipsoid selection](http://i.imgur.com/pOwYY62.png)
-![Customizable particle effect and particle distance](http://i.imgur.com/VcR0IMA.png)
+| ![Cuboid selection](http://i.imgur.com/0MAcN3o.png)          | ![Polygon selection](http://i.imgur.com/OqSQQr7.png)         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![Ellipsoid selection](http://i.imgur.com/pOwYY62.png)       | ![Customizable particle effect](http://i.imgur.com/VcR0IMA.png)  |
 
 ## Metrics
 
