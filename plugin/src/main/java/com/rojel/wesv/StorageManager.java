@@ -23,16 +23,16 @@ public class StorageManager {
     private final Set<UUID> disabledPlayers = new HashSet<>();
 
     private final File playersFile;
-    private final FileConfiguration playerConfig;
+    private final FileConfiguration playersConfig;
 
     public StorageManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
         playersFile = new File(plugin.getDataFolder(), "players.yml");
 
-        playerConfig = YamlConfiguration.loadConfiguration(playersFile);
+        playersConfig = YamlConfiguration.loadConfiguration(playersFile);
 
-        playerConfig.getStringList("disabled-players").stream()
+        playersConfig.getStringList("disabled-players").stream()
                 .map(this::parseUUID)
                 .filter(Objects::nonNull)
                 .forEach(disabledPlayers::add);
@@ -54,10 +54,10 @@ public class StorageManager {
     }
 
     public void save() {
-        playerConfig.set("disabled-players", disabledPlayers.stream().map(UUID::toString).collect(Collectors.toList()));
+        playersConfig.set("disabled-players", disabledPlayers.stream().map(UUID::toString).collect(Collectors.toList()));
 
         try {
-            playerConfig.save(playersFile);
+            playersConfig.save(playersFile);
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Error while saving players.yml", e);
         }

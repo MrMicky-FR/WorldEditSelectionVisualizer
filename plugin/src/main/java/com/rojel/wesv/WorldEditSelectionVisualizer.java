@@ -67,7 +67,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
 
-        getServer().getOnlinePlayers().forEach(this::addPlayer);
+        getServer().getScheduler().runTask(this, () -> getServer().getOnlinePlayers().forEach(this::addPlayer));
 
         try {
             // bStats use Gson, but Gson is not with Spigot < 1.8

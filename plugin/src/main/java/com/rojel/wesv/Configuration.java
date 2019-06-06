@@ -229,7 +229,8 @@ public class Configuration {
         if (effect != null && effect.isSupported()) {
             return effect;
         }
-        plugin.getLogger().warning("The particle effect in the config is invalid.");
+
+        plugin.getLogger().warning("The particle effect in the config is invalid: " + effect);
         return ParticleType.REDSTONE;
     }
 

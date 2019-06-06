@@ -64,9 +64,7 @@ public class WorldEditHelper extends BukkitRunnable {
 
                 plugin.getServer().getPluginManager().callEvent(new WorldEditSelectionChangeEvent(player, currentRegion));
 
-                if (plugin.isSelectionShown(player)) {
-                    plugin.showSelection(player);
-                }
+                plugin.addPlayer(player);
             }
         }
     }

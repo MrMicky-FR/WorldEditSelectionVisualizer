@@ -6,15 +6,15 @@
 
     <groupId>com.rojel</groupId>
     <artifactId>wesv</artifactId>
-    <version>1.6.5</version>
+    <version>1.6.6</version>
     <packaging>pom</packaging>
+
+    <name>WorldEditSelectionVisualizer</name>
 
     <modules>
         <module>compatibility</module>
         <module>plugin</module>
     </modules>
-
-    <name>WorldEditSelectionVisualizer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,8 +53,9 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
+            <version>1.14.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 </project>
