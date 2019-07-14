@@ -21,7 +21,8 @@ public class ParticleTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        int particleDistance = plugin.getCustomConfig().getParticleDistance();
+        double particleDistanceSquared = NumberConversions.square(plugin.getCustomConfig().getParticleDistance());
+
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             Location loc = player.getLocation();
             Collection<ImmutableVector> vectors = plugin.getPlayerParticleMap().get(player.getUniqueId());
@@ -30,13 +31,13 @@ public class ParticleTask extends BukkitRunnable {
                 continue;
             }
 
+            ParticleType particle = plugin.getCustomConfig().getParticle();
+            Object particleData = plugin.getCustomConfig().getParticleData();
+
             for (ImmutableVector vec : vectors) {
-                if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > NumberConversions.square(particleDistance)) {
+                if (vec.distanceSquared(loc.getX(), loc.getY(), loc.getZ()) > particleDistanceSquared) {
                     continue;
                 }
-
-                ParticleType particle = plugin.getCustomConfig().getParticle();
-                Object particleData = plugin.getCustomConfig().getParticleData();
 
                 FastParticle.spawnParticle(player, particle, vec.getX(), vec.getY(), vec.getZ(), 1, 0.0, 0.0, 0.0, 0.0, particleData);
             }

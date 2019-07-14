@@ -20,7 +20,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 
 ## Downloads
 
-You can download releases and find more information on SpigotMC: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
+You can download releases and find more information on [SpigotMC](https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/).
 
 ## Screenshots
 

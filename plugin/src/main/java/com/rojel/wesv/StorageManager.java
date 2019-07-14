@@ -38,18 +38,18 @@ public class StorageManager {
                 .forEach(disabledPlayers::add);
     }
 
-    public boolean isEnabled(Player p) {
-        return !disabledPlayers.contains(p.getUniqueId());
+    public boolean isEnabled(Player player) {
+        return !disabledPlayers.contains(player.getUniqueId());
     }
 
-    public void setEnable(Player p, boolean enable) {
+    public void setEnable(Player player, boolean enable) {
         if (enable) {
-            disabledPlayers.remove(p.getUniqueId());
+            disabledPlayers.remove(player.getUniqueId());
         } else {
-            disabledPlayers.add(p.getUniqueId());
+            disabledPlayers.add(player.getUniqueId());
         }
 
-        plugin.getServer().getPluginManager().callEvent(new VisualizationToggleEvent(p, enable));
+        plugin.getServer().getPluginManager().callEvent(new VisualizationToggleEvent(player, enable));
         save();
     }
 

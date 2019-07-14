@@ -79,7 +79,7 @@ public class WorldEditHelper extends BukkitRunnable {
                 try {
                     return selector.getRegion();
                 } catch (IncompleteRegionException e) {
-                    plugin.getLogger().warning("Region still incomplete.");
+                    plugin.getLogger().warning("Region still incomplete for " + player.getName());
                 }
             }
         }

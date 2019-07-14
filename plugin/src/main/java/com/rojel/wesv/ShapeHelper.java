@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class ShapeHelper {
 
-    private static final double RADIAN_MULT = Math.PI * 2;
+    private static final double DOUBLE_PI = Math.PI * 2;
 
     private final WorldEditSelectionVisualizer plugin;
     private final Configuration config;
@@ -45,10 +45,10 @@ public class ShapeHelper {
             if (region instanceof CuboidRegion) {
                 List<ImmutableVector> bottomCorners = new ArrayList<>();
 
-                bottomCorners.add(new ImmutableVector(min.getX(), min.getY(), min.getZ()));
-                bottomCorners.add(new ImmutableVector(max.getX(), min.getY(), min.getZ()));
-                bottomCorners.add(new ImmutableVector(max.getX(), min.getY(), max.getZ()));
-                bottomCorners.add(new ImmutableVector(min.getX(), min.getY(), max.getZ()));
+                bottomCorners.add(min);
+                bottomCorners.add(min.withX(max.getX()));
+                bottomCorners.add(max.withY(min.getY()));
+                bottomCorners.add(min.withZ(max.getZ()));
 
                 for (int i = 0; i < bottomCorners.size(); i++) {
                     ImmutableVector p1 = bottomCorners.get(i);
@@ -78,8 +78,8 @@ public class ShapeHelper {
             } else if (region instanceof Polygonal2DRegion) {
                 List<ImmutableVector> bottomCorners = new ArrayList<>();
 
-                for (ImmutableVector vec2D : regionWrapper.getPolygonalRegionPoints()) {
-                    bottomCorners.add(new ImmutableVector(vec2D.getX() + 0.5, min.getY(), vec2D.getZ() + 0.5));
+                for (ImmutableVector vector : regionWrapper.getPolygonalRegionPoints()) {
+                    bottomCorners.add(new ImmutableVector(vector.getX() + 0.5, min.getY(), vector.getZ() + 0.5));
                 }
 
                 for (int i = 0; i < bottomCorners.size(); ++i) {
@@ -132,16 +132,16 @@ public class ShapeHelper {
 
                 if (config.isCylinderLinesEnabled()) {
                     for (double offset = config.getVerticalGap(); offset < height; offset += config.getVerticalGap()) {
-                        for (ImmutableVector vec2 : bottomCorners) {
-                            vectors.add(vec2.add(0.0, offset, 0.0));
+                        for (ImmutableVector vector : bottomCorners) {
+                            vectors.add(vector.add(0.0, offset, 0.0));
                         }
                     }
                 }
 
                 bottomCorners.addAll(bottomRadius);
 
-                for (ImmutableVector vec : bottomCorners) {
-                    vectors.add(vec.add(0, height, 0));
+                for (ImmutableVector vector : bottomCorners) {
+                    vectors.add(vector.add(0, height, 0));
                 }
             } else if (region instanceof EllipsoidRegion) {
                 ImmutableVector radius = regionWrapper.getEllipsoidRegionRadius().add(0.5, 0.5, 0.5);
@@ -157,10 +157,12 @@ public class ShapeHelper {
                         ImmutableVector center2 = new ImmutableVector(center.getX(), center.getY() + offset, center.getZ());
                         double difference = Math.abs(center1.getY() - center.getY());
                         double radiusRatio = Math.cos(Math.asin(difference / radius.getY()));
-                        double rx = radius.getX() * radiusRatio;
-                        double rz = radius.getZ() * radiusRatio;
-                        vectors.addAll(plotEllipse(center1, new ImmutableVector(rx, 0.0, rz)));
-                        vectors.addAll(plotEllipse(center2, new ImmutableVector(rx, 0.0, rz)));
+                        double radiusX = radius.getX() * radiusRatio;
+                        double radiusZ = radius.getZ() * radiusRatio;
+
+                        ImmutableVector newRadius = new ImmutableVector(radiusX, 0.0, radiusZ);
+                        vectors.addAll(plotEllipse(center1, newRadius));
+                        vectors.addAll(plotEllipse(center2, newRadius));
                     }
                 }
             } else if (region instanceof ConvexPolyhedralRegion) {
@@ -216,15 +218,15 @@ public class ShapeHelper {
         }
     }
 
-    private List<ImmutableVector> plotLine(ImmutableVector p1, ImmutableVector p2) {
+    private List<ImmutableVector> plotLine(ImmutableVector startVector, ImmutableVector endVector) {
         List<ImmutableVector> vectors = new ArrayList<>();
-        int points = (int) (p1.distance(p2) / config.getGapBetweenPoints()) + 1;
-        double length = p1.distance(p2);
+        int points = (int) (startVector.distance(endVector) / config.getGapBetweenPoints()) + 1;
+        double length = startVector.distance(endVector);
         double gap = length / (points - 1);
-        ImmutableVector gapVector = p2.subtract(p1).normalize().multiply(gap);
+        ImmutableVector gapVector = endVector.subtract(startVector).normalize().multiply(gap);
 
         for (int i = 0; i < points; ++i) {
-            vectors.add(p1.add(gapVector.multiply(i)));
+            vectors.add(startVector.add(gapVector.multiply(i)));
         }
 
         return vectors;
@@ -233,7 +235,7 @@ public class ShapeHelper {
     private List<ImmutableVector> plotEllipse(ImmutableVector center, ImmutableVector radius) {
         List<ImmutableVector> vectors = new ArrayList<>();
         double maxRadius = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
-        double deltaTheta = config.getGapBetweenPoints() / (maxRadius * RADIAN_MULT);
+        double deltaTheta = config.getGapBetweenPoints() / (maxRadius * DOUBLE_PI);
 
         for (double i = 0.0; i < 1.0; i += deltaTheta) {
             double x = center.getX();
@@ -241,14 +243,14 @@ public class ShapeHelper {
             double z = center.getZ();
 
             if (radius.getX() == 0.0) {
-                y = center.getY() + Math.cos(i * RADIAN_MULT) * radius.getY();
-                z = center.getZ() + Math.sin(i * RADIAN_MULT) * radius.getZ();
+                y = center.getY() + Math.cos(i * DOUBLE_PI) * radius.getY();
+                z = center.getZ() + Math.sin(i * DOUBLE_PI) * radius.getZ();
             } else if (radius.getY() == 0.0) {
-                x = center.getX() + Math.cos(i * RADIAN_MULT) * radius.getX();
-                z = center.getZ() + Math.sin(i * RADIAN_MULT) * radius.getZ();
+                x = center.getX() + Math.cos(i * DOUBLE_PI) * radius.getX();
+                z = center.getZ() + Math.sin(i * DOUBLE_PI) * radius.getZ();
             } else if (radius.getZ() == 0.0) {
-                x = center.getX() + Math.cos(i * RADIAN_MULT) * radius.getX();
-                y = center.getY() + Math.sin(i * RADIAN_MULT) * radius.getY();
+                x = center.getX() + Math.cos(i * DOUBLE_PI) * radius.getX();
+                y = center.getY() + Math.sin(i * DOUBLE_PI) * radius.getY();
             }
 
             vectors.add(new ImmutableVector(x, y, z));
