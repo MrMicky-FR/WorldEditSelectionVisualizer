@@ -3,20 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <artifactId>wesv-compatibility</artifactId>
-        <groupId>com.rojel</groupId>
-        <version>1.6.6</version>
+        <groupId>fr.mrmicky</groupId>
+        <artifactId>worldeditselectionvisualizer-compatibility</artifactId>
+        <version>2.0</version>
     </parent>
 
-    <artifactId>wesv-compatibility-commons</artifactId>
+    <artifactId>worldeditselectionvisualizer-compatibility-commons</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
+            <version>7.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

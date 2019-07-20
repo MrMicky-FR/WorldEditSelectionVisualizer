@@ -11,10 +11,10 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Spawns particles around WorldEdit selections so players can see them
 - No client mod required
 - Supports cuboid, sphere, ellipsoid, cylinder, polygon and convex selections
-- Use `/wesv` to toggle the visualizer
+- Can display the current clipboard
+- Use `/wesv toggle` to toggle the visualizer
 - Only show the selection when holding the selection item
-- Configurable particle effect
-- Force large particle distances to see your selection from far away
+- Configurable particle effect and view distance
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
 
