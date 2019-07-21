@@ -18,6 +18,7 @@ import fr.mrmicky.worldeditselectionvisualizer.compat.ClipboardAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.event.SelectionChangeEvent;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.ConvexPolyhedralProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.CuboidProcessor;
@@ -94,7 +95,7 @@ public class WorldEditHelper extends BukkitRunnable {
             }
 
             ClipboardAdapter clipboardAdapter = plugin.getCompatibilityHelper().adaptClipboard(clipboard);
-            ImmutableVector shiftVector = ImmutableVector.ZERO.subtract(clipboardAdapter.getOrigin());
+            Vector3d shiftVector = Vector3d.ZERO.subtract(clipboardAdapter.getOrigin());
 
             try {
                 region = clipboardAdapter.getShiftedRegion(shiftVector);

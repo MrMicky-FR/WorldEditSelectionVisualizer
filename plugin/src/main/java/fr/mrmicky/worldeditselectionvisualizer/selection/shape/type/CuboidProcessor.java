@@ -4,7 +4,7 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
 
@@ -19,13 +19,13 @@ public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
 
     @Override
     public void processSelection(SelectionPoints selection, CuboidRegion region, RegionAdapter regionAdapter, GlobalSelectionConfig config) {
-        ImmutableVector min = regionAdapter.getMinimumPoint();
-        ImmutableVector max = regionAdapter.getMaximumPoint().add(1, 1, 1);
+        Vector3d min = regionAdapter.getMinimumPoint();
+        Vector3d max = regionAdapter.getMaximumPoint().add(1, 1, 1);
         int height = region.getHeight();
         int width = region.getWidth();
         int length = region.getLength();
 
-        List<ImmutableVector> bottomCorners = new ArrayList<>(4);
+        List<Vector3d> bottomCorners = new ArrayList<>(4);
         bottomCorners.add(min);
         bottomCorners.add(min.withX(max.getX()));
         bottomCorners.add(max.withY(min.getY()));

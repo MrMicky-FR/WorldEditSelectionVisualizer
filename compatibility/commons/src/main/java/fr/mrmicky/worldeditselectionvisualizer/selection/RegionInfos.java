@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -8,9 +9,9 @@ import java.util.Objects;
 public class RegionInfos {
 
     @NotNull
-    private final ImmutableVector minimum;
+    private final Vector3d minimum;
     @NotNull
-    private final ImmutableVector maximum;
+    private final Vector3d maximum;
 
     private final int width;
     private final int length;
@@ -26,7 +27,7 @@ public class RegionInfos {
         area = region.getRegion().getArea();
     }
 
-    public RegionInfos(@NotNull ImmutableVector minimum, @NotNull ImmutableVector maximum, int width, int length, int height, int area) {
+    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int area) {
         this.minimum = Objects.requireNonNull(minimum, "minimum");
         this.maximum = Objects.requireNonNull(maximum, "maximum");
         this.width = width;
@@ -36,12 +37,12 @@ public class RegionInfos {
     }
 
     @NotNull
-    public ImmutableVector getMinimum() {
+    public Vector3d getMinimum() {
         return minimum;
     }
 
     @NotNull
-    public ImmutableVector getMaximum() {
+    public Vector3d getMaximum() {
         return maximum;
     }
 

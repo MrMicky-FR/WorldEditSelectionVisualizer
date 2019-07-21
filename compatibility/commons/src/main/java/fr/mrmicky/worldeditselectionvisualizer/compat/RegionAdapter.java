@@ -1,28 +1,28 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat;
 
 import com.sk89q.worldedit.regions.Region;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.RegionInfos;
 
 import java.util.List;
 
 public interface RegionAdapter {
 
-    ImmutableVector getMinimumPoint();
+    Vector3d getMinimumPoint();
 
-    ImmutableVector getMaximumPoint();
+    Vector3d getMaximumPoint();
 
-    ImmutableVector getCenter();
+    Vector3d getCenter();
 
-    List<ImmutableVector> getPolygonalPoints();
+    List<Vector3d> getPolygonalPoints();
 
-    ImmutableVector getEllipsoidRadius();
+    Vector3d getEllipsoidRadius();
 
-    default List<ImmutableVector[]> getConvexTriangles() {
+    default List<Vector3d[]> getConvexTriangles() {
         return getConvexTriangles(false);
     }
 
-    List<ImmutableVector[]> getConvexTriangles(boolean faweSupport);
+    List<Vector3d[]> getConvexTriangles(boolean faweSupport);
 
     Region getRegion();
 

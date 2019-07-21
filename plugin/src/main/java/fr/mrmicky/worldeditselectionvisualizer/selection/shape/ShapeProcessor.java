@@ -4,7 +4,7 @@ import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,19 +38,19 @@ public abstract class ShapeProcessor<R extends Region> {
         return plugin;
     }
 
-    protected void createLine(Collection<ImmutableVector> vectors, ImmutableVector start, ImmutableVector end, double distance) {
+    protected void createLine(Collection<Vector3d> vectors, Vector3d start, Vector3d end, double distance) {
         double length = start.distance(end);
         int points = (int) (length / distance) + 1;
 
         double gap = length / (points - 1);
-        ImmutableVector gapVector = end.subtract(start).normalize().multiply(gap);
+        Vector3d gapVector = end.subtract(start).normalize().multiply(gap);
 
         for (int i = 0; i < points; i++) {
             vectors.add(start.add(gapVector.multiply(i)));
         }
     }
 
-    protected void createEllipse(Collection<ImmutableVector> vectors, ImmutableVector center, ImmutableVector radius, double distance) {
+    protected void createEllipse(Collection<Vector3d> vectors, Vector3d center, Vector3d radius, double distance) {
         double maxRadius = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
         double deltaTheta = distance / (maxRadius * DOUBLE_PI);
 
@@ -64,7 +64,7 @@ public abstract class ShapeProcessor<R extends Region> {
         }
     }
 
-    protected void createLinesFromBottom(SelectionPoints selection, List<ImmutableVector> bottomCorners, int height, GlobalSelectionConfig config) {
+    protected void createLinesFromBottom(SelectionPoints selection, List<Vector3d> bottomCorners, int height, GlobalSelectionConfig config) {
         selection.primary().addAll(bottomCorners);
 
         double primaryDistance = config.primary().getPointsDistance();
@@ -73,10 +73,10 @@ public abstract class ShapeProcessor<R extends Region> {
         double secondaryGap = config.secondary().getLinesGap();
 
         for (int i = 0; i < bottomCorners.size(); i++) {
-            ImmutableVector bottomMin = bottomCorners.get(i);
-            ImmutableVector bottomMax = bottomCorners.get(i < bottomCorners.size() - 1 ? i + 1 : 0);
-            ImmutableVector topMin = bottomMin.add(0, height, 0);
-            ImmutableVector topMax = bottomMax.add(0, height, 0);
+            Vector3d bottomMin = bottomCorners.get(i);
+            Vector3d bottomMax = bottomCorners.get(i < bottomCorners.size() - 1 ? i + 1 : 0);
+            Vector3d topMin = bottomMin.add(0, height, 0);
+            Vector3d topMax = bottomMax.add(0, height, 0);
 
             createLine(selection.primary(), bottomMin, bottomMax, primaryDistance);
             createLine(selection.primary(), bottomMin, topMin, primaryDistance);
@@ -84,8 +84,8 @@ public abstract class ShapeProcessor<R extends Region> {
 
             if (secondaryGap > 0) {
                 for (double offset = secondaryGap; offset < height; offset += secondaryGap) {
-                    ImmutableVector linePointMin = bottomMin.add(0.0, offset, 0.0);
-                    ImmutableVector linePointMax = bottomMax.add(0.0, offset, 0.0);
+                    Vector3d linePointMin = bottomMin.add(0.0, offset, 0.0);
+                    Vector3d linePointMax = bottomMax.add(0.0, offset, 0.0);
 
                     createLine(selection.secondary(), linePointMin, linePointMax, secondaryDistance);
                 }

@@ -4,7 +4,7 @@ import com.sk89q.worldedit.regions.EllipsoidRegion;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
 
@@ -16,8 +16,8 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
 
     @Override
     protected void processSelection(SelectionPoints selection, EllipsoidRegion region, RegionAdapter regionAdapter, GlobalSelectionConfig config) {
-        ImmutableVector radius = regionAdapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);
-        ImmutableVector center = regionAdapter.getCenter().add(0.5, 0.5, 0.5);
+        Vector3d radius = regionAdapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);
+        Vector3d center = regionAdapter.getCenter().add(0.5, 0.5, 0.5);
 
         selection.primary().add(center);
 
@@ -29,15 +29,15 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
 
         double offsetY = radius.getY() / 2.0;
 
-        ImmutableVector center1 = center.add(0, offsetY, 0);
-        ImmutableVector center2 = center.subtract(0, offsetY, 0);
-        ImmutableVector offsetRadius = radius.multiply(Math.cos(Math.asin(offsetY / radius.getY())));
+        Vector3d center1 = center.add(0, offsetY, 0);
+        Vector3d center2 = center.subtract(0, offsetY, 0);
+        Vector3d offsetRadius = radius.multiply(Math.cos(Math.asin(offsetY / radius.getY())));
 
         createEllipse(selection.secondary(), center1, offsetRadius, config.secondary().getPointsDistance());
         createEllipse(selection.secondary(), center2, offsetRadius, config.secondary().getPointsDistance());
     }
 
-    private void createEllipsoid(SelectionPoints selection, ImmutableVector center, ImmutableVector radius, GlobalSelectionConfig config) {
+    private void createEllipsoid(SelectionPoints selection, Vector3d center, Vector3d radius, GlobalSelectionConfig config) {
         double maxRadius = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
         double deltaTheta = config.primary().getPointsDistance() / (maxRadius * DOUBLE_PI);
         double increment = DOUBLE_PI / 8;

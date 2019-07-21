@@ -3,7 +3,7 @@ package fr.mrmicky.worldeditselectionvisualizer.display;
 import fr.mrmicky.fastparticle.FastParticle;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
@@ -62,12 +62,12 @@ public class ParticlesTask extends BukkitRunnable {
                 continue;
             }
 
-            Collection<ImmutableVector> vectors = primary ? selectionInfo.primary() : selectionInfo.secondary();
+            Collection<Vector3d> vectors = primary ? selectionInfo.primary() : selectionInfo.secondary();
 
-            ImmutableVector location = new ImmutableVector(player.getLocation().toVector());
-            ImmutableVector origin = (type != SelectionType.CLIPBOARD) ? ImmutableVector.ZERO : location;
+            Vector3d location = new Vector3d(player.getLocation().toVector());
+            Vector3d origin = (type != SelectionType.CLIPBOARD) ? Vector3d.ZERO : location;
 
-            for (ImmutableVector vector : vectors) {
+            for (Vector3d vector : vectors) {
                 double x = vector.getX() + origin.getX();
                 double y = vector.getY() + origin.getY();
                 double z = vector.getZ() + origin.getZ();

@@ -4,7 +4,7 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
 
@@ -22,9 +22,9 @@ public class Polygonal2DProcessor extends ShapeProcessor<Polygonal2DRegion> {
         double minY = regionAdapter.getMinimumPoint().getY();
         int height = region.getHeight();
 
-        List<ImmutableVector> bottomCorners = new ArrayList<>();
+        List<Vector3d> bottomCorners = new ArrayList<>();
 
-        for (ImmutableVector vec2d : regionAdapter.getPolygonalPoints()) {
+        for (Vector3d vec2d : regionAdapter.getPolygonalPoints()) {
             bottomCorners.add(vec2d.add(0.5, minY, 0.5));
         }
 

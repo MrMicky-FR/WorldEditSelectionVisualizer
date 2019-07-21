@@ -8,7 +8,7 @@ import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.FaweAdapter7;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.Vectors7;
-import fr.mrmicky.worldeditselectionvisualizer.selection.ImmutableVector;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,47 +25,47 @@ public class RegionAdapter7 implements RegionAdapter {
     }
 
     @Override
-    public ImmutableVector getMinimumPoint() {
-        return Vectors7.toImmutableVector(region.getMinimumPoint());
+    public Vector3d getMinimumPoint() {
+        return Vectors7.toVector3d(region.getMinimumPoint());
     }
 
     @Override
-    public ImmutableVector getMaximumPoint() {
-        return Vectors7.toImmutableVector(region.getMaximumPoint());
+    public Vector3d getMaximumPoint() {
+        return Vectors7.toVector3d(region.getMaximumPoint());
     }
 
     @Override
-    public ImmutableVector getCenter() {
-        return Vectors7.toImmutableVector(region.getCenter());
+    public Vector3d getCenter() {
+        return Vectors7.toVector3d(region.getCenter());
     }
 
     @Override
-    public List<ImmutableVector> getPolygonalPoints() {
+    public List<Vector3d> getPolygonalPoints() {
         if (region instanceof Polygonal2DRegion) {
             Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
 
             return polygonalRegion.getPoints().stream()
-                    .map(vec -> new ImmutableVector(vec.getX(), 0, vec.getZ()))
+                    .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
                     .collect(Collectors.toList());
         }
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ImmutableVector getEllipsoidRadius() {
+    public Vector3d getEllipsoidRadius() {
         if (region instanceof EllipsoidRegion) {
-            return Vectors7.toImmutableVector(((EllipsoidRegion) region).getRadius());
+            return Vectors7.toVector3d(((EllipsoidRegion) region).getRadius());
         }
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<ImmutableVector[]> getConvexTriangles(boolean faweSupport) {
+    public List<Vector3d[]> getConvexTriangles(boolean faweSupport) {
         if (region instanceof ConvexPolyhedralRegion) {
             ConvexPolyhedralRegion polygonalRegion = (ConvexPolyhedralRegion) region;
 
             return polygonalRegion.getTriangles().stream()
-                    .map(this::triangleToImmutableVectors)
+                    .map(this::triangleToVectors)
                     .collect(Collectors.toList());
         }
 
@@ -82,11 +82,11 @@ public class RegionAdapter7 implements RegionAdapter {
         return region;
     }
 
-    private ImmutableVector[] triangleToImmutableVectors(Triangle triangle) {
-        ImmutableVector[] vectors = new ImmutableVector[3];
+    private Vector3d[] triangleToVectors(Triangle triangle) {
+        Vector3d[] vectors = new Vector3d[3];
 
         for (int i = 0; i < vectors.length; i++) {
-            vectors[i] = Vectors7.toImmutableVector(triangle.getVertex(i));
+            vectors[i] = Vectors7.toVector3d(triangle.getVertex(i));
         }
 
         return vectors;
