@@ -1,8 +1,7 @@
 # WorldEditSelectionVisualizer
 [![Build Status](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer.svg?branch=master)](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MrMicky-FR/WorldEditSelectionVisualizer&amp;utm_campaign=Badge_Grade)
-[![Discord](https://img.shields.io/discord/390919659874156560.svg?label=discord&logo=discord&logoColor=fff&style=flat)](https://discord.gg/q9UwaBT)
-![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer)
+[![Discord](https://img.shields.io/discord/390919659874156560.svg?colorB=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/q9UwaBT)
 
 WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) mod in the form of a bukkit plugin, which means that players don't need to install anything on their client.
 
@@ -13,10 +12,11 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Supports cuboid, sphere, ellipsoid, cylinder, polygon and convex selections
 - Can display the current clipboard
 - Use `/wesv toggle` to toggle the visualizer
-- Only show the selection when holding the selection item
+- Option to only show the selection when holding the selection item
 - Configurable particle effect and view distance
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
+- Great compatibility: works with 1.7.10 to 1.14 servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
 
 ## Downloads
 
@@ -24,11 +24,11 @@ You can download releases and find more information on [SpigotMC](https://www.sp
 
 ## Screenshots
 
-| ![Cuboid selection](http://i.imgur.com/0MAcN3o.png)          | ![Polygon selection](http://i.imgur.com/OqSQQr7.png)         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Ellipsoid selection](http://i.imgur.com/pOwYY62.png)       | ![Customizable particles](http://i.imgur.com/VcR0IMA.png)    |
+| Cuboid selection                                       | Cylinder selection                                     | Convex selection                                      |
+| ------------------------------------------------------ | ------------------------------------------------------ | ----------------------------------------------------- |
+| ![Cuboid selection](https://i.imgur.com/jGVVpgx.png)   | ![Cylinder selection](https://i.imgur.com/XLprNDA.png) | ![Convex selection](https://i.imgur.com/XKalgCn.png)  |
 
-## Metrics
+## Credits
 
-WorldEditSelectionVisualizer collects statistics anonymously via [bStats](https://bstats.org/). You can see the statistics here: https://bstats.org/plugin/bukkit/WorldEditSelectionVisualizer
-If you want to disable bStats, you just need to set `enabled` to `false` in `plugins/bStats/config.yml`, but statistics are really useful for developers.
+WorldEditSelectionVisualizer was originally made by [Rojetto](https://dev.bukkit.org/projects/worldedit-selection-visualizer/),
+and then was updated and maintained by [martinambrus](https://github.com/martinambrus/).
