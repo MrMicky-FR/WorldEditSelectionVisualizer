@@ -27,11 +27,13 @@ public class GlobalSelectionConfig {
         return maxSelectionSize;
     }
 
-    public @NotNull SelectionConfig primary() {
+    @NotNull
+    public SelectionConfig primary() {
         return primary;
     }
 
-    public @NotNull SelectionConfig secondary() {
+    @NotNull
+    public SelectionConfig secondary() {
         return secondary;
     }
 }

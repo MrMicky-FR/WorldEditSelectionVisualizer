@@ -55,6 +55,7 @@ public class VisualizationToggleEvent extends Event {
         return handlers;
     }
 
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }

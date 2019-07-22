@@ -36,7 +36,6 @@
             <artifactId>fawe-api</artifactId>
             <version>1.13.164</version>
             <scope>provided</scope>
-            <!--<systemPath>${project.basedir}/../../libs/FastAsyncWorldEdit-bukkit-1.13.jar</systemPath>-->
         </dependency>
     </dependencies>
 

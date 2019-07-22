@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when the WorldEdit clipboard of a player changed
- *
  */
 public class ClipboardChangeEvent extends Event {
 
@@ -58,6 +57,7 @@ public class ClipboardChangeEvent extends Event {
         return handlers;
     }
 
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }
