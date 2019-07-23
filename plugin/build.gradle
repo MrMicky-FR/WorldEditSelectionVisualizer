@@ -1,0 +1,39 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
+repositories {
+    maven { url 'https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compile project(':worldeditselectionvisualizer-compatibility-commons')
+    compile project(':worldeditselectionvisualizer-compatibility-v6')
+    compile project(':worldeditselectionvisualizer-compatibility-v7')
+    compile 'fr.mrmicky:FastParticles:1.2.0'
+    compile 'org.bstats:bstats-bukkit:1.5'
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.0.0'
+    compileOnly 'com.boydti:fawe-api:latest'
+}
+
+shadowJar {
+    archiveFileName = "WorldEditSelectionVisualizer-${project.version}.jar"
+
+    relocate 'org.bstats.bukkit', 'fr.mrmicky.worldeditselectionvisualizer.metrics'
+    relocate 'fr.mrmicky.fastparticle', 'fr.mrmicky.worldeditselectionvisualizer.libs.fastparticles'
+
+    exclude 'org/intellij/lang/annotations/**'
+}
+
+artifacts {
+    archives shadowJar
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: project.version]
+    }
+}

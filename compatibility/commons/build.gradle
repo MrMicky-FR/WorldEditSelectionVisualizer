@@ -1,0 +1,3 @@
+dependencies {
+    compileOnly 'com.sk89q.worldedit:worldedit-core:7.0.0'
+}

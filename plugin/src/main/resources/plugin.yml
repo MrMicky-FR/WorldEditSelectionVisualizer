@@ -1,5 +1,5 @@
 name: WorldEditSelectionVisualizer
-version: ${project.version}
+version: @version@
 authors: [MrMicky, ZathrusWriter, Rojetto]
 description: Visualize your WorldEdit selection with particles and without any mod
 prefix: WESV
