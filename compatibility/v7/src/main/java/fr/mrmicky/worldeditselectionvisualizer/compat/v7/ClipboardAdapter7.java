@@ -32,8 +32,8 @@ public class ClipboardAdapter7 implements ClipboardAdapter {
 
     @Override
     public Region getShiftedRegion(Vector3d vector) throws RegionOperationException {
-        Region region = clipboard.getRegion();
-        region.clone().shift(Vectors7.toBlockVector3(vector));
+        Region region = clipboard.getRegion().clone();
+        region.shift(Vectors7.toBlockVector3(vector));
         return region;
     }
 }
