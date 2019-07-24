@@ -4,7 +4,6 @@ import com.sk89q.worldedit.EmptyClipboardException;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.CylinderRegion;
@@ -13,6 +12,7 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.RegionSelector;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.ClipboardAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
@@ -87,15 +87,15 @@ public class WorldEditHelper extends BukkitRunnable {
         Region region;
 
         if (type == SelectionType.CLIPBOARD) {
-            Clipboard clipboard = getClipboardRegion(session);
+            ClipboardHolder clipboard = getClipboardHolder(session);
 
             if (clipboard == null) {
                 playerSelection.resetSelection();
                 return;
             }
 
-            ClipboardAdapter clipboardAdapter = plugin.getCompatibilityHelper().adaptClipboard(clipboard);
-            Vector3d shiftVector = Vector3d.ZERO.subtract(clipboardAdapter.getOrigin());
+            ClipboardAdapter clipboardAdapter = plugin.getCompatibilityHelper().adaptClipboard(clipboard.getClipboard());
+            Vector3d shiftVector = Vector3d.ZERO.subtract(clipboardAdapter.getOrigin().add(0.5, 0, 0.5));
 
             try {
                 region = clipboardAdapter.getShiftedRegion(shiftVector);
@@ -173,10 +173,10 @@ public class WorldEditHelper extends BukkitRunnable {
     }
 
     @Nullable
-    private Clipboard getClipboardRegion(@Nullable LocalSession session) {
+    private ClipboardHolder getClipboardHolder(@Nullable LocalSession session) {
         if (session != null) {
             try {
-                return session.getClipboard().getClipboard();
+                return session.getClipboard();
             } catch (EmptyClipboardException e) {
                 // ignore, clipboard is empty
             }
