@@ -27,11 +27,12 @@ public class CompatibilityHelper {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    private boolean offHand;
-    private boolean supportActionBar;
+    private final boolean supportOffHand = isOffhandSupported();
+    private final boolean supportActionBar = isActionBarSupported();
+
+    private final boolean worldEdit7 = isWorldEdit7();
 
     private boolean supportFawe;
-    private boolean worldEdit7;
 
     @Nullable
     private Field wandItemField;
@@ -39,33 +40,7 @@ public class CompatibilityHelper {
     public CompatibilityHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
-        try {
-            PlayerInventory.class.getMethod("getItemInOffHand");
-            offHand = true;  // 1.9+ server
-        } catch (NoSuchMethodException e) {
-            offHand = false; // 1.7-1.8 server
-        }
-
-        try {
-            Player.class.getMethod("spigot");
-
-            SpigotActionBarAdapter.checkSupported();
-
-            supportActionBar = true;
-        } catch (NoSuchMethodException e) {
-            supportActionBar = false;
-            // Bukkit or old Spigot build
-        }
-
-        try {
-            Class.forName("com.sk89q.worldedit.math.Vector3");
-
-            worldEdit7 = true;
-        } catch (ClassNotFoundException e) {
-            worldEdit7 = false;
-        }
-
-        plugin.getLogger().info("Using WorldEdit " + (worldEdit7 ? 7 : 6) + " api");
+        plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
 
         if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
             supportFawe = true;
@@ -95,20 +70,6 @@ public class CompatibilityHelper {
 
     public int getWorldEditVersion() {
         return worldEdit7 ? 7 : 6;
-    }
-
-    @Nullable
-    public ItemStack getItemInMainHand(Player player) {
-        //noinspection deprecation - for 1.7/1.8 servers
-        return player.getItemInHand();
-    }
-
-    @Nullable
-    public ItemStack getItemInOffHand(Player player) {
-        if (!offHand) {
-            return null;
-        }
-        return player.getInventory().getItemInOffHand();
     }
 
     public boolean isHoldingSelectionItem(Player player) {
@@ -154,5 +115,48 @@ public class CompatibilityHelper {
         }
 
         return true;
+    }
+
+    private ItemStack getItemInMainHand(Player player) {
+        //noinspection deprecation - for 1.7/1.8 servers
+        return player.getItemInHand();
+    }
+
+    private ItemStack getItemInOffHand(Player player) {
+        if (!supportOffHand) {
+            return null;
+        }
+        return player.getInventory().getItemInOffHand();
+    }
+
+    private boolean isActionBarSupported() {
+        try {
+            Player.class.getMethod("spigot");
+            SpigotActionBarAdapter.checkSupported();
+
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    private boolean isOffhandSupported() {
+        try {
+            PlayerInventory.class.getMethod("getItemInOffHand");
+
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    private boolean isWorldEdit7() {
+        try {
+            Class.forName("com.sk89q.worldedit.math.Vector3");
+
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }
