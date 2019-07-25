@@ -4,6 +4,8 @@ import com.sk89q.worldedit.EmptyClipboardException;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.CylinderRegion;
@@ -14,7 +16,6 @@ import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
-import fr.mrmicky.worldeditselectionvisualizer.compat.ClipboardAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.event.SelectionChangeEvent;
@@ -80,34 +81,40 @@ public class WorldEditHelper extends BukkitRunnable {
 
         PlayerSelection playerSelection = playerInfo.getSelection(type).orElse(null);
 
-        if (playerSelection == null) {
+        if (playerSelection == null || session == null) {
             return;
         }
 
+        Vector3d origin = Vector3d.ZERO;
         Region region;
 
         if (type == SelectionType.CLIPBOARD) {
-            ClipboardHolder clipboard = getClipboardHolder(session);
+            ClipboardHolder clipboardHolder = getClipboardHolder(session);
 
-            if (clipboard == null) {
+            if (clipboardHolder == null) {
                 playerSelection.resetSelection();
                 return;
             }
 
-            ClipboardAdapter clipboardAdapter = plugin.getCompatibilityHelper().adaptClipboard(clipboard.getClipboard());
-            Vector3d shiftVector = Vector3d.ZERO.subtract(clipboardAdapter.getOrigin().add(0.5, 0, 0.5));
+            Clipboard clipboard = clipboardHolder.getClipboard();
+            Transform transform = clipboardHolder.getTransform();
 
-            try {
-                region = clipboardAdapter.getShiftedRegion(shiftVector);
-            } catch (RegionOperationException e) {
-                playerSelection.resetSelection();
-                return;
+            origin = plugin.getCompatibilityHelper().adaptClipboard(clipboard).getOrigin();
+            region = clipboard.getRegion().clone();
+
+            if (!transform.isIdentity()) {
+                try {
+                    RegionAdapter regionAdapter = plugin.getCompatibilityHelper().adaptRegion(region);
+                    regionAdapter.shift(origin.multiply(-1));
+
+                    region = regionAdapter.transform(transform);
+                    plugin.getCompatibilityHelper().adaptRegion(region).shift(origin);
+                } catch (RegionOperationException e) {
+                    // Shift on unsupported region, we can just ignore
+                }
             }
-
-        } else if (type == SelectionType.SELECTION) {
-            region = getSelectedRegion(session);
         } else {
-            return;
+            region = getSelectedRegion(session);
         }
 
         if (region == null) {
@@ -149,7 +156,7 @@ public class WorldEditHelper extends BukkitRunnable {
         ShapeProcessor<?> shapeProcessor = shapeProcessors.get(region.getClass());
 
         if (shapeProcessor != null) {
-            playerSelection.updateSelection(shapeProcessor.processSelection(regionAdapter, config), regionInfos, config.getFadeDelay());
+            playerSelection.updateSelection(shapeProcessor.processSelection(regionAdapter, config, origin), regionInfos, config.getFadeDelay());
         } else {
             // Unsupported selection type
             playerSelection.resetSelection(regionInfos);

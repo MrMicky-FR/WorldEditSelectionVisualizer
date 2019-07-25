@@ -19,6 +19,7 @@ public class ClipboardAdapter7 implements ClipboardAdapter {
         this.clipboard = Objects.requireNonNull(clipboard, "clipboard");
     }
 
+    @NotNull
     @Override
     public Vector3d getOrigin() {
         return Vectors7.toVector3d(clipboard.getOrigin());
@@ -30,6 +31,7 @@ public class ClipboardAdapter7 implements ClipboardAdapter {
         return clipboard;
     }
 
+    @NotNull
     @Override
     public Region getShiftedRegion(Vector3d vector) throws RegionOperationException {
         Region region = clipboard.getRegion().clone();

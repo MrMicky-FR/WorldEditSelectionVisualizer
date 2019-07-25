@@ -24,8 +24,8 @@ public abstract class ShapeProcessor<R extends Region> {
     }
 
     @NotNull
-    public SelectionPoints processSelection(RegionAdapter regionAdapter, GlobalSelectionConfig config) {
-        SelectionPoints selectionInfo = new SelectionPoints();
+    public SelectionPoints processSelection(RegionAdapter regionAdapter, GlobalSelectionConfig config, Vector3d origin) {
+        SelectionPoints selectionInfo = new SelectionPoints(origin);
 
         processSelection(selectionInfo, regionClass.cast(regionAdapter.getRegion()), regionAdapter, config);
 

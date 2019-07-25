@@ -1,9 +1,13 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat.v7;
 
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.EllipsoidRegion;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.FaweAdapter7;
@@ -24,16 +28,19 @@ public class RegionAdapter7 implements RegionAdapter {
         this.region = Objects.requireNonNull(region, "region");
     }
 
+    @NotNull
     @Override
     public Vector3d getMinimumPoint() {
         return Vectors7.toVector3d(region.getMinimumPoint());
     }
 
+    @NotNull
     @Override
     public Vector3d getMaximumPoint() {
         return Vectors7.toVector3d(region.getMaximumPoint());
     }
 
+    @NotNull
     @Override
     public Vector3d getCenter() {
         return Vectors7.toVector3d(region.getCenter());
@@ -51,6 +58,7 @@ public class RegionAdapter7 implements RegionAdapter {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public Vector3d getEllipsoidRadius() {
         if (region instanceof EllipsoidRegion) {
@@ -59,6 +67,7 @@ public class RegionAdapter7 implements RegionAdapter {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public List<Vector3d[]> getConvexTriangles(boolean faweSupport) {
         if (region instanceof ConvexPolyhedralRegion) {
@@ -76,12 +85,32 @@ public class RegionAdapter7 implements RegionAdapter {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void shift(Vector3d vector) throws RegionOperationException {
+        region.shift(Vectors7.toBlockVector3(vector));
+    }
+
+    @NotNull
+    @Override
+    public Region transform(Transform transform) {
+        if (region instanceof CuboidRegion) {
+            CuboidRegion cuboidRegion = (CuboidRegion) region;
+            BlockVector3 pos1 = transform.apply(cuboidRegion.getPos1().toVector3()).toBlockPoint();
+            BlockVector3 pos2 = transform.apply(cuboidRegion.getPos2().toVector3()).toBlockPoint();
+
+            return new CuboidRegion(region.getWorld(), pos1, pos2);
+        }
+
+        return region.clone();
+    }
+
     @NotNull
     @Override
     public Region getRegion() {
         return region;
     }
 
+    @NotNull
     private Vector3d[] triangleToVectors(Triangle triangle) {
         Vector3d[] vectors = new Vector3d[3];
 

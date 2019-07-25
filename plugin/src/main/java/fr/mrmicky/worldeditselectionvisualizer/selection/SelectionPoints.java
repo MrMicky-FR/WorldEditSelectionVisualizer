@@ -12,6 +12,13 @@ public class SelectionPoints {
     private final Collection<Vector3d> secondaryPoints = new HashSet<>();
 
     @NotNull
+    private final Vector3d origin;
+
+    public SelectionPoints(@NotNull Vector3d origin) {
+        this.origin = origin;
+    }
+
+    @NotNull
     public Collection<Vector3d> primary() {
         return primaryPoints;
     }
@@ -19,5 +26,10 @@ public class SelectionPoints {
     @NotNull
     public Collection<Vector3d> secondary() {
         return secondaryPoints;
+    }
+
+    @NotNull
+    public Vector3d origin() {
+        return origin;
     }
 }

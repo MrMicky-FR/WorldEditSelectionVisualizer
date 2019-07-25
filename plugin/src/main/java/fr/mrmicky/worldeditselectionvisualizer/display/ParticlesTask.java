@@ -42,9 +42,8 @@ public class ParticlesTask extends BukkitRunnable {
     @Override
     public void run() {
         boolean needWand = plugin.getConfig().getBoolean("need-we-wand");
-
-        ParticleData particleData = config.getParticleData();
         double maxDistanceSquared = NumberConversions.square(config.getViewDistance());
+        ParticleData particleData = config.getParticleData();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             PlayerVisualizerInfos visualizerInfo = plugin.getPlayerInfos(player);
@@ -56,16 +55,16 @@ public class ParticlesTask extends BukkitRunnable {
             }
 
             playerSelection.checkExpireTime();
-            SelectionPoints selectionInfo = playerSelection.getSelectionPoints();
+            SelectionPoints selectionPoints = playerSelection.getSelectionPoints();
 
-            if (selectionInfo == null || (needWand && !visualizerInfo.isHoldingSelectionItem())) {
+            if (selectionPoints == null || (needWand && !visualizerInfo.isHoldingSelectionItem())) {
                 continue;
             }
 
-            Collection<Vector3d> vectors = primary ? selectionInfo.primary() : selectionInfo.secondary();
+            Collection<Vector3d> vectors = primary ? selectionPoints.primary() : selectionPoints.secondary();
 
             Vector3d location = new Vector3d(player.getLocation().toVector());
-            Vector3d origin = (type != SelectionType.CLIPBOARD) ? Vector3d.ZERO : location;
+            Vector3d origin = (type != SelectionType.CLIPBOARD) ? Vector3d.ZERO : location.subtract(selectionPoints.origin()).floor();
 
             for (Vector3d vector : vectors) {
                 double x = vector.getX() + origin.getX();

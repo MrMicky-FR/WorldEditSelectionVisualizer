@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Vector3d {
 
     public static final Vector3d ZERO = new Vector3d(0, 0, 0);
+    public static final Vector3d ONE = new Vector3d(1, 1, 1);
 
     private final double x;
     private final double y;
@@ -115,6 +116,22 @@ public class Vector3d {
 
     public double lengthSquared() {
         return x * x + y * y + z * z;
+    }
+
+    public Vector3d floor() {
+        return new Vector3d(Math.floor(x), Math.floor(y), Math.floor(z));
+    }
+
+    public Vector3d ceil() {
+        return new Vector3d(Math.ceil(x), Math.ceil(y), Math.ceil(z));
+    }
+
+    public Vector3d round() {
+        return new Vector3d(Math.floor(x + 0.5), Math.floor(y + 0.5), Math.floor(z + 0.5));
+    }
+
+    public Vector3d abs() {
+        return new Vector3d(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
     public Vector toVector() {
