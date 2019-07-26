@@ -12,7 +12,6 @@ import com.sk89q.worldedit.regions.CylinderRegion;
 import com.sk89q.worldedit.regions.EllipsoidRegion;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
@@ -103,15 +102,7 @@ public class WorldEditHelper extends BukkitRunnable {
             region = clipboard.getRegion().clone();
 
             if (!transform.isIdentity()) {
-                try {
-                    RegionAdapter regionAdapter = plugin.getCompatibilityHelper().adaptRegion(region);
-                    regionAdapter.shift(origin.multiply(-1));
-
-                    region = regionAdapter.transform(transform);
-                    plugin.getCompatibilityHelper().adaptRegion(region).shift(origin);
-                } catch (RegionOperationException e) {
-                    // Shift on unsupported region, we can just ignore
-                }
+                region = plugin.getCompatibilityHelper().adaptRegion(region).transform(transform, origin);
             }
         } else {
             region = getSelectedRegion(session);

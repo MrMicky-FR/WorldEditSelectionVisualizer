@@ -46,6 +46,7 @@ public class RegionAdapter6 implements RegionAdapter {
         return Vectors6.toVector3d(region.getCenter());
     }
 
+    @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {
         if (region instanceof Polygonal2DRegion) {
@@ -92,11 +93,12 @@ public class RegionAdapter6 implements RegionAdapter {
 
     @NotNull
     @Override
-    public Region transform(Transform transform) {
+    public Region transform(Transform transform, Vector3d origin) {
         if (region instanceof CuboidRegion) {
+            Vector originVector = Vectors6.toVector(origin);
             CuboidRegion cuboidRegion = (CuboidRegion) region;
-            Vector pos1 = transform.apply(cuboidRegion.getPos1());
-            Vector pos2 = transform.apply(cuboidRegion.getPos2());
+            Vector pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
+            Vector pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
 
             return new CuboidRegion(region.getWorld(), pos1, pos2);
         }
@@ -119,5 +121,9 @@ public class RegionAdapter6 implements RegionAdapter {
         }
 
         return vectors;
+    }
+
+    private Vector applyTransform(Transform transform, Vector origin, Vector vector) {
+        return transform.apply(vector.subtract(origin)).add(origin);
     }
 }

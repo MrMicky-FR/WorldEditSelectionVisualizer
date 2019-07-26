@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat.v7;
 
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -46,6 +47,7 @@ public class RegionAdapter7 implements RegionAdapter {
         return Vectors7.toVector3d(region.getCenter());
     }
 
+    @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {
         if (region instanceof Polygonal2DRegion) {
@@ -92,11 +94,12 @@ public class RegionAdapter7 implements RegionAdapter {
 
     @NotNull
     @Override
-    public Region transform(Transform transform) {
+    public Region transform(Transform transform, Vector3d origin) {
         if (region instanceof CuboidRegion) {
+            Vector3 originVector = Vectors7.toVector3(origin);
             CuboidRegion cuboidRegion = (CuboidRegion) region;
-            BlockVector3 pos1 = transform.apply(cuboidRegion.getPos1().toVector3()).toBlockPoint();
-            BlockVector3 pos2 = transform.apply(cuboidRegion.getPos2().toVector3()).toBlockPoint();
+            BlockVector3 pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
+            BlockVector3 pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
 
             return new CuboidRegion(region.getWorld(), pos1, pos2);
         }
@@ -119,5 +122,13 @@ public class RegionAdapter7 implements RegionAdapter {
         }
 
         return vectors;
+    }
+
+    private BlockVector3 applyTransform(Transform transform, Vector3 origin, BlockVector3 vector) {
+        return applyTransform(transform, origin, vector.toVector3()).toBlockPoint();
+    }
+
+    private Vector3 applyTransform(Transform transform, Vector3 origin, Vector3 vector) {
+        return transform.apply(vector.subtract(origin)).add(origin);
     }
 }

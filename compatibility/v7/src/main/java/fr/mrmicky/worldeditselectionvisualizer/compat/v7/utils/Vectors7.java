@@ -22,6 +22,11 @@ public final class Vectors7 {
     }
 
     @NotNull
+    public static Vector3 toVector3(Vector3d vec) {
+        return Vector3.at(vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    @NotNull
     public static BlockVector3 toBlockVector3(Vector3d vec) {
         return BlockVector3.at(vec.getX(), vec.getY(), vec.getZ());
     }

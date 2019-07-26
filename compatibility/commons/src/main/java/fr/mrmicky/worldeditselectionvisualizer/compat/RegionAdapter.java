@@ -20,6 +20,7 @@ public interface RegionAdapter {
     @NotNull
     Vector3d getCenter();
 
+    @NotNull
     List<Vector3d> getPolygonalPoints();
 
     @NotNull
@@ -34,7 +35,7 @@ public interface RegionAdapter {
     List<Vector3d[]> getConvexTriangles(boolean faweSupport);
 
     @NotNull
-    Region transform(Transform transform);
+    Region transform(Transform transform, Vector3d origin);
 
     void shift(Vector3d vector) throws RegionOperationException;
 
