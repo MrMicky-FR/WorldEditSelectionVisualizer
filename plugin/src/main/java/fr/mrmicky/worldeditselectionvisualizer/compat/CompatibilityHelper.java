@@ -131,11 +131,12 @@ public class CompatibilityHelper {
 
     private boolean isActionBarSupported() {
         try {
+            Class.forName("net.md_5.bungee.api.chat.TextComponent");
             Player.class.getMethod("spigot");
             SpigotActionBarAdapter.checkSupported();
 
             return true;
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
             return false;
         }
     }
