@@ -122,7 +122,10 @@ public class WorldEditHelper extends BukkitRunnable {
         RegionInfos regionInfos = regionAdapter.getRegionsInfos();
 
         if (regionInfos.equals(playerSelection.getLastSelectedRegion())) {
-            return;
+            SelectionPoints points = playerSelection.getSelectionPoints();
+            if (points == null || points.origin().equals(origin)) {
+                return;
+            }
         }
 
         if (!player.hasPermission("wesv.use")) {
