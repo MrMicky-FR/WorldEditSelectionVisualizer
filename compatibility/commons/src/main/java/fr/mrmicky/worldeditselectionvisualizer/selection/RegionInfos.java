@@ -1,5 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
+import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
+import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
@@ -17,23 +19,29 @@ public class RegionInfos {
     private final int length;
     private final int height;
     private final int area;
+    private final int points;
 
-    public RegionInfos(RegionAdapter region) {
-        minimum = region.getMinimumPoint();
-        maximum = region.getMinimumPoint();
-        width = region.getRegion().getWidth();
-        length = region.getRegion().getLength();
-        height = region.getRegion().getHeight();
-        area = region.getRegion().getArea();
+    public RegionInfos(RegionAdapter regionAdapter) {
+        Region region = regionAdapter.getRegion();
+
+        minimum = regionAdapter.getMinimumPoint();
+        maximum = regionAdapter.getMinimumPoint();
+
+        width = region.getWidth();
+        length = region.getLength();
+        height = region.getHeight();
+        area = region.getArea();
+        points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 
-    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int area) {
+    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int area, int points) {
         this.minimum = Objects.requireNonNull(minimum, "minimum");
         this.maximum = Objects.requireNonNull(maximum, "maximum");
         this.width = width;
         this.length = length;
         this.height = height;
         this.area = area;
+        this.points = points;
     }
 
     @NotNull
@@ -62,6 +70,10 @@ public class RegionInfos {
         return area;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,13 +88,14 @@ public class RegionInfos {
                 && length == that.length
                 && height == that.height
                 && area == that.area
+                && points == that.points
                 && minimum.equals(that.minimum)
                 && maximum.equals(that.maximum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(minimum, maximum, width, length, height, area);
+        return Objects.hash(minimum, maximum, width, length, height, area, points);
     }
 
     @Override
@@ -94,6 +107,7 @@ public class RegionInfos {
                 ", length=" + length +
                 ", height=" + height +
                 ", area=" + area +
+                ", points=" + points +
                 '}';
     }
 }
