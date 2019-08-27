@@ -69,7 +69,6 @@ public abstract class ShapeProcessor<R extends Region> {
 
         double primaryDistance = config.primary().getPointsDistance();
         double secondaryDistance = config.secondary().getPointsDistance();
-
         double secondaryGap = config.secondary().getLinesGap();
 
         for (int i = 0; i < bottomCorners.size(); i++) {

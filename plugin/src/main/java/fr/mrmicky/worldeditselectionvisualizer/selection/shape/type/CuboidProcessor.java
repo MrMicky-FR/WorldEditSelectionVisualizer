@@ -34,7 +34,7 @@ public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
         createLinesFromBottom(selection, bottomCorners, height, config);
 
         double lineGap = config.secondary().getLinesGap();
-        double distance = config.primary().getPointsDistance();
+        double distance = config.secondary().getPointsDistance();
 
         if (lineGap > 0 && getPlugin().getConfig().getBoolean("cuboid-top-bottom")) {
             for (double offset = lineGap; offset < width; offset += lineGap) {

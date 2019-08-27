@@ -33,10 +33,11 @@ cuboid-top-bottom: true
 # 'selection': The WorldEdit current selection
 # 'clipboard': The WorldEdit clipboard (when you use //copy or //schem load )
 # 'primary': The primary selection points (the region borders)
-# 'secondary': The primary selection points,
+# 'secondary': The secondary selection points
 #   'fade-delay': The number of seconds before the particles disappears. You can set it to 0 to remove the fade delay
 #   'max-selection-size' : The maximum size of a selection to be display
 #   'points-distance': The distance between each particles. The higher this number is, less particles will be spawn
+#   'lines-gap' (secondary selection only): The distance between each particles lines on cuboid and polygon. The higher this number is, less particles will be spawn. Set it to 0 to remove cuboid lines
 #   'update-interval': The delay in ticks between particles spawn. This impact the players performances
 #   'view-distance':  The maximum distance in which players can see the particles. On 1.7.10 the particle distance is limited to 16 (Minecraft limitation)
 #   'particles': The particles type and data. The data can be a color for redstone like in the form 'r,g,b' or a Material for block crack/item crack

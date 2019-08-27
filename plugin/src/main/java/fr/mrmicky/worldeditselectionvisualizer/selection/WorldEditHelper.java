@@ -145,6 +145,8 @@ public class WorldEditHelper extends BukkitRunnable {
             return;
         }
 
+        plugin.updateHoldingSelectionItem(playerInfo);
+
         Bukkit.getPluginManager().callEvent(new SelectionChangeEvent(player, region));
 
         ShapeProcessor<?> shapeProcessor = shapeProcessors.get(region.getClass());

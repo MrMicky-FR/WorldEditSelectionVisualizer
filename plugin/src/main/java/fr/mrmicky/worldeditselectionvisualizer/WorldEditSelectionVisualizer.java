@@ -79,12 +79,14 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         super.reloadConfig();
 
         if (configurationHelper != null) {
-            particlesTasks.forEach(BukkitTask::cancel);
             loadConfig();
         }
     }
 
     private void loadConfig() {
+        particlesTasks.forEach(BukkitTask::cancel);
+        particlesTasks.clear();
+
         for (SelectionType type : SelectionType.values()) {
             GlobalSelectionConfig config = configurationHelper.loadGlobalSelectionConfig(type);
 
