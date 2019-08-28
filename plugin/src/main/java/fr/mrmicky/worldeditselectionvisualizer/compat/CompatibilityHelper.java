@@ -32,7 +32,7 @@ public class CompatibilityHelper {
 
     private final boolean worldEdit7 = isWorldEdit7();
 
-    private boolean supportFawe;
+    private final boolean supportFawe;
 
     @Nullable
     private Field wandItemField;
@@ -42,8 +42,9 @@ public class CompatibilityHelper {
 
         plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
 
-        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") != null) {
-            supportFawe = true;
+        supportFawe = isFaweInstalled();
+
+        if (supportFawe) {
             plugin.getLogger().info("FastAsyncWorldEdit support enabled");
         }
 
@@ -157,6 +158,21 @@ public class CompatibilityHelper {
 
             return true;
         } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    private boolean isFaweInstalled() {
+        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") == null) {
+            return false;
+        }
+
+        try {
+            Class.forName("com.boydti.fawe.object.regions.PolyhedralRegion");
+
+            return true;
+        } catch (ClassNotFoundException e) {
+            plugin.getLogger().severe("A plugin with the name 'FastAsyncWorldEdit' is installed but FAWE classes was not found");
             return false;
         }
     }
