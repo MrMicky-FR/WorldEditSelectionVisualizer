@@ -2,9 +2,9 @@ rootProject.name = 'worldeditselectionvisualizer'
 
 // include 'compatibility', 'compatibility:commons', 'compatibility:v6', 'compatibility:v7', 'plugin'
 
-['compatibility', 'compatibility:commons', 'compatibility:v6', 'compatibility:v7', 'plugin'].each { dir ->
-    def moduleName = ":worldeditselectionvisualizer-${dir.replace(':', '-')}"
+['compatibility', 'compatibility:commons', 'compatibility:v6', 'compatibility:v7', 'plugin'].each {
+    def moduleName = ":worldeditselectionvisualizer-${it.replace(':', '-')}"
 
     include moduleName
-    project(moduleName).projectDir = file(dir.replace(':', '/'))
+    project(moduleName).projectDir = file(it.replace(':', '/'))
 }

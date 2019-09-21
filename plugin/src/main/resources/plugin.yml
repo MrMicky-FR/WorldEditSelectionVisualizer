@@ -1,5 +1,5 @@
 name: WorldEditSelectionVisualizer
-version: @version@
+version: ${pluginVersion}
 authors: [MrMicky, ZathrusWriter, Rojetto]
 description: Visualize your WorldEdit selection with particles and without any mod
 prefix: WESV
@@ -21,13 +21,13 @@ permissions:
     children:
       wesv.use: true
       wesv.toggle: true
-      wesv.reloadconfig: true
+      wesv.reload: true
   wesv.use:
     default: true
     description: Allows the visualizer to be used.
   wesv.toggle:
     default: true
     description: Allows the visualizer to be toggled.
-  wesv.reloadconfig:
+  wesv.reload:
     default: op
     description: Allows the configuration of this plugin to be reloaded from the config.yml file.
