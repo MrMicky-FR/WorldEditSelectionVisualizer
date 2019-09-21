@@ -53,6 +53,11 @@ public class ConfigurationHelper {
             return new ParticleData(ParticleType.REDSTONE);
         }
 
+        if (!type.isSupported()) {
+            plugin.getLogger().warning("Unsupported particle type in the config: " + rawType);
+            return new ParticleData(ParticleType.REDSTONE);
+        }
+
         return new ParticleData(type, loadParticleData(type.getDataType(), config.getString("data")));
     }
 

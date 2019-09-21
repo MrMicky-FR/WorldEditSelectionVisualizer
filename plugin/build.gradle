@@ -11,7 +11,7 @@ dependencies {
     compile project(':worldeditselectionvisualizer-compatibility-commons')
     compile project(':worldeditselectionvisualizer-compatibility-v6')
     compile project(':worldeditselectionvisualizer-compatibility-v7')
-    compile 'fr.mrmicky:FastParticles:1.2.2'
+    compile 'fr.mrmicky:FastParticles:1.2.3'
     compile 'org.bstats:bstats-bukkit:1.5'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.0.0'
     compileOnly 'com.boydti:fawe-api:latest'

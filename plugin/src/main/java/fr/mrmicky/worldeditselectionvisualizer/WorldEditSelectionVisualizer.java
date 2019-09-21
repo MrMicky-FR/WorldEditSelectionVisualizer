@@ -26,6 +26,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -131,6 +132,11 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
 
         return playerInfos;
+    }
+
+    @NotNull
+    public Optional<PlayerVisualizerInfos> getPlayerInfosSafe(Player player) {
+        return Optional.ofNullable(players.get(player.getUniqueId()));
     }
 
     public Map<UUID, PlayerVisualizerInfos> getPlayers() {
