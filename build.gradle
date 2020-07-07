@@ -16,9 +16,11 @@ subprojects {
     repositories {
         mavenCentral()
 
-        maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
         maven { url 'https://maven.sk89q.com/repo/' }
-        maven { url 'https://repo.codemc.org/repository/maven-public/' }
+        maven { url 'https://mvn.intellectualsites.com/content/repositories/public/' }
+        maven { url 'https://repo.codemc.io/repository/maven-public/' }
+        maven { url 'https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
     }
 
     dependencies {
