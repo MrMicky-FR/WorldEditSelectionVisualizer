@@ -8,10 +8,12 @@ import java.util.function.Supplier;
 
 public final class WesvMetrics {
 
+    private static final int B_STATS_PLUGIN_ID = 335;
+
     private final Metrics metrics;
 
     private WesvMetrics(WorldEditSelectionVisualizer plugin) {
-        metrics = new Metrics(plugin);
+        metrics = new Metrics(plugin, B_STATS_PLUGIN_ID);
 
         CompatibilityHelper compatHelper = plugin.getCompatibilityHelper();
 

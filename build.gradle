@@ -20,7 +20,6 @@ subprojects {
         maven { url 'https://maven.sk89q.com/repo/' }
         maven { url 'https://mvn.intellectualsites.com/content/repositories/public/' }
         maven { url 'https://repo.codemc.io/repository/maven-public/' }
-        maven { url 'https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
     }
 
     dependencies {

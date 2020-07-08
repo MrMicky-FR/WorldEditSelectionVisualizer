@@ -3,7 +3,6 @@ plugins {
 }
 
 repositories {
-    maven { url 'https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn/' }
     maven { url 'https://jitpack.io' }
 }
 
@@ -12,7 +11,7 @@ dependencies {
     compile project(':worldeditselectionvisualizer-compatibility-v6')
     compile project(':worldeditselectionvisualizer-compatibility-v7')
     compile 'fr.mrmicky:FastParticles:1.2.3'
-    compile 'org.bstats:bstats-bukkit:1.5'
+    compile 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.0.0'
     compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.0.0'
 }
