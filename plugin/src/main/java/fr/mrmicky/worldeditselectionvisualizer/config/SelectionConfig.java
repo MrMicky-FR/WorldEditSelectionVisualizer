@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.config;
 
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticleData;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

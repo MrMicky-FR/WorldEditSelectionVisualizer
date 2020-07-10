@@ -27,10 +27,17 @@ public class RegionInfos {
         minimum = regionAdapter.getMinimumPoint();
         maximum = regionAdapter.getMinimumPoint();
 
-        width = region.getWidth();
-        length = region.getLength();
-        height = region.getHeight();
-        area = region.getArea();
+        if (minimum == Vector3d.ZERO || maximum == Vector3d.ZERO) {
+            width = 0;
+            length = 0;
+            height = 0;
+            area = 0;
+        } else {
+            width = region.getWidth();
+            length = region.getLength();
+            height = region.getHeight();
+            area = region.getArea();
+        }
         points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 

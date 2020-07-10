@@ -32,13 +32,35 @@ public class RegionAdapter7 implements RegionAdapter {
     @NotNull
     @Override
     public Vector3d getMinimumPoint() {
-        return Vectors7.toVector3d(region.getMinimumPoint());
+        BlockVector3 point = region.getMinimumPoint();
+        if (point == null)
+            return Vector3d.ZERO;
+        return Vectors7.toVector3d(point);
     }
 
     @NotNull
     @Override
     public Vector3d getMaximumPoint() {
-        return Vectors7.toVector3d(region.getMaximumPoint());
+        BlockVector3 point = region.getMaximumPoint();
+        if (point == null)
+            return Vector3d.ZERO;
+        return Vectors7.toVector3d(point);
+    }
+
+    @NotNull
+    @Override
+    public Vector3d getPos1() {
+        if (region instanceof CuboidRegion)
+            return Vectors7.toVector3d(((CuboidRegion) region).getPos1());
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public Vector3d getPos2() {
+        if (region instanceof CuboidRegion)
+            return Vectors7.toVector3d(((CuboidRegion) region).getPos2());
+        throw new UnsupportedOperationException();
     }
 
     @NotNull
@@ -55,6 +77,19 @@ public class RegionAdapter7 implements RegionAdapter {
 
             return polygonalRegion.getPoints().stream()
                     .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
+                    .collect(Collectors.toList());
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public List<Vector3d> getPolyhedralVertices() {
+        if (region instanceof ConvexPolyhedralRegion) {
+            ConvexPolyhedralRegion polyhedralRegion = (ConvexPolyhedralRegion) region;
+
+            return polyhedralRegion.getVertices().stream()
+                    .map(vec -> new Vector3d(vec.getX(), vec.getY(), vec.getZ()))
                     .collect(Collectors.toList());
         }
         throw new UnsupportedOperationException();

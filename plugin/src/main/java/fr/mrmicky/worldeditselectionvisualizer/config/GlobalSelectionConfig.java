@@ -12,11 +12,14 @@ public class GlobalSelectionConfig {
     @NotNull
     private final SelectionConfig secondary;
 
-    public GlobalSelectionConfig(int fadeDelay, int maxSelectionSize, @NotNull SelectionConfig primary, @NotNull SelectionConfig secondary) {
+    private final PositionBlockConfig positionBlock;
+
+    public GlobalSelectionConfig(int fadeDelay, int maxSelectionSize, @NotNull SelectionConfig primary, @NotNull SelectionConfig secondary, PositionBlockConfig positionBlock) {
         this.fadeDelay = fadeDelay;
         this.maxSelectionSize = maxSelectionSize;
         this.primary = primary;
         this.secondary = secondary;
+        this.positionBlock = positionBlock;
     }
 
     public int getFadeDelay() {
@@ -35,5 +38,9 @@ public class GlobalSelectionConfig {
     @NotNull
     public SelectionConfig secondary() {
         return secondary;
+    }
+
+    public PositionBlockConfig positionBlock() {
+        return positionBlock;
     }
 }

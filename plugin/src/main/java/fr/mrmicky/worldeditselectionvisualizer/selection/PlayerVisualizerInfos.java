@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +22,8 @@ public class PlayerVisualizerInfos {
     private final Map<SelectionType, PlayerSelection> enabledVisualizations = new EnumMap<>(SelectionType.class);
 
     private boolean holdingSelectionItem = true;
+
+    private SelectionPoints selectionPoints = null;
 
     public PlayerVisualizerInfos(@NotNull Player player) {
         this.player = Objects.requireNonNull(player, "player");
@@ -51,6 +54,14 @@ public class PlayerVisualizerInfos {
 
     public boolean isSelectionVisible(SelectionType type) {
         return enabledVisualizations.containsKey(type);
+    }
+
+    public void setSelectionPoints(SelectionPoints selectionPoints) {
+        this.selectionPoints = selectionPoints;
+    }
+
+    public SelectionPoints getSelectionPoints() {
+        return selectionPoints;
     }
 
     public void toggleSelectionVisibility(SelectionType type, boolean enable) {

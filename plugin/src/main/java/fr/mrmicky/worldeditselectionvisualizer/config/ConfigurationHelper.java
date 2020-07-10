@@ -6,6 +6,7 @@ import fr.mrmicky.worldeditselectionvisualizer.display.ParticleData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -28,8 +29,9 @@ public class ConfigurationHelper {
         int maxSelectionSize = section.getInt("max-selection-size");
         SelectionConfig primary = loadSelectionConfig(section.getConfigurationSection("primary"));
         SelectionConfig secondary = loadSelectionConfig(section.getConfigurationSection("secondary"));
+        PositionBlockConfig positionBlock = loadPositionBlockConfig(section.getConfigurationSection("position-block"));
 
-        return new GlobalSelectionConfig(fadeDelay, maxSelectionSize, primary, secondary);
+        return new GlobalSelectionConfig(fadeDelay, maxSelectionSize, primary, secondary, positionBlock);
     }
 
     @NotNull
@@ -41,6 +43,17 @@ public class ConfigurationHelper {
         ParticleData particleData = loadParticle(config.getConfigurationSection("particles"));
 
         return new SelectionConfig(pointsDistance, linesGap, updateInterval, viewDistance, particleData);
+    }
+
+    private PositionBlockConfig loadPositionBlockConfig(ConfigurationSection config) {
+        if (config == null)
+            return null;
+
+        int updateInterval = config.getInt("update-interval");
+        BlockData primary = loadBlock(config.getConfigurationSection("primary"));
+        BlockData secondary = loadBlock(config.getConfigurationSection("secondary"));
+
+        return new PositionBlockConfig(updateInterval, primary, secondary);
     }
 
     @NotNull
@@ -59,6 +72,32 @@ public class ConfigurationHelper {
         }
 
         return new ParticleData(type, loadParticleData(type.getDataType(), config.getString("data")));
+    }
+
+    private BlockData loadBlock(ConfigurationSection config) {
+        if (config == null)
+            return null;
+        String rawMaterial = config.getString("material");
+        if (rawMaterial == null)
+            return null;
+        Material material = Material.matchMaterial(rawMaterial);
+        if (material == null) {
+            plugin.getLogger().warning("Invalid block material in the config: " + rawMaterial);
+            return null;
+        }
+        if (!material.isBlock()) {
+            plugin.getLogger().warning("Invalid block material in the config. Specified material is not a block: " + rawMaterial);
+            return null;
+        }
+
+        String rawData = config.getString("data", "");
+        try {
+            @NotNull BlockData blockData = material.createBlockData(rawData);
+            return blockData;
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Invalid block data in the config: " + rawData);
+            return material.createBlockData();
+        }
     }
 
     @SuppressWarnings("deprecation")

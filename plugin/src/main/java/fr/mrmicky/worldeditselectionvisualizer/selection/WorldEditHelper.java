@@ -5,6 +5,7 @@ import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -13,6 +14,7 @@ import com.sk89q.worldedit.regions.EllipsoidRegion;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
+import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
@@ -27,11 +29,15 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.EllipsoidPro
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.FawePolyhedralProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.Polygonal2DProcessor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WorldEditHelper extends BukkitRunnable {
@@ -134,17 +140,19 @@ public class WorldEditHelper extends BukkitRunnable {
         }
 
         GlobalSelectionConfig config = plugin.getSelectionConfig(type);
-        int area = region.getArea();
+        if (session.isSelectionDefined(session.getSelectionWorld())) {
+            int area = region.getArea();
 
-        if (area < 0 || area > config.getMaxSelectionSize()) {
-            if (!playerSelection.isLastSelectionTooLarge()) {
-                String message = plugin.getMessage("selection-too-large").replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
-                plugin.getCompatibilityHelper().sendActionBar(player, message);
+            if (area < 0 || area > config.getMaxSelectionSize()) {
+                if (!playerSelection.isLastSelectionTooLarge()) {
+                    String message = plugin.getMessage("selection-too-large").replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
+                    plugin.getCompatibilityHelper().sendActionBar(player, message);
+                }
+
+                playerSelection.resetSelection(regionInfos);
+                playerSelection.setLastSelectionTooLarge(true);
+                return;
             }
-
-            playerSelection.resetSelection(regionInfos);
-            playerSelection.setLastSelectionTooLarge(true);
-            return;
         }
 
         plugin.updateHoldingSelectionItem(playerInfo);
@@ -166,13 +174,13 @@ public class WorldEditHelper extends BukkitRunnable {
         if (session != null && session.getSelectionWorld() != null) {
             RegionSelector selector = session.getRegionSelector(session.getSelectionWorld());
 
-            if (selector.isDefined()) {
+            //if (selector.isDefined()) {
                 try {
-                    return selector.getRegion();
+                    return selector.getIncompleteRegion();
                 } catch (IncompleteRegionException e) {
                     plugin.getLogger().warning("Region still incomplete");
                 }
-            }
+            //}
         }
         return null;
     }

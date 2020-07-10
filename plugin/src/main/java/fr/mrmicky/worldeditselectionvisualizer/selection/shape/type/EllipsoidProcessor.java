@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shape.type;
 
+import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.regions.EllipsoidRegion;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
@@ -16,8 +17,16 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
 
     @Override
     protected void processSelection(SelectionPoints selection, EllipsoidRegion region, RegionAdapter regionAdapter, GlobalSelectionConfig config) {
+        Vector3d center = regionAdapter.getCenter();
+        if (center == Vector3d.ZERO)
+            return;
+        selection.primaryPositions().add(new Vector3d(center.getX(), center.getY(), center.getZ()));
+        if (region.getRadius().lengthSq() == 0)
+            // Selection is incomplete.
+            return;
+
         Vector3d radius = regionAdapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);
-        Vector3d center = regionAdapter.getCenter().add(0.5, 0.5, 0.5);
+        center = regionAdapter.getCenter().add(0.5, 0.5, 0.5);
 
         selection.primary().add(center);
 

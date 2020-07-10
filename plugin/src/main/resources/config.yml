@@ -45,6 +45,12 @@ visualization:
   selection:
     fade-delay: 0
     max-selection-size: 50000
+    position-block:
+      view-distance: 64
+      primary:
+        material: DIAMOND_BLOCK
+      secondary:
+        material: GOLD_BLOCK
     primary:
       points-distance: 0.5
       update-interval: 10

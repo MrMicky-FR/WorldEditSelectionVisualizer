@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat.v6;
 
+import com.boydti.fawe.object.regions.PolyhedralRegion;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
@@ -42,6 +43,31 @@ public class RegionAdapter6 implements RegionAdapter {
 
     @NotNull
     @Override
+    public Vector3d getPos1() {
+        if (region instanceof CuboidRegion)
+            return convPos(((CuboidRegion) region).getPos1());
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public Vector3d getPos2() {
+        if (region instanceof CuboidRegion)
+            return convPos(((CuboidRegion) region).getPos2());
+        throw new UnsupportedOperationException();
+    }
+
+    private Vector3d convPos(Vector pos) {
+        if (pos.getX() == 0 && pos.getY() == 0 && pos.getZ() == 0)
+            // This isn't ideal, as Vector3d.ZERO is a specific instance of Vector3d which denotes an uninitialized value.
+            // WEv7 uses BlockVector3.ZERO for this purpose, while v6 does not. So in v6, we're accepting the low risk
+            // possibility that someone actually did select 0,0,0 to be able to use ==.ZERO for uninitialized position.
+            return Vector3d.ZERO;
+        return Vectors6.toVector3d(pos);
+    }
+
+    @NotNull
+    @Override
     public Vector3d getCenter() {
         return Vectors6.toVector3d(region.getCenter());
     }
@@ -54,6 +80,19 @@ public class RegionAdapter6 implements RegionAdapter {
 
             return polygonalRegion.getPoints().stream()
                     .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
+                    .collect(Collectors.toList());
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @NotNull
+    @Override
+    public List<Vector3d> getPolyhedralVertices() {
+        if (region instanceof PolyhedralRegion) {
+            PolyhedralRegion polyhedralRegion = (PolyhedralRegion) region;
+
+            return polyhedralRegion.getVertices().stream()
+                    .map(vec -> new Vector3d(vec.getX(), vec.getY(), vec.getZ()))
                     .collect(Collectors.toList());
         }
         throw new UnsupportedOperationException();

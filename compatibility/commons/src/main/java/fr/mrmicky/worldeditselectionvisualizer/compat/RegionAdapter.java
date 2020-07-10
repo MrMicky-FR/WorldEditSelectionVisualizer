@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat;
 
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
@@ -17,11 +18,17 @@ public interface RegionAdapter {
     @NotNull
     Vector3d getMaximumPoint();
 
+    Vector3d getPos1();
+    Vector3d getPos2();
+
     @NotNull
     Vector3d getCenter();
 
     @NotNull
     List<Vector3d> getPolygonalPoints();
+
+    @NotNull
+    List<Vector3d> getPolyhedralVertices();
 
     @NotNull
     Vector3d getEllipsoidRadius();

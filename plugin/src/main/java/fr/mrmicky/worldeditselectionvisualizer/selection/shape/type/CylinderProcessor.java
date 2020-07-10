@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shape.type;
 
+import com.sk89q.worldedit.math.Vector2;
 import com.sk89q.worldedit.regions.CylinderRegion;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
@@ -18,6 +19,13 @@ public class CylinderProcessor extends ShapeProcessor<CylinderRegion> {
 
     @Override
     protected void processSelection(SelectionPoints selection, CylinderRegion region, RegionAdapter regionAdapter, GlobalSelectionConfig config) {
+        if (regionAdapter.getCenter() == Vector3d.ZERO)
+            return;
+        selection.primaryPositions().add(regionAdapter.getCenter());
+        if (region.getRadius().equals(Vector2.ZERO))
+            // Selection is incomplete. Can't add lines.
+            return;
+
         Vector3d min = regionAdapter.getMinimumPoint();
         Vector3d max = regionAdapter.getMaximumPoint().add(1, 1, 1);
         Vector3d bottomCenter = regionAdapter.getCenter().withY(min.getY()).add(0.5, 0.0, 0.5);

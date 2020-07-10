@@ -5,6 +5,7 @@ import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
 import fr.mrmicky.worldeditselectionvisualizer.config.ConfigurationHelper;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
+import fr.mrmicky.worldeditselectionvisualizer.display.PositionBlockTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
 import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
@@ -35,7 +36,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     private final Map<UUID, PlayerVisualizerInfos> players = new HashMap<>();
     private final Map<SelectionType, GlobalSelectionConfig> configurations = new EnumMap<>(SelectionType.class);
 
-    private final Set<BukkitTask> particlesTasks = new HashSet<>();
+    private final Set<BukkitTask> visualizationTasks = new HashSet<>();
 
     private WorldEditHelper worldEditHelper;
     private StorageManager storageManager;
@@ -85,17 +86,22 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     }
 
     private void loadConfig() {
-        particlesTasks.forEach(BukkitTask::cancel);
-        particlesTasks.clear();
+        visualizationTasks.forEach(BukkitTask::cancel);
+        visualizationTasks.clear();
 
         for (SelectionType type : SelectionType.values()) {
             GlobalSelectionConfig config = configurationHelper.loadGlobalSelectionConfig(type);
 
             configurations.put(type, config);
 
-            particlesTasks.add(new ParticlesTask(this, type, true, config.primary()).start());
-            particlesTasks.add(new ParticlesTask(this, type, false, config.secondary()).start());
+            visualizationTasks.add(new ParticlesTask(this, type, true, config.primary()).start());
+            visualizationTasks.add(new ParticlesTask(this, type, false, config.secondary()).start());
         }
+
+        GlobalSelectionConfig config = configurationHelper.loadGlobalSelectionConfig(SelectionType.SELECTION);
+        BukkitTask positionBlockBukkitTask = (new PositionBlockTask(this, config.positionBlock()).start());
+        if (positionBlockBukkitTask != null)
+            visualizationTasks.add(positionBlockBukkitTask);
     }
 
     public void updateHoldingSelectionItem(PlayerVisualizerInfos playerInfos) {
