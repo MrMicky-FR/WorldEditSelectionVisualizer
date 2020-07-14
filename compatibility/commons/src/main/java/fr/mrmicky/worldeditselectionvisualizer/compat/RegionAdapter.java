@@ -24,7 +24,7 @@ public interface RegionAdapter {
         int area = getRegion().getArea();
 
         // Handle integer overflow
-        if (area < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) < (area * area)) {
+        if (area < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > (area * area)) {
             return Long.MAX_VALUE;
         }
 
