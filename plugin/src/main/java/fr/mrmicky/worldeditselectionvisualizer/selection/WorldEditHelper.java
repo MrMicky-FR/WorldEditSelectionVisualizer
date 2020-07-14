@@ -134,9 +134,8 @@ public class WorldEditHelper extends BukkitRunnable {
         }
 
         GlobalSelectionConfig config = plugin.getSelectionConfig(type);
-        int area = region.getArea();
 
-        if (area < 0 || area > config.getMaxSelectionSize()) {
+        if (regionAdapter.getVolume() > config.getMaxSelectionSize()) {
             if (!playerSelection.isLastSelectionTooLarge()) {
                 String message = plugin.getMessage("selection-too-large").replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
                 plugin.getCompatibilityHelper().sendActionBar(player, message);
