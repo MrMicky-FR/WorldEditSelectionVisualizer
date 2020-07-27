@@ -5,6 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Called when a player toggled his selection visualizer
  */
@@ -25,7 +27,7 @@ public class VisualizationToggleEvent extends Event {
      *                or disable their WorldEdit selection visualization.
      */
     public VisualizationToggleEvent(@NotNull Player player, boolean enabled) {
-        this.player = player;
+        this.player = Objects.requireNonNull(player, "player");
         this.enabled = enabled;
     }
 

@@ -46,6 +46,11 @@ public class RegionAdapter6 implements RegionAdapter {
         return Vectors6.toVector3d(region.getCenter());
     }
 
+    @Override
+    public long getVolume() {
+        return region.getArea();
+    }
+
     @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {

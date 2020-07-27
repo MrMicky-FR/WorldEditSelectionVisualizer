@@ -20,16 +20,7 @@ public interface RegionAdapter {
     @NotNull
     Vector3d getCenter();
 
-    default long getVolume() {
-        int area = getRegion().getArea();
-
-        // Handle integer overflow
-        if (area < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > (area * area)) {
-            return Long.MAX_VALUE;
-        }
-
-        return area;
-    }
+    long getVolume();
 
     @NotNull
     List<Vector3d> getPolygonalPoints();

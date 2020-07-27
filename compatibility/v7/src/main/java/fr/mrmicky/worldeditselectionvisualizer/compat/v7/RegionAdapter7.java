@@ -47,6 +47,19 @@ public class RegionAdapter7 implements RegionAdapter {
         return Vectors7.toVector3d(region.getCenter());
     }
 
+    @Override
+    public long getVolume() {
+        // TODO Use Region#getVolume when WorldEdit 7.2 is released.
+        int volume = region.getArea();
+
+        // Handle integer overflow introduced in WorldEdit 7
+        if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > (volume * volume)) {
+            return Long.MAX_VALUE;
+        }
+
+        return volume;
+    }
+
     @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {

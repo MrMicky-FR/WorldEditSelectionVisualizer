@@ -14,7 +14,7 @@ public class ParticleData {
     @Nullable
     private final Object data;
 
-    public ParticleData(ParticleType type) {
+    public ParticleData(@NotNull ParticleType type) {
         this(type, null);
     }
 

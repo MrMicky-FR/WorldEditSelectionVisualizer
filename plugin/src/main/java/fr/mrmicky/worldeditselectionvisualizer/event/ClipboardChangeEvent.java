@@ -7,6 +7,8 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Called when the WorldEdit clipboard of a player changed
  */
@@ -27,8 +29,8 @@ public class ClipboardChangeEvent extends Event {
      * @param region The region in which to listen to this event.
      */
     public ClipboardChangeEvent(@NotNull Player player, @Nullable Region region) {
-        this.player = player;
-        this.region = region;
+        this.player = Objects.requireNonNull(player, "player");
+        this.region = Objects.requireNonNull(region, "region");
     }
 
     /**

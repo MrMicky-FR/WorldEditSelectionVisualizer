@@ -18,10 +18,11 @@ public class RegionInfos {
     private final int width;
     private final int length;
     private final int height;
-    private final int area;
+
+    private final long volume;
     private final int points;
 
-    public RegionInfos(RegionAdapter regionAdapter) {
+    public RegionInfos(@NotNull RegionAdapter regionAdapter) {
         Region region = regionAdapter.getRegion();
 
         minimum = regionAdapter.getMinimumPoint();
@@ -30,17 +31,18 @@ public class RegionInfos {
         width = region.getWidth();
         length = region.getLength();
         height = region.getHeight();
-        area = region.getArea();
+
+        volume = regionAdapter.getVolume();
         points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 
-    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int area, int points) {
+    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int volume, int points) {
         this.minimum = Objects.requireNonNull(minimum, "minimum");
         this.maximum = Objects.requireNonNull(maximum, "maximum");
         this.width = width;
         this.length = length;
         this.height = height;
-        this.area = area;
+        this.volume = volume;
         this.points = points;
     }
 
@@ -66,8 +68,8 @@ public class RegionInfos {
         return height;
     }
 
-    public int getArea() {
-        return area;
+    public long getVolume() {
+        return volume;
     }
 
     public int getPoints() {
@@ -87,7 +89,7 @@ public class RegionInfos {
         return width == that.width
                 && length == that.length
                 && height == that.height
-                && area == that.area
+                && volume == that.volume
                 && points == that.points
                 && minimum.equals(that.minimum)
                 && maximum.equals(that.maximum);
@@ -95,7 +97,7 @@ public class RegionInfos {
 
     @Override
     public int hashCode() {
-        return Objects.hash(minimum, maximum, width, length, height, area, points);
+        return Objects.hash(minimum, maximum, width, length, height, volume, points);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class RegionInfos {
                 ", width=" + width +
                 ", length=" + length +
                 ", height=" + height +
-                ", area=" + area +
+                ", volume=" + volume +
                 ", points=" + points +
                 '}';
     }

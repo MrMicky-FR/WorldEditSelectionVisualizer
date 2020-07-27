@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -73,7 +74,7 @@ public class CompatibilityHelper {
         return worldEdit7 ? 7 : 6;
     }
 
-    public boolean isHoldingSelectionItem(Player player) {
+    public boolean isHoldingSelectionItem(@NotNull Player player) {
         return isSelectionItem(getItemInMainHand(player)) || isSelectionItem(getItemInOffHand(player));
     }
 
@@ -81,7 +82,7 @@ public class CompatibilityHelper {
         return supportFawe;
     }
 
-    public void sendActionBar(Player player, String message) {
+    public void sendActionBar(@NotNull Player player, @NotNull String message) {
         if (!supportActionBar) {
             player.sendMessage(message);
             return;
@@ -90,7 +91,8 @@ public class CompatibilityHelper {
         SpigotActionBarAdapter.sendActionBar(player, message);
     }
 
-    public boolean isSelectionItem(ItemStack item) {
+    @SuppressWarnings("deprecation")
+    public boolean isSelectionItem(@Nullable ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return false;
         }
@@ -101,7 +103,6 @@ public class CompatibilityHelper {
 
         try {
             if (wandItemField.getType() == int.class) { // WorldEdit under 1.13
-                //noinspection deprecation
                 return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
             }
 
@@ -118,8 +119,8 @@ public class CompatibilityHelper {
         return true;
     }
 
+    @SuppressWarnings("deprecation") // 1.7.10/1.8 servers support
     private ItemStack getItemInMainHand(Player player) {
-        //noinspection deprecation - for 1.7/1.8 servers
         return player.getItemInHand();
     }
 
