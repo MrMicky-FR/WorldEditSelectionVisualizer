@@ -14,6 +14,7 @@ import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.FaweAdapter7;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.Vectors7;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
+import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class RegionAdapter7 implements RegionAdapter {
         int volume = region.getArea();
 
         // Handle integer overflow introduced in WorldEdit 7
-        if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > (volume * volume)) {
+        if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
             return Long.MAX_VALUE;
         }
 
