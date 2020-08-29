@@ -13,7 +13,7 @@ dependencies {
     compile 'fr.mrmicky:FastParticles:1.2.4'
     compile 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.0.0'
-    compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.0.0'
+    compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.16-326'
 }
 
 shadowJar {

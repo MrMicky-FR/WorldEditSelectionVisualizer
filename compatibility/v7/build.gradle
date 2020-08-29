@@ -1,5 +1,5 @@
 dependencies {
     compile project(':worldeditselectionvisualizer-compatibility-commons')
     compileOnly 'com.sk89q.worldedit:worldedit-core:7.0.0'
-    compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.0.0'
+    compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.16-326'
 }
