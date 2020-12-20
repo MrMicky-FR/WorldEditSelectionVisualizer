@@ -35,7 +35,7 @@ cuboid-top-bottom: true
 # 'primary': The primary selection points (the region borders)
 # 'secondary': The secondary selection points
 #   'fade-delay': The number of seconds before the particles disappears. You can set it to 0 to remove the fade delay
-#   'max-selection-size' : The maximum size of a selection to be display
+#   'max-selection-size' : The maximum size of a selection to be display. A big value (> 1000000) can cause important lags
 #   'points-distance': The distance between each particles. The higher this number is, less particles will be spawn
 #   'lines-gap' (secondary selection only): The distance between each particles lines on cuboid and polygon. The higher this number is, less particles will be spawn. Set it to 0 to remove cuboid lines
 #   'update-interval': The delay in ticks between particles spawn. This impact the players performances

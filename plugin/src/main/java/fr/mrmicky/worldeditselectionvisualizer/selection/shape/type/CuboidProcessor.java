@@ -8,7 +8,7 @@ import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
@@ -25,11 +25,12 @@ public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
         int width = region.getWidth();
         int length = region.getLength();
 
-        List<Vector3d> bottomCorners = new ArrayList<>(4);
-        bottomCorners.add(min);
-        bottomCorners.add(min.withX(max.getX()));
-        bottomCorners.add(max.withY(min.getY()));
-        bottomCorners.add(min.withZ(max.getZ()));
+        List<Vector3d> bottomCorners = Arrays.asList(
+                min,
+                min.withX(max.getX()),
+                max.withY(min.getY()),
+                min.withZ(max.getZ())
+        );
 
         createLinesFromBottom(selection, bottomCorners, height, config);
 

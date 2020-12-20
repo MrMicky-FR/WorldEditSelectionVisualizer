@@ -12,6 +12,7 @@ import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation")
 public class ConfigurationHelper {
 
     private final WorldEditSelectionVisualizer plugin;
@@ -22,7 +23,7 @@ public class ConfigurationHelper {
 
     @NotNull
     public GlobalSelectionConfig loadGlobalSelectionConfig(SelectionType type) {
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("visualization." + type.toString().toLowerCase());
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("visualization." + type.getName());
 
         int fadeDelay = section.getInt("fade-delay");
         int maxSelectionSize = section.getInt("max-selection-size");
@@ -61,7 +62,6 @@ public class ConfigurationHelper {
         return new ParticleData(type, loadParticleData(type.getDataType(), config.getString("data")));
     }
 
-    @SuppressWarnings("deprecation")
     @Nullable
     private Object loadParticleData(Class<?> dataClass, String name) {
         if (dataClass == Color.class) {

@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer;
 
+import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.commands.CommandWesv;
 import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
 import fr.mrmicky.worldeditselectionvisualizer.config.ConfigurationHelper;
@@ -73,6 +74,21 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
 
         WesvMetrics.register(this);
+
+        if (compatibilityHelper.getWorldEditVersion() == 7) {
+            try {
+                Region.class.getMethod("getVolume");
+            } catch (NoSuchMethodException e) {
+                getServer().getScheduler().runTask(this, () -> {
+                    getLogger().warning("***************************");
+                    getLogger().warning("You are using an old WorldEdit version (7.0.x or 7.1.x) !");
+                    getLogger().warning("It's recommended to update to WorldEdit 7.2.0 or later");
+                    getLogger().warning("You can download the latest WorldEdit version here: https://dev.bukkit.org/projects/worldedit/files");
+                    getLogger().warning("New versions of WorldEditSelectionVisualizer might not work with this WorldEdit version");
+                    getLogger().warning("***************************");
+                });
+            }
+        }
     }
 
     @Override

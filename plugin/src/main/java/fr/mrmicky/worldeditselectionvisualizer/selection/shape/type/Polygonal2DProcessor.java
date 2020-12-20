@@ -22,9 +22,10 @@ public class Polygonal2DProcessor extends ShapeProcessor<Polygonal2DRegion> {
         double minY = regionAdapter.getMinimumPoint().getY();
         int height = region.getHeight();
 
-        List<Vector3d> bottomCorners = new ArrayList<>();
+        List<Vector3d> polygonalPoints = regionAdapter.getPolygonalPoints();
+        List<Vector3d> bottomCorners = new ArrayList<>(polygonalPoints.size());
 
-        for (Vector3d vec2d : regionAdapter.getPolygonalPoints()) {
+        for (Vector3d vec2d : polygonalPoints) {
             bottomCorners.add(vec2d.add(0.5, minY, 0.5));
         }
 

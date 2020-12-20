@@ -54,23 +54,25 @@ public class RegionAdapter6 implements RegionAdapter {
     @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {
-        if (region instanceof Polygonal2DRegion) {
-            Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
-
-            return polygonalRegion.getPoints().stream()
-                    .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
-                    .collect(Collectors.toList());
+        if (!(region instanceof Polygonal2DRegion)) {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
+
+        Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
+
+        return polygonalRegion.getPoints().stream()
+                .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
+                .collect(Collectors.toList());
     }
 
     @NotNull
     @Override
     public Vector3d getEllipsoidRadius() {
-        if (region instanceof EllipsoidRegion) {
-            return Vectors6.toVector3d(((EllipsoidRegion) region).getRadius());
+        if (!(region instanceof EllipsoidRegion)) {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
+
+        return Vectors6.toVector3d(((EllipsoidRegion) region).getRadius());
     }
 
     @NotNull
@@ -99,16 +101,16 @@ public class RegionAdapter6 implements RegionAdapter {
     @NotNull
     @Override
     public Region transform(Transform transform, Vector3d origin) {
-        if (region instanceof CuboidRegion) {
-            Vector originVector = Vectors6.toVector(origin);
-            CuboidRegion cuboidRegion = (CuboidRegion) region;
-            Vector pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
-            Vector pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
-
-            return new CuboidRegion(region.getWorld(), pos1, pos2);
+        if (!(region instanceof CuboidRegion)) {
+            return region.clone();
         }
 
-        return region.clone();
+        Vector originVector = Vectors6.toVector(origin);
+        CuboidRegion cuboidRegion = (CuboidRegion) region;
+        Vector pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
+        Vector pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
+
+        return new CuboidRegion(region.getWorld(), pos1, pos2);
     }
 
     @NotNull

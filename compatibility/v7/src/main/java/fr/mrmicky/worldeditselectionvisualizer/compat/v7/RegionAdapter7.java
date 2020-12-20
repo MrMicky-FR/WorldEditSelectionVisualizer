@@ -23,6 +23,20 @@ import java.util.stream.Collectors;
 
 public class RegionAdapter7 implements RegionAdapter {
 
+    public static final boolean USE_REGION_GET_VOLUME;
+
+    static {
+        boolean useRegionGetVolume = true;
+
+        try {
+            Region.class.getMethod("getVolume");
+        } catch (NoSuchMethodException e) {
+            useRegionGetVolume = false;
+        }
+
+        USE_REGION_GET_VOLUME = useRegionGetVolume;
+    }
+
     @NotNull
     private final Region region;
 
@@ -48,39 +62,46 @@ public class RegionAdapter7 implements RegionAdapter {
         return Vectors7.toVector3d(region.getCenter());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public long getVolume() {
-        // TODO Use Region#getVolume when WorldEdit 7.2 is released.
-        int volume = region.getArea();
+        if (!USE_REGION_GET_VOLUME) {
+            // TODO Remove WorldEdit 7.0.x and 7.1.x support
+            int volume = region.getArea();
 
-        // Handle integer overflow introduced in WorldEdit 7
-        if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
-            return Long.MAX_VALUE;
+            // Handle integer overflow introduced in WorldEdit 7
+            if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
+                return Long.MAX_VALUE;
+            }
+
+            return volume;
         }
 
-        return volume;
+        return region.getVolume();
     }
 
     @NotNull
     @Override
     public List<Vector3d> getPolygonalPoints() {
-        if (region instanceof Polygonal2DRegion) {
-            Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
-
-            return polygonalRegion.getPoints().stream()
-                    .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
-                    .collect(Collectors.toList());
+        if (!(region instanceof Polygonal2DRegion)) {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
+
+        Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
+
+        return polygonalRegion.getPoints().stream()
+                .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
+                .collect(Collectors.toList());
     }
 
     @NotNull
     @Override
     public Vector3d getEllipsoidRadius() {
-        if (region instanceof EllipsoidRegion) {
-            return Vectors7.toVector3d(((EllipsoidRegion) region).getRadius());
+        if (!(region instanceof EllipsoidRegion)) {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
+
+        return Vectors7.toVector3d(((EllipsoidRegion) region).getRadius());
     }
 
     @NotNull
@@ -109,16 +130,16 @@ public class RegionAdapter7 implements RegionAdapter {
     @NotNull
     @Override
     public Region transform(Transform transform, Vector3d origin) {
-        if (region instanceof CuboidRegion) {
-            Vector3 originVector = Vectors7.toVector3(origin);
-            CuboidRegion cuboidRegion = (CuboidRegion) region;
-            BlockVector3 pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
-            BlockVector3 pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
-
-            return new CuboidRegion(region.getWorld(), pos1, pos2);
+        if (!(region instanceof CuboidRegion)) {
+            return region.clone();
         }
 
-        return region.clone();
+        Vector3 originVector = Vectors7.toVector3(origin);
+        CuboidRegion cuboidRegion = (CuboidRegion) region;
+        BlockVector3 pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
+        BlockVector3 pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
+
+        return new CuboidRegion(region.getWorld(), pos1, pos2);
     }
 
     @NotNull

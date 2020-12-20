@@ -1,6 +1,6 @@
 allprojects {
     group = 'fr.mrmicky'
-    version = '2.0.6'
+    version = '2.0.7'
 }
 
 subprojects {
@@ -23,7 +23,7 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT'
-        compile 'org.jetbrains:annotations:17.0.0'
+        implementation 'org.jetbrains:annotations:20.1.0'
+        compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
     }
 }

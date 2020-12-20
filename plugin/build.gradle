@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 repositories {
@@ -7,12 +7,12 @@ repositories {
 }
 
 dependencies {
-    compile project(':worldeditselectionvisualizer-compatibility-commons')
-    compile project(':worldeditselectionvisualizer-compatibility-v6')
-    compile project(':worldeditselectionvisualizer-compatibility-v7')
-    compile 'fr.mrmicky:FastParticles:1.2.4'
-    compile 'org.bstats:bstats-bukkit:1.7'
-    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.0.0'
+    implementation project(':worldeditselectionvisualizer-compatibility-commons')
+    implementation project(':worldeditselectionvisualizer-compatibility-v6')
+    implementation project(':worldeditselectionvisualizer-compatibility-v7')
+    implementation 'fr.mrmicky:FastParticles:1.2.4'
+    implementation 'org.bstats:bstats-bukkit:1.8'
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
     compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.16-326'
 }
 
@@ -30,7 +30,7 @@ artifacts {
 }
 
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
+    filesMatching('**/*.yml') {
         expand 'pluginVersion': project.version
     }
 }

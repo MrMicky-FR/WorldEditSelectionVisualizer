@@ -1,4 +1,5 @@
 # WorldEditSelectionVisualizer
+
 [![Build Status](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer.svg?branch=master)](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer)
 [![Discord](https://img.shields.io/discord/390919659874156560.svg?colorB=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/q9UwaBT)
@@ -16,7 +17,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Configurable particle effect and view distance
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
-- Great compatibility: works with 1.7.10 to 1.14 servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
+- Great compatibility: works with 1.7.10 to 1.16.x servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
 
 ## Downloads
 
@@ -27,6 +28,8 @@ You can download releases and find more information on [SpigotMC](https://www.sp
 | Cuboid selection                                       | Cylinder selection                                     | Convex selection                                      |
 | ------------------------------------------------------ | ------------------------------------------------------ | ----------------------------------------------------- |
 | ![Cuboid selection](https://i.imgur.com/jGVVpgx.png)   | ![Cylinder selection](https://i.imgur.com/XLprNDA.png) | ![Convex selection](https://i.imgur.com/XKalgCn.png)  |
+
+[More screenshots](https://imgur.com/a/CEwIxaV)
 
 ## Credits
 
