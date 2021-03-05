@@ -8,6 +8,7 @@ import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
 import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
+import fr.mrmicky.worldeditselectionvisualizer.placeholders.PlaceholderManager;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.selection.StorageManager;
@@ -42,6 +43,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     private StorageManager storageManager;
     private ConfigurationHelper configurationHelper;
     private CompatibilityHelper compatibilityHelper;
+    private PlaceholderManager placeholderManager;
 
     @Override
     public void onEnable() {
@@ -61,6 +63,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         storageManager = new StorageManager(this);
         configurationHelper = new ConfigurationHelper(this);
         worldEditHelper = new WorldEditHelper(this);
+        placeholderManager = new PlaceholderManager(this);
 
         getCommand("worldeditselectionvisualizer").setExecutor(new CommandWesv(this));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -68,6 +71,10 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         loadConfig();
 
         getServer().getOnlinePlayers().forEach(this::loadPlayer);
+
+        if (getConfig().getBoolean("hook-placeholders")) {
+            placeholderManager.hook();
+        }
 
         if (getConfig().getBoolean("check-updates")) {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
@@ -88,6 +95,13 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
                     getLogger().warning("***************************");
                 });
             }
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        if (getConfig().getBoolean("hook-placeholders")) {
+            placeholderManager.unhook();
         }
     }
 

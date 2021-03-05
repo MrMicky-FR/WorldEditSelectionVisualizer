@@ -3,6 +3,12 @@
 # When enabled, if a new update is available it will display a message in the console on start
 check-updates: true
 
+# When enabled, placeholders will be hooked
+# Available placeholders:
+#  - %wesv_toggled_selection% - Return "true" if player has toggled selection view
+#  - %wesv_toggled_clipboard% - Return "true" if player has toggled clipboard view
+hook-placeholders: true
+
 # You can edit the plugin messages here
 messages:
   no-permissions: "&cYou don't have the permission to use this command"
