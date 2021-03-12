@@ -6,7 +6,7 @@ prefix: WESV
 website: https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/
 main: fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer
 depend: [WorldEdit]
-softdepend: [FastAsyncWorldEdit]
+softdepend: [FastAsyncWorldEdit, PlaceholderAPI]
 api-version: 1.13
 
 commands:

@@ -8,6 +8,7 @@ import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
 import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
+import fr.mrmicky.worldeditselectionvisualizer.placeholders.PlaceholderAPIExpansion;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.selection.StorageManager;
@@ -68,6 +69,10 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         loadConfig();
 
         getServer().getOnlinePlayers().forEach(this::loadPlayer);
+
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new PlaceholderAPIExpansion(this).registerExpansion();
+        }
 
         if (getConfig().getBoolean("check-updates")) {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
