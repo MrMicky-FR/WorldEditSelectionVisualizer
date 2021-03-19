@@ -1,7 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.commands;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
-import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
+import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.utils.ChatUtils;
 import org.bukkit.ChatColor;
@@ -49,15 +49,15 @@ public class CommandWesv implements TabExecutor {
                 return true;
             }
 
-            PlayerVisualizerInfos playerInfos = plugin.getPlayerInfos((Player) sender);
+            PlayerVisualizerData playerData = plugin.getPlayerData((Player) sender);
             SelectionType type = SelectionType.SELECTION;
 
             if (args.length > 1 && args[1].equalsIgnoreCase("clipboard")) {
                 type = SelectionType.CLIPBOARD;
             }
 
-            boolean enabled = !playerInfos.isSelectionVisible(type);
-            playerInfos.toggleSelectionVisibility(type, enabled);
+            boolean enabled = !playerData.isSelectionVisible(type);
+            playerData.toggleSelectionVisibility(type, enabled);
 
             if (type == SelectionType.SELECTION) {
                 sender.sendMessage(plugin.getMessage("visualizer-" + (enabled ? "enabled" : "disabled")));
@@ -66,7 +66,7 @@ public class CommandWesv implements TabExecutor {
             }
 
             if (plugin.getConfig().getBoolean("save-toggle")) {
-                plugin.getStorageManager().setEnable(playerInfos.getPlayer(), type, enabled);
+                plugin.getStorageManager().setEnable(playerData.getPlayer(), type, enabled);
             }
 
             return true;

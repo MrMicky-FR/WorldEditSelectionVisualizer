@@ -2,8 +2,6 @@ package fr.mrmicky.worldeditselectionvisualizer.math;
 
 import org.bukkit.util.Vector;
 
-import java.util.Objects;
-
 public class Vector3d {
 
     public static final Vector3d ZERO = new Vector3d(0, 0, 0);
@@ -154,7 +152,11 @@ public class Vector3d {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z);
+        int hash = 1;
+        hash = 31 * hash + Double.hashCode(x);
+        hash = 31 * hash + Double.hashCode(y);
+        hash = 31 * hash + Double.hashCode(z);
+        return hash;
     }
 
     @Override

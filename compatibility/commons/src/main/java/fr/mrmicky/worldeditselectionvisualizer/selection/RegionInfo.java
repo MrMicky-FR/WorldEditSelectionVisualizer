@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class RegionInfos {
+public class RegionInfo {
 
     @NotNull
     private final Vector3d minimum;
@@ -22,7 +22,7 @@ public class RegionInfos {
     private final long volume;
     private final int points;
 
-    public RegionInfos(@NotNull RegionAdapter regionAdapter) {
+    public RegionInfo(@NotNull RegionAdapter regionAdapter) {
         Region region = regionAdapter.getRegion();
 
         minimum = regionAdapter.getMinimumPoint();
@@ -36,7 +36,7 @@ public class RegionInfos {
         points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 
-    public RegionInfos(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int volume, int points) {
+    public RegionInfo(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int volume, int points) {
         this.minimum = Objects.requireNonNull(minimum, "minimum");
         this.maximum = Objects.requireNonNull(maximum, "maximum");
         this.width = width;
@@ -81,18 +81,18 @@ public class RegionInfos {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RegionInfos)) {
+        if (!(o instanceof RegionInfo)) {
             return false;
         }
 
-        RegionInfos that = (RegionInfos) o;
-        return width == that.width
-                && length == that.length
-                && height == that.height
-                && volume == that.volume
-                && points == that.points
-                && minimum.equals(that.minimum)
-                && maximum.equals(that.maximum);
+        RegionInfo region = (RegionInfo) o;
+        return width == region.width
+                && length == region.length
+                && height == region.height
+                && volume == region.volume
+                && points == region.points
+                && minimum.equals(region.minimum)
+                && maximum.equals(region.maximum);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class RegionInfos {
 
     @Override
     public String toString() {
-        return "RegionInfos{" +
+        return "RegionInfo{" +
                 "minimum=" + minimum +
                 ", maximum=" + maximum +
                 ", width=" + width +

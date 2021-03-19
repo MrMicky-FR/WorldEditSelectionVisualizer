@@ -70,7 +70,7 @@ public class RegionAdapter7 implements RegionAdapter {
             int volume = region.getArea();
 
             // Handle integer overflow introduced in WorldEdit 7
-            if (volume < 0 || getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
+            if (getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
                 return Long.MAX_VALUE;
             }
 

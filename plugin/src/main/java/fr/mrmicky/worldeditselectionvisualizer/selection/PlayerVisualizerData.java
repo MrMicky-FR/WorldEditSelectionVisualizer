@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * Contains the visualizer data of a connected {@link Player}
  */
-public class PlayerVisualizerInfos {
+public class PlayerVisualizerData {
 
     @NotNull
     private final Player player;
@@ -22,7 +22,7 @@ public class PlayerVisualizerInfos {
 
     private boolean holdingSelectionItem = true;
 
-    public PlayerVisualizerInfos(@NotNull Player player) {
+    public PlayerVisualizerData(@NotNull Player player) {
         this.player = Objects.requireNonNull(player, "player");
     }
 

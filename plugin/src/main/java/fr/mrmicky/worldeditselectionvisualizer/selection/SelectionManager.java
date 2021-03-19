@@ -34,14 +34,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WorldEditHelper extends BukkitRunnable {
+public class SelectionManager extends BukkitRunnable {
 
     private final Map<Class<? extends Region>, ShapeProcessor<?>> shapeProcessors = new HashMap<>();
 
     private final WorldEditSelectionVisualizer plugin;
     private final WorldEditPlugin worldEditPlugin;
 
-    public WorldEditHelper(WorldEditSelectionVisualizer plugin) {
+    public SelectionManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
         registerShapeProcessors();
@@ -57,19 +57,19 @@ public class WorldEditHelper extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayerVisualizations(plugin.getPlayerInfos(player));
+        for (PlayerVisualizerData player : plugin.getPlayers()) {
+            updatePlayerVisualizations(player);
         }
     }
 
-    public void updatePlayerVisualizations(PlayerVisualizerInfos playerInfo) {
+    public void updatePlayerVisualizations(PlayerVisualizerData playerData) {
         for (SelectionType type : SelectionType.values()) {
-            updatePlayerVisualization(playerInfo, type);
+            updatePlayerVisualization(playerData, type);
         }
     }
 
-    public void updatePlayerVisualization(PlayerVisualizerInfos playerInfo, SelectionType type) {
-        Player player = playerInfo.getPlayer();
+    public void updatePlayerVisualization(PlayerVisualizerData playerData, SelectionType type) {
+        Player player = playerData.getPlayer();
         LocalSession session;
         try {
             session = worldEditPlugin.getSession(player);
@@ -78,7 +78,7 @@ public class WorldEditHelper extends BukkitRunnable {
             return;
         }
 
-        PlayerSelection playerSelection = playerInfo.getSelection(type).orElse(null);
+        PlayerSelection playerSelection = playerData.getSelection(type).orElse(null);
 
         if (playerSelection == null || session == null) {
             return;
@@ -119,9 +119,9 @@ public class WorldEditHelper extends BukkitRunnable {
         }
 
         RegionAdapter regionAdapter = plugin.getCompatibilityHelper().adaptRegion(region);
-        RegionInfos regionInfos = regionAdapter.getRegionsInfos();
+        RegionInfo regionInfo = regionAdapter.getRegionInfo();
 
-        if (regionInfos.equals(playerSelection.getLastSelectedRegion())) {
+        if (regionInfo.equals(playerSelection.getLastSelectedRegion())) {
             SelectionPoints points = playerSelection.getSelectionPoints();
             if (points == null || points.origin().equals(origin)) {
                 return;
@@ -129,35 +129,35 @@ public class WorldEditHelper extends BukkitRunnable {
         }
 
         if (!player.hasPermission("wesv.use")) {
-            playerSelection.resetSelection(regionInfos);
+            playerSelection.resetSelection(regionInfo);
             return;
         }
 
         GlobalSelectionConfig config = plugin.getSelectionConfig(type);
         long volume = regionAdapter.getVolume();
 
-        if (volume < 0 || volume > config.getMaxSelectionSize()) {
+        if (volume <= 0 || volume > config.getMaxSelectionSize()) {
             if (!playerSelection.isLastSelectionTooLarge()) {
                 String message = plugin.getMessage("selection-too-large").replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
                 plugin.getCompatibilityHelper().sendActionBar(player, message);
             }
 
-            playerSelection.resetSelection(regionInfos);
+            playerSelection.resetSelection(regionInfo);
             playerSelection.setLastSelectionTooLarge(true);
             return;
         }
 
-        plugin.updateHoldingSelectionItem(playerInfo);
+        plugin.updateHoldingSelectionItem(playerData);
 
         Bukkit.getPluginManager().callEvent(new SelectionChangeEvent(player, region));
 
         ShapeProcessor<?> shapeProcessor = shapeProcessors.get(region.getClass());
 
         if (shapeProcessor != null) {
-            playerSelection.updateSelection(shapeProcessor.processSelection(regionAdapter, config, origin), regionInfos, config.getFadeDelay());
+            playerSelection.updateSelection(shapeProcessor.processSelection(regionAdapter, config, origin), regionInfo, config.getFadeDelay());
         } else {
             // Unsupported selection type
-            playerSelection.resetSelection(regionInfos);
+            playerSelection.resetSelection(regionInfo);
         }
     }
 

@@ -5,10 +5,9 @@ import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
-import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
+import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -45,10 +44,9 @@ public class ParticlesTask extends BukkitRunnable {
         double maxDistanceSquared = NumberConversions.square(config.getViewDistance());
         ParticleData particleData = config.getParticleData();
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            PlayerVisualizerInfos visualizerInfo = plugin.getPlayerInfos(player);
-
-            PlayerSelection playerSelection = visualizerInfo.getSelection(type).orElse(null);
+        for (PlayerVisualizerData visualizerData : plugin.getPlayers()) {
+            Player player = visualizerData.getPlayer();
+            PlayerSelection playerSelection = visualizerData.getSelection(type).orElse(null);
 
             if (playerSelection == null) {
                 continue;
@@ -57,7 +55,7 @@ public class ParticlesTask extends BukkitRunnable {
             playerSelection.checkExpireTime();
             SelectionPoints selectionPoints = playerSelection.getSelectionPoints();
 
-            if (selectionPoints == null || (needWand && !visualizerInfo.isHoldingSelectionItem())) {
+            if (selectionPoints == null || (needWand && !visualizerData.isHoldingSelectionItem())) {
                 continue;
             }
 

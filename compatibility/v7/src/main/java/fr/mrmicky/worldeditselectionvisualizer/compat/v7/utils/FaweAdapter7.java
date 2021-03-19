@@ -23,7 +23,6 @@ public final class FaweAdapter7 {
         throw new UnsupportedOperationException();
     }
 
-
     private static Vector3d[] triangleToVectors(Triangle triangle) {
         Vector3d[] vectors = new Vector3d[3];
 

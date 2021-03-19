@@ -41,6 +41,7 @@ cuboid-top-bottom: true
 #   'update-interval': The delay in ticks between particles spawn. This impact the players performances
 #   'view-distance':  The maximum distance in which players can see the particles. On 1.7.10 the particle distance is limited to 16 (Minecraft limitation)
 #   'particles': The particles type and data. The data can be a color for redstone like in the form 'r,g,b' or a Material for block crack/item crack
+#     The particle types are available on https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
 visualization:
   selection:
     fade-delay: 0

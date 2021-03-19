@@ -68,11 +68,11 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
         }
 
         if (identifier.equals("toggled_selection")) {
-            return translateBool(plugin.getPlayerInfos(player).isSelectionVisible(SelectionType.SELECTION));
+            return translateBool(plugin.getPlayerData(player).isSelectionVisible(SelectionType.SELECTION));
         }
 
         if (identifier.equals("toggled_clipboard")) {
-            return translateBool(plugin.getPlayerInfos(player).isSelectionVisible(SelectionType.CLIPBOARD));
+            return translateBool(plugin.getPlayerData(player).isSelectionVisible(SelectionType.CLIPBOARD));
         }
 
         return null;

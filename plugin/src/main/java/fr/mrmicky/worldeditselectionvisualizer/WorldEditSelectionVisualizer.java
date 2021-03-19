@@ -9,10 +9,10 @@ import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
 import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
 import fr.mrmicky.worldeditselectionvisualizer.placeholders.PlaceholderAPIExpansion;
-import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerInfos;
+import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
+import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionManager;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.selection.StorageManager;
-import fr.mrmicky.worldeditselectionvisualizer.selection.WorldEditHelper;
 import fr.mrmicky.worldeditselectionvisualizer.utils.ChatUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,12 +35,12 @@ import java.util.UUID;
 
 public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
-    private final Map<UUID, PlayerVisualizerInfos> players = new HashMap<>();
+    private final Map<UUID, PlayerVisualizerData> players = new HashMap<>();
     private final Map<SelectionType, GlobalSelectionConfig> configurations = new EnumMap<>(SelectionType.class);
 
     private final Set<BukkitTask> particlesTasks = new HashSet<>();
 
-    private WorldEditHelper worldEditHelper;
+    private SelectionManager selectionManager;
     private StorageManager storageManager;
     private ConfigurationHelper configurationHelper;
     private CompatibilityHelper compatibilityHelper;
@@ -61,7 +62,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         compatibilityHelper = new CompatibilityHelper(this);
         storageManager = new StorageManager(this);
         configurationHelper = new ConfigurationHelper(this);
-        worldEditHelper = new WorldEditHelper(this);
+        selectionManager = new SelectionManager(this);
 
         getCommand("worldeditselectionvisualizer").setExecutor(new CommandWesv(this));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -119,8 +120,8 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
     }
 
-    public void updateHoldingSelectionItem(PlayerVisualizerInfos playerInfos) {
-        playerInfos.setHoldingSelectionItem(compatibilityHelper.isHoldingSelectionItem(playerInfos.getPlayer()));
+    public void updateHoldingSelectionItem(PlayerVisualizerData playerData) {
+        playerData.setHoldingSelectionItem(compatibilityHelper.isHoldingSelectionItem(playerData.getPlayer()));
     }
 
     public void loadPlayer(Player player) {
@@ -128,16 +129,16 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
             return;
         }
 
-        PlayerVisualizerInfos playerInfos = new PlayerVisualizerInfos(player);
+        PlayerVisualizerData playerData = new PlayerVisualizerData(player);
 
         for (SelectionType type : SelectionType.values()) {
             boolean enable = !getConfig().getBoolean("save-toggle") || storageManager.isEnabled(player, type);
-            playerInfos.toggleSelectionVisibility(type, enable);
+            playerData.toggleSelectionVisibility(type, enable);
         }
 
-        updateHoldingSelectionItem(playerInfos);
+        updateHoldingSelectionItem(playerData);
 
-        players.put(player.getUniqueId(), playerInfos);
+        players.put(player.getUniqueId(), playerData);
     }
 
     public void unloadPlayer(Player player) {
@@ -145,27 +146,28 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     }
 
     @NotNull
-    public PlayerVisualizerInfos getPlayerInfos(Player player) {
-        PlayerVisualizerInfos playerInfos = players.get(player.getUniqueId());
+    public PlayerVisualizerData getPlayerData(Player player) {
+        PlayerVisualizerData playerData = players.get(player.getUniqueId());
 
-        if (playerInfos == null) {
-            throw new IllegalStateException("No player infos loaded for " + player.getName());
+        if (playerData == null) {
+            throw new IllegalStateException("No player data loaded for " + player.getName());
         }
 
-        return playerInfos;
+        return playerData;
     }
 
     @NotNull
-    public Optional<PlayerVisualizerInfos> getPlayerInfosSafe(Player player) {
+    public Optional<PlayerVisualizerData> getOptionalPlayerData(Player player) {
         return Optional.ofNullable(players.get(player.getUniqueId()));
     }
 
-    public Map<UUID, PlayerVisualizerInfos> getPlayers() {
-        return players;
+    @NotNull
+    public Collection<PlayerVisualizerData> getPlayers() {
+        return players.values();
     }
 
-    public WorldEditHelper getWorldEditHelper() {
-        return worldEditHelper;
+    public SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 
     public StorageManager getStorageManager() {

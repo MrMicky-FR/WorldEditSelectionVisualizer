@@ -4,7 +4,7 @@ import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
-import fr.mrmicky.worldeditselectionvisualizer.selection.RegionInfos;
+import fr.mrmicky.worldeditselectionvisualizer.selection.RegionInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public interface RegionAdapter {
     Region getRegion();
 
     @NotNull
-    default RegionInfos getRegionsInfos() {
-        return new RegionInfos(this);
+    default RegionInfo getRegionInfo() {
+        return new RegionInfo(this);
     }
 }

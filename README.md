@@ -1,6 +1,7 @@
 # WorldEditSelectionVisualizer
 
 [![Build Status](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer.svg?branch=master)](https://travis-ci.org/MrMicky-FR/WorldEditSelectionVisualizer)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/MrMicky-FR/WorldEditSelectionVisualizer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/MrMicky-FR/WorldEditSelectionVisualizer/alerts/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9fd5bd3cfa3443cac965a7c89ebbccb)](https://www.codacy.com/app/MrMicky-FR/WorldEditSelectionVisualizer)
 [![Discord](https://img.shields.io/discord/390919659874156560.svg?colorB=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/q9UwaBT)
 
@@ -18,6 +19,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
 - Great compatibility: works with 1.7.10 to 1.16.x servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
+- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%` and `%wesv_toggled_clipboard%`)
 
 ## Downloads
 

@@ -32,11 +32,11 @@ public class PlayerListener implements Listener {
     public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
         Player player = e.getPlayer();
 
-        plugin.getPlayerInfosSafe(player).ifPresent(infos -> {
-            plugin.updateHoldingSelectionItem(infos);
+        plugin.getOptionalPlayerData(player).ifPresent(data -> {
+            plugin.updateHoldingSelectionItem(data);
 
-            infos.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
-            plugin.getWorldEditHelper().updatePlayerVisualizations(infos);
+            data.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
+            plugin.getSelectionManager().updatePlayerVisualizations(data);
         });
     }
 
@@ -51,7 +51,7 @@ public class PlayerListener implements Listener {
         }
 
         Bukkit.getScheduler().runTask(plugin, () ->
-                plugin.updateHoldingSelectionItem(plugin.getPlayerInfos(player)));
+                plugin.updateHoldingSelectionItem(plugin.getPlayerData(player)));
     }
 
     @EventHandler

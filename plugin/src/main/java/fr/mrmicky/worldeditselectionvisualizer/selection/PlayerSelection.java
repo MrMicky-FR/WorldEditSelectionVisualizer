@@ -18,7 +18,7 @@ public class PlayerSelection {
     private Instant expireTime;
 
     @Nullable
-    private RegionInfos lastSelectedRegion;
+    private RegionInfo lastSelectedRegion;
     private boolean lastSelectionTooLarge;
 
     public PlayerSelection(@NotNull SelectionType selectionType) {
@@ -44,11 +44,11 @@ public class PlayerSelection {
     }
 
     @Nullable
-    public RegionInfos getLastSelectedRegion() {
+    public RegionInfo getLastSelectedRegion() {
         return lastSelectedRegion;
     }
 
-    public void setLastSelectedRegion(@Nullable RegionInfos lastSelectedRegion) {
+    public void setLastSelectedRegion(@Nullable RegionInfo lastSelectedRegion) {
         this.lastSelectedRegion = lastSelectedRegion;
     }
 
@@ -72,7 +72,7 @@ public class PlayerSelection {
         }
     }
 
-    public void updateSelection(@Nullable SelectionPoints selectionPoints, @Nullable RegionInfos lastSelectedRegion, int expireSeconds) {
+    public void updateSelection(@Nullable SelectionPoints selectionPoints, @Nullable RegionInfo lastSelectedRegion, int expireSeconds) {
         this.selectionPoints = selectionPoints;
         this.lastSelectedRegion = lastSelectedRegion;
 
@@ -85,7 +85,7 @@ public class PlayerSelection {
         resetSelection(null);
     }
 
-    public void resetSelection(RegionInfos lastSelectedRegion) {
+    public void resetSelection(RegionInfo lastSelectedRegion) {
         this.lastSelectedRegion = lastSelectedRegion;
 
         selectionPoints = null;
