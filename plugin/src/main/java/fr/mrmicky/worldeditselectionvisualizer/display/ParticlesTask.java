@@ -8,6 +8,7 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -46,6 +47,12 @@ public class ParticlesTask extends BukkitRunnable {
 
         for (PlayerVisualizerData visualizerData : plugin.getPlayers()) {
             Player player = visualizerData.getPlayer();
+
+            if(player.getItemInHand().getType() != Material.WOODEN_AXE) {
+                break;
+            }
+
+
             PlayerSelection playerSelection = visualizerData.getSelection(type).orElse(null);
 
             if (playerSelection == null) {
