@@ -11,6 +11,9 @@ import java.util.Objects;
 public class RegionInfo {
 
     @NotNull
+    private final RegionAdapter regionAdapter;
+
+    @NotNull
     private final Vector3d minimum;
     @NotNull
     private final Vector3d maximum;
@@ -23,27 +26,21 @@ public class RegionInfo {
     private final int points;
 
     public RegionInfo(@NotNull RegionAdapter regionAdapter) {
-        Region region = regionAdapter.getRegion();
+        this.regionAdapter = regionAdapter;
 
+        Region region = regionAdapter.getRegion();
         minimum = regionAdapter.getMinimumPoint();
         maximum = regionAdapter.getMinimumPoint();
-
         width = region.getWidth();
         length = region.getLength();
         height = region.getHeight();
-
         volume = regionAdapter.getVolume();
         points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 
-    public RegionInfo(@NotNull Vector3d minimum, @NotNull Vector3d maximum, int width, int length, int height, int volume, int points) {
-        this.minimum = Objects.requireNonNull(minimum, "minimum");
-        this.maximum = Objects.requireNonNull(maximum, "maximum");
-        this.width = width;
-        this.length = length;
-        this.height = height;
-        this.volume = volume;
-        this.points = points;
+    @NotNull
+    public RegionAdapter getRegionAdapter() {
+        return regionAdapter;
     }
 
     @NotNull

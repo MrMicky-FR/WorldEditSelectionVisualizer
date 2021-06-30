@@ -10,15 +10,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Contains the visualizer data of a connected {@link Player}
+ * Contains the visualizer data of a connected {@link Player}.
  */
 public class PlayerVisualizerData {
 
-    @NotNull
-    private final Player player;
+    private final Map<SelectionType, PlayerSelection> enabledVisualizations = new EnumMap<>(SelectionType.class);
 
     @NotNull
-    private final Map<SelectionType, PlayerSelection> enabledVisualizations = new EnumMap<>(SelectionType.class);
+    private final Player player;
 
     private boolean holdingSelectionItem = true;
 

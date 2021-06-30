@@ -1,6 +1,8 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
+import fr.mrmicky.worldeditselectionvisualizer.event.VisualizationToggleEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,6 +38,8 @@ public class StorageManager {
 
     public void setEnable(Player player, SelectionType type, boolean enable) {
         playersSection.set(player.getUniqueId() + "." + type.getName(), enable);
+
+        Bukkit.getPluginManager().callEvent(new VisualizationToggleEvent(player, enable));
 
         save();
     }

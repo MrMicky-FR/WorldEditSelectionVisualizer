@@ -53,6 +53,26 @@ public class RegionAdapter6 implements RegionAdapter {
 
     @NotNull
     @Override
+    public Vector3d getCuboidPos1() {
+        if (!(region instanceof CuboidRegion)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return Vectors6.toVector3d(((CuboidRegion) region).getPos1());
+    }
+
+    @NotNull
+    @Override
+    public Vector3d getCuboidPos2() {
+        if (!(region instanceof CuboidRegion)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return Vectors6.toVector3d(((CuboidRegion) region).getPos2());
+    }
+
+    @NotNull
+    @Override
     public List<Vector3d> getPolygonalPoints() {
         if (!(region instanceof Polygonal2DRegion)) {
             throw new UnsupportedOperationException();

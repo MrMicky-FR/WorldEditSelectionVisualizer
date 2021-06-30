@@ -1,5 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +15,9 @@ public class PlayerSelection {
 
     @Nullable
     private SelectionPoints selectionPoints;
+
+    @NotNull
+    private Vector3d origin = Vector3d.ZERO;
 
     @Nullable
     private Instant expireTime;
@@ -30,8 +35,9 @@ public class PlayerSelection {
         return selectionPoints;
     }
 
-    public void setSelectionPoints(@Nullable SelectionPoints selectionPoints) {
-        this.selectionPoints = selectionPoints;
+    @NotNull
+    public Vector3d getOrigin() {
+        return origin;
     }
 
     @Nullable
@@ -39,17 +45,9 @@ public class PlayerSelection {
         return expireTime;
     }
 
-    public void setExpireTime(@Nullable Instant expireTime) {
-        this.expireTime = expireTime;
-    }
-
     @Nullable
     public RegionInfo getLastSelectedRegion() {
         return lastSelectedRegion;
-    }
-
-    public void setLastSelectedRegion(@Nullable RegionInfo lastSelectedRegion) {
-        this.lastSelectedRegion = lastSelectedRegion;
     }
 
     public boolean isLastSelectionTooLarge() {
@@ -65,16 +63,22 @@ public class PlayerSelection {
         return selectionType;
     }
 
-    public void checkExpireTime() {
+    @Contract("-> this")
+    public PlayerSelection verifyExpireTime() {
         if (expireTime != null && expireTime.isBefore(Instant.now())) {
             expireTime = null;
             selectionPoints = null;
         }
+        return this;
     }
 
-    public void updateSelection(@Nullable SelectionPoints selectionPoints, @Nullable RegionInfo lastSelectedRegion, int expireSeconds) {
+    public void updateSelection(@Nullable SelectionPoints selectionPoints,
+                                @Nullable RegionInfo lastSelectedRegion,
+                                @NotNull Vector3d origin,
+                                int expireSeconds) {
         this.selectionPoints = selectionPoints;
         this.lastSelectedRegion = lastSelectedRegion;
+        this.origin = origin;
 
         lastSelectionTooLarge = false;
 
@@ -89,6 +93,7 @@ public class PlayerSelection {
         this.lastSelectedRegion = lastSelectedRegion;
 
         selectionPoints = null;
+        origin = Vector3d.ZERO;
         expireTime = null;
         lastSelectionTooLarge = false;
     }

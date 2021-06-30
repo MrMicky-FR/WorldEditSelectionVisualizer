@@ -3,7 +3,7 @@ package fr.mrmicky.worldeditselectionvisualizer;
 import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.commands.CommandWesv;
 import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
-import fr.mrmicky.worldeditselectionvisualizer.config.ConfigurationHelper;
+import fr.mrmicky.worldeditselectionvisualizer.config.ConfigurationManager;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
@@ -24,45 +24,49 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
-    private final Map<UUID, PlayerVisualizerData> players = new HashMap<>();
     private final Map<SelectionType, GlobalSelectionConfig> configurations = new EnumMap<>(SelectionType.class);
-
-    private final Set<BukkitTask> particlesTasks = new HashSet<>();
+    private final Map<UUID, PlayerVisualizerData> players = new HashMap<>();
+    private final List<BukkitTask> particlesTasks = new ArrayList<>(4);
 
     private SelectionManager selectionManager;
     private StorageManager storageManager;
-    private ConfigurationHelper configurationHelper;
+    private ConfigurationManager configurationManager;
     private CompatibilityHelper compatibilityHelper;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-
-        if (getConfig().get("lang") != null) {
-            // Rename the config from WorldEditSelectionVisualizer v1.x to prevent any issues
-            File configFile = new File(getDataFolder(), "config.yml");
-            File configBackupFile = new File(getDataFolder(), "config-old.yml");
-
-            configFile.renameTo(configBackupFile);
-            saveDefaultConfig();
-            reloadConfig();
-        }
+        migrateV1Config();
 
         compatibilityHelper = new CompatibilityHelper(this);
         storageManager = new StorageManager(this);
-        configurationHelper = new ConfigurationHelper(this);
+        configurationManager = new ConfigurationManager(this);
         selectionManager = new SelectionManager(this);
+
+        if (compatibilityHelper.getWorldEditVersion() == 7) {
+            try {
+                Region.class.getMethod("getVolume");
+            } catch (NoSuchMethodException e) {
+                getLogger().severe("**********************************");
+                getLogger().severe("You are using an unsupported WorldEdit version (7.0.x or 7.1.x) !");
+                getLogger().severe("WorldEditSelection visualizer don't works with outdated WorldEdit version.");
+                getLogger().severe("You can download the latest WorldEdit version here: https://dev.bukkit.org/projects/worldedit/files");
+                getLogger().severe("**********************************");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
+        }
 
         getCommand("worldeditselectionvisualizer").setExecutor(new CommandWesv(this));
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -80,28 +84,13 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
 
         WesvMetrics.register(this);
-
-        if (compatibilityHelper.getWorldEditVersion() == 7) {
-            try {
-                Region.class.getMethod("getVolume");
-            } catch (NoSuchMethodException e) {
-                getServer().getScheduler().runTask(this, () -> {
-                    getLogger().warning("***************************");
-                    getLogger().warning("You are using an old WorldEdit version (7.0.x or 7.1.x) !");
-                    getLogger().warning("It's recommended to update to WorldEdit 7.2.0 or later");
-                    getLogger().warning("You can download the latest WorldEdit version here: https://dev.bukkit.org/projects/worldedit/files");
-                    getLogger().warning("New versions of WorldEditSelectionVisualizer might not work with this WorldEdit version");
-                    getLogger().warning("***************************");
-                });
-            }
-        }
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
 
-        if (configurationHelper != null) {
+        if (configurationManager != null) {
             loadConfig();
         }
     }
@@ -111,10 +100,9 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         particlesTasks.clear();
 
         for (SelectionType type : SelectionType.values()) {
-            GlobalSelectionConfig config = configurationHelper.loadGlobalSelectionConfig(type);
+            GlobalSelectionConfig config = configurationManager.loadGlobalSelectionConfig(type);
 
             configurations.put(type, config);
-
             particlesTasks.add(new ParticlesTask(this, type, true, config.primary()).start());
             particlesTasks.add(new ParticlesTask(this, type, false, config.secondary()).start());
         }
@@ -199,5 +187,19 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         } catch (IOException e) {
             // ignore
         }
+    }
+
+    private void migrateV1Config() {
+        if (getConfig().get("lang") == null) {
+            return;
+        }
+
+        // Rename the config from WorldEditSelectionVisualizer v1.x to prevent any issues
+        File configFile = new File(getDataFolder(), "config.yml");
+        File configBackupFile = new File(getDataFolder(), "config-old.yml");
+
+        configFile.renameTo(configBackupFile);
+        saveDefaultConfig();
+        reloadConfig();
     }
 }

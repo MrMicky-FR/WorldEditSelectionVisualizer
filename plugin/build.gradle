@@ -11,7 +11,7 @@ dependencies {
     implementation project(':worldeditselectionvisualizer-compatibility-commons')
     implementation project(':worldeditselectionvisualizer-compatibility-v6')
     implementation project(':worldeditselectionvisualizer-compatibility-v7')
-    implementation 'fr.mrmicky:FastParticles:1.2.4'
+    implementation 'fr.mrmicky:fastparticles:2.0.0'
     implementation 'org.bstats:bstats-bukkit:1.8'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
     compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.16-326'
@@ -22,7 +22,7 @@ shadowJar {
     archiveFileName = "WorldEditSelectionVisualizer-${project.version}.jar"
 
     relocate 'org.bstats.bukkit', 'fr.mrmicky.worldeditselectionvisualizer.metrics'
-    relocate 'fr.mrmicky.fastparticle', 'fr.mrmicky.worldeditselectionvisualizer.libs.fastparticles'
+    relocate 'fr.mrmicky.fastparticles', 'fr.mrmicky.worldeditselectionvisualizer.libs.fastparticles'
 
     exclude 'org/intellij/lang/annotations/**'
 }
@@ -32,7 +32,7 @@ artifacts {
 }
 
 processResources {
-    filesMatching('**/*.yml') {
+    filesMatching('plugin.yml') {
         expand 'pluginVersion': project.version
     }
 }

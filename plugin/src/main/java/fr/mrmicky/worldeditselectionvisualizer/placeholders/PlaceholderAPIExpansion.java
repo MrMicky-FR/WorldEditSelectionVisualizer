@@ -62,7 +62,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     @Nullable
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+    public String onPlaceholderRequest(@Nullable Player player, @NotNull String identifier) {
         if (player == null) {
             return "";
         }

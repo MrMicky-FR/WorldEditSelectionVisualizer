@@ -1,11 +1,12 @@
-package fr.mrmicky.worldeditselectionvisualizer.selection.shape.type;
+package fr.mrmicky.worldeditselectionvisualizer.selection.shapes;
 
 import com.boydti.fawe.object.regions.PolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
+
+import java.util.List;
 
 public class FawePolyhedralProcessor extends AbstractConvexProcessor<PolyhedralRegion> {
 
@@ -14,8 +15,8 @@ public class FawePolyhedralProcessor extends AbstractConvexProcessor<PolyhedralR
     }
 
     @Override
-    protected void processSelection(SelectionPoints selection, PolyhedralRegion region, RegionAdapter regionAdapter, GlobalSelectionConfig config) {
-        createTriangles(selection.primary(), regionAdapter.getConvexTriangles(true), config.primary().getPointsDistance());
+    protected List<Vector3d[]> getTriangles(RegionAdapter region) {
+        return region.getConvexTriangles(true);
     }
 
     public static Class<? extends Region> getRegionClass() {

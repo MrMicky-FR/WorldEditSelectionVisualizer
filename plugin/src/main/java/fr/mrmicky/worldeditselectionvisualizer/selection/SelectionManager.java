@@ -17,17 +17,19 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.event.ClipboardChangeEvent;
 import fr.mrmicky.worldeditselectionvisualizer.event.SelectionChangeEvent;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.ShapeProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.ConvexPolyhedralProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.CuboidProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.CylinderProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.EllipsoidProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.FawePolyhedralProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shape.type.Polygonal2DProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ConvexPolyhedralProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CuboidProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CylinderProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.EllipsoidProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.FawePolyhedralProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.Polygonal2DProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ShapeProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +38,7 @@ import java.util.Map;
 
 public class SelectionManager extends BukkitRunnable {
 
-    private final Map<Class<? extends Region>, ShapeProcessor<?>> shapeProcessors = new HashMap<>();
+    private final Map<Class<? extends Region>, ShapeProcessor<?>> shapeProcessors = new HashMap<>(8);
 
     private final WorldEditSelectionVisualizer plugin;
     private final WorldEditPlugin worldEditPlugin;
@@ -63,18 +65,19 @@ public class SelectionManager extends BukkitRunnable {
     }
 
     public void updatePlayerVisualizations(PlayerVisualizerData playerData) {
-        for (SelectionType type : SelectionType.values()) {
+        for (SelectionType type : SelectionType.getValues()) {
             updatePlayerVisualization(playerData, type);
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void updatePlayerVisualization(PlayerVisualizerData playerData, SelectionType type) {
         Player player = playerData.getPlayer();
         LocalSession session;
         try {
             session = worldEditPlugin.getSession(player);
         } catch (Exception e) {
-            // sometimes after a reload getSession create errors with WorldEdit, this prevent error spam
+            // sometimes after reloading, getSession creates errors with WorldEdit
             return;
         }
 
@@ -123,7 +126,7 @@ public class SelectionManager extends BukkitRunnable {
 
         if (regionInfo.equals(playerSelection.getLastSelectedRegion())) {
             SelectionPoints points = playerSelection.getSelectionPoints();
-            if (points == null || points.origin().equals(origin)) {
+            if (points == null || playerSelection.getOrigin().equals(origin)) {
                 return;
             }
         }
@@ -138,7 +141,8 @@ public class SelectionManager extends BukkitRunnable {
 
         if (volume <= 0 || volume > config.getMaxSelectionSize()) {
             if (!playerSelection.isLastSelectionTooLarge()) {
-                String message = plugin.getMessage("selection-too-large").replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
+                String message = plugin.getMessage("selection-too-large")
+                        .replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
                 plugin.getCompatibilityHelper().sendActionBar(player, message);
             }
 
@@ -149,16 +153,19 @@ public class SelectionManager extends BukkitRunnable {
 
         plugin.updateHoldingSelectionItem(playerData);
 
-        Bukkit.getPluginManager().callEvent(new SelectionChangeEvent(player, region));
+        Event event = (type == SelectionType.SELECTION)
+                ? new SelectionChangeEvent(player, region) : new ClipboardChangeEvent(player, region);
+        Bukkit.getPluginManager().callEvent(event);
 
         ShapeProcessor<?> shapeProcessor = shapeProcessors.get(region.getClass());
 
-        if (shapeProcessor != null) {
-            playerSelection.updateSelection(shapeProcessor.processSelection(regionAdapter, config, origin), regionInfo, config.getFadeDelay());
-        } else {
-            // Unsupported selection type
+        if (shapeProcessor == null) { // Unsupported selection type
             playerSelection.resetSelection(regionInfo);
+            return;
         }
+
+        SelectionPoints selection = shapeProcessor.processSelection(regionAdapter, config);
+        playerSelection.updateSelection(selection, regionInfo, origin, config.getFadeDelay());
     }
 
     @Nullable

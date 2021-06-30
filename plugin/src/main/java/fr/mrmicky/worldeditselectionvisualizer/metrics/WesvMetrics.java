@@ -4,6 +4,7 @@ import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
 import org.bstats.bukkit.Metrics;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public final class WesvMetrics {
@@ -13,20 +14,23 @@ public final class WesvMetrics {
     private final Metrics metrics;
 
     private WesvMetrics(WorldEditSelectionVisualizer plugin) {
-        metrics = new Metrics(plugin, B_STATS_PLUGIN_ID);
+        this.metrics = new Metrics(plugin, B_STATS_PLUGIN_ID);
 
         CompatibilityHelper compatHelper = plugin.getCompatibilityHelper();
 
-        addObjectChart("selection_update_interval", () -> plugin.getConfig().getInt("selection-update-interval"));
         addBooleanChart("top_bottom_cuboid", () -> plugin.getConfig().getBoolean("cuboid-top-bottom"));
-        addCustomChart("worldedit_version", () -> "WorldEdit " + compatHelper.getWorldEditVersion());
         addBooleanChart("use_fawe", compatHelper::isUsingFawe);
         addBooleanChart("check_for_axe", () -> plugin.getConfig().getBoolean("need-we-wand"));
+        addCustomChart("worldedit_version", () -> "WorldEdit " + compatHelper.getWorldEditVersion());
+        addCustomChart("selection_update_interval", () -> {
+            int interval = plugin.getConfig().getInt("selection-update-interval");
+            return Integer.toString(interval);
+        });
     }
 
     public static void register(WorldEditSelectionVisualizer plugin) {
         try {
-            // bStats use Gson, but Gson is not shade with Spigot < 1.8
+            // bStats uses Gson, but Gson is not shaded with Spigot < 1.8
             Class.forName("com.google.gson.Gson");
 
             new WesvMetrics(plugin);
@@ -35,15 +39,11 @@ public final class WesvMetrics {
         }
     }
 
-    private void addBooleanChart(String name, Supplier<Boolean> value) {
-        addCustomChart(name, () -> value.get() ? "Enabled" : "Disabled");
-    }
-
-    private void addObjectChart(String name, Supplier<Object> value) {
-        addCustomChart(name, () -> value.get().toString());
+    private void addBooleanChart(String name, BooleanSupplier value) {
+        addCustomChart(name, () -> value.getAsBoolean() ? "Enabled" : "Disabled");
     }
 
     private void addCustomChart(String name, Supplier<String> value) {
-        metrics.addCustomChart(new Metrics.SimplePie(name, value::get));
+        this.metrics.addCustomChart(new Metrics.SimplePie(name, value::get));
     }
 }

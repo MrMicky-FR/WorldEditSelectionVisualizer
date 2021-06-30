@@ -1,33 +1,33 @@
 # WorldEditSelectionVisualizer configuration
 
-# When enabled, if a new update is available it will display a message in the console on start
+# When enabled, if a new update is available it will display a message in the console on enable
 check-updates: true
 
 # You can edit the plugin messages here
 messages:
-  no-permissions: "&cYou don't have the permission to use this command"
+  no-permissions: "&cYou don't have the permission to use this command."
   config-reloaded: "&aThe config was reloaded"
-  selection-too-large: "&6The visualizer only works with selections up to a size of %blocks% blocks"
+  selection-too-large: "&6The visualizer only works with selections up to a size of %blocks% blocks."
   visualizer-enabled: "&6Your visualizer has been &eenabled."
   visualizer-disabled: "&6Your visualizer has been &cdisabled."
   visualizer-clipboard-enabled: "&6Your clipboard visualizer has been &eenabled&6."
   visualizer-clipboard-disabled: "&6Your clipboard visualizer has been &cdisabled&6."
 
-# When enable, if a player disable the selection visualization and leave the server, when he will
-# come back, the selection visualization will be still disable until he activate it again with /wesv toggle
+# When enabled, if a player disables the selection visualization and leaves the server, when he will
+# come back, the selection visualization will be still disabled until he activates it again with /wesv toggle.
 save-toggle: true
 
-# Delay in ticks when the WorldEdit selection and clipboard are updated
-# This do not affect particles spawning and players performances
+# Delay in ticks when the WorldEdit selection and clipboard are updated.
+# This doesn't affect particles spawning and players performances.
 # The server impact is medium
 selection-update-interval: 20
 
-# When enabled, the particles are display only when holding the WorldEdit selection wand item (by default a wooden axe)
+# When enabled, the particles are displayed only when holding the WorldEdit selection wand item (by default a wooden axe)
 # You can change the WorldEdit wand item in the WorldEdit configuration
 need-we-wand: false
 
-# When enabled, top and bottom particles will be displayed
-cuboid-top-bottom: true
+# When enabled, top and bottom particles will be displayed for cuboid selections
+cuboid-top-bottom: false
 
 # Settings for visualization
 # 'selection': The WorldEdit current selection
@@ -47,17 +47,17 @@ visualization:
     fade-delay: 0
     max-selection-size: 50000
     primary:
-      points-distance: 0.5
-      update-interval: 10
+      points-distance: 1.0
+      update-interval: 12
       view-distance: 64
       particles:
         type: "FLAME"
         data: ""
     secondary:
-      points-distance: 1.0
-      lines-gap: 2.0
-      update-interval: 20
-      view-distance: 64
+      points-distance: 3.0
+      lines-gap: 5.0
+      update-interval: 18
+      view-distance: 32
       particles:
         type: "REDSTONE"
         data: "RED"
@@ -66,16 +66,16 @@ visualization:
     max-selection-size: 50000
     primary:
       points-distance: 1.0
-      update-interval: 10
+      update-interval: 12
       view-distance: 64
       particles:
         type: "FLAME"
         data: ""
     secondary:
-      points-distance: 2.0
-      lines-gap: 2.0
-      update-interval: 20
-      view-distance: 64
+      points-distance: 3.0
+      lines-gap: 5.0
+      update-interval: 18
+      view-distance: 32
       particles:
         type: "REDSTONE"
         data: "BLUE"

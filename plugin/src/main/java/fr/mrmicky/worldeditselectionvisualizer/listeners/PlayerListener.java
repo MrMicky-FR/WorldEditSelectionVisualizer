@@ -46,7 +46,11 @@ public class PlayerListener implements Listener {
         ItemStack oldItem = player.getInventory().getItem(e.getPreviousSlot());
         ItemStack newItem = player.getInventory().getItem(e.getNewSlot());
 
-        if ((oldItem == null && newItem == null) || (oldItem != null && newItem != null && oldItem.getType() == newItem.getType())) {
+        if (oldItem == null && newItem == null) {
+            return;
+        }
+
+        if (oldItem != null && newItem != null && oldItem.getType() == newItem.getType()) {
             return;
         }
 

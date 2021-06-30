@@ -10,7 +10,6 @@ import fr.mrmicky.worldeditselectionvisualizer.compat.v6.ClipboardAdapter6;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.RegionAdapter6;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.ClipboardAdapter7;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.RegionAdapter7;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,10 +29,8 @@ public class CompatibilityHelper {
 
     private final boolean supportOffHand = isOffhandSupported();
     private final boolean supportActionBar = isActionBarSupported();
-
-    private final boolean worldEdit7 = isWorldEdit7();
-
-    private final boolean supportFawe;
+    private final boolean worldEdit7 = classExists("com.sk89q.worldedit.math.Vector3");
+    private final boolean supportFawe = classExists("com.boydti.fawe.object.regions.PolyhedralRegion");
 
     @Nullable
     private Field wandItemField;
@@ -42,8 +39,6 @@ public class CompatibilityHelper {
         this.plugin = plugin;
 
         plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
-
-        supportFawe = isFaweInstalled();
 
         if (supportFawe) {
             plugin.getLogger().info("FastAsyncWorldEdit support enabled");
@@ -91,7 +86,7 @@ public class CompatibilityHelper {
         SpigotActionBarAdapter.sendActionBar(player, message);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation") // WorldEdit 6 support
     public boolean isSelectionItem(@Nullable ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return false;
@@ -153,27 +148,11 @@ public class CompatibilityHelper {
         }
     }
 
-    private boolean isWorldEdit7() {
+    private boolean classExists(String name) {
         try {
-            Class.forName("com.sk89q.worldedit.math.Vector3");
-
+            Class.forName(name);
             return true;
         } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    private boolean isFaweInstalled() {
-        if (Bukkit.getPluginManager().getPlugin("FastAsyncWorldEdit") == null) {
-            return false;
-        }
-
-        try {
-            Class.forName("com.boydti.fawe.object.regions.PolyhedralRegion");
-
-            return true;
-        } catch (ClassNotFoundException e) {
-            plugin.getLogger().severe("A plugin with the name 'FastAsyncWorldEdit' is installed but FAWE classes was not found");
             return false;
         }
     }

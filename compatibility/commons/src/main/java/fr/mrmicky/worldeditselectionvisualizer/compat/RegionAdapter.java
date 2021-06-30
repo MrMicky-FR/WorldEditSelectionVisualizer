@@ -23,6 +23,12 @@ public interface RegionAdapter {
     long getVolume();
 
     @NotNull
+    Vector3d getCuboidPos1();
+
+    @NotNull
+    Vector3d getCuboidPos2();
+
+    @NotNull
     List<Vector3d> getPolygonalPoints();
 
     @NotNull

@@ -1,35 +1,25 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
-import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
-import org.jetbrains.annotations.NotNull;
+import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 
 public class SelectionPoints {
 
-    private final Collection<Vector3d> primaryPoints = new HashSet<>();
-    private final Collection<Vector3d> secondaryPoints = new HashSet<>();
+    private final Collection<Shape> primary;
+    private final Collection<Shape> secondary;
 
-    @NotNull
-    private final Vector3d origin;
-
-    public SelectionPoints(@NotNull Vector3d origin) {
-        this.origin = origin;
+    public SelectionPoints(Collection<Shape> primary, Collection<Shape> secondary) {
+        this.primary = Collections.unmodifiableCollection(primary);
+        this.secondary = Collections.unmodifiableCollection(secondary);
     }
 
-    @NotNull
-    public Collection<Vector3d> primary() {
-        return primaryPoints;
+    public Collection<Shape> getPrimary() {
+        return this.primary;
     }
 
-    @NotNull
-    public Collection<Vector3d> secondary() {
-        return secondaryPoints;
-    }
-
-    @NotNull
-    public Vector3d origin() {
-        return origin;
+    public Collection<Shape> getSecondary() {
+        return this.secondary;
     }
 }

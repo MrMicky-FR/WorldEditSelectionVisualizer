@@ -14,7 +14,6 @@ import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.FaweAdapter7;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.Vectors7;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
-import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,20 +21,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RegionAdapter7 implements RegionAdapter {
-
-    public static final boolean USE_REGION_GET_VOLUME;
-
-    static {
-        boolean useRegionGetVolume = true;
-
-        try {
-            Region.class.getMethod("getVolume");
-        } catch (NoSuchMethodException e) {
-            useRegionGetVolume = false;
-        }
-
-        USE_REGION_GET_VOLUME = useRegionGetVolume;
-    }
 
     @NotNull
     private final Region region;
@@ -62,22 +47,29 @@ public class RegionAdapter7 implements RegionAdapter {
         return Vectors7.toVector3d(region.getCenter());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public long getVolume() {
-        if (!USE_REGION_GET_VOLUME) {
-            // TODO Remove WorldEdit 7.0.x and 7.1.x support
-            int volume = region.getArea();
+        return region.getVolume();
+    }
 
-            // Handle integer overflow introduced in WorldEdit 7
-            if (getMinimumPoint().distanceSquared(getMaximumPoint()) > NumberConversions.square(volume)) {
-                return Long.MAX_VALUE;
-            }
-
-            return volume;
+    @Override
+    @NotNull
+    public Vector3d getCuboidPos1() {
+        if (!(region instanceof CuboidRegion)) {
+            throw new UnsupportedOperationException();
         }
 
-        return region.getVolume();
+        return Vectors7.toVector3d(((CuboidRegion) region).getPos1());
+    }
+
+    @Override
+    @NotNull
+    public Vector3d getCuboidPos2() {
+        if (!(region instanceof CuboidRegion)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return Vectors7.toVector3d(((CuboidRegion) region).getPos2());
     }
 
     @NotNull
