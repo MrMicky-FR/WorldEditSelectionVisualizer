@@ -5,6 +5,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.item.ItemTypes;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.ClipboardAdapter6;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.RegionAdapter6;
@@ -97,16 +98,15 @@ public class CompatibilityHelper {
         }
 
         try {
-            if (wandItemField.getType() == int.class) { // WorldEdit under 1.13
+            if (wandItemField.getType() == int.class) { // WorldEdit 6
                 return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
             }
 
-            if (wandItemField.getType() == String.class) { // WorldEdit 1.13+
+            if (wandItemField.getType() == String.class) { // WorldEdit 7
                 String wandItem = (String) wandItemField.get(WorldEdit.getInstance().getConfiguration());
 
-                return BukkitAdapter.adapt(item).getType().getId().equals(wandItem);
+                return BukkitAdapter.adapt(item).getType().equals(ItemTypes.get(wandItem));
             }
-
         } catch (ReflectiveOperationException e) {
             plugin.getLogger().log(Level.WARNING, "An error occurred on isHoldingSelectionItem", e);
         }
