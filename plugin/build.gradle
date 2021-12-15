@@ -23,8 +23,6 @@ shadowJar {
 
     relocate 'org.bstats.bukkit', 'fr.mrmicky.worldeditselectionvisualizer.metrics'
     relocate 'fr.mrmicky.fastparticles', 'fr.mrmicky.worldeditselectionvisualizer.libs.fastparticles'
-
-    exclude 'org/intellij/lang/annotations/**'
 }
 
 artifacts {
