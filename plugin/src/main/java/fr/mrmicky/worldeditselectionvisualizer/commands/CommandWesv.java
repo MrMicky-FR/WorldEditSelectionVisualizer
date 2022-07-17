@@ -5,6 +5,7 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.utils.ChatUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -45,29 +46,22 @@ public class CommandWesv implements TabExecutor {
 
         if (args[0].equalsIgnoreCase("toggle")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "Only players can use this command");
+                sender.sendMessage(ChatColor.RED + "Only players can use this command.");
                 return true;
             }
 
-            PlayerVisualizerData playerData = plugin.getPlayerData((Player) sender);
-            SelectionType type = SelectionType.SELECTION;
+            handleToggle((Player) sender, args);
 
-            if (args.length > 1 && args[1].equalsIgnoreCase("clipboard")) {
-                type = SelectionType.CLIPBOARD;
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("lock")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "Only players can use this command.");
+                return true;
             }
 
-            boolean enabled = !playerData.isSelectionVisible(type);
-            playerData.toggleSelectionVisibility(type, enabled);
-
-            if (type == SelectionType.SELECTION) {
-                sender.sendMessage(plugin.getMessage("visualizer-" + (enabled ? "enabled" : "disabled")));
-            } else {
-                sender.sendMessage(plugin.getMessage("visualizer-clipboard-" + (enabled ? "enabled" : "disabled")));
-            }
-
-            if (plugin.getConfig().getBoolean("save-toggle")) {
-                plugin.getStorageManager().setEnable(playerData.getPlayer(), type, enabled);
-            }
+            handleLock((Player) sender, args);
 
             return true;
         }
@@ -88,6 +82,7 @@ public class CommandWesv implements TabExecutor {
 
             if (sender instanceof Player) {
                 completions.add("toggle");
+                completions.add("lock");
             }
 
             if (sender.hasPermission("wesv.reload")) {
@@ -101,7 +96,59 @@ public class CommandWesv implements TabExecutor {
             return Collections.singletonList("clipboard");
         }
 
+        if (args.length == 2 && args[0].equalsIgnoreCase("lock") && StringUtil.startsWithIgnoreCase("tp", args[1])) {
+            return Collections.singletonList("tp");
+        }
+
         return Collections.emptyList();
+    }
+
+    private void handleToggle(Player player, String[] args) {
+        PlayerVisualizerData playerData = plugin.getPlayerData(player);
+        SelectionType type = SelectionType.SELECTION;
+
+        if (args.length > 1 && args[1].equalsIgnoreCase("clipboard")) {
+            type = SelectionType.CLIPBOARD;
+        }
+
+        boolean enabled = !playerData.isSelectionVisible(type);
+        String key = enabled ? "enabled" : "disabled";
+        playerData.toggleSelectionVisibility(type, enabled);
+
+        if (type == SelectionType.SELECTION) {
+            player.sendMessage(plugin.getMessage("visualizer-" + key));
+        } else {
+            player.sendMessage(plugin.getMessage("visualizer-clipboard-" + key));
+        }
+
+        if (plugin.getConfig().getBoolean("save-toggle")) {
+            plugin.getStorageManager().setEnable(player, type, enabled);
+        }
+    }
+
+    private void handleLock(Player player, String[] args) {
+        PlayerVisualizerData playerData = plugin.getPlayerData(player);
+        Location location = playerData.getClipboardLockLocation();
+
+        if (args.length > 1 && args[1].equalsIgnoreCase("tp")) {
+            if (location == null) {
+                player.sendMessage(plugin.getMessage("lock-no-position"));
+                return;
+            }
+
+            player.teleport(location);
+            return;
+        }
+
+        if (location != null) {
+            playerData.setClipboardLockLocation(null);
+            player.sendMessage(plugin.getMessage("lock-disabled"));
+            return;
+        }
+
+        playerData.setClipboardLockLocation(player.getLocation());
+
+        player.sendMessage(plugin.getMessage("lock-enabled"));
     }
 
     private void sendUsage(CommandSender sender) {
@@ -109,6 +156,8 @@ public class CommandWesv implements TabExecutor {
         sender.sendMessage(ChatUtils.color("&6WorldEditSelectionVisualizer v" + version + "&7 by &6MrMicky&7."));
 
         if (sender instanceof Player) {
+            sender.sendMessage(ChatUtils.color("&7- /wesv lock"));
+            sender.sendMessage(ChatUtils.color("&7- /wesv lock tp"));
             sender.sendMessage(ChatUtils.color("&7- /wesv toggle"));
             sender.sendMessage(ChatUtils.color("&7- /wesv toggle clipboard"));
         }

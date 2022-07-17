@@ -58,7 +58,7 @@ public class ParticlesTask implements Runnable {
             }
 
             Collection<Shape> renderables = primary ? selectionPoints.getPrimary() : selectionPoints.getSecondary();
-            Vector3d location = new Vector3d(player.getLocation().toVector());
+            Vector3d location = new Vector3d(playerData.getClipboardLocation().toVector());
             Vector3d origin = (type != SelectionType.CLIPBOARD) ? Vector3d.ZERO : location.subtract(selection.getOrigin()).floor();
             ParticleRenderer renderer = new ParticleRenderer(player, location, origin, maxDistanceSquared, particleData);
 

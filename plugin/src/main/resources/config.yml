@@ -6,12 +6,15 @@ check-updates: true
 # You can edit the plugin messages here
 messages:
   no-permissions: "&cYou don't have the permission to use this command."
-  config-reloaded: "&aThe config was reloaded"
+  config-reloaded: "&aThe config was reloaded."
   selection-too-large: "&6The visualizer only works with selections up to a size of %blocks% blocks."
-  visualizer-enabled: "&6Your visualizer has been &eenabled."
-  visualizer-disabled: "&6Your visualizer has been &cdisabled."
-  visualizer-clipboard-enabled: "&6Your clipboard visualizer has been &eenabled&6."
+  visualizer-enabled: "&6Your visualizer has been &aenabled&6."
+  visualizer-disabled: "&6Your visualizer has been &cdisabled&6."
+  visualizer-clipboard-enabled: "&6Your clipboard visualizer has been &aenabled&6."
   visualizer-clipboard-disabled: "&6Your clipboard visualizer has been &cdisabled&6."
+  lock-enabled: "&6Clipboard origin lock is now &aenabled &6at your current position. Use &3/wesv lock tp &6to return to this position."
+  lock-disabled: "&6Clipboard origin lock is now &cdisabled&6."
+  lock-no-position: "&cClipboard origin lock isn't enabled&6."
 
 # When enabled, if a player disables the selection visualization and leaves the server, when he will
 # come back, the selection visualization will be still disabled until he activates it again with /wesv toggle.
