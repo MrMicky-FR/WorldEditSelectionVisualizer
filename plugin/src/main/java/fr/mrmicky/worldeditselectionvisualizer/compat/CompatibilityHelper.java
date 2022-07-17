@@ -30,8 +30,7 @@ public class CompatibilityHelper {
 
     private final boolean supportOffHand = isOffhandSupported();
     private final boolean supportActionBar = isActionBarSupported();
-    private final boolean worldEdit7 = classExists("com.sk89q.worldedit.math.Vector3");
-    private final boolean supportFawe = classExists("com.boydti.fawe.object.regions.PolyhedralRegion");
+    private final boolean worldEdit7 = isWorldEdit7();
 
     @Nullable
     private Field wandItemField;
@@ -40,10 +39,6 @@ public class CompatibilityHelper {
         this.plugin = plugin;
 
         plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
-
-        if (supportFawe) {
-            plugin.getLogger().info("FastAsyncWorldEdit support enabled");
-        }
 
         try {
             wandItemField = LocalConfiguration.class.getField("wandItem");
@@ -72,10 +67,6 @@ public class CompatibilityHelper {
 
     public boolean isHoldingSelectionItem(@NotNull Player player) {
         return isSelectionItem(getItemInMainHand(player)) || isSelectionItem(getItemInOffHand(player));
-    }
-
-    public boolean isUsingFawe() {
-        return supportFawe;
     }
 
     public void sendActionBar(@NotNull Player player, @NotNull String message) {
@@ -148,9 +139,10 @@ public class CompatibilityHelper {
         }
     }
 
-    private boolean classExists(String name) {
+    private boolean isWorldEdit7() {
         try {
-            Class.forName(name);
+            Class.forName("com.sk89q.worldedit.math.Vector3");
+
             return true;
         } catch (ClassNotFoundException e) {
             return false;

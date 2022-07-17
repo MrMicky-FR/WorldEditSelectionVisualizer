@@ -35,12 +35,7 @@ public interface RegionAdapter {
     Vector3d getEllipsoidRadius();
 
     @NotNull
-    default List<Vector3d[]> getConvexTriangles() {
-        return getConvexTriangles(false);
-    }
-
-    @NotNull
-    List<Vector3d[]> getConvexTriangles(boolean faweSupport);
+    List<Vector3d[]> getConvexTriangles();
 
     @NotNull
     Region transform(Transform transform, Vector3d origin);

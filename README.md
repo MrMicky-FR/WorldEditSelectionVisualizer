@@ -17,7 +17,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Configurable particle effect and view distance
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
-- Great compatibility: works with 1.7.10 to 1.18.x servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
+- Great compatibility: works with 1.7.10 to 1.19.x servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
 - [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%` and `%wesv_toggled_clipboard%`)
 
 ## Downloads
@@ -26,9 +26,9 @@ You can download releases and find more information on [SpigotMC](https://www.sp
 
 ## Screenshots
 
-| Cuboid selection                                       | Cylinder selection                                     | Convex selection                                      |
-| ------------------------------------------------------ | ------------------------------------------------------ | ----------------------------------------------------- |
-| ![Cuboid selection](https://i.imgur.com/jGVVpgx.png)   | ![Cylinder selection](https://i.imgur.com/XLprNDA.png) | ![Convex selection](https://i.imgur.com/XKalgCn.png)  |
+| Cuboid selection                                     | Cylinder selection                                     | Convex selection                                     |
+|------------------------------------------------------|--------------------------------------------------------|------------------------------------------------------|
+| ![Cuboid selection](https://i.imgur.com/jGVVpgx.png) | ![Cylinder selection](https://i.imgur.com/XLprNDA.png) | ![Convex selection](https://i.imgur.com/XKalgCn.png) |
 
 [More screenshots](https://imgur.com/a/CEwIxaV)
 

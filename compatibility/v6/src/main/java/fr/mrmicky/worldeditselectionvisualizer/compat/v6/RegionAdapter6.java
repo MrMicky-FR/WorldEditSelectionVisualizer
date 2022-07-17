@@ -10,7 +10,6 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.compat.v6.utils.FaweAdapter6;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.utils.Vectors6;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
@@ -97,17 +96,13 @@ public class RegionAdapter6 implements RegionAdapter {
 
     @NotNull
     @Override
-    public List<Vector3d[]> getConvexTriangles(boolean faweSupport) {
+    public List<Vector3d[]> getConvexTriangles() {
         if (region instanceof ConvexPolyhedralRegion) {
             ConvexPolyhedralRegion polygonalRegion = (ConvexPolyhedralRegion) region;
 
             return polygonalRegion.getTriangles().stream()
                     .map(this::triangleToVectors)
                     .collect(Collectors.toList());
-        }
-
-        if (faweSupport) {
-            return FaweAdapter6.getConvexTriangles(region);
         }
 
         throw new UnsupportedOperationException();

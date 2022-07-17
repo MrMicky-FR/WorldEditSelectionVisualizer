@@ -24,7 +24,6 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ConvexPolyhedral
 import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CuboidProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CylinderProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.EllipsoidProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.FawePolyhedralProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.Polygonal2DProcessor;
 import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ShapeProcessor;
 import org.bukkit.Bukkit;
@@ -70,8 +69,7 @@ public class SelectionManager extends BukkitRunnable {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public void updatePlayerVisualization(PlayerVisualizerData playerData, SelectionType type) {
+    public void updatePlayerVisualization(PlayerVisualizerData playerData, SelectionType type) { // TODO cleanup this
         Player player = playerData.getPlayer();
         LocalSession session;
         try {
@@ -202,9 +200,5 @@ public class SelectionManager extends BukkitRunnable {
         shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(plugin));
         shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(plugin));
         shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(plugin));
-
-        if (plugin.getCompatibilityHelper().isUsingFawe()) {
-            shapeProcessors.put(FawePolyhedralProcessor.getRegionClass(), new FawePolyhedralProcessor(plugin));
-        }
     }
 }

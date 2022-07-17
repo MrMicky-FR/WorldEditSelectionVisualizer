@@ -81,7 +81,6 @@ public class PlayerSelection {
         this.origin = origin;
 
         lastSelectionTooLarge = false;
-
         expireTime = expireSeconds > 0 ? Instant.now().plusSeconds(expireSeconds) : null;
     }
 

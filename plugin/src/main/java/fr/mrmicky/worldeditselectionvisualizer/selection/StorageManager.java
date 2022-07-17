@@ -33,7 +33,9 @@ public class StorageManager {
     }
 
     public boolean isEnabled(Player player, SelectionType type) {
-        return playersSection.getBoolean(player.getUniqueId() + "." + type.getName(), type.isEnabledByDefault());
+        String key = player.getUniqueId() + "." + type.getName();
+
+        return playersSection.getBoolean(key, type.isEnabledByDefault());
     }
 
     public void setEnable(Player player, SelectionType type, boolean enable) {

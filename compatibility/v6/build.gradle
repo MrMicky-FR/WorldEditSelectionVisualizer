@@ -1,9 +1,4 @@
-repositories {
-    maven { url 'https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
-}
-
 dependencies {
     implementation project(':worldeditselectionvisualizer-compatibility-commons')
     compileOnly 'com.sk89q.worldedit:worldedit-core:6.1'
-    compileOnly 'com.boydti:fawe-api:latest'
 }

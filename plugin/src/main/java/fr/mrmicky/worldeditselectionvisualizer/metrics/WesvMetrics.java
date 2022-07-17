@@ -19,7 +19,6 @@ public final class WesvMetrics {
         CompatibilityHelper compatHelper = plugin.getCompatibilityHelper();
 
         addBooleanChart("top_bottom_cuboid", () -> plugin.getConfig().getBoolean("cuboid-top-bottom"));
-        addBooleanChart("use_fawe", compatHelper::isUsingFawe);
         addBooleanChart("check_for_axe", () -> plugin.getConfig().getBoolean("need-we-wand"));
         addCustomChart("worldedit_version", () -> "WorldEdit " + compatHelper.getWorldEditVersion());
         addCustomChart("selection_update_interval", () -> {

@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -14,7 +14,6 @@ dependencies {
     implementation 'fr.mrmicky:fastparticles:2.0.0'
     implementation 'org.bstats:bstats-bukkit:1.8'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
-    compileOnly 'com.intellectualsites.fawe:FAWE-Bukkit:1.16-326'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
