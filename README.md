@@ -28,6 +28,7 @@ You can download releases and find more information on [SpigotMC](https://www.sp
 * `/wesv toggle` and `/wesv toggle clipboard`: toggle the selection/clipboard visualization
 * `/wesv lock`: lock/unlock the origin of the clipboard visualization to your current location
 * `/wesv lock tp`: teleport to the lock location (when clipboard visualization lock is enabled)
+* `/wesv reload`: reload the plugin config
 
 ## Screenshots
 

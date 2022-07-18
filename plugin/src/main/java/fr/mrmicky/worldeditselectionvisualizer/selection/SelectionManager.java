@@ -135,9 +135,9 @@ public class SelectionManager extends BukkitRunnable {
         }
 
         GlobalSelectionConfig config = plugin.getSelectionConfig(type);
-        long volume = regionAdapter.getVolume();
+        long volume = Math.abs(regionAdapter.getVolume());
 
-        if (volume <= 0 || volume > config.getMaxSelectionSize()) {
+        if (volume > config.getMaxSelectionSize()) {
             if (!playerSelection.isLastSelectionTooLarge()) {
                 String message = plugin.getMessage("selection-too-large")
                         .replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));

@@ -16,7 +16,7 @@ public class VerticalEllipse implements Shape {
         this.radius = radius;
 
         double maxRadius = Math.max(radius.getX(), Math.max(radius.getY(), radius.getZ()));
-        this.points = (int) Math.round((maxRadius * TWO_PI) / config.getPointsDistance());
+        this.points = Math.abs((int) Math.round((maxRadius * TWO_PI) / config.getPointsDistance()));
         double increment = TWO_PI / Math.max(1, this.points);
 
         this.cos = new double[this.points];

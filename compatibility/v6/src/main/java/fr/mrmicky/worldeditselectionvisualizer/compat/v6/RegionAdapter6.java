@@ -10,6 +10,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
+import fr.mrmicky.worldeditselectionvisualizer.compat.v6.utils.RegionTransforms6;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.utils.Vectors6;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
@@ -116,16 +117,9 @@ public class RegionAdapter6 implements RegionAdapter {
     @NotNull
     @Override
     public Region transform(Transform transform, Vector3d origin) {
-        if (!(region instanceof CuboidRegion)) {
-            return region.clone();
-        }
+        Vector originVec = Vectors6.toVector(origin);
 
-        Vector originVector = Vectors6.toVector(origin);
-        CuboidRegion cuboidRegion = (CuboidRegion) region;
-        Vector pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
-        Vector pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
-
-        return new CuboidRegion(region.getWorld(), pos1, pos2);
+        return RegionTransforms6.applyTransform(region, transform, originVec);
     }
 
     @NotNull
@@ -143,9 +137,5 @@ public class RegionAdapter6 implements RegionAdapter {
         }
 
         return vectors;
-    }
-
-    private Vector applyTransform(Transform transform, Vector origin, Vector vector) {
-        return transform.apply(vector.subtract(origin)).add(origin);
     }
 }

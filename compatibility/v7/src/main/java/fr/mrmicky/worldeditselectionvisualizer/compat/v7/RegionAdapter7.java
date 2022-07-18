@@ -1,6 +1,5 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat.v7;
 
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
@@ -11,6 +10,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionOperationException;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
+import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.RegionTransforms7;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.Vectors7;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jetbrains.annotations.NotNull;
@@ -117,16 +117,9 @@ public class RegionAdapter7 implements RegionAdapter {
     @NotNull
     @Override
     public Region transform(Transform transform, Vector3d origin) {
-        if (!(region instanceof CuboidRegion)) {
-            return region.clone();
-        }
+        Vector3 originVec = Vectors7.toVector3(origin);
 
-        Vector3 originVector = Vectors7.toVector3(origin);
-        CuboidRegion cuboidRegion = (CuboidRegion) region;
-        BlockVector3 pos1 = applyTransform(transform, originVector, cuboidRegion.getPos1());
-        BlockVector3 pos2 = applyTransform(transform, originVector, cuboidRegion.getPos2());
-
-        return new CuboidRegion(region.getWorld(), pos1, pos2);
+        return RegionTransforms7.originTransform(region, transform, originVec);
     }
 
     @NotNull
@@ -144,13 +137,5 @@ public class RegionAdapter7 implements RegionAdapter {
         }
 
         return vectors;
-    }
-
-    private BlockVector3 applyTransform(Transform transform, Vector3 origin, BlockVector3 vector) {
-        return applyTransform(transform, origin, vector.toVector3()).toBlockPoint();
-    }
-
-    private Vector3 applyTransform(Transform transform, Vector3 origin, Vector3 vector) {
-        return transform.apply(vector.subtract(origin)).add(origin);
     }
 }
