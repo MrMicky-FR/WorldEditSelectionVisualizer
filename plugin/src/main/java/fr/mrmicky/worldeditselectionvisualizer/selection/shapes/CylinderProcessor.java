@@ -7,6 +7,7 @@ import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Ellipse;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Line;
+import fr.mrmicky.worldeditselectionvisualizer.geometry.Point;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
@@ -29,6 +30,7 @@ public class CylinderProcessor extends ShapeProcessor<CylinderRegion> {
         Vector3d radius = new Vector3d(region.getWidth() / 2.0, 0, region.getLength() / 2.0);
         Vector3d bottomCenter = adapter.getCenter().withY(min.getY()).add(0.5, 0.0, 0.5);
         Vector3d topCenter = bottomCenter.withY(max.getY());
+        Vector3d middleCenter = bottomCenter.add(0, region.getHeight() / 2.0, 0);
         List<Shape> primary = new ArrayList<>(14); // 2 + 3 * 4
         List<Shape> secondary = new ArrayList<>(12); // 3 * 4
 
@@ -50,6 +52,6 @@ public class CylinderProcessor extends ShapeProcessor<CylinderRegion> {
             lines.add(new Line(top, topCenter, localConfig));
         }
 
-        return new SelectionPoints(primary, secondary);
+        return new SelectionPoints(primary, secondary, new Point(middleCenter));
     }
 }

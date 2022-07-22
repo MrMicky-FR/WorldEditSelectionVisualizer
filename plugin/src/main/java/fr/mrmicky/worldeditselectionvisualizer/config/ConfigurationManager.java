@@ -27,11 +27,12 @@ public class ConfigurationManager {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("visualization." + type.getName());
 
         int fadeDelay = section.getInt("fade-delay");
-        int maxSelectionSize = section.getInt("max-selection-size");
+        int max = section.getInt("max-selection-size");
         SelectionConfig primary = loadSelectionConfig(section.getConfigurationSection("primary"));
         SelectionConfig secondary = loadSelectionConfig(section.getConfigurationSection("secondary"));
+        SelectionConfig origin = loadSelectionConfig(section.getConfigurationSection("origin"));
 
-        return new GlobalSelectionConfig(fadeDelay, maxSelectionSize, primary, secondary);
+        return new GlobalSelectionConfig(fadeDelay, max, primary, secondary, origin);
     }
 
     @NotNull

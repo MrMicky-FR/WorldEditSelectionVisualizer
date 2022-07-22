@@ -25,12 +25,11 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
 
     @Override
     protected SelectionPoints processSelection(EllipsoidRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
-        List<Shape> primary = new ArrayList<>(6);
+        List<Shape> primary = new ArrayList<>(5);
         List<Shape> secondary = new ArrayList<>(6);
         Vector3d radius = adapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);
         Vector3d center = adapter.getCenter().add(0.5, 0.5, 0.5);
 
-        primary.add(new Point(center));
         primary.add(new Ellipse(center, radius, config.primary()));
 
         double offsetY = radius.getY() / 2.0;
@@ -44,11 +43,11 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
             double sin = Math.sin(i * INCREMENT);
 
             List<Shape> ellipses = (i % 2 == 0) ? primary : secondary;
-            SelectionConfig localConfig = ((i % 2 == 0) ? config.primary() : config.secondary());
+            SelectionConfig localConfig = (i % 2 == 0) ? config.primary() : config.secondary();
 
             ellipses.add(new VerticalEllipse(center, radius.multiply(sin, 1, cos), localConfig));
         }
 
-        return new SelectionPoints(primary, secondary);
+        return new SelectionPoints(primary, secondary, new Point(center));
     }
 }

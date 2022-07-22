@@ -9,6 +9,7 @@ import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
 import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
 import fr.mrmicky.worldeditselectionvisualizer.placeholders.PlaceholderAPIExpansion;
+import fr.mrmicky.worldeditselectionvisualizer.display.DisplayType;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionManager;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
@@ -37,7 +38,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
     private final Map<SelectionType, GlobalSelectionConfig> configurations = new EnumMap<>(SelectionType.class);
     private final Map<UUID, PlayerVisualizerData> players = new HashMap<>();
-    private final List<BukkitTask> particlesTasks = new ArrayList<>(4);
+    private final List<BukkitTask> particlesTasks = new ArrayList<>(6);
 
     private SelectionManager selectionManager;
     private StorageManager storageManager;
@@ -103,8 +104,11 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
             GlobalSelectionConfig config = configurationManager.loadGlobalSelectionConfig(type);
 
             configurations.put(type, config);
-            particlesTasks.add(new ParticlesTask(this, type, true, config.primary()).start());
-            particlesTasks.add(new ParticlesTask(this, type, false, config.secondary()).start());
+
+            for (DisplayType display : DisplayType.values()) {
+                ParticlesTask task = new ParticlesTask(this, type, display, config.byType(display));
+                particlesTasks.add(task.start());
+            }
         }
     }
 

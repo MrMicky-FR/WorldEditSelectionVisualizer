@@ -22,14 +22,18 @@ public class ParticlesTask implements Runnable {
 
     @NotNull
     private final SelectionType type;
-    private final boolean primary;
+    @NotNull
+    private final DisplayType displayType;
     @NotNull
     private final SelectionConfig config;
 
-    public ParticlesTask(WorldEditSelectionVisualizer plugin, @NotNull SelectionType type, boolean primary, @NotNull SelectionConfig config) {
+    public ParticlesTask(WorldEditSelectionVisualizer plugin,
+                         @NotNull SelectionType type,
+                         @NotNull DisplayType displayType,
+                         @NotNull SelectionConfig config) {
         this.plugin = plugin;
         this.type = type;
-        this.primary = primary;
+        this.displayType = displayType;
         this.config = config;
     }
 
@@ -57,9 +61,12 @@ public class ParticlesTask implements Runnable {
                 continue;
             }
 
-            Collection<Shape> renderables = primary ? selectionPoints.getPrimary() : selectionPoints.getSecondary();
+            Collection<Shape> renderables = selectionPoints.get(displayType);
             Vector3d location = new Vector3d(playerData.getClipboardLocation().toVector());
-            Vector3d origin = (type != SelectionType.CLIPBOARD) ? Vector3d.ZERO : location.subtract(selection.getOrigin()).floor();
+            Vector3d origin = (type != SelectionType.CLIPBOARD)
+                    ? Vector3d.ZERO :
+                    location.subtract(selection.getOrigin()).floor();
+
             ParticleRenderer renderer = new ParticleRenderer(player, location, origin, maxDistanceSquared, particleData);
 
             for (Shape renderable : renderables) {

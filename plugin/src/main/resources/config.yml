@@ -37,6 +37,7 @@ cuboid-top-bottom: false
 # 'clipboard': The WorldEdit clipboard (when you use //copy or //schem load )
 # 'primary': The primary selection points (the region borders)
 # 'secondary': The secondary selection points
+# 'origin': The selection origin point (position 1 for cuboid selection, and center for ellipsoid/cylinders)
 #   'fade-delay': The number of seconds before the particles disappears. You can set it to 0 to remove the fade delay
 #   'max-selection-size' : The maximum size of a selection to be display. A big value (> 1000000) can cause important lags
 #   'points-distance': The distance between each particles. The higher this number is, less particles will be spawn
@@ -64,6 +65,12 @@ visualization:
       particles:
         type: "REDSTONE"
         data: "RED"
+    origin:
+      update-interval: 15
+      view-distance: 64
+      particles:
+        type: "VILLAGER_HAPPY"
+        data: ""
   clipboard:
     fade-delay: 0
     max-selection-size: 50000
@@ -82,3 +89,9 @@ visualization:
       particles:
         type: "REDSTONE"
         data: "BLUE"
+    origin:
+      update-interval: 15
+      view-distance: 64
+      particles:
+        type: "VILLAGER_HAPPY"
+        data: ""
