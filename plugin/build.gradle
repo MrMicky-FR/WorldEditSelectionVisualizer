@@ -12,7 +12,7 @@ dependencies {
     implementation project(':worldeditselectionvisualizer-compatibility-v6')
     implementation project(':worldeditselectionvisualizer-compatibility-v7')
     implementation 'fr.mrmicky:fastparticles:2.0.0'
-    implementation 'org.bstats:bstats-bukkit:1.8'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
@@ -20,7 +20,7 @@ dependencies {
 shadowJar {
     archiveFileName = "WorldEditSelectionVisualizer-${project.version}.jar"
 
-    relocate 'org.bstats.bukkit', 'fr.mrmicky.worldeditselectionvisualizer.metrics'
+    relocate 'org.bstats', 'fr.mrmicky.worldeditselectionvisualizer.metrics'
     relocate 'fr.mrmicky.fastparticles', 'fr.mrmicky.worldeditselectionvisualizer.libs.fastparticles'
 }
 

@@ -24,7 +24,9 @@ public class CylinderProcessor extends ShapeProcessor<CylinderRegion> {
     }
 
     @Override
-    protected SelectionPoints processSelection(CylinderRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
+    protected SelectionPoints processSelection(CylinderRegion region,
+                                               RegionAdapter adapter,
+                                               GlobalSelectionConfig config) {
         Vector3d min = adapter.getMinimumPoint();
         Vector3d max = adapter.getMaximumPoint().add(1, 1, 1);
         Vector3d radius = new Vector3d(region.getWidth() / 2.0, 0, region.getLength() / 2.0);

@@ -12,7 +12,7 @@ api-version: 1.13
 commands:
   worldeditselectionvisualizer:
     description: Toggles the visualizer or reload the config
-    usage: /<command> <toggle|reload>
+    usage: /<command> <toggle|lock|reload>
     aliases: [wesv]
 
 permissions:

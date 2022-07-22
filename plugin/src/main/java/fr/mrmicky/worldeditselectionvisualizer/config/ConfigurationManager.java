@@ -22,9 +22,9 @@ public class ConfigurationManager {
         this.plugin = plugin;
     }
 
-    @NotNull
-    public GlobalSelectionConfig loadGlobalSelectionConfig(SelectionType type) {
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("visualization." + type.getName());
+    public @NotNull GlobalSelectionConfig loadGlobalSelectionConfig(SelectionType type) {
+        ConfigurationSection section = this.plugin.getConfig()
+                .getConfigurationSection("visualization." + type.getName());
 
         int fadeDelay = section.getInt("fade-delay");
         int max = section.getInt("max-selection-size");
@@ -35,13 +35,11 @@ public class ConfigurationManager {
         return new GlobalSelectionConfig(fadeDelay, max, primary, secondary, origin);
     }
 
-    @NotNull
-    private SelectionConfig loadSelectionConfig(ConfigurationSection config) {
+    private @NotNull SelectionConfig loadSelectionConfig(ConfigurationSection config) {
         return new SelectionConfig(config, this::loadParticle);
     }
 
-    @NotNull
-    public Particle loadParticle(ConfigurationSection config) {
+    public @NotNull Particle loadParticle(ConfigurationSection config) {
         if (config == null) {
             return Particle.FALLBACK;
         }
@@ -54,15 +52,16 @@ public class ConfigurationManager {
 
         try {
             ParticleType type = ParticleType.of(rawType);
-            return new Particle(type, loadParticleData(type.getDataType(), config.getString("data")));
+            String data = config.getString("data");
+
+            return new Particle(type, loadParticleData(type.getDataType(), data));
         } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning("Invalid or unsupported particle type in the config: " + rawType);
+            this.plugin.getLogger().warning("Invalid or unsupported particle type in the config: " + rawType);
             return Particle.FALLBACK;
         }
     }
 
-    @Nullable
-    private ParticleData loadParticleData(Class<?> dataClass, String name) {
+    private @Nullable ParticleData loadParticleData(Class<?> dataClass, String name) {
         if (dataClass == ParticleData.DustOptions.class) {
             if (name == null || name.isEmpty()) {
                 return ParticleData.createDustOptions(Color.RED, 1);
@@ -82,7 +81,8 @@ public class ConfigurationManager {
                 Color color = (Color) Color.class.getField(name.toUpperCase(Locale.ROOT)).get(null);
                 return ParticleData.createDustOptions(color, 1);
             } catch (IllegalArgumentException | ReflectiveOperationException e) {
-                plugin.getLogger().warning("Invalid particle color in the config: " + name);
+                this.plugin.getLogger().warning("Invalid particle color in the config: " + name);
+
                 return ParticleData.createDustOptions(Color.RED, 1);
             }
         }
@@ -102,16 +102,15 @@ public class ConfigurationManager {
         throw new IllegalArgumentException("Invalid particle data: " + dataClass.getName());
     }
 
-    @NotNull
-    private Material getMaterial(String type, boolean needBlock) {
+    private @NotNull Material getMaterial(String type, boolean needBlock) {
         Material material = Material.matchMaterial(type);
         if (material == null) {
-            plugin.getLogger().warning("Invalid material for particle in the config: " + type);
+            this.plugin.getLogger().warning("Invalid material for particle in the config: " + type);
             return Material.STONE;
         }
 
         if (needBlock && !material.isBlock()) {
-            plugin.getLogger().warning("The material for particle in the config must be a block: " + type);
+            this.plugin.getLogger().warning("The material for particle in the config must be a block: " + type);
             return Material.STONE;
         }
 

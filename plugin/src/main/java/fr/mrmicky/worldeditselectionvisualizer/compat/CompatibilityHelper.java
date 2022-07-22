@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 /**
- * Helper class to help supporting multiples Spigot and WorldEdit versions
+ * Helper class to help support multiples Spigot and WorldEdit versions
  */
 public class CompatibilityHelper {
 
@@ -32,8 +32,7 @@ public class CompatibilityHelper {
     private final boolean supportActionBar = isActionBarSupported();
     private final boolean worldEdit7 = isWorldEdit7();
 
-    @Nullable
-    private Field wandItemField;
+    private @Nullable Field wandItemField;
 
     public CompatibilityHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
@@ -41,28 +40,30 @@ public class CompatibilityHelper {
         plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
 
         try {
-            wandItemField = LocalConfiguration.class.getField("wandItem");
+            this.wandItemField = LocalConfiguration.class.getField("wandItem");
         } catch (NoSuchFieldException e) {
             plugin.getLogger().warning("No field 'wandItem' in LocalConfiguration");
         }
 
-        if (wandItemField != null && wandItemField.getType() != int.class && wandItemField.getType() != String.class) {
+        if (this.wandItemField != null
+                && this.wandItemField.getType() != int.class
+                && this.wandItemField.getType() != String.class) {
             plugin.getLogger().warning("Unsupported WorldEdit configuration, try to update WorldEdit (and FAWE if you have it)");
 
-            wandItemField = null;
+            this.wandItemField = null;
         }
     }
 
     public RegionAdapter adaptRegion(Region region) {
-        return worldEdit7 ? new RegionAdapter7(region) : new RegionAdapter6(region);
+        return this.worldEdit7 ? new RegionAdapter7(region) : new RegionAdapter6(region);
     }
 
     public ClipboardAdapter adaptClipboard(Clipboard clipboard) {
-        return worldEdit7 ? new ClipboardAdapter7(clipboard) : new ClipboardAdapter6(clipboard);
+        return this.worldEdit7 ? new ClipboardAdapter7(clipboard) : new ClipboardAdapter6(clipboard);
     }
 
     public int getWorldEditVersion() {
-        return worldEdit7 ? 7 : 6;
+        return this.worldEdit7 ? 7 : 6;
     }
 
     public boolean isHoldingSelectionItem(@NotNull Player player) {
@@ -70,7 +71,7 @@ public class CompatibilityHelper {
     }
 
     public void sendActionBar(@NotNull Player player, @NotNull String message) {
-        if (!supportActionBar) {
+        if (!this.supportActionBar) {
             player.sendMessage(message);
             return;
         }
@@ -84,36 +85,39 @@ public class CompatibilityHelper {
             return false;
         }
 
-        if (wandItemField == null) {
+        if (this.wandItemField == null) {
             return true;
         }
 
         try {
-            if (wandItemField.getType() == int.class) { // WorldEdit 6
-                return item.getType().getId() == wandItemField.getInt(WorldEdit.getInstance().getConfiguration());
+            LocalConfiguration config = WorldEdit.getInstance().getConfiguration();
+
+            if (this.wandItemField.getType() == int.class) { // WorldEdit 6
+                return item.getType().getId() == this.wandItemField.getInt(config);
             }
 
-            if (wandItemField.getType() == String.class) { // WorldEdit 7
-                String wandItem = (String) wandItemField.get(WorldEdit.getInstance().getConfiguration());
+            if (this.wandItemField.getType() == String.class) { // WorldEdit 7
+                String wandItem = (String) this.wandItemField.get(config);
 
                 return BukkitAdapter.adapt(item).getType().equals(ItemTypes.get(wandItem));
             }
         } catch (ReflectiveOperationException e) {
-            plugin.getLogger().log(Level.WARNING, "An error occurred on isHoldingSelectionItem", e);
+            this.plugin.getLogger().log(Level.WARNING, "An error occurred on isHoldingSelectionItem", e);
         }
 
         return true;
     }
 
     @SuppressWarnings("deprecation") // 1.7.10/1.8 servers support
-    private ItemStack getItemInMainHand(Player player) {
+    private @NotNull ItemStack getItemInMainHand(Player player) {
         return player.getItemInHand();
     }
 
-    private ItemStack getItemInOffHand(Player player) {
-        if (!supportOffHand) {
+    private @Nullable ItemStack getItemInOffHand(Player player) {
+        if (!this.supportOffHand) {
             return null;
         }
+
         return player.getInventory().getItemInOffHand();
     }
 

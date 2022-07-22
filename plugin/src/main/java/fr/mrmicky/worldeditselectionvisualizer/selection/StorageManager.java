@@ -23,23 +23,22 @@ public class StorageManager {
     public StorageManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
-        playersFile = new File(plugin.getDataFolder(), "players.yml");
+        this.playersFile = new File(plugin.getDataFolder(), "players.yml");
+        this.playersConfig = YamlConfiguration.loadConfiguration(this.playersFile);
 
-        playersConfig = YamlConfiguration.loadConfiguration(playersFile);
-
-        ConfigurationSection section = playersConfig.getConfigurationSection("players");
-
-        playersSection = section != null ? section : playersConfig.createSection("players");
+        ConfigurationSection section = this.playersConfig.getConfigurationSection("players");
+        this.playersSection = section != null
+                ? section : this.playersConfig.createSection("players");
     }
 
     public boolean isEnabled(Player player, SelectionType type) {
         String key = player.getUniqueId() + "." + type.getName();
 
-        return playersSection.getBoolean(key, type.isEnabledByDefault());
+        return this.playersSection.getBoolean(key, type.isEnabledByDefault());
     }
 
     public void setEnable(Player player, SelectionType type, boolean enable) {
-        playersSection.set(player.getUniqueId() + "." + type.getName(), enable);
+        this.playersSection.set(player.getUniqueId() + "." + type.getName(), enable);
 
         Bukkit.getPluginManager().callEvent(new VisualizationToggleEvent(player, enable));
 
@@ -48,9 +47,9 @@ public class StorageManager {
 
     private void save() {
         try {
-            playersConfig.save(playersFile);
+            this.playersConfig.save(this.playersFile);
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Error while saving players.yml", e);
+            this.plugin.getLogger().log(Level.SEVERE, "Error while saving players.yml", e);
         }
     }
 }

@@ -11,10 +11,8 @@ public class Particle {
 
     public static final Particle FALLBACK = new Particle(ParticleType.of("FLAME"));
 
-    @NotNull
-    private final ParticleType type;
-    @Nullable
-    private final ParticleData data;
+    private final @NotNull ParticleType type;
+    private final @Nullable ParticleData data;
 
     public Particle(@NotNull ParticleType type) {
         this(type, null);
@@ -25,13 +23,11 @@ public class Particle {
         this.data = data;
     }
 
-    @NotNull
-    public ParticleType getType() {
-        return type;
+    public @NotNull ParticleType getType() {
+        return this.type;
     }
 
-    @Nullable
-    public ParticleData getData() {
-        return data;
+    public @Nullable ParticleData getData() {
+        return this.data;
     }
 }

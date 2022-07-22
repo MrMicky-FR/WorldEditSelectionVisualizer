@@ -8,12 +8,9 @@ public class GlobalSelectionConfig {
     private final int fadeDelay;
     private final int maxSelectionSize;
 
-    @NotNull
-    private final SelectionConfig primary;
-    @NotNull
-    private final SelectionConfig secondary;
-    @NotNull
-    private final SelectionConfig origin;
+    private final @NotNull SelectionConfig primary;
+    private final @NotNull SelectionConfig secondary;
+    private final @NotNull SelectionConfig origin;
 
     public GlobalSelectionConfig(int fadeDelay, int maxSelectionSize,
                                  @NotNull SelectionConfig primary,
@@ -27,37 +24,33 @@ public class GlobalSelectionConfig {
     }
 
     public int getFadeDelay() {
-        return fadeDelay;
+        return this.fadeDelay;
     }
 
     public int getMaxSelectionSize() {
-        return maxSelectionSize;
+        return this.maxSelectionSize;
     }
 
-    @NotNull
-    public SelectionConfig primary() {
-        return primary;
+    public @NotNull SelectionConfig primary() {
+        return this.primary;
     }
 
-    @NotNull
-    public SelectionConfig secondary() {
-        return secondary;
+    public @NotNull SelectionConfig secondary() {
+        return this.secondary;
     }
 
-    @NotNull
-    public SelectionConfig origin() {
-        return origin;
+    public @NotNull SelectionConfig origin() {
+        return this.origin;
     }
 
-    @NotNull
-    public SelectionConfig byType(DisplayType type) {
+    public @NotNull SelectionConfig byType(DisplayType type) {
         switch (type) {
             case PRIMARY:
-                return primary;
+                return this.primary;
             case SECONDARY:
-                return secondary;
+                return this.secondary;
             case ORIGIN:
-                return origin;
+                return this.origin;
         }
 
         throw new IllegalArgumentException("Invalid display type: " + type);

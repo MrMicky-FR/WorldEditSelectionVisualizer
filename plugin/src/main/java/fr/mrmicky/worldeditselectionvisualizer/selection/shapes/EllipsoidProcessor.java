@@ -24,7 +24,9 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
     }
 
     @Override
-    protected SelectionPoints processSelection(EllipsoidRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
+    protected SelectionPoints processSelection(EllipsoidRegion region,
+                                               RegionAdapter adapter,
+                                               GlobalSelectionConfig config) {
         List<Shape> primary = new ArrayList<>(5);
         List<Shape> secondary = new ArrayList<>(6);
         Vector3d radius = adapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);

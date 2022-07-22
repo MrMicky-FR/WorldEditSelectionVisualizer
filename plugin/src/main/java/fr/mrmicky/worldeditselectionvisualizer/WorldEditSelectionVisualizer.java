@@ -50,12 +50,12 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         saveDefaultConfig();
         migrateV1Config();
 
-        compatibilityHelper = new CompatibilityHelper(this);
-        storageManager = new StorageManager(this);
-        configurationManager = new ConfigurationManager(this);
-        selectionManager = new SelectionManager(this);
+        this.compatibilityHelper = new CompatibilityHelper(this);
+        this.storageManager = new StorageManager(this);
+        this.configurationManager = new ConfigurationManager(this);
+        this.selectionManager = new SelectionManager(this);
 
-        if (compatibilityHelper.getWorldEditVersion() == 7) {
+        if (this.compatibilityHelper.getWorldEditVersion() == 7) {
             try {
                 Region.class.getMethod("getVolume");
             } catch (NoSuchMethodException e) {
@@ -91,55 +91,54 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     public void reloadConfig() {
         super.reloadConfig();
 
-        if (configurationManager != null) {
+        if (this.configurationManager != null) {
             loadConfig();
         }
     }
 
     private void loadConfig() {
-        particlesTasks.forEach(BukkitTask::cancel);
-        particlesTasks.clear();
+        this.particlesTasks.forEach(BukkitTask::cancel);
+        this.particlesTasks.clear();
 
         for (SelectionType type : SelectionType.values()) {
-            GlobalSelectionConfig config = configurationManager.loadGlobalSelectionConfig(type);
+            GlobalSelectionConfig config = this.configurationManager.loadGlobalSelectionConfig(type);
 
-            configurations.put(type, config);
+            this.configurations.put(type, config);
 
             for (DisplayType display : DisplayType.values()) {
                 ParticlesTask task = new ParticlesTask(this, type, display, config.byType(display));
-                particlesTasks.add(task.start());
+                this.particlesTasks.add(task.start());
             }
         }
     }
 
     public void updateHoldingSelectionItem(PlayerVisualizerData playerData) {
-        playerData.setHoldingSelectionItem(compatibilityHelper.isHoldingSelectionItem(playerData.getPlayer()));
+        playerData.setHoldingSelectionItem(this.compatibilityHelper.isHoldingSelectionItem(playerData.getPlayer()));
     }
 
     public void loadPlayer(Player player) {
-        if (players.containsKey(player.getUniqueId())) {
+        if (this.players.containsKey(player.getUniqueId())) {
             return;
         }
 
         PlayerVisualizerData playerData = new PlayerVisualizerData(player);
 
         for (SelectionType type : SelectionType.values()) {
-            boolean enable = !getConfig().getBoolean("save-toggle") || storageManager.isEnabled(player, type);
+            boolean enable = !getConfig().getBoolean("save-toggle") || this.storageManager.isEnabled(player, type);
             playerData.toggleSelectionVisibility(type, enable);
         }
 
         updateHoldingSelectionItem(playerData);
 
-        players.put(player.getUniqueId(), playerData);
+        this.players.put(player.getUniqueId(), playerData);
     }
 
     public void unloadPlayer(Player player) {
-        players.remove(player.getUniqueId());
+        this.players.remove(player.getUniqueId());
     }
 
-    @NotNull
-    public PlayerVisualizerData getPlayerData(Player player) {
-        PlayerVisualizerData playerData = players.get(player.getUniqueId());
+    public @NotNull PlayerVisualizerData getPlayerData(Player player) {
+        PlayerVisualizerData playerData = this.players.get(player.getUniqueId());
 
         if (playerData == null) {
             throw new IllegalStateException("No player data loaded for " + player.getName());
@@ -148,30 +147,28 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         return playerData;
     }
 
-    @NotNull
-    public Optional<PlayerVisualizerData> getOptionalPlayerData(Player player) {
-        return Optional.ofNullable(players.get(player.getUniqueId()));
+    public @NotNull Optional<PlayerVisualizerData> getOptionalPlayerData(Player player) {
+        return Optional.ofNullable(this.players.get(player.getUniqueId()));
     }
 
-    @NotNull
-    public Collection<PlayerVisualizerData> getPlayers() {
-        return players.values();
+    public @NotNull Collection<PlayerVisualizerData> getPlayers() {
+        return this.players.values();
     }
 
     public SelectionManager getSelectionManager() {
-        return selectionManager;
+        return this.selectionManager;
     }
 
     public StorageManager getStorageManager() {
-        return storageManager;
+        return this.storageManager;
     }
 
     public CompatibilityHelper getCompatibilityHelper() {
-        return compatibilityHelper;
+        return this.compatibilityHelper;
     }
 
     public GlobalSelectionConfig getSelectionConfig(SelectionType selectionType) {
-        return configurations.get(selectionType);
+        return this.configurations.get(selectionType);
     }
 
     public String getMessage(String path) {

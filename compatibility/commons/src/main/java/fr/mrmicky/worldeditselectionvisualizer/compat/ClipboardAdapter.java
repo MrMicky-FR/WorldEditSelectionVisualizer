@@ -8,12 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ClipboardAdapter {
 
-    @NotNull
-    Vector3d getOrigin();
+    @NotNull Vector3d getOrigin();
 
-    @NotNull
-    Clipboard getClipboard();
+    @NotNull Clipboard getClipboard();
 
-    @NotNull
-    Region getShiftedRegion(Vector3d vector) throws RegionOperationException;
+    @NotNull Region shiftRegion(@NotNull Vector3d change) throws RegionOperationException;
 }

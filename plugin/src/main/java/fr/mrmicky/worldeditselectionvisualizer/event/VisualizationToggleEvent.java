@@ -14,16 +14,14 @@ public class VisualizationToggleEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    @NotNull
-    private final Player player;
-
+    private final @NotNull Player player;
     private final boolean enabled;
 
     /**
      * Creates a new custom "VisualizationToggleEvent" event.
      *
      * @param player  The player who has toggled their WorldEdit selection visualization.
-     * @param enabled The state representing whether or not the player has enabled
+     * @param enabled The state representing whether the player has enabled
      *                or disable their WorldEdit selection visualization.
      */
     public VisualizationToggleEvent(@NotNull Player player, boolean enabled) {
@@ -36,29 +34,26 @@ public class VisualizationToggleEvent extends Event {
      *
      * @return Returns player who has toggled their WorldEdit selection visualization.
      */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     /**
-     * Gets a state representing whether or not a player has enabled
+     * Gets a state representing whether a player has enabled
      * or disable their WorldEdit selection visualization.
      *
      * @return Returns true if a player has enabled visualizations, or false if disabled.
      */
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
 
-    @NotNull
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 }

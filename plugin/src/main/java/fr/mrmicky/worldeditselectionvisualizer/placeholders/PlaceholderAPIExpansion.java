@@ -21,32 +21,28 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     public void registerExpansion() {
         if (register()) {
-            plugin.getLogger().info("PlaceholderAPI extension successfully registered.");
+            this.plugin.getLogger().info("PlaceholderAPI extension successfully registered.");
         }
     }
 
-    @NotNull
     @Override
-    public String getName() {
-        return plugin.getName();
+    public @NotNull String getName() {
+        return this.plugin.getName();
     }
 
-    @NotNull
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "wesv";
     }
 
-    @NotNull
     @Override
-    public String getAuthor() {
-        return String.join(", ", plugin.getDescription().getAuthors());
+    public @NotNull String getAuthor() {
+        return String.join(", ", this.plugin.getDescription().getAuthors());
     }
 
-    @NotNull
     @Override
-    public String getVersion() {
-        return plugin.getDescription().getVersion();
+    public @NotNull String getVersion() {
+        return this.plugin.getDescription().getVersion();
     }
 
     @Override
@@ -54,31 +50,30 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
         return true;
     }
 
-    @NotNull
     @Override
-    public List<String> getPlaceholders() {
+    public @NotNull List<String> getPlaceholders() {
         return Arrays.asList("%wesv_toggled_selection%", "%wesv_toggled_clipboard%");
     }
 
-    @Nullable
     @Override
-    public String onPlaceholderRequest(@Nullable Player player, @NotNull String identifier) {
+    public @Nullable String onPlaceholderRequest(@Nullable Player player,
+                                                 @NotNull String identifier) {
         if (player == null) {
             return "";
         }
 
         if (identifier.equals("toggled_selection")) {
-            return translateBool(plugin.getPlayerData(player).isSelectionVisible(SelectionType.SELECTION));
+            return translateBool(this.plugin.getPlayerData(player).isSelectionVisible(SelectionType.SELECTION));
         }
 
         if (identifier.equals("toggled_clipboard")) {
-            return translateBool(plugin.getPlayerData(player).isSelectionVisible(SelectionType.CLIPBOARD));
+            return translateBool(this.plugin.getPlayerData(player).isSelectionVisible(SelectionType.CLIPBOARD));
         }
 
         return null;
     }
 
-    private String translateBool(boolean bool) {
+    private @NotNull String translateBool(boolean bool) {
         return bool ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
     }
 }

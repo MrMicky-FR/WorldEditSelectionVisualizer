@@ -47,9 +47,9 @@ public class SelectionManager extends BukkitRunnable {
 
         registerShapeProcessors();
 
-        worldEditPlugin = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+        this.worldEditPlugin = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 
-        if (worldEditPlugin == null) {
+        if (this.worldEditPlugin == null) {
             throw new IllegalStateException("WorldEditPlugin not found");
         }
 
@@ -58,7 +58,7 @@ public class SelectionManager extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (PlayerVisualizerData player : plugin.getPlayers()) {
+        for (PlayerVisualizerData player : this.plugin.getPlayers()) {
             updatePlayerVisualizations(player);
         }
     }
@@ -73,7 +73,7 @@ public class SelectionManager extends BukkitRunnable {
         Player player = playerData.getPlayer();
         LocalSession session;
         try {
-            session = worldEditPlugin.getSession(player);
+            session = this.worldEditPlugin.getSession(player);
         } catch (Exception e) {
             // sometimes after reloading, getSession creates errors with WorldEdit
             return;
@@ -99,11 +99,11 @@ public class SelectionManager extends BukkitRunnable {
             Clipboard clipboard = clipboardHolder.getClipboard();
             Transform transform = clipboardHolder.getTransform();
 
-            origin = plugin.getCompatibilityHelper().adaptClipboard(clipboard).getOrigin();
+            origin = this.plugin.getCompatibilityHelper().adaptClipboard(clipboard).getOrigin();
             region = clipboard.getRegion().clone();
 
             if (!transform.isIdentity()) {
-                region = plugin.getCompatibilityHelper().adaptRegion(region).transform(transform, origin);
+                region = this.plugin.getCompatibilityHelper().adaptRegion(region).transform(transform, origin);
             }
         } else {
             region = getSelectedRegion(session);
@@ -119,7 +119,7 @@ public class SelectionManager extends BukkitRunnable {
             return;
         }
 
-        RegionAdapter regionAdapter = plugin.getCompatibilityHelper().adaptRegion(region);
+        RegionAdapter regionAdapter = this.plugin.getCompatibilityHelper().adaptRegion(region);
         RegionInfo regionInfo = regionAdapter.getRegionInfo();
 
         if (regionInfo.equals(playerSelection.getLastSelectedRegion())) {
@@ -134,14 +134,14 @@ public class SelectionManager extends BukkitRunnable {
             return;
         }
 
-        GlobalSelectionConfig config = plugin.getSelectionConfig(type);
+        GlobalSelectionConfig config = this.plugin.getSelectionConfig(type);
         long volume = Math.abs(regionAdapter.getVolume());
 
         if (volume > config.getMaxSelectionSize()) {
             if (!playerSelection.isLastSelectionTooLarge()) {
-                String message = plugin.getMessage("selection-too-large")
+                String message = this.plugin.getMessage("selection-too-large")
                         .replace("%blocks%", Integer.toString(config.getMaxSelectionSize()));
-                plugin.getCompatibilityHelper().sendActionBar(player, message);
+                this.plugin.getCompatibilityHelper().sendActionBar(player, message);
             }
 
             playerSelection.resetSelection(regionInfo);
@@ -149,13 +149,13 @@ public class SelectionManager extends BukkitRunnable {
             return;
         }
 
-        plugin.updateHoldingSelectionItem(playerData);
+        this.plugin.updateHoldingSelectionItem(playerData);
 
         Event event = (type == SelectionType.SELECTION)
                 ? new SelectionChangeEvent(player, region) : new ClipboardChangeEvent(player, region);
         Bukkit.getPluginManager().callEvent(event);
 
-        ShapeProcessor<?> shapeProcessor = shapeProcessors.get(region.getClass());
+        ShapeProcessor<?> shapeProcessor = this.shapeProcessors.get(region.getClass());
 
         if (shapeProcessor == null) { // Unsupported selection type
             playerSelection.resetSelection(regionInfo);
@@ -166,8 +166,7 @@ public class SelectionManager extends BukkitRunnable {
         playerSelection.updateSelection(selection, regionInfo, origin, config.getFadeDelay());
     }
 
-    @Nullable
-    private Region getSelectedRegion(@Nullable LocalSession session) {
+    private @Nullable Region getSelectedRegion(@Nullable LocalSession session) {
         if (session != null && session.getSelectionWorld() != null) {
             RegionSelector selector = session.getRegionSelector(session.getSelectionWorld());
 
@@ -175,15 +174,14 @@ public class SelectionManager extends BukkitRunnable {
                 try {
                     return selector.getRegion();
                 } catch (IncompleteRegionException e) {
-                    plugin.getLogger().warning("Region still incomplete");
+                    this.plugin.getLogger().warning("Region still incomplete");
                 }
             }
         }
         return null;
     }
 
-    @Nullable
-    private ClipboardHolder getClipboardHolder(@Nullable LocalSession session) {
+    private @Nullable ClipboardHolder getClipboardHolder(@Nullable LocalSession session) {
         if (session != null) {
             try {
                 return session.getClipboard();
@@ -195,10 +193,10 @@ public class SelectionManager extends BukkitRunnable {
     }
 
     private void registerShapeProcessors() {
-        shapeProcessors.put(CuboidRegion.class, new CuboidProcessor(plugin));
-        shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor(plugin));
-        shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(plugin));
-        shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(plugin));
-        shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(plugin));
+        this.shapeProcessors.put(CuboidRegion.class, new CuboidProcessor(this.plugin));
+        this.shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor(this.plugin));
+        this.shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(this.plugin));
+        this.shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(this.plugin));
+        this.shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(this.plugin));
     }
 }

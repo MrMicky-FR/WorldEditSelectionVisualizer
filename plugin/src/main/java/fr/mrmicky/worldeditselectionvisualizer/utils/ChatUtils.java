@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.utils;
 
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 public final class ChatUtils {
 
@@ -8,7 +9,7 @@ public final class ChatUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static String color(String s) {
+    public static @NotNull String color(@NotNull String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
 }

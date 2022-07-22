@@ -20,12 +20,9 @@ public class ParticlesTask implements Runnable {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    @NotNull
-    private final SelectionType type;
-    @NotNull
-    private final DisplayType displayType;
-    @NotNull
-    private final SelectionConfig config;
+    private final @NotNull SelectionType type;
+    private final @NotNull DisplayType displayType;
+    private final @NotNull SelectionConfig config;
 
     public ParticlesTask(WorldEditSelectionVisualizer plugin,
                          @NotNull SelectionType type,
@@ -38,18 +35,20 @@ public class ParticlesTask implements Runnable {
     }
 
     public BukkitTask start() {
-        return Bukkit.getScheduler().runTaskTimer(plugin, this, config.getUpdateInterval(), config.getUpdateInterval());
+        int interval = this.config.getUpdateInterval();
+
+        return Bukkit.getScheduler().runTaskTimer(this.plugin, this, interval, interval);
     }
 
     @Override
     public void run() {
-        boolean needWand = plugin.getConfig().getBoolean("need-we-wand");
-        double maxDistanceSquared = NumberConversions.square(config.getViewDistance());
-        Particle particleData = config.getParticle();
+        boolean needWand = this.plugin.getConfig().getBoolean("need-we-wand");
+        double distanceSquare = NumberConversions.square(this.config.getViewDistance());
+        Particle particleData = this.config.getParticle();
 
-        for (PlayerVisualizerData playerData : plugin.getPlayers()) {
+        for (PlayerVisualizerData playerData : this.plugin.getPlayers()) {
             Player player = playerData.getPlayer();
-            PlayerSelection selection = playerData.getSelection(type).orElse(null);
+            PlayerSelection selection = playerData.getSelection(this.type).orElse(null);
 
             if (selection == null) {
                 continue;
@@ -61,13 +60,14 @@ public class ParticlesTask implements Runnable {
                 continue;
             }
 
-            Collection<Shape> renderables = selectionPoints.get(displayType);
+            Collection<Shape> renderables = selectionPoints.get(this.displayType);
             Vector3d location = new Vector3d(playerData.getClipboardLocation().toVector());
-            Vector3d origin = (type != SelectionType.CLIPBOARD)
+            Vector3d origin = (this.type != SelectionType.CLIPBOARD)
                     ? Vector3d.ZERO :
                     location.subtract(selection.getOrigin()).floor();
 
-            ParticleRenderer renderer = new ParticleRenderer(player, location, origin, maxDistanceSquared, particleData);
+            ParticleRenderer renderer = new ParticleRenderer(player, location,
+                    origin, distanceSquare, particleData);
 
             for (Shape renderable : renderables) {
                 renderable.render(renderer);
@@ -82,7 +82,8 @@ public class ParticlesTask implements Runnable {
         private final double maxDistance;
         private final Particle particle;
 
-        public ParticleRenderer(Player player, Vector3d location, Vector3d origin, double maxDistance, Particle particle) {
+        public ParticleRenderer(Player player, Vector3d location, Vector3d origin,
+                                double maxDistance, Particle particle) {
             this.player = player;
             this.location = location;
             this.origin = origin;
@@ -92,15 +93,15 @@ public class ParticlesTask implements Runnable {
 
         @Override
         public void render(double vecX, double vecY, double vecZ) {
-            double x = vecX + origin.getX();
-            double y = vecY + origin.getY();
-            double z = vecZ + origin.getZ();
+            double x = vecX + this.origin.getX();
+            double y = vecY + this.origin.getY();
+            double z = vecZ + this.origin.getZ();
 
-            if (location.distanceSquared(x, y, z) > maxDistance) {
+            if (this.location.distanceSquared(x, y, z) > this.maxDistance) {
                 return;
             }
 
-            particle.getType().spawn(player, x, y, z, 1, 0, 0, 0, 0, particle.getData());
+            this.particle.getType().spawn(this.player, x, y, z, 1, 0, 0, 0, 0, this.particle.getData());
         }
     }
 }

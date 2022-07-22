@@ -25,18 +25,18 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
 
-        plugin.loadPlayer(player);
+        this.plugin.loadPlayer(player);
     }
 
     @EventHandler
     public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
         Player player = e.getPlayer();
 
-        plugin.getOptionalPlayerData(player).ifPresent(data -> {
-            plugin.updateHoldingSelectionItem(data);
+        this.plugin.getOptionalPlayerData(player).ifPresent(data -> {
+            this.plugin.updateHoldingSelectionItem(data);
 
             data.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
-            plugin.getSelectionManager().updatePlayerVisualizations(data);
+            this.plugin.getSelectionManager().updatePlayerVisualizations(data);
         });
     }
 
@@ -54,14 +54,14 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Bukkit.getScheduler().runTask(plugin, () ->
-                plugin.updateHoldingSelectionItem(plugin.getPlayerData(player)));
+        Bukkit.getScheduler().runTask(this.plugin, () ->
+                this.plugin.updateHoldingSelectionItem(this.plugin.getPlayerData(player)));
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
 
-        plugin.unloadPlayer(player);
+        this.plugin.unloadPlayer(player);
     }
 }

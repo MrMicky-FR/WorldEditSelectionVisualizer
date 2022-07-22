@@ -18,35 +18,29 @@ public class PlayerVisualizerData {
 
     private final Map<SelectionType, PlayerSelection> enabledVisualizations = new EnumMap<>(SelectionType.class);
 
-    @NotNull
-    private final Player player;
+    private final @NotNull Player player;
 
-    @Nullable
-    private Location clipboardLockLocation;
-
+    private @Nullable Location clipboardLockLocation;
     private boolean holdingSelectionItem = true;
 
     public PlayerVisualizerData(@NotNull Player player) {
         this.player = Objects.requireNonNull(player, "player");
     }
 
-    @NotNull
-    public Optional<PlayerSelection> getSelection(SelectionType type) {
-        return Optional.ofNullable(enabledVisualizations.get(type));
+    public @NotNull Optional<PlayerSelection> getSelection(SelectionType type) {
+        return Optional.ofNullable(this.enabledVisualizations.get(type));
     }
 
-    @NotNull
-    public Collection<PlayerSelection> getEnabledVisualizations() {
-        return enabledVisualizations.values();
+    public @NotNull Collection<PlayerSelection> getEnabledVisualizations() {
+        return this.enabledVisualizations.values();
     }
 
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     public boolean isHoldingSelectionItem() {
-        return holdingSelectionItem;
+        return this.holdingSelectionItem;
     }
 
     public void setHoldingSelectionItem(boolean holdingSelectionItem) {
@@ -54,31 +48,31 @@ public class PlayerVisualizerData {
     }
 
     public boolean isSelectionVisible(SelectionType type) {
-        return enabledVisualizations.containsKey(type);
+        return this.enabledVisualizations.containsKey(type);
     }
 
     public void toggleSelectionVisibility(SelectionType type, boolean enable) {
         if (!enable) {
-            enabledVisualizations.remove(type);
+            this.enabledVisualizations.remove(type);
             return;
         }
 
-        enabledVisualizations.computeIfAbsent(type, PlayerSelection::new);
+        this.enabledVisualizations.computeIfAbsent(type, PlayerSelection::new);
     }
 
     public @NotNull Location getClipboardLocation() {
-        if (clipboardLockLocation == null) {
-            return player.getLocation();
+        if (this.clipboardLockLocation == null) {
+            return this.player.getLocation();
         }
 
-        return clipboardLockLocation;
+        return this.clipboardLockLocation;
     }
 
     public @Nullable Location getClipboardLockLocation() {
-        return clipboardLockLocation;
+        return this.clipboardLockLocation;
     }
 
     public void setClipboardLockLocation(@Nullable Location location) {
-        clipboardLockLocation = location;
+        this.clipboardLockLocation = location;
     }
 }

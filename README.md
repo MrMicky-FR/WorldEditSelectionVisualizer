@@ -25,6 +25,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 You can download releases and find more information on [SpigotMC](https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/).
 
 ## Commands
+
 * `/wesv toggle` and `/wesv toggle clipboard`: toggle the selection/clipboard visualization
 * `/wesv lock`: lock/unlock the origin of the clipboard visualization to your current location
 * `/wesv lock tp`: teleport to the lock location (when clipboard visualization lock is enabled)

@@ -21,115 +21,102 @@ import java.util.stream.Collectors;
 
 public class RegionAdapter6 implements RegionAdapter {
 
-    @NotNull
-    private final Region region;
+    private final @NotNull Region region;
 
     public RegionAdapter6(@NotNull Region region) {
         this.region = Objects.requireNonNull(region, "region");
     }
 
-    @NotNull
     @Override
-    public Vector3d getMinimumPoint() {
-        return Vectors6.toVector3d(region.getMinimumPoint());
+    public @NotNull Vector3d getMinimumPoint() {
+        return Vectors6.toVector3d(this.region.getMinimumPoint());
     }
 
-    @NotNull
     @Override
-    public Vector3d getMaximumPoint() {
-        return Vectors6.toVector3d(region.getMaximumPoint());
+    public @NotNull Vector3d getMaximumPoint() {
+        return Vectors6.toVector3d(this.region.getMaximumPoint());
     }
 
-    @NotNull
     @Override
-    public Vector3d getCenter() {
-        return Vectors6.toVector3d(region.getCenter());
+    public @NotNull Vector3d getCenter() {
+        return Vectors6.toVector3d(this.region.getCenter());
     }
 
     @Override
     public long getVolume() {
-        return region.getArea();
+        return this.region.getArea();
     }
 
-    @NotNull
     @Override
-    public Vector3d getCuboidPos1() {
-        if (!(region instanceof CuboidRegion)) {
+    public @NotNull Vector3d getCuboidPos1() {
+        if (!(this.region instanceof CuboidRegion)) {
             throw new UnsupportedOperationException();
         }
 
-        return Vectors6.toVector3d(((CuboidRegion) region).getPos1());
+        return Vectors6.toVector3d(((CuboidRegion) this.region).getPos1());
     }
 
-    @NotNull
     @Override
-    public Vector3d getCuboidPos2() {
-        if (!(region instanceof CuboidRegion)) {
+    public @NotNull Vector3d getCuboidPos2() {
+        if (!(this.region instanceof CuboidRegion)) {
             throw new UnsupportedOperationException();
         }
 
-        return Vectors6.toVector3d(((CuboidRegion) region).getPos2());
+        return Vectors6.toVector3d(((CuboidRegion) this.region).getPos2());
     }
 
-    @NotNull
     @Override
-    public List<Vector3d> getPolygonalPoints() {
-        if (!(region instanceof Polygonal2DRegion)) {
+    public @NotNull List<Vector3d> getPolygonalPoints() {
+        if (!(this.region instanceof Polygonal2DRegion)) {
             throw new UnsupportedOperationException();
         }
 
-        Polygonal2DRegion polygonalRegion = (Polygonal2DRegion) region;
-
-        return polygonalRegion.getPoints().stream()
+        return ((Polygonal2DRegion) this.region).getPoints()
+                .stream()
                 .map(vec -> new Vector3d(vec.getX(), 0, vec.getZ()))
                 .collect(Collectors.toList());
     }
 
-    @NotNull
     @Override
-    public Vector3d getEllipsoidRadius() {
-        if (!(region instanceof EllipsoidRegion)) {
+    public @NotNull Vector3d getEllipsoidRadius() {
+        if (!(this.region instanceof EllipsoidRegion)) {
             throw new UnsupportedOperationException();
         }
 
-        return Vectors6.toVector3d(((EllipsoidRegion) region).getRadius());
+        return Vectors6.toVector3d(((EllipsoidRegion) this.region).getRadius());
     }
 
-    @NotNull
     @Override
-    public List<Vector3d[]> getConvexTriangles() {
-        if (region instanceof ConvexPolyhedralRegion) {
-            ConvexPolyhedralRegion polygonalRegion = (ConvexPolyhedralRegion) region;
-
-            return polygonalRegion.getTriangles().stream()
-                    .map(this::triangleToVectors)
-                    .collect(Collectors.toList());
+    public @NotNull List<Vector3d[]> getConvexTriangles() {
+        if (!(this.region instanceof ConvexPolyhedralRegion)) {
+            throw new UnsupportedOperationException();
         }
 
-        throw new UnsupportedOperationException();
+
+        return ((ConvexPolyhedralRegion) this.region).getTriangles()
+                .stream()
+                .map(this::triangleToVectors)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void shift(Vector3d vector) throws RegionOperationException {
-        region.shift(Vectors6.toVector(vector));
+    public void shift(@NotNull Vector3d vector) throws RegionOperationException {
+        this.region.shift(Vectors6.toVector(vector));
     }
 
-    @NotNull
     @Override
-    public Region transform(Transform transform, Vector3d origin) {
-        Vector originVec = Vectors6.toVector(origin);
+    public @NotNull Region transform(@NotNull Transform transform, @NotNull Vector3d origin) {
+        Vector vector = Vectors6.toVector(origin);
 
-        return RegionTransforms6.applyTransform(region, transform, originVec);
+        return RegionTransforms6.applyTransform(this.region, transform, vector);
     }
 
-    @NotNull
     @Override
-    public Region getRegion() {
-        return region;
+    public @NotNull Region getRegion() {
+        return this.region;
     }
 
-    @NotNull
-    private Vector3d[] triangleToVectors(Triangle triangle) {
+    private @NotNull Vector3d[] triangleToVectors(Triangle triangle) {
         Vector3d[] vectors = new Vector3d[3];
 
         for (int i = 0; i < vectors.length; i++) {

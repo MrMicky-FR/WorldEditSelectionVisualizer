@@ -12,9 +12,7 @@ public class SelectionConfig {
     private final double linesGap;
     private final int updateInterval;
     private final int viewDistance;
-
-    @NotNull
-    private final Particle particle;
+    private final @NotNull Particle particle;
 
     public SelectionConfig(ConfigurationSection config, Function<ConfigurationSection, Particle> map) {
         this.pointsDistance = config.getDouble("points-distance");
@@ -40,8 +38,7 @@ public class SelectionConfig {
         return this.viewDistance;
     }
 
-    @NotNull
-    public Particle getParticle() {
-        return particle;
+    public @NotNull Particle getParticle() {
+        return this.particle;
     }
 }

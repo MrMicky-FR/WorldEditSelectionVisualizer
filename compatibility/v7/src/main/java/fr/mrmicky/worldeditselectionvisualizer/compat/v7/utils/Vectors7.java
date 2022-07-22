@@ -11,23 +11,19 @@ public final class Vectors7 {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull
-    public static Vector3d toVector3d(Vector3 vec) {
-        return new Vector3d(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull Vector3d toVector3d(Vector3 vector) {
+        return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    @NotNull
-    public static Vector3d toVector3d(BlockVector3 vec) {
-        return new Vector3d(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull Vector3d toVector3d(BlockVector3 vector) {
+        return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    @NotNull
-    public static Vector3 toVector3(Vector3d vec) {
-        return Vector3.at(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull Vector3 toVector3(Vector3d vector) {
+        return Vector3.at(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    @NotNull
-    public static BlockVector3 toBlockVector3(Vector3d vec) {
-        return BlockVector3.at(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull BlockVector3 toBlockVector3(Vector3d vector) {
+        return BlockVector3.at(vector.getX(), vector.getY(), vector.getZ());
     }
 }

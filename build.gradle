@@ -18,7 +18,6 @@ subprojects {
 
         maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
         maven { url 'https://maven.enginehub.org/repo/' }
-        maven { url 'https://repo.codemc.io/repository/maven-public/' }
     }
 
     dependencies {

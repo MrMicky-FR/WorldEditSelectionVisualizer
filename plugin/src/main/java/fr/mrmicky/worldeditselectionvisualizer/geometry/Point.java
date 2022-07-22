@@ -1,17 +1,20 @@
 package fr.mrmicky.worldeditselectionvisualizer.geometry;
 
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
+import org.jetbrains.annotations.NotNull;
 
-public class Point implements Shape{
+import java.util.Objects;
 
-    private final Vector3d point;
+public class Point implements Shape {
+
+    private final @NotNull Vector3d point;
 
     public Point(Vector3d point) {
-        this.point = point;
+        this.point = Objects.requireNonNull(point, "point");
     }
 
     @Override
-    public void render(VectorRenderer renderer) {
-        renderer.render(point.getX(), point.getY(), point.getZ());
+    public void render(@NotNull VectorRenderer renderer) {
+        renderer.render(this.point.getX(), this.point.getY(), this.point.getZ());
     }
 }

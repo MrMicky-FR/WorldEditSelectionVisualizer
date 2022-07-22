@@ -16,11 +16,8 @@ public class SelectionChangeEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    @NotNull
-    private final Player player;
-
-    @Nullable
-    private final Region region;
+    private final @NotNull Player player;
+    private final @Nullable Region region;
 
     /**
      * Creates a new SelectionChangeEvent.
@@ -30,7 +27,7 @@ public class SelectionChangeEvent extends Event {
      */
     public SelectionChangeEvent(@NotNull Player player, @Nullable Region region) {
         this.player = Objects.requireNonNull(player, "player");
-        this.region = Objects.requireNonNull(region, "region");
+        this.region = region;
     }
 
     /**
@@ -38,9 +35,8 @@ public class SelectionChangeEvent extends Event {
      *
      * @return Returns player for who listening to this event is enabled.
      */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     /**
@@ -48,19 +44,16 @@ public class SelectionChangeEvent extends Event {
      *
      * @return Returns region in which listening to this event is enabled.
      */
-    @Nullable
-    public Region getRegion() {
-        return region;
+    public @Nullable Region getRegion() {
+        return this.region;
     }
 
-    @NotNull
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 }

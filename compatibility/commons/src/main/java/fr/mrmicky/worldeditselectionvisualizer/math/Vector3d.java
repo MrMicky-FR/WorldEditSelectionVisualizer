@@ -5,7 +5,6 @@ import org.bukkit.util.Vector;
 public class Vector3d {
 
     public static final Vector3d ZERO = new Vector3d(0, 0, 0);
-    public static final Vector3d ONE = new Vector3d(1, 1, 1);
 
     private final double x;
     private final double y;
@@ -22,27 +21,27 @@ public class Vector3d {
     }
 
     public double getX() {
-        return x;
+        return this.x;
     }
 
     public Vector3d withX(double x) {
-        return new Vector3d(x, y, z);
+        return new Vector3d(x, this.y, this.z);
     }
 
     public double getY() {
-        return y;
+        return this.y;
     }
 
     public Vector3d withY(double y) {
-        return new Vector3d(x, y, z);
+        return new Vector3d(this.x, y, this.z);
     }
 
     public double getZ() {
-        return z;
+        return this.z;
     }
 
     public Vector3d withZ(double z) {
-        return new Vector3d(x, y, z);
+        return new Vector3d(this.x, this.y, z);
     }
 
     public Vector3d add(Vector3d vec) {
@@ -113,27 +112,27 @@ public class Vector3d {
     }
 
     public double lengthSquared() {
-        return x * x + y * y + z * z;
+        return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
     public Vector3d floor() {
-        return new Vector3d(Math.floor(x), Math.floor(y), Math.floor(z));
+        return new Vector3d(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
     }
 
     public Vector3d ceil() {
-        return new Vector3d(Math.ceil(x), Math.ceil(y), Math.ceil(z));
+        return new Vector3d(Math.ceil(this.x), Math.ceil(this.y), Math.ceil(this.z));
     }
 
     public Vector3d round() {
-        return new Vector3d(Math.floor(x + 0.5), Math.floor(y + 0.5), Math.floor(z + 0.5));
+        return new Vector3d(Math.floor(this.x + 0.5), Math.floor(this.y + 0.5), Math.floor(this.z + 0.5));
     }
 
     public Vector3d abs() {
-        return new Vector3d(Math.abs(x), Math.abs(y), Math.abs(z));
+        return new Vector3d(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
     }
 
     public Vector toVector() {
-        return new Vector(x, y, z);
+        return new Vector(this.x, this.y, this.z);
     }
 
     @Override
@@ -147,20 +146,20 @@ public class Vector3d {
         }
 
         Vector3d vec = (Vector3d) o;
-        return x == vec.getX() && y == vec.getY() && z == vec.getZ();
+        return this.x == vec.getX() && this.y == vec.getY() && this.z == vec.getZ();
     }
 
     @Override
     public int hashCode() {
         int hash = 1;
-        hash = 31 * hash + Double.hashCode(x);
-        hash = 31 * hash + Double.hashCode(y);
-        hash = 31 * hash + Double.hashCode(z);
+        hash = 31 * hash + Double.hashCode(this.x);
+        hash = 31 * hash + Double.hashCode(this.y);
+        hash = 31 * hash + Double.hashCode(this.z);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "Vector3d{x=" + x + ", y=" + y + ", z=" + z + '}';
+        return "Vector3d{x=" + this.x + ", y=" + this.y + ", z=" + this.z + '}';
     }
 }

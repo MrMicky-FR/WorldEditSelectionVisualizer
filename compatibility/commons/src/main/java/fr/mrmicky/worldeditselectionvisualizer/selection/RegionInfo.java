@@ -10,13 +10,9 @@ import java.util.Objects;
 
 public class RegionInfo {
 
-    @NotNull
-    private final RegionAdapter regionAdapter;
-
-    @NotNull
-    private final Vector3d minimum;
-    @NotNull
-    private final Vector3d maximum;
+    private final @NotNull RegionAdapter regionAdapter;
+    private final @NotNull Vector3d minimum;
+    private final @NotNull Vector3d maximum;
 
     private final int width;
     private final int length;
@@ -29,48 +25,46 @@ public class RegionInfo {
         this.regionAdapter = regionAdapter;
 
         Region region = regionAdapter.getRegion();
-        minimum = regionAdapter.getMinimumPoint();
-        maximum = regionAdapter.getMinimumPoint();
-        width = region.getWidth();
-        length = region.getLength();
-        height = region.getHeight();
-        volume = regionAdapter.getVolume();
-        points = region instanceof ConvexPolyhedralRegion ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
+        this.minimum = regionAdapter.getMinimumPoint();
+        this.maximum = regionAdapter.getMinimumPoint();
+        this.width = region.getWidth();
+        this.length = region.getLength();
+        this.height = region.getHeight();
+        this.volume = regionAdapter.getVolume();
+        this.points = region instanceof ConvexPolyhedralRegion
+                ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
     }
 
-    @NotNull
-    public RegionAdapter getRegionAdapter() {
-        return regionAdapter;
+    public @NotNull RegionAdapter getRegionAdapter() {
+        return this.regionAdapter;
     }
 
-    @NotNull
-    public Vector3d getMinimum() {
-        return minimum;
+    public @NotNull Vector3d getMinimum() {
+        return this.minimum;
     }
 
-    @NotNull
-    public Vector3d getMaximum() {
-        return maximum;
+    public @NotNull Vector3d getMaximum() {
+        return this.maximum;
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getLength() {
-        return length;
+        return this.length;
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public long getVolume() {
-        return volume;
+        return this.volume;
     }
 
     public int getPoints() {
-        return points;
+        return this.points;
     }
 
     @Override
@@ -83,30 +77,31 @@ public class RegionInfo {
         }
 
         RegionInfo region = (RegionInfo) o;
-        return width == region.width
-                && length == region.length
-                && height == region.height
-                && volume == region.volume
-                && points == region.points
-                && minimum.equals(region.minimum)
-                && maximum.equals(region.maximum);
+        return this.width == region.width
+                && this.length == region.length
+                && this.height == region.height
+                && this.volume == region.volume
+                && this.points == region.points
+                && this.minimum.equals(region.minimum)
+                && this.maximum.equals(region.maximum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(minimum, maximum, width, length, height, volume, points);
+        return Objects.hash(this.minimum, this.maximum, this.width,
+                this.length, this.height, this.volume, this.points);
     }
 
     @Override
     public String toString() {
         return "RegionInfo{" +
-                "minimum=" + minimum +
-                ", maximum=" + maximum +
-                ", width=" + width +
-                ", length=" + length +
-                ", height=" + height +
-                ", volume=" + volume +
-                ", points=" + points +
+                "minimum=" + this.minimum +
+                ", maximum=" + this.maximum +
+                ", width=" + this.width +
+                ", length=" + this.length +
+                ", height=" + this.height +
+                ", volume=" + this.volume +
+                ", points=" + this.points +
                 '}';
     }
 }

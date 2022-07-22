@@ -26,9 +26,12 @@ public class CommandWesv implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender,
+                             @NotNull Command command,
+                             @NotNull String label,
+                             @NotNull String[] args) {
         if (!sender.hasPermission("wesv.use")) {
-            sender.sendMessage(plugin.getMessage("no-permissions"));
+            sender.sendMessage(this.plugin.getMessage("no-permissions"));
             return true;
         }
 
@@ -38,9 +41,9 @@ public class CommandWesv implements TabExecutor {
         }
 
         if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("wesv.reload")) {
-            plugin.reloadConfig();
+            this.plugin.reloadConfig();
 
-            sender.sendMessage(plugin.getMessage("config-reloaded"));
+            sender.sendMessage(this.plugin.getMessage("config-reloaded"));
             return true;
         }
 
@@ -72,7 +75,10 @@ public class CommandWesv implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender,
+                                      @NotNull Command command,
+                                      @NotNull String alias,
+                                      @NotNull String[] args) {
         if (args.length > 2 || !sender.hasPermission("wesv.use")) {
             return Collections.emptyList();
         }
@@ -92,11 +98,13 @@ public class CommandWesv implements TabExecutor {
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("toggle") && StringUtil.startsWithIgnoreCase("clipboard", args[1])) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("toggle")
+                && StringUtil.startsWithIgnoreCase("clipboard", args[1])) {
             return Collections.singletonList("clipboard");
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("lock") && StringUtil.startsWithIgnoreCase("tp", args[1])) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("lock")
+                && StringUtil.startsWithIgnoreCase("tp", args[1])) {
             return Collections.singletonList("tp");
         }
 
@@ -104,7 +112,7 @@ public class CommandWesv implements TabExecutor {
     }
 
     private void handleToggle(Player player, String[] args) {
-        PlayerVisualizerData playerData = plugin.getPlayerData(player);
+        PlayerVisualizerData playerData = this.plugin.getPlayerData(player);
         SelectionType type = SelectionType.SELECTION;
 
         if (args.length > 1 && args[1].equalsIgnoreCase("clipboard")) {
@@ -116,23 +124,23 @@ public class CommandWesv implements TabExecutor {
         playerData.toggleSelectionVisibility(type, enabled);
 
         if (type == SelectionType.SELECTION) {
-            player.sendMessage(plugin.getMessage("visualizer-" + key));
+            player.sendMessage(this.plugin.getMessage("visualizer-" + key));
         } else {
-            player.sendMessage(plugin.getMessage("visualizer-clipboard-" + key));
+            player.sendMessage(this.plugin.getMessage("visualizer-clipboard-" + key));
         }
 
-        if (plugin.getConfig().getBoolean("save-toggle")) {
-            plugin.getStorageManager().setEnable(player, type, enabled);
+        if (this.plugin.getConfig().getBoolean("save-toggle")) {
+            this.plugin.getStorageManager().setEnable(player, type, enabled);
         }
     }
 
     private void handleLock(Player player, String[] args) {
-        PlayerVisualizerData playerData = plugin.getPlayerData(player);
+        PlayerVisualizerData playerData = this.plugin.getPlayerData(player);
         Location location = playerData.getClipboardLockLocation();
 
         if (args.length > 1 && args[1].equalsIgnoreCase("tp")) {
             if (location == null) {
-                player.sendMessage(plugin.getMessage("lock-no-position"));
+                player.sendMessage(this.plugin.getMessage("lock-no-position"));
                 return;
             }
 
@@ -142,17 +150,17 @@ public class CommandWesv implements TabExecutor {
 
         if (location != null) {
             playerData.setClipboardLockLocation(null);
-            player.sendMessage(plugin.getMessage("lock-disabled"));
+            player.sendMessage(this.plugin.getMessage("lock-disabled"));
             return;
         }
 
         playerData.setClipboardLockLocation(player.getLocation());
 
-        player.sendMessage(plugin.getMessage("lock-enabled"));
+        player.sendMessage(this.plugin.getMessage("lock-enabled"));
     }
 
     private void sendUsage(CommandSender sender) {
-        String version = plugin.getDescription().getVersion();
+        String version = this.plugin.getDescription().getVersion();
         sender.sendMessage(ChatUtils.color("&6WorldEditSelectionVisualizer v" + version + "&7 by &6MrMicky&7."));
 
         if (sender instanceof Player) {

@@ -22,15 +22,16 @@ public abstract class ShapeProcessor<R extends Region> {
         this.plugin = plugin;
     }
 
-    @NotNull
-    public SelectionPoints processSelection(RegionAdapter regionAdapter, GlobalSelectionConfig config) {
-        return processSelection(regionClass.cast(regionAdapter.getRegion()), regionAdapter, config);
+    public @NotNull SelectionPoints processSelection(RegionAdapter regionAdapter,
+                                                     GlobalSelectionConfig config) {
+        R region = this.regionClass.cast(regionAdapter.getRegion());
+        return processSelection(region, regionAdapter, config);
     }
 
     protected abstract SelectionPoints processSelection(R region, RegionAdapter adapter, GlobalSelectionConfig config);
 
     protected WorldEditSelectionVisualizer getPlugin() {
-        return plugin;
+        return this.plugin;
     }
 
     protected void createLinesFromBottom(List<Shape> primary,

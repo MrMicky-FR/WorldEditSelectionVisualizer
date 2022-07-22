@@ -18,7 +18,9 @@ public class Polygonal2DProcessor extends ShapeProcessor<Polygonal2DRegion> {
     }
 
     @Override
-    protected SelectionPoints processSelection(Polygonal2DRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
+    protected SelectionPoints processSelection(Polygonal2DRegion region,
+                                               RegionAdapter adapter,
+                                               GlobalSelectionConfig config) {
         double minY = adapter.getMinimumPoint().getY();
         int height = region.getHeight();
         List<Vector3d> polygonalPoints = adapter.getPolygonalPoints();

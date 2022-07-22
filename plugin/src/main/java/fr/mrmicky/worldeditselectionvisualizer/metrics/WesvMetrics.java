@@ -3,6 +3,7 @@ package fr.mrmicky.worldeditselectionvisualizer.metrics;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -43,6 +44,6 @@ public final class WesvMetrics {
     }
 
     private void addCustomChart(String name, Supplier<String> value) {
-        this.metrics.addCustomChart(new Metrics.SimplePie(name, value::get));
+        this.metrics.addCustomChart(new SimplePie(name, value::get));
     }
 }

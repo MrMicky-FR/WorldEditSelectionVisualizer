@@ -10,64 +10,51 @@ import java.util.Objects;
 
 public class PlayerSelection {
 
-    @NotNull
-    private final SelectionType selectionType;
+    private final @NotNull SelectionType selectionType;
 
-    @Nullable
-    private SelectionPoints selectionPoints;
-
-    @NotNull
-    private Vector3d origin = Vector3d.ZERO;
-
-    @Nullable
-    private Instant expireTime;
-
-    @Nullable
-    private RegionInfo lastSelectedRegion;
+    private @Nullable SelectionPoints selectionPoints;
+    private @NotNull Vector3d origin = Vector3d.ZERO;
+    private @Nullable Instant expireTime;
+    private @Nullable RegionInfo lastSelectedRegion;
     private boolean lastSelectionTooLarge;
 
     public PlayerSelection(@NotNull SelectionType selectionType) {
         this.selectionType = Objects.requireNonNull(selectionType, "selectionType");
     }
 
-    @Nullable
-    public SelectionPoints getSelectionPoints() {
-        return selectionPoints;
+    public @Nullable SelectionPoints getSelectionPoints() {
+        return this.selectionPoints;
     }
 
-    @NotNull
-    public Vector3d getOrigin() {
-        return origin;
+    public @NotNull Vector3d getOrigin() {
+        return this.origin;
     }
 
-    @Nullable
-    public Instant getExpireTime() {
-        return expireTime;
+    public @Nullable Instant getExpireTime() {
+        return this.expireTime;
     }
 
-    @Nullable
-    public RegionInfo getLastSelectedRegion() {
-        return lastSelectedRegion;
+    public @Nullable RegionInfo getLastSelectedRegion() {
+        return this.lastSelectedRegion;
     }
 
     public boolean isLastSelectionTooLarge() {
-        return lastSelectionTooLarge;
+        return this.lastSelectionTooLarge;
     }
 
     public void setLastSelectionTooLarge(boolean lastSelectionTooLarge) {
         this.lastSelectionTooLarge = lastSelectionTooLarge;
     }
 
-    @NotNull
-    public SelectionType getSelectionType() {
-        return selectionType;
+    public @NotNull SelectionType getSelectionType() {
+        return this.selectionType;
     }
 
     @Contract("-> this")
     public PlayerSelection verifyExpireTime() {
-        if (expireTime != null && expireTime.isBefore(Instant.now())) {
-            expireTime = null;
-            selectionPoints = null;
+        if (this.expireTime != null && this.expireTime.isBefore(Instant.now())) {
+            this.expireTime = null;
+            this.selectionPoints = null;
         }
         return this;
     }
@@ -79,9 +66,8 @@ public class PlayerSelection {
         this.selectionPoints = selectionPoints;
         this.lastSelectedRegion = lastSelectedRegion;
         this.origin = origin;
-
-        lastSelectionTooLarge = false;
-        expireTime = expireSeconds > 0 ? Instant.now().plusSeconds(expireSeconds) : null;
+        this.lastSelectionTooLarge = false;
+        this.expireTime = expireSeconds > 0 ? Instant.now().plusSeconds(expireSeconds) : null;
     }
 
     public void resetSelection() {
@@ -90,10 +76,9 @@ public class PlayerSelection {
 
     public void resetSelection(RegionInfo lastSelectedRegion) {
         this.lastSelectedRegion = lastSelectedRegion;
-
-        selectionPoints = null;
-        origin = Vector3d.ZERO;
-        expireTime = null;
-        lastSelectionTooLarge = false;
+        this.selectionPoints = null;
+        this.origin = Vector3d.ZERO;
+        this.expireTime = null;
+        this.lastSelectionTooLarge = false;
     }
 }

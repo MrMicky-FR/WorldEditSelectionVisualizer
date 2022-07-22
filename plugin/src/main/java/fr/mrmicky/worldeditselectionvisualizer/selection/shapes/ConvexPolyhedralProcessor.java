@@ -20,7 +20,9 @@ public class ConvexPolyhedralProcessor extends ShapeProcessor<ConvexPolyhedralRe
     }
 
     @Override
-    public SelectionPoints processSelection(ConvexPolyhedralRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
+    public SelectionPoints processSelection(ConvexPolyhedralRegion region,
+                                            RegionAdapter adapter,
+                                            GlobalSelectionConfig config) {
         List<Vector3d[]> triangles = adapter.getConvexTriangles();
         List<Vector3d> corners = new ArrayList<>(triangles.size() * 3);
 

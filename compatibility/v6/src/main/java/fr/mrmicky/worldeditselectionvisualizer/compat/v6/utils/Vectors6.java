@@ -10,13 +10,11 @@ public final class Vectors6 {
         throw new UnsupportedOperationException();
     }
 
-    @NotNull
-    public static Vector3d toVector3d(Vector vec) {
-        return new Vector3d(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull Vector3d toVector3d(Vector vector) {
+        return new Vector3d(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    @NotNull
-    public static Vector toVector(Vector3d vec) {
-        return new Vector(vec.getX(), vec.getY(), vec.getZ());
+    public static @NotNull Vector toVector(Vector3d vector) {
+        return new Vector(vector.getX(), vector.getY(), vector.getZ());
     }
 }

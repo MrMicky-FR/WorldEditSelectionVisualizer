@@ -21,7 +21,9 @@ public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
     }
 
     @Override
-    protected SelectionPoints processSelection(CuboidRegion region, RegionAdapter adapter, GlobalSelectionConfig config) {
+    protected SelectionPoints processSelection(CuboidRegion region,
+                                               RegionAdapter adapter,
+                                               GlobalSelectionConfig config) {
         List<Shape> primary = new ArrayList<>(12);
         List<Shape> secondary = new ArrayList<>();
         Vector3d min = adapter.getMinimumPoint();

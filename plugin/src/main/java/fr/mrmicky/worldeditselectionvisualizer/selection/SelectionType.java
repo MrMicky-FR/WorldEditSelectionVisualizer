@@ -18,11 +18,11 @@ public enum SelectionType {
     }
 
     public boolean isEnabledByDefault() {
-        return enabledByDefault;
+        return this.enabledByDefault;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     static SelectionType[] getValues() {

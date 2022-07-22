@@ -12,30 +12,27 @@ import java.util.Objects;
 
 public class ClipboardAdapter7 implements ClipboardAdapter {
 
-    @NotNull
-    private final Clipboard clipboard;
+    private final @NotNull Clipboard clipboard;
 
     public ClipboardAdapter7(@NotNull Clipboard clipboard) {
         this.clipboard = Objects.requireNonNull(clipboard, "clipboard");
     }
 
-    @NotNull
     @Override
-    public Vector3d getOrigin() {
-        return Vectors7.toVector3d(clipboard.getOrigin());
+    public @NotNull Vector3d getOrigin() {
+        return Vectors7.toVector3d(this.clipboard.getOrigin());
     }
 
-    @NotNull
     @Override
-    public Clipboard getClipboard() {
-        return clipboard;
+    public @NotNull Clipboard getClipboard() {
+        return this.clipboard;
     }
 
-    @NotNull
     @Override
-    public Region getShiftedRegion(Vector3d vector) throws RegionOperationException {
-        Region region = clipboard.getRegion().clone();
-        region.shift(Vectors7.toBlockVector3(vector));
+    public @NotNull Region shiftRegion(@NotNull Vector3d change)
+            throws RegionOperationException {
+        Region region = this.clipboard.getRegion().clone();
+        region.shift(Vectors7.toBlockVector3(change));
         return region;
     }
 }

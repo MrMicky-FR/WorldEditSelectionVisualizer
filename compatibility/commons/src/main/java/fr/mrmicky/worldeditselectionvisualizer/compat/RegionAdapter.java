@@ -11,42 +11,32 @@ import java.util.List;
 
 public interface RegionAdapter {
 
-    @NotNull
-    Vector3d getMinimumPoint();
+    @NotNull Vector3d getMinimumPoint();
 
-    @NotNull
-    Vector3d getMaximumPoint();
+    @NotNull Vector3d getMaximumPoint();
 
-    @NotNull
-    Vector3d getCenter();
+    @NotNull Vector3d getCenter();
 
     long getVolume();
 
-    @NotNull
-    Vector3d getCuboidPos1();
+    @NotNull Vector3d getCuboidPos1();
 
-    @NotNull
-    Vector3d getCuboidPos2();
+    @NotNull Vector3d getCuboidPos2();
 
-    @NotNull
-    List<Vector3d> getPolygonalPoints();
+    @NotNull List<Vector3d> getPolygonalPoints();
 
-    @NotNull
-    Vector3d getEllipsoidRadius();
+    @NotNull Vector3d getEllipsoidRadius();
 
-    @NotNull
-    List<Vector3d[]> getConvexTriangles();
+    @NotNull List<Vector3d[]> getConvexTriangles();
 
-    @NotNull
-    Region transform(Transform transform, Vector3d origin);
+    @NotNull Region transform(@NotNull Transform transform,
+                              @NotNull Vector3d origin);
 
-    void shift(Vector3d vector) throws RegionOperationException;
+    void shift(@NotNull Vector3d vector) throws RegionOperationException;
 
-    @NotNull
-    Region getRegion();
+    @NotNull Region getRegion();
 
-    @NotNull
-    default RegionInfo getRegionInfo() {
+    default @NotNull RegionInfo getRegionInfo() {
         return new RegionInfo(this);
     }
 }
