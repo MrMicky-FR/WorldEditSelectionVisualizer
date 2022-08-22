@@ -29,14 +29,7 @@ public final class WesvMetrics {
     }
 
     public static void register(WorldEditSelectionVisualizer plugin) {
-        try {
-            // bStats uses Gson, but Gson is not shaded with Spigot < 1.8
-            Class.forName("com.google.gson.Gson");
-
-            new WesvMetrics(plugin);
-        } catch (ClassNotFoundException e) {
-            // disable metrics
-        }
+        new WesvMetrics(plugin);
     }
 
     private void addBooleanChart(String name, BooleanSupplier value) {
