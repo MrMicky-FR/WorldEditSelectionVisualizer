@@ -29,6 +29,8 @@ public interface RegionAdapter {
 
     @NotNull List<Vector3d[]> getConvexTriangles();
 
+    @NotNull List<Vector3d> getConvexVertices();
+
     @NotNull Region transform(@NotNull Transform transform,
                               @NotNull Vector3d origin);
 

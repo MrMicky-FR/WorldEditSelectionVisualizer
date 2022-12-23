@@ -47,7 +47,7 @@ public class CommandWesv implements TabExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("toggle")) {
+        if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("wesv.toggle")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "Only players can use this command.");
                 return true;
@@ -58,7 +58,7 @@ public class CommandWesv implements TabExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("lock")) {
+        if (args[0].equalsIgnoreCase("lock") && sender.hasPermission("wesv.lock")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "Only players can use this command.");
                 return true;
@@ -87,8 +87,13 @@ public class CommandWesv implements TabExecutor {
             List<String> completions = new ArrayList<>();
 
             if (sender instanceof Player) {
-                completions.add("toggle");
-                completions.add("lock");
+                if (sender.hasPermission("wesv.lock")) {
+                    completions.add("toggle");
+                }
+
+                if (sender.hasPermission("wesv.lock")) {
+                    completions.add("lock");
+                }
             }
 
             if (sender.hasPermission("wesv.reload")) {
@@ -164,10 +169,15 @@ public class CommandWesv implements TabExecutor {
         sender.sendMessage(ChatUtils.color("&6WorldEditSelectionVisualizer v" + version + "&7 by &6MrMicky&7."));
 
         if (sender instanceof Player) {
-            sender.sendMessage(ChatUtils.color("&7- /wesv lock"));
-            sender.sendMessage(ChatUtils.color("&7- /wesv lock tp"));
-            sender.sendMessage(ChatUtils.color("&7- /wesv toggle"));
-            sender.sendMessage(ChatUtils.color("&7- /wesv toggle clipboard"));
+            if (sender.hasPermission("wesv.lock")) {
+                sender.sendMessage(ChatUtils.color("&7- /wesv lock"));
+                sender.sendMessage(ChatUtils.color("&7- /wesv lock tp"));
+            }
+
+            if (sender.hasPermission("wesv.toggle")) {
+                sender.sendMessage(ChatUtils.color("&7- /wesv toggle"));
+                sender.sendMessage(ChatUtils.color("&7- /wesv toggle clipboard"));
+            }
         }
 
         if (sender.hasPermission("wesv.reload")) {

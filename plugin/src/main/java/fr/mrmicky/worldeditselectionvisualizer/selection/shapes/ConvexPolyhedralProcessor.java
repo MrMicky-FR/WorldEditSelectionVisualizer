@@ -5,6 +5,7 @@ import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Line;
+import fr.mrmicky.worldeditselectionvisualizer.geometry.Point;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
@@ -24,6 +25,7 @@ public class ConvexPolyhedralProcessor extends ShapeProcessor<ConvexPolyhedralRe
                                             RegionAdapter adapter,
                                             GlobalSelectionConfig config) {
         List<Vector3d[]> triangles = adapter.getConvexTriangles();
+        List<Vector3d> vertices = adapter.getConvexVertices();
         List<Vector3d> corners = new ArrayList<>(triangles.size() * 3);
 
         for (Vector3d[] triangle : triangles) {
@@ -33,12 +35,14 @@ public class ConvexPolyhedralProcessor extends ShapeProcessor<ConvexPolyhedralRe
         }
 
         List<Shape> primary = new ArrayList<>(corners.size());
+        Point origin = vertices.isEmpty()
+                ? null : new Point(vertices.get(0).add(0.5, 0.5, 0.5));
 
         for (int i = 0; i < corners.size(); i++) {
             Vector3d end = corners.get(i + 1 < corners.size() ? i + 1 : 0);
             primary.add(new Line(corners.get(i), end, config.primary()));
         }
 
-        return new SelectionPoints(primary, Collections.emptyList());
+        return new SelectionPoints(primary, Collections.emptyList(), origin);
     }
 }

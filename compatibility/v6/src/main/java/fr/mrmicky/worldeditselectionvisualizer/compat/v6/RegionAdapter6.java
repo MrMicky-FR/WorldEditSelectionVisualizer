@@ -100,6 +100,18 @@ public class RegionAdapter6 implements RegionAdapter {
     }
 
     @Override
+    public @NotNull List<Vector3d> getConvexVertices() {
+        if (!(this.region instanceof ConvexPolyhedralRegion)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return ((ConvexPolyhedralRegion) this.region).getVertices()
+                .stream()
+                .map(Vectors6::toVector3d)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void shift(@NotNull Vector3d vector) throws RegionOperationException {
         this.region.shift(Vectors6.toVector(vector));
     }

@@ -199,7 +199,10 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         File configFile = new File(getDataFolder(), "config.yml");
         File configBackupFile = new File(getDataFolder(), "config-old.yml");
 
-        configFile.renameTo(configBackupFile);
+        if (!configFile.renameTo(configBackupFile)) {
+            getLogger().warning("Unable to rename old config.yml file.");
+        }
+
         saveDefaultConfig();
         reloadConfig();
     }

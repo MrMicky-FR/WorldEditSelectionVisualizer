@@ -21,6 +21,7 @@ permissions:
     children:
       wesv.use: true
       wesv.toggle: true
+      wesv.lock: true
       wesv.reload: true
   wesv.use:
     default: true
@@ -28,6 +29,9 @@ permissions:
   wesv.toggle:
     default: true
     description: Allows the visualizer to be toggled.
+  wesv.lock:
+    default: true
+    description: Allows to use the lock and lock tp command.
   wesv.reload:
     default: op
     description: Allows the configuration of this plugin to be reloaded from the config.yml file.

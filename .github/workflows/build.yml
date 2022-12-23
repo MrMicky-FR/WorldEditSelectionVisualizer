@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [8, 11, 17]
+        java-version: [ 8, 11, 17 ]
 
     steps:
       - name: Checkout repository
@@ -31,7 +31,7 @@ jobs:
         run: ./gradlew build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: WorldEditSelectionVisualizer
           path: plugin/build/libs/WorldEditSelectionVisualizer-*.jar

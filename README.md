@@ -1,7 +1,7 @@
 # WorldEditSelectionVisualizer
 
 [![Java CI](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/build.yml/badge.svg)](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/build.yml)
-[![Language grade](https://img.shields.io/lgtm/grade/java/g/MrMicky-FR/WorldEditSelectionVisualizer.svg?label=code%20quality&logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/MrMicky-FR/WorldEditSelectionVisualizer/context:java)
+[![CodeQL](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/codeql.yml/badge.svg)](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/codeql.yml)
 [![Discord](https://img.shields.io/discord/390919659874156560.svg?colorB=5865f2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/q9UwaBT)
 
 WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) mod in the form of a Bukkit plugin, which means that players don't need to install anything on their client.
