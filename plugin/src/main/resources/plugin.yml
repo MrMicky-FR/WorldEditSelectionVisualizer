@@ -22,6 +22,7 @@ permissions:
       wesv.use: true
       wesv.toggle: true
       wesv.lock: true
+      wesv.reload: false
   wesv.use:
     default: true
     description: Allows the visualizer to be used.
