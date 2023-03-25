@@ -54,8 +54,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Bukkit.getScheduler().runTask(this.plugin, () ->
-                this.plugin.updateHoldingSelectionItem(this.plugin.getPlayerData(player)));
+        Bukkit.getScheduler().runTask(this.plugin, () -> this.plugin.getOptionalPlayerData(player).ifPresent(this.plugin::updateHoldingSelectionItem));
     }
 
     @EventHandler
