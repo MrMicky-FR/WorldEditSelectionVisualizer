@@ -20,6 +20,11 @@ messages:
 # come back, the selection visualization will be still disabled until he activates it again with /wesv toggle.
 save-toggle: true
 
+# The default enabled values for visualization, used for new players or when 'save-toggle' is set to false
+default-enabled:
+  selection: true
+  clipboard: false
+
 # Delay in ticks when the WorldEdit selection and clipboard are updated.
 # This doesn't affect particles spawning and players performances.
 # The server impact is medium

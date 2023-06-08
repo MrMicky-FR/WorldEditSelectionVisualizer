@@ -33,8 +33,10 @@ public class StorageManager {
 
     public boolean isEnabled(Player player, SelectionType type) {
         String key = player.getUniqueId() + "." + type.getName();
+        boolean defaultValue = this.plugin.getConfig()
+                .getBoolean("default-enabled." + type.getName());
 
-        return this.playersSection.getBoolean(key, type.isEnabledByDefault());
+        return this.playersSection.getBoolean(key, defaultValue);
     }
 
     public void setEnable(Player player, SelectionType type, boolean enable) {

@@ -4,21 +4,14 @@ import java.util.Locale;
 
 public enum SelectionType {
 
-    SELECTION(true),
-    CLIPBOARD(false);
+    SELECTION, CLIPBOARD;
 
     private static final SelectionType[] VALUES = values();
 
-    private final boolean enabledByDefault;
     private final String name;
 
-    SelectionType(boolean enabledByDefault) {
-        this.enabledByDefault = enabledByDefault;
+    SelectionType() {
         this.name = name().toLowerCase(Locale.ROOT);
-    }
-
-    public boolean isEnabledByDefault() {
-        return this.enabledByDefault;
     }
 
     public String getName() {
