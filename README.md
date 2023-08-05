@@ -17,8 +17,9 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Configurable particle effect and view distance
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
-- Great compatibility: works with 1.7.10 to 1.19.x servers, with WorldEdit 6 and 7, and with or without FastAsyncWorldEdit
-- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%` and `%wesv_toggled_clipboard%`)
+- Supports both [WorldEdit](https://enginehub.org/worldedit) and [FastAsyncWorldEdit](https://www.spigotmc.org/resources/fastasyncworldedit.13932/)
+- Minecraft 1.7.10 to 1.20 support
+- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%` and `%wesv_toggled_clipboard%`, `%wesv_volume_selection` and `%wesv_volume_clipboard%`)
 
 ## Downloads
 

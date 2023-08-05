@@ -18,6 +18,14 @@ public enum SelectionType {
         return this.name;
     }
 
+    public static SelectionType from(String type) {
+        try {
+            return valueOf(type.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     static SelectionType[] getValues() {
         return VALUES;
     }

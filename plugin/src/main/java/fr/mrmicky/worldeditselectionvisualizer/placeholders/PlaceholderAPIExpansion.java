@@ -1,6 +1,8 @@
 package fr.mrmicky.worldeditselectionvisualizer.placeholders;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
+import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
+import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -10,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
@@ -52,7 +55,12 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull List<String> getPlaceholders() {
-        return Arrays.asList("%wesv_toggled_selection%", "%wesv_toggled_clipboard%");
+        return Arrays.asList(
+                "%wesv_toggled_selection%",
+                "%wesv_toggled_clipboard%",
+                "%wesv_volume_selection%",
+                "%wesv_volume_clipboard%"
+        );
     }
 
     @Override
@@ -62,18 +70,35 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             return "";
         }
 
-        if (identifier.equals("toggled_selection")) {
-            return translateBool(this.plugin.getPlayerData(player).isSelectionVisible(SelectionType.SELECTION));
+        String[] args = identifier.split("_", 2);
+        Optional<PlayerVisualizerData> playerData = this.plugin.getOptionalPlayerData(player);
+
+        if (!playerData.isPresent() || args.length != 2) {
+            return null;
         }
 
-        if (identifier.equals("toggled_clipboard")) {
-            return translateBool(this.plugin.getPlayerData(player).isSelectionVisible(SelectionType.CLIPBOARD));
+        SelectionType type = SelectionType.from(args[1]);
+
+        return type != null ? parsePlaceholder(playerData.get(), args[0], type) : null;
+    }
+
+    private @Nullable String parsePlaceholder(@NotNull PlayerVisualizerData player,
+                                              @NotNull String identifier,
+                                              @NotNull SelectionType type) {
+        if (identifier.equals("toggled")) {
+            return player.isSelectionVisible(type)
+                    ? PlaceholderAPIPlugin.booleanTrue()
+                    : PlaceholderAPIPlugin.booleanFalse();
+        }
+
+        if (identifier.equals("volume")) {
+            long volume = player.getSelection(type)
+                    .map(PlayerSelection::getSelectedVolume)
+                    .orElse(0L);
+
+            return Long.toString(volume);
         }
 
         return null;
-    }
-
-    private @NotNull String translateBool(boolean bool) {
-        return bool ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
     }
 }

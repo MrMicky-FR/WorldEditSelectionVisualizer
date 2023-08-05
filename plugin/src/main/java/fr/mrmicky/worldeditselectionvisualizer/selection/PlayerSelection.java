@@ -50,6 +50,10 @@ public class PlayerSelection {
         return this.selectionType;
     }
 
+    public long getSelectedVolume() {
+        return this.lastSelectedRegion != null ? this.lastSelectedRegion.getVolume() : 0;
+    }
+
     @Contract("-> this")
     public PlayerSelection verifyExpireTime() {
         if (this.expireTime != null && this.expireTime.isBefore(Instant.now())) {
