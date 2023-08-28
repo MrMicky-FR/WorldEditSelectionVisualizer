@@ -123,7 +123,7 @@ public class CompatibilityHelper {
 
     private boolean isActionBarSupported() {
         try {
-            Class.forName("net.md_5.bungee.api.chat.TextComponent");
+            Class.forName("net.md_5.bungee.api.ChatMessageType");
             Player.class.getMethod("spigot");
             SpigotActionBarAdapter.checkSupported();
 

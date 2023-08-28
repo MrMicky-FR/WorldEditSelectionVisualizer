@@ -19,7 +19,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Highly customizable for the performance of your server
 - Supports both [WorldEdit](https://enginehub.org/worldedit) and [FastAsyncWorldEdit](https://www.spigotmc.org/resources/fastasyncworldedit.13932/)
 - Minecraft 1.7.10 to 1.20 support
-- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%` and `%wesv_toggled_clipboard%`, `%wesv_volume_selection` and `%wesv_volume_clipboard%`)
+- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%`, `%wesv_toggled_clipboard%`, `%wesv_volume_selection%` and `%wesv_volume_clipboard%`)
 
 ## Downloads
 
