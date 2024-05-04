@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 repositories {
@@ -11,8 +11,8 @@ dependencies {
     implementation project(':worldeditselectionvisualizer-compatibility-commons')
     implementation project(':worldeditselectionvisualizer-compatibility-v6')
     implementation project(':worldeditselectionvisualizer-compatibility-v7')
-    implementation 'fr.mrmicky:fastparticles:2.0.0'
-    implementation 'org.bstats:bstats-bukkit:3.0.0'
+    implementation 'fr.mrmicky:fastparticles:2.0.1'
+    implementation 'org.bstats:bstats-bukkit:3.0.2'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }

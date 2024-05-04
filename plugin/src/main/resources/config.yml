@@ -45,8 +45,8 @@ cuboid-top-bottom: false
 # 'origin': The selection origin point (position 1 for cuboid selection, and center for ellipsoid/cylinders)
 #   'fade-delay': The number of seconds before the particles disappears. You can set it to 0 to remove the fade delay
 #   'max-selection-size' : The maximum size of a selection to be display. A big value (> 1000000) can cause important lags
-#   'points-distance': The distance between each particles. The higher this number is, less particles will be spawn
-#   'lines-gap' (secondary selection only): The distance between each particles lines on cuboid and polygon. The higher this number is, less particles will be spawn. Set it to 0 to remove cuboid lines
+#   'points-distance': The distance between each particle. The higher this number is, fewer particles will be spawn
+#   'lines-gap' (secondary selection only): The distance between each particles lines on cuboid and polygon. The higher this number is, fewer particles will be spawn. Set it to 0 to remove cuboid lines
 #   'update-interval': The delay in ticks between particles spawn. This impact the players performances
 #   'view-distance':  The maximum distance in which players can see the particles. On 1.7.10 the particle distance is limited to 16 (Minecraft limitation)
 #   'particles': The particles type and data. The data can be a color for redstone like in the form 'r,g,b' or a Material for block crack/item crack

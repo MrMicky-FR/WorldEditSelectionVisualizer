@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,8 +61,8 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
                 Region.class.getMethod("getVolume");
             } catch (NoSuchMethodException e) {
                 getLogger().severe("**********************************");
-                getLogger().severe("You are using an unsupported WorldEdit version (7.0.x or 7.1.x) !");
-                getLogger().severe("WorldEditSelection visualizer don't works with outdated WorldEdit version.");
+                getLogger().severe("You are using an unsupported WorldEdit version (7.0.x or 7.1.x)!");
+                getLogger().severe("WorldEditSelection visualizer doesn't works with outdated WorldEdit version.");
                 getLogger().severe("You can download the latest WorldEdit version here: https://dev.bukkit.org/projects/worldedit/files");
                 getLogger().severe("**********************************");
                 getServer().getPluginManager().disablePlugin(this);
@@ -177,12 +178,12 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
     private void checkUpdate() {
         try {
-            URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=17311");
+            URL url = URI.create("https://api.spigotmc.org/legacy/update.php?resource=17311").toURL();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
                 String lastVersion = reader.readLine();
                 if (!getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
-                    getLogger().warning("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
-                    getLogger().warning("You can download it on: " + getDescription().getWebsite());
+                    getLogger().warning("A new version is available! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
+                    getLogger().warning("You can download it on " + getDescription().getWebsite());
                 }
             }
         } catch (IOException e) {

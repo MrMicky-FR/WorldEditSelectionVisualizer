@@ -1,7 +1,6 @@
 # WorldEditSelectionVisualizer
 
 [![Java CI](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/build.yml/badge.svg)](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/build.yml)
-[![CodeQL](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/codeql.yml/badge.svg)](https://github.com/MrMicky-FR/WorldEditSelectionVisualizer/actions/workflows/codeql.yml)
 [![Discord](https://img.shields.io/discord/390919659874156560.svg?colorB=5865f2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/q9UwaBT)
 
 WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](http://www.minecraftforum.net/topic/2171206-172-worldeditcui/) mod in the form of a Bukkit plugin, which means that players don't need to install anything on their client.
@@ -18,7 +17,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Prevent players from spawning too many particles when selecting huge regions
 - Highly customizable for the performance of your server
 - Supports both [WorldEdit](https://enginehub.org/worldedit) and [FastAsyncWorldEdit](https://www.spigotmc.org/resources/fastasyncworldedit.13932/)
-- Minecraft 1.7.10 to 1.20 support
+- Compatible with all Minecraft versions starting with 1.7.10
 - [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%`, `%wesv_toggled_clipboard%`, `%wesv_volume_selection%` and `%wesv_volume_clipboard%`)
 
 ## Downloads
