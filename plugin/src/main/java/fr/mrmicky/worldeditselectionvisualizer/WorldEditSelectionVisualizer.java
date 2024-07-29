@@ -8,7 +8,6 @@ import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.DisplayType;
 import fr.mrmicky.worldeditselectionvisualizer.display.ParticlesTask;
 import fr.mrmicky.worldeditselectionvisualizer.listeners.PlayerListener;
-import fr.mrmicky.worldeditselectionvisualizer.metrics.WesvMetrics;
 import fr.mrmicky.worldeditselectionvisualizer.placeholders.PlaceholderAPIExpansion;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionManager;
@@ -84,8 +83,6 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         if (getConfig().getBoolean("check-updates")) {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
-
-        WesvMetrics.register(this);
     }
 
     @Override
@@ -94,6 +91,10 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
         if (this.configurationManager != null) {
             loadConfig();
+        }
+
+        if (this.compatibilityHelper != null) {
+            this.compatibilityHelper.init();
         }
     }
 
@@ -182,12 +183,12 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
                 String lastVersion = reader.readLine();
                 if (!getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
-                    getLogger().warning("A new version is available! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
+                    getLogger().warning("A new version is available. Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
                     getLogger().warning("You can download it on " + getDescription().getWebsite());
                 }
             }
         } catch (IOException e) {
-            // ignore
+            getLogger().warning("Unable to check for updates: " + e.getMessage());
         }
     }
 

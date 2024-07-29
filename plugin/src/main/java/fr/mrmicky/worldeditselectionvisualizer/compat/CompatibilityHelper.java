@@ -5,6 +5,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.item.ItemType;
 import com.sk89q.worldedit.world.item.ItemTypes;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v6.ClipboardAdapter6;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 /**
@@ -32,25 +34,40 @@ public class CompatibilityHelper {
     private final boolean supportActionBar = isActionBarSupported();
     private final boolean worldEdit7 = isWorldEdit7();
 
-    private @Nullable Field wandItemField;
+    private @Nullable Predicate<ItemStack> selectionItemPredicate;
 
     public CompatibilityHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
         plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
 
+        init();
+    }
+
+    @SuppressWarnings("deprecation") // WorldEdit 6 support
+    public void init() {
         try {
-            this.wandItemField = LocalConfiguration.class.getField("wandItem");
-        } catch (NoSuchFieldException e) {
-            plugin.getLogger().warning("No field 'wandItem' in LocalConfiguration");
-        }
+            Field field = LocalConfiguration.class.getField("wandItem");
+            LocalConfiguration config = WorldEdit.getInstance().getConfiguration();
 
-        if (this.wandItemField != null
-                && this.wandItemField.getType() != int.class
-                && this.wandItemField.getType() != String.class) {
-            plugin.getLogger().warning("Unsupported WorldEdit configuration, try to update WorldEdit (and FAWE if you have it)");
+            if (field.getType() == int.class) { // WorldEdit 6
+                int itemId = field.getInt(config);
 
-            this.wandItemField = null;
+                this.selectionItemPredicate = item -> item.getType().getId() == itemId;
+                return;
+            }
+
+            if (field.getType() == String.class) { // WorldEdit 7
+                ItemType itemType = ItemTypes.get((String) field.get(config));
+                Material type = itemType != null ? BukkitAdapter.adapt(itemType) : null;
+
+                this.selectionItemPredicate = item -> item.getType() == type;
+                return;
+            }
+
+            this.plugin.getLogger().warning("Unsupported item type in WorldEdit config, try to update WorldEdit.");
+        } catch (ReflectiveOperationException e) {
+            this.plugin.getLogger().log(Level.WARNING, "Failed to get WorldEdit wand item, try to update WorldEdit.", e);
         }
     }
 
@@ -79,33 +96,16 @@ public class CompatibilityHelper {
         SpigotActionBarAdapter.sendActionBar(player, message);
     }
 
-    @SuppressWarnings("deprecation") // WorldEdit 6 support
     public boolean isSelectionItem(@Nullable ItemStack item) {
         if (item == null || item.getType() == Material.AIR) {
             return false;
         }
 
-        if (this.wandItemField == null) {
+        if (this.selectionItemPredicate == null) {
             return true;
         }
 
-        try {
-            LocalConfiguration config = WorldEdit.getInstance().getConfiguration();
-
-            if (this.wandItemField.getType() == int.class) { // WorldEdit 6
-                return item.getType().getId() == this.wandItemField.getInt(config);
-            }
-
-            if (this.wandItemField.getType() == String.class) { // WorldEdit 7
-                String wandItem = (String) this.wandItemField.get(config);
-
-                return BukkitAdapter.adapt(item).getType().equals(ItemTypes.get(wandItem));
-            }
-        } catch (ReflectiveOperationException e) {
-            this.plugin.getLogger().log(Level.WARNING, "An error occurred on isHoldingSelectionItem", e);
-        }
-
-        return true;
+        return this.selectionItemPredicate.test(item);
     }
 
     @SuppressWarnings("deprecation") // 1.7.10/1.8 servers support

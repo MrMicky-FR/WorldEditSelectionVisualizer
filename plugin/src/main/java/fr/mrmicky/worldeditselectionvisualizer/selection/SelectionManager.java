@@ -119,6 +119,8 @@ public class SelectionManager extends BukkitRunnable {
             return;
         }
 
+        this.plugin.updateHoldingSelectionItem(playerData);
+
         RegionAdapter regionAdapter = this.plugin.getCompatibilityHelper().adaptRegion(region);
         RegionInfo regionInfo = regionAdapter.getRegionInfo();
 
@@ -148,8 +150,6 @@ public class SelectionManager extends BukkitRunnable {
             playerSelection.setLastSelectionTooLarge(true);
             return;
         }
-
-        this.plugin.updateHoldingSelectionItem(playerData);
 
         Event event = (type == SelectionType.SELECTION)
                 ? new SelectionChangeEvent(player, region) : new ClipboardChangeEvent(player, region);
