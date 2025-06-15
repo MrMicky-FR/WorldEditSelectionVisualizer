@@ -101,7 +101,7 @@ public class ParticlesTask implements Runnable {
                 return;
             }
 
-            this.particle.getType().spawn(this.player, x, y, z, 1, 0, 0, 0, 0, this.particle.getData());
+            this.particle.getType().spawn(this.player, x, y, z, 1, 0, 0, 0, 0, this.particle.getData(), true);
         }
     }
 }

@@ -11,9 +11,13 @@ dependencies {
     implementation project(':worldeditselectionvisualizer-compatibility-commons')
     implementation project(':worldeditselectionvisualizer-compatibility-v6')
     implementation project(':worldeditselectionvisualizer-compatibility-v7')
-    implementation 'fr.mrmicky:fastparticles:2.0.1'
+    implementation 'fr.mrmicky:fastparticles:2.0.2'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
-    compileOnly 'me.clip:placeholderapi:2.10.9'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+
+    testImplementation 'net.md-5:bungeecord-chat:1.20-R0.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 shadowJar {
@@ -34,4 +38,8 @@ processResources {
     filesMatching('plugin.yml') {
         expand 'pluginVersion': project.version
     }
+}
+
+test {
+    useJUnitPlatform()
 }

@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 
 /**
@@ -34,7 +33,7 @@ public class CompatibilityHelper {
     private final boolean supportActionBar = isActionBarSupported();
     private final boolean worldEdit7 = isWorldEdit7();
 
-    private @Nullable Predicate<ItemStack> selectionItemPredicate;
+    private @Nullable Material selectionItem;
 
     public CompatibilityHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
@@ -44,24 +43,22 @@ public class CompatibilityHelper {
         init();
     }
 
-    @SuppressWarnings("deprecation") // WorldEdit 6 support
     public void init() {
         try {
             Field field = LocalConfiguration.class.getField("wandItem");
             LocalConfiguration config = WorldEdit.getInstance().getConfiguration();
 
             if (field.getType() == int.class) { // WorldEdit 6
-                int itemId = field.getInt(config);
+                String itemId = Integer.toString(field.getInt(config));
+                this.selectionItem = Material.matchMaterial(itemId);
 
-                this.selectionItemPredicate = item -> item.getType().getId() == itemId;
                 return;
             }
 
             if (field.getType() == String.class) { // WorldEdit 7
                 ItemType itemType = ItemTypes.get((String) field.get(config));
-                Material type = itemType != null ? BukkitAdapter.adapt(itemType) : null;
+                this.selectionItem = itemType != null ? BukkitAdapter.adapt(itemType) : null;
 
-                this.selectionItemPredicate = item -> item.getType() == type;
                 return;
             }
 
@@ -97,15 +94,11 @@ public class CompatibilityHelper {
     }
 
     public boolean isSelectionItem(@Nullable ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return false;
-        }
-
-        if (this.selectionItemPredicate == null) {
+        if (this.selectionItem == null) {
             return true;
         }
 
-        return this.selectionItemPredicate.test(item);
+        return item != null && item.getType() == this.selectionItem;
     }
 
     @SuppressWarnings("deprecation") // 1.7.10/1.8 servers support
