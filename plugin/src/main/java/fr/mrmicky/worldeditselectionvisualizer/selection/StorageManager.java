@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,14 +19,16 @@ public class StorageManager {
 
     private final WorldEditSelectionVisualizer plugin;
 
-    private final File playersFile;
-    private final FileConfiguration playersConfig;
-    private final ConfigurationSection playersSection;
+    private @Nullable File playersFile;
+    private @Nullable FileConfiguration playersConfig;
+    private @Nullable ConfigurationSection playersSection;
 
     public StorageManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
+    }
 
-        this.playersFile = new File(plugin.getDataFolder(), "players.yml");
+    public void init() {
+        this.playersFile = new File(this.plugin.getDataFolder(), "players.yml");
         this.playersConfig = YamlConfiguration.loadConfiguration(this.playersFile);
 
         ConfigurationSection section = this.playersConfig.getConfigurationSection("players");
@@ -38,18 +41,22 @@ public class StorageManager {
         boolean defaultValue = this.plugin.getConfig()
                 .getBoolean("default-enabled." + type.getName());
 
+        if (this.playersSection == null) {
+            return defaultValue;
+        }
+
         return this.playersSection.getBoolean(key, defaultValue);
     }
 
     public void setEnable(Player player, SelectionType type, boolean enable) {
+        if (this.playersSection == null || this.playersConfig == null || this.playersFile == null) {
+            throw new IllegalStateException("StorageManager is not initialized yet");
+        }
+
         this.playersSection.set(player.getUniqueId() + "." + type.getName(), enable);
 
         Bukkit.getPluginManager().callEvent(new VisualizationToggleEvent(player, enable));
 
-        save();
-    }
-
-    private void save() {
         try {
             this.playersConfig.save(this.playersFile);
         } catch (IOException e) {

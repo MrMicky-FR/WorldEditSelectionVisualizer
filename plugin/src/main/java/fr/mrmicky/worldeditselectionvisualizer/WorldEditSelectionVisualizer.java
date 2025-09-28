@@ -3,6 +3,8 @@ package fr.mrmicky.worldeditselectionvisualizer;
 import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.commands.CommandWesv;
 import fr.mrmicky.worldeditselectionvisualizer.compat.CompatibilityHelper;
+import fr.mrmicky.worldeditselectionvisualizer.compat.ScheduledTask;
+import fr.mrmicky.worldeditselectionvisualizer.compat.SchedulerAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.config.ConfigurationManager;
 import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.display.DisplayType;
@@ -16,47 +18,45 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.StorageManager;
 import fr.mrmicky.worldeditselectionvisualizer.utils.ChatUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
+@NullMarked
 public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
     private final Map<SelectionType, GlobalSelectionConfig> configurations = new EnumMap<>(SelectionType.class);
-    private final Map<UUID, PlayerVisualizerData> players = new HashMap<>();
-    private final List<BukkitTask> particlesTasks = new ArrayList<>(6);
+    private final Map<UUID, PlayerVisualizerData> players = new ConcurrentHashMap<>();
+    private final List<ScheduledTask> particlesTasks = new ArrayList<>(6);
 
-    private SelectionManager selectionManager;
-    private StorageManager storageManager;
-    private ConfigurationManager configurationManager;
-    private CompatibilityHelper compatibilityHelper;
+    private final SelectionManager selectionManager = new SelectionManager(this);
+    private final StorageManager storageManager = new StorageManager(this);
+    private final ConfigurationManager configurationManager = new ConfigurationManager(this);
+    private final CompatibilityHelper compatibilityHelper = new CompatibilityHelper(this);
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        migrateV1Config();
 
-        this.compatibilityHelper = new CompatibilityHelper(this);
-        this.storageManager = new StorageManager(this);
-        this.configurationManager = new ConfigurationManager(this);
-        this.selectionManager = new SelectionManager(this);
+        this.compatibilityHelper.init();
+        this.storageManager.init();
+        this.selectionManager.init();
+
+        getLogger().info("Using WorldEdit " + this.compatibilityHelper.getWorldEditVersion() + " api");
+        getLogger().info("Using " + this.getScheduler().name() + " scheduler");
 
         if (this.compatibilityHelper.getWorldEditVersion() == 7) {
             try {
                 Region.class.getMethod("getVolume");
             } catch (NoSuchMethodException e) {
-                getLogger().severe("**********************************");
-                getLogger().severe("You are using an unsupported WorldEdit version (7.0.x or 7.1.x)!");
-                getLogger().severe("WorldEditSelection visualizer doesn't works with outdated WorldEdit version.");
-                getLogger().severe("You can download the latest WorldEdit version here: https://dev.bukkit.org/projects/worldedit/files");
-                getLogger().severe("**********************************");
+                getLogger().severe("You are using an unsupported WorldEdit version (7.0.x or 7.1.x)");
+                getLogger().severe("Please update WorldEdit: https://dev.bukkit.org/projects/worldedit/files");
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
@@ -74,7 +74,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("check-updates")) {
-            getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
+            getScheduler().executeAsync(this::checkUpdate);
         }
     }
 
@@ -82,17 +82,13 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
     public void reloadConfig() {
         super.reloadConfig();
 
-        if (this.configurationManager != null) {
-            loadConfig();
-        }
+        loadConfig();
 
-        if (this.compatibilityHelper != null) {
-            this.compatibilityHelper.init();
-        }
+        this.compatibilityHelper.init();
     }
 
     private void loadConfig() {
-        this.particlesTasks.forEach(BukkitTask::cancel);
+        this.particlesTasks.forEach(ScheduledTask::cancel);
         this.particlesTasks.clear();
 
         for (SelectionType type : SelectionType.values()) {
@@ -107,15 +103,11 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         }
     }
 
-    public void updateHoldingSelectionItem(@NonNull PlayerVisualizerData playerData) {
+    public void updateHoldingSelectionItem(PlayerVisualizerData playerData) {
         playerData.setHoldingSelectionItem(this.compatibilityHelper.isHoldingSelectionItem(playerData.getPlayer()));
     }
 
-    public void loadPlayer(@NonNull Player player) {
-        if (this.players.containsKey(player.getUniqueId())) {
-            return;
-        }
-
+    public void loadPlayer(Player player) {
         PlayerVisualizerData playerData = new PlayerVisualizerData(player);
 
         for (SelectionType type : SelectionType.values()) {
@@ -125,14 +117,14 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
 
         updateHoldingSelectionItem(playerData);
 
-        this.players.put(player.getUniqueId(), playerData);
+        this.players.putIfAbsent(player.getUniqueId(), playerData);
     }
 
-    public void unloadPlayer(@NonNull Player player) {
+    public void unloadPlayer(Player player) {
         this.players.remove(player.getUniqueId());
     }
 
-    public @NonNull PlayerVisualizerData getPlayerData(Player player) {
+    public PlayerVisualizerData getPlayerData(Player player) {
         PlayerVisualizerData playerData = this.players.get(player.getUniqueId());
 
         if (playerData == null) {
@@ -142,11 +134,11 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         return playerData;
     }
 
-    public @NonNull Optional<PlayerVisualizerData> getOptionalPlayerData(Player player) {
+    public Optional<PlayerVisualizerData> getOptionalPlayerData(Player player) {
         return Optional.ofNullable(this.players.get(player.getUniqueId()));
     }
 
-    public @NonNull Collection<PlayerVisualizerData> getPlayers() {
+    public Collection<PlayerVisualizerData> getPlayers() {
         return this.players.values();
     }
 
@@ -170,35 +162,27 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         return ChatUtils.color(getConfig().getString("messages." + path));
     }
 
+    public SchedulerAdapter getScheduler() {
+        return this.compatibilityHelper.getScheduler();
+    }
+
+    @SuppressWarnings("deprecation") // Ignore Paper-specific deprecations (for compatibility)
+    public String getPluginVersion() {
+        return getDescription().getVersion();
+    }
+
     private void checkUpdate() {
         try {
             URL url = URI.create("https://api.spigotmc.org/legacy/update.php?resource=17311").toURL();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
                 String lastVersion = reader.readLine();
-                if (!getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
-                    getLogger().warning("A new version is available. Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
-                    getLogger().warning("You can download it on " + getDescription().getWebsite());
+                if (!getPluginVersion().equalsIgnoreCase(lastVersion)) {
+                    getLogger().warning("A new version is available. Last version is " + lastVersion + " and you are on " + getPluginVersion());
+                    getLogger().warning("You can download it on https://www.spigotmc.org/resources/worldeditselectionvisualizer.17311/");
                 }
             }
         } catch (IOException e) {
             getLogger().warning("Unable to check for updates: " + e.getMessage());
         }
-    }
-
-    private void migrateV1Config() {
-        if (getConfig().get("lang") == null) {
-            return;
-        }
-
-        // Rename the config from WorldEditSelectionVisualizer v1.x to prevent any issues
-        File configFile = new File(getDataFolder(), "config.yml");
-        File configBackupFile = new File(getDataFolder(), "config-old.yml");
-
-        if (!configFile.renameTo(configBackupFile)) {
-            getLogger().warning("Unable to rename old config.yml file.");
-        }
-
-        saveDefaultConfig();
-        reloadConfig();
     }
 }

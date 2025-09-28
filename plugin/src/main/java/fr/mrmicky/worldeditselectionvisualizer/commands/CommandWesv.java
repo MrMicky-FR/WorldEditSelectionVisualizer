@@ -144,7 +144,7 @@ public class CommandWesv implements TabExecutor {
                 return;
             }
 
-            player.teleport(location);
+            this.plugin.getScheduler().teleport(player, location);
             return;
         }
 
@@ -160,7 +160,7 @@ public class CommandWesv implements TabExecutor {
     }
 
     private void sendUsage(CommandSender sender) {
-        String version = this.plugin.getDescription().getVersion();
+        String version = this.plugin.getPluginVersion();
         sender.sendMessage(ChatUtils.color("&6WorldEditSelectionVisualizer v" + version + "&7 by &6MrMicky&7."));
 
         if (sender instanceof Player) {

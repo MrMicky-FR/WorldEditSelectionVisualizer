@@ -41,12 +41,12 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public String getAuthor() {
-        return String.join(", ", this.plugin.getDescription().getAuthors());
+        return "MrMicky";
     }
 
     @Override
     public String getVersion() {
-        return this.plugin.getDescription().getVersion();
+        return this.plugin.getPluginVersion();
     }
 
     @Override

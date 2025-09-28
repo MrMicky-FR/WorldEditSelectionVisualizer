@@ -3,8 +3,8 @@ plugins {
 }
 
 repositories {
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
 }
 
 dependencies {

@@ -23,7 +23,6 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ShapeProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -31,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @NullMarked
-public class SelectionManager extends BukkitRunnable {
+public class SelectionManager implements Runnable {
 
     private final Map<Class<? extends Region>, ShapeProcessor<?>> shapeProcessors = new HashMap<>(8);
 
@@ -41,15 +40,24 @@ public class SelectionManager extends BukkitRunnable {
     public SelectionManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
-        registerShapeProcessors();
+        WorldEditPlugin worldEdit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 
-        this.worldEditPlugin = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
-
-        if (this.worldEditPlugin == null) {
-            throw new IllegalStateException("WorldEditPlugin not found");
+        if (worldEdit == null) {
+            throw new IllegalStateException("WorldEdit plugin not found");
         }
 
-        runTaskTimer(plugin, 20, plugin.getConfig().getInt("selection-update-interval"));
+        this.worldEditPlugin = worldEdit;
+        this.shapeProcessors.put(CuboidRegion.class, new CuboidProcessor(this.plugin));
+        this.shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor(this.plugin));
+        this.shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(this.plugin));
+        this.shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(this.plugin));
+        this.shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(this.plugin));
+    }
+
+    public void init() {
+        int delay = this.plugin.getConfig().getInt("selection-update-interval");
+
+        this.plugin.getScheduler().scheduleGlobalRepeating(this, 20, delay);
     }
 
     @Override
@@ -186,13 +194,5 @@ public class SelectionManager extends BukkitRunnable {
             }
         }
         return null;
-    }
-
-    private void registerShapeProcessors() {
-        this.shapeProcessors.put(CuboidRegion.class, new CuboidProcessor(this.plugin));
-        this.shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor(this.plugin));
-        this.shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(this.plugin));
-        this.shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(this.plugin));
-        this.shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(this.plugin));
     }
 }

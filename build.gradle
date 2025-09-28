@@ -1,6 +1,6 @@
 allprojects {
     group = 'fr.mrmicky'
-    version = '2.1.8'
+    version = '2.1.9'
 }
 
 subprojects {
@@ -9,6 +9,8 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
+        disableAutoTargetJvm()
     }
 
     tasks.withType(JavaCompile) {
@@ -18,12 +20,12 @@ subprojects {
     repositories {
         mavenCentral()
 
-        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-        maven { url 'https://maven.enginehub.org/repo/' }
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://maven.enginehub.org/repo/' }
     }
 
     dependencies {
         implementation 'org.jspecify:jspecify:1.0.0'
-        compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+        compileOnly 'dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT'
     }
 }

@@ -20,6 +20,7 @@ WorldEditSelectionVisualizer (WESV) is essentially the famous [WorldEditCUI](htt
 - Compatible with all Minecraft versions starting with 1.7.10
 - Support for RGB color codes in messages on Minecraft 1.16 and higher, with the `&#rrggbb` format
 - [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) support (you can use the placeholders `%wesv_toggled_selection%`, `%wesv_toggled_clipboard%`, `%wesv_volume_selection%` and `%wesv_volume_clipboard%`)
+- [Folia](https://github.com/PaperMC/Folia) support for better performance
 
 ## Downloads
 

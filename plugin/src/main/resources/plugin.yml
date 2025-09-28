@@ -8,6 +8,7 @@ main: fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer
 depend: [WorldEdit]
 softdepend: [PlaceholderAPI]
 api-version: 1.13
+folia-supported: true
 
 commands:
   worldeditselectionvisualizer:

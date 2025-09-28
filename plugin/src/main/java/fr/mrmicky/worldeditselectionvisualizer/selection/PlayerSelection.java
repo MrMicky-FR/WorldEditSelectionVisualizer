@@ -12,11 +12,11 @@ public class PlayerSelection {
 
     private final SelectionType selectionType;
 
-    private Vector3d origin = Vector3d.ZERO;
-    private boolean lastSelectionTooLarge = false;
-    private @Nullable SelectionPoints selectionPoints;
-    private @Nullable Instant expireTime;
-    private @Nullable RegionInfo lastSelectedRegion;
+    private volatile Vector3d origin = Vector3d.ZERO;
+    private volatile boolean lastSelectionTooLarge = false;
+    private volatile @Nullable SelectionPoints selectionPoints;
+    private volatile @Nullable Instant expireTime;
+    private volatile @Nullable RegionInfo lastSelectedRegion;
 
     public PlayerSelection(SelectionType selectionType) {
         this.selectionType = Objects.requireNonNull(selectionType, "selectionType");
@@ -51,11 +51,15 @@ public class PlayerSelection {
     }
 
     public long getSelectedVolume() {
-        return this.lastSelectedRegion != null ? this.lastSelectedRegion.getVolume() : 0;
+        RegionInfo lastRegion = this.lastSelectedRegion;
+
+        return lastRegion != null ? lastRegion.getVolume() : 0;
     }
 
     public PlayerSelection verifyExpireTime() {
-        if (this.expireTime != null && this.expireTime.isBefore(Instant.now())) {
+        Instant expireTime = this.expireTime;
+
+        if (expireTime != null && expireTime.isBefore(Instant.now())) {
             this.expireTime = null;
             this.selectionPoints = null;
         }

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@SuppressWarnings("deprecation") // Ignore Paper-specific deprecations (for compatibility)
 final class SpigotActionBarAdapter {
 
     private SpigotActionBarAdapter() {

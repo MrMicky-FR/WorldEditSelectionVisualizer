@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
+@SuppressWarnings("deprecation") // Ignore Paper-specific deprecations (for compatibility)
 public final class ChatUtils {
 
     private static final boolean HEX_COLORS;

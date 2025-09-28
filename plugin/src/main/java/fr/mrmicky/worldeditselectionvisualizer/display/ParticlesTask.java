@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.display;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
+import fr.mrmicky.worldeditselectionvisualizer.compat.ScheduledTask;
 import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
@@ -8,9 +9,8 @@ import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.NumberConversions;
 import org.jspecify.annotations.NullMarked;
 
@@ -35,10 +35,10 @@ public class ParticlesTask implements Runnable {
         this.config = config;
     }
 
-    public BukkitTask start() {
+    public ScheduledTask start() {
         int interval = this.config.getUpdateInterval();
 
-        return Bukkit.getScheduler().runTaskTimer(this.plugin, this, interval, interval);
+        return this.plugin.getScheduler().scheduleAsyncRepeating(this, interval, interval);
     }
 
     @Override
@@ -56,18 +56,19 @@ public class ParticlesTask implements Runnable {
             }
 
             SelectionPoints selectionPoints = selection.verifyExpireTime().getSelectionPoints();
+            Location lockLocation = playerData.getClipboardLockLocation();
 
             if (selectionPoints == null || (needWand && !playerData.isHoldingSelectionItem())) {
                 continue;
             }
 
             Collection<Shape> renderables = selectionPoints.get(this.displayType);
-            Vector3d location = new Vector3d(playerData.getClipboardLocation().toVector());
-            Vector3d origin = (this.type != SelectionType.CLIPBOARD)
-                    ? Vector3d.ZERO :
-                    location.subtract(selection.getOrigin()).floor();
+            Vector3d playerLocation = new Vector3d(player.getLocation());
+            Vector3d clipboardLocation = lockLocation != null ? new Vector3d(lockLocation) : playerLocation;
+            Vector3d origin = this.type != SelectionType.CLIPBOARD
+                    ? Vector3d.ZERO : clipboardLocation.subtract(selection.getOrigin()).floor();
 
-            ParticleRenderer renderer = new ParticleRenderer(player, location,
+            ParticleRenderer renderer = new ParticleRenderer(player, playerLocation,
                     origin, distanceSquare, particleData);
 
             for (Shape renderable : renderables) {

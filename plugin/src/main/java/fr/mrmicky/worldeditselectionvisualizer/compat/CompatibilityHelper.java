@@ -30,6 +30,7 @@ public class CompatibilityHelper {
 
     private final WorldEditSelectionVisualizer plugin;
 
+    private final SchedulerAdapter scheduler;
     private final boolean supportOffHand = isOffhandSupported();
     private final boolean supportActionBar = isActionBarSupported();
     private final boolean worldEdit7 = isWorldEdit7();
@@ -38,10 +39,7 @@ public class CompatibilityHelper {
 
     public CompatibilityHelper(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
-
-        plugin.getLogger().info("Using WorldEdit " + getWorldEditVersion() + " api");
-
-        init();
+        this.scheduler = SchedulerAdapter.create(this.plugin);
     }
 
     public void init() {
@@ -67,6 +65,10 @@ public class CompatibilityHelper {
         } catch (ReflectiveOperationException e) {
             this.plugin.getLogger().log(Level.WARNING, "Failed to get WorldEdit wand item, try to update WorldEdit.", e);
         }
+    }
+
+    public SchedulerAdapter getScheduler() {
+        return this.scheduler;
     }
 
     public RegionAdapter adaptRegion(Region region) {

@@ -21,8 +21,8 @@ public class PlayerVisualizerData {
 
     private final Player player;
 
-    private @Nullable Location clipboardLockLocation;
-    private boolean holdingSelectionItem = true;
+    private volatile @Nullable Location clipboardLockLocation;
+    private volatile boolean holdingSelectionItem = true;
 
     public PlayerVisualizerData(Player player) {
         this.player = Objects.requireNonNull(player, "player");
@@ -59,14 +59,6 @@ public class PlayerVisualizerData {
         }
 
         this.enabledVisualizations.computeIfAbsent(type, PlayerSelection::new);
-    }
-
-    public Location getClipboardLocation() {
-        if (this.clipboardLockLocation == null) {
-            return this.player.getLocation();
-        }
-
-        return this.clipboardLockLocation;
     }
 
     public @Nullable Location getClipboardLockLocation() {

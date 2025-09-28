@@ -2,7 +2,6 @@ package fr.mrmicky.worldeditselectionvisualizer.listeners;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,11 +33,13 @@ public class PlayerListener implements Listener {
     public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
         Player player = e.getPlayer();
 
-        this.plugin.getOptionalPlayerData(player).ifPresent(data -> {
-            this.plugin.updateHoldingSelectionItem(data);
+        this.plugin.getScheduler().execute(() -> {
+            this.plugin.getOptionalPlayerData(player).ifPresent(data -> {
+                this.plugin.updateHoldingSelectionItem(data);
 
-            data.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
-            this.plugin.getSelectionManager().updatePlayerVisualizations(data);
+                data.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
+                this.plugin.getSelectionManager().updatePlayerVisualizations(data);
+            });
         });
     }
 
@@ -56,7 +57,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Bukkit.getScheduler().runTask(this.plugin, () -> this.plugin.getOptionalPlayerData(player)
+        this.plugin.getScheduler().execute(() -> this.plugin.getOptionalPlayerData(player)
                 .ifPresent(this.plugin::updateHoldingSelectionItem));
     }
 

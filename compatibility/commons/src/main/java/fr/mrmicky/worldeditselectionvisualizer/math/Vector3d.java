@@ -1,5 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.math;
 
+import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jspecify.annotations.NullMarked;
 
@@ -11,6 +12,10 @@ public class Vector3d {
     private final double x;
     private final double y;
     private final double z;
+
+    public Vector3d(Location loc) {
+        this(loc.getX(), loc.getY(), loc.getZ());
+    }
 
     public Vector3d(Vector vec) {
         this(vec.getX(), vec.getY(), vec.getZ());
