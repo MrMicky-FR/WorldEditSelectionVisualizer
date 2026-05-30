@@ -111,7 +111,7 @@ public final class WorldEditSelectionVisualizer extends JavaPlugin {
         PlayerVisualizerData playerData = new PlayerVisualizerData(player);
 
         for (SelectionType type : SelectionType.values()) {
-            boolean enable = !getConfig().getBoolean("save-toggle") || this.storageManager.isEnabled(player, type);
+            boolean enable = this.storageManager.isEnabled(player, type);
             playerData.toggleSelectionVisibility(type, enable);
         }
 

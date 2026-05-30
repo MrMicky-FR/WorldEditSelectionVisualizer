@@ -24,7 +24,7 @@ public class SelectionPoints {
                            @Nullable Shape origin) {
         this.primary = Collections.unmodifiableCollection(primary);
         this.secondary = Collections.unmodifiableCollection(secondary);
-        this.origin = (origin != null) ? Collections.singletonList(origin) : Collections.emptyList();
+        this.origin = origin != null ? Collections.singletonList(origin) : Collections.emptyList();
     }
 
     public Collection<Shape> get(DisplayType type) {

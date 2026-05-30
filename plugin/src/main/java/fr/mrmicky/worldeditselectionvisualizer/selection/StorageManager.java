@@ -41,7 +41,7 @@ public class StorageManager {
         boolean defaultValue = this.plugin.getConfig()
                 .getBoolean("default-enabled." + type.getName());
 
-        if (this.playersSection == null) {
+        if (this.playersSection == null || !this.plugin.getConfig().getBoolean("save-toggle")) {
             return defaultValue;
         }
 

@@ -3,6 +3,7 @@ package fr.mrmicky.worldeditselectionvisualizer.math;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class Vector3d {
@@ -147,7 +148,7 @@ public class Vector3d {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }

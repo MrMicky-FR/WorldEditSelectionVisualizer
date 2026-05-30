@@ -30,8 +30,8 @@ shadowJar {
     }
 }
 
-artifacts {
-    archives shadowJar
+build {
+    dependsOn shadowJar
 }
 
 processResources {
