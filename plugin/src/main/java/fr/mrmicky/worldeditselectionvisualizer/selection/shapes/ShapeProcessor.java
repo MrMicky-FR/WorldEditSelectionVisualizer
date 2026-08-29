@@ -1,9 +1,8 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shapes;
 
 import com.sk89q.worldedit.regions.Region;
-import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.VisualizationConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Line;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
@@ -16,29 +15,23 @@ import java.util.List;
 public abstract class ShapeProcessor<R extends Region> {
 
     private final Class<R> regionClass;
-    private final WorldEditSelectionVisualizer plugin;
 
-    protected ShapeProcessor(Class<R> regionClass, WorldEditSelectionVisualizer plugin) {
+    protected ShapeProcessor(Class<R> regionClass) {
         this.regionClass = regionClass;
-        this.plugin = plugin;
     }
 
-    public SelectionPoints processSelection(RegionAdapter regionAdapter, GlobalSelectionConfig config) {
+    public SelectionPoints processSelection(RegionAdapter regionAdapter, VisualizationConfig config) {
         R region = this.regionClass.cast(regionAdapter.getRegion());
         return processSelection(region, regionAdapter, config);
     }
 
-    protected abstract SelectionPoints processSelection(R region, RegionAdapter adapter, GlobalSelectionConfig config);
-
-    protected WorldEditSelectionVisualizer getPlugin() {
-        return this.plugin;
-    }
+    protected abstract SelectionPoints processSelection(R region, RegionAdapter adapter, VisualizationConfig config);
 
     protected void createLinesFromBottom(List<Shape> primary,
                                          List<Shape> secondary,
                                          List<Vector3d> bottomCorners,
                                          int height,
-                                         GlobalSelectionConfig config) {
+                                         VisualizationConfig config) {
         double secondaryGap = config.secondary().getLinesGap();
 
         for (int i = 0; i < bottomCorners.size(); i++) {

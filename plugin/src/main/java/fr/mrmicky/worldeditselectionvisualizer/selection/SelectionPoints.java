@@ -36,7 +36,7 @@ public class SelectionPoints {
             case ORIGIN:
                 return this.origin;
             default:
-                return Collections.emptyList();
+                throw new IllegalArgumentException("Invalid display type: " + type);
         }
     }
 }

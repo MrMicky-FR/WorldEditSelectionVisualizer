@@ -30,10 +30,6 @@ public class PlayerSelection {
         return this.origin;
     }
 
-    public @Nullable Instant getExpireTime() {
-        return this.expireTime;
-    }
-
     public @Nullable RegionInfo getLastSelectedRegion() {
         return this.lastSelectedRegion;
     }
@@ -46,17 +42,13 @@ public class PlayerSelection {
         this.lastSelectionTooLarge = lastSelectionTooLarge;
     }
 
-    public SelectionType getSelectionType() {
-        return this.selectionType;
-    }
-
     public long getSelectedVolume() {
         RegionInfo lastRegion = this.lastSelectedRegion;
 
         return lastRegion != null ? lastRegion.getVolume() : 0;
     }
 
-    public PlayerSelection verifyExpireTime() {
+    public PlayerSelection clearIfExpired() {
         Instant expireTime = this.expireTime;
 
         if (expireTime != null && expireTime.isBefore(Instant.now())) {

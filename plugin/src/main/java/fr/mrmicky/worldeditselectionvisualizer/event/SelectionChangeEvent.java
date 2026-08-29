@@ -10,7 +10,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Called when the WorldEdit selection of a player changed.
+ * Called when the WorldEdit selection of a player changes.
+ * Detected by polling, so it may lag by up to {@code selection-update-interval} ticks,
+ * and is only fired for players who have selection visualization enabled.
  */
 @NullMarked
 public class SelectionChangeEvent extends Event {
@@ -21,7 +23,7 @@ public class SelectionChangeEvent extends Event {
     private final @Nullable Region region;
 
     /**
-     * Creates a new SelectionChangeEvent for the given player with the specified region.
+     * Creates a new {@link SelectionChangeEvent} for the given player with the specified region.
      *
      * @param player the player whose selection changed
      * @param region the new region in the selection, or null if the selection is empty
@@ -45,9 +47,10 @@ public class SelectionChangeEvent extends Event {
     }
 
     /**
-     * Returns the region in the selection of the player.
+     * Returns the new region in the selection of the player.
+     * This is the live region owned by the player's region selector: do not modify it.
      *
-     * @return the region in the selection, or null if the selection is empty
+     * @return the new region in the selection, or null if the selection is empty
      */
     public @Nullable Region getRegion() {
         return this.region;

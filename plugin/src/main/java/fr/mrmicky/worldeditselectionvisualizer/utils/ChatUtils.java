@@ -47,7 +47,7 @@ public final class ChatUtils {
             }
 
             // Extract the #rrggbb color (without '&')
-            String color = ChatColor.of(s.substring(i + 1, i + 8)).toString();
+            String color = parseHexColor(s.substring(i + 1, i + 8));
             // Remove the &#rrggbb (including '&') and replace it with Bungee format
             s = s.substring(0, i) + color + s.substring(i + 8);
             // Fast-forward to the end of the replaced part
@@ -55,5 +55,13 @@ public final class ChatUtils {
         }
 
         return s;
+    }
+
+    private static String parseHexColor(String hex) {
+        try {
+            return ChatColor.of(hex).toString();
+        } catch (IllegalArgumentException e) {
+            return hex; // fallback to raw color code
+        }
     }
 }

@@ -25,5 +25,6 @@ public class ChatUtilsTest {
         assertEquals("&#ff000", ChatUtils.colorHex("&#ff000"));
         assertEquals(RED + "Hello World&#1500f", ChatUtils.colorHex("&#ff0a0aHello World&#1500f"));
         assertEquals("#ff0000 Hello", ChatUtils.colorHex("#ff0000 Hello"));
+        assertEquals(RED + "Valid and #kkllmm invalid", ChatUtils.colorHex("&#ff0a0aValid and &#kkllmm invalid"));
     }
 }

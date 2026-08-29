@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.commands;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
+import fr.mrmicky.worldeditselectionvisualizer.event.VisualizationToggleEvent;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerVisualizerData;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionType;
 import fr.mrmicky.worldeditselectionvisualizer.utils.ChatUtils;
@@ -39,7 +40,7 @@ public class CommandWesv implements TabExecutor {
         }
 
         if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("wesv.reload")) {
-            this.plugin.reloadConfig();
+            this.plugin.reload();
 
             sender.sendMessage(this.plugin.getMessage("config-reloaded"));
             return true;
@@ -82,7 +83,7 @@ public class CommandWesv implements TabExecutor {
             List<String> completions = new ArrayList<>();
 
             if (sender instanceof Player) {
-                if (sender.hasPermission("wesv.lock")) {
+                if (sender.hasPermission("wesv.toggle")) {
                     completions.add("toggle");
                 }
 
@@ -99,12 +100,14 @@ public class CommandWesv implements TabExecutor {
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("toggle")
-                && StringUtil.startsWithIgnoreCase("clipboard", args[1])) {
+                && StringUtil.startsWithIgnoreCase("clipboard", args[1])
+                && sender.hasPermission("wesv.toggle")) {
             return Collections.singletonList("clipboard");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("lock")
-                && StringUtil.startsWithIgnoreCase("tp", args[1])) {
+                && StringUtil.startsWithIgnoreCase("tp", args[1])
+                && sender.hasPermission("wesv.lock")) {
             return Collections.singletonList("tp");
         }
 
@@ -121,7 +124,9 @@ public class CommandWesv implements TabExecutor {
 
         boolean enabled = !playerData.isSelectionVisible(type);
         String key = enabled ? "enabled" : "disabled";
-        playerData.toggleSelectionVisibility(type, enabled);
+        playerData.setSelectionVisible(type, enabled);
+
+        this.plugin.getServer().getPluginManager().callEvent(new VisualizationToggleEvent(player, type, enabled));
 
         if (type == SelectionType.SELECTION) {
             player.sendMessage(this.plugin.getMessage("visualizer-" + key));
@@ -130,7 +135,7 @@ public class CommandWesv implements TabExecutor {
         }
 
         if (this.plugin.getConfig().getBoolean("save-toggle")) {
-            this.plugin.getStorageManager().setEnable(player, type, enabled);
+            this.plugin.getStorageManager().setEnabled(player, type, enabled);
         }
     }
 
@@ -164,14 +169,14 @@ public class CommandWesv implements TabExecutor {
         sender.sendMessage(ChatUtils.color("&6WorldEditSelectionVisualizer v" + version + "&7 by &6MrMicky&7."));
 
         if (sender instanceof Player) {
-            if (sender.hasPermission("wesv.lock")) {
-                sender.sendMessage(ChatUtils.color("&7- /wesv lock"));
-                sender.sendMessage(ChatUtils.color("&7- /wesv lock tp"));
-            }
-
             if (sender.hasPermission("wesv.toggle")) {
                 sender.sendMessage(ChatUtils.color("&7- /wesv toggle"));
                 sender.sendMessage(ChatUtils.color("&7- /wesv toggle clipboard"));
+            }
+
+            if (sender.hasPermission("wesv.lock")) {
+                sender.sendMessage(ChatUtils.color("&7- /wesv lock"));
+                sender.sendMessage(ChatUtils.color("&7- /wesv lock tp"));
             }
         }
 

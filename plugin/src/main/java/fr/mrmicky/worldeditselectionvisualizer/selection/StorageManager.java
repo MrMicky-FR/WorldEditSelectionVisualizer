@@ -1,8 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
-import fr.mrmicky.worldeditselectionvisualizer.event.VisualizationToggleEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -48,17 +46,39 @@ public class StorageManager {
         return this.playersSection.getBoolean(key, defaultValue);
     }
 
-    public void setEnable(Player player, SelectionType type, boolean enable) {
-        if (this.playersSection == null || this.playersConfig == null || this.playersFile == null) {
+    public synchronized void setEnabled(Player player, SelectionType type, boolean enabled) {
+        if (this.playersSection == null) {
             throw new IllegalStateException("StorageManager is not initialized yet");
         }
 
-        this.playersSection.set(player.getUniqueId() + "." + type.getName(), enable);
+        String uuid = player.getUniqueId().toString();
+        boolean defaultValue = this.plugin.getConfig().getBoolean("default-enabled." + type.getName());
 
-        Bukkit.getPluginManager().callEvent(new VisualizationToggleEvent(player, enable));
+        ConfigurationSection playerSection = this.playersSection.getConfigurationSection(uuid);
+
+        if (playerSection == null) {
+            playerSection = this.playersSection.createSection(uuid);
+        }
+
+        playerSection.set(type.getName(), enabled != defaultValue ? enabled : null);
+
+        if (playerSection.getKeys(false).isEmpty()) {
+            this.playersSection.set(uuid, null);
+        }
+
+        this.plugin.getScheduler().executeAsync(this::save);
+    }
+
+    private synchronized void save() {
+        FileConfiguration config = this.playersConfig;
+        File file = this.playersFile;
+
+        if (config == null || file == null) {
+            return;
+        }
 
         try {
-            this.playersConfig.save(this.playersFile);
+            config.save(file);
         } catch (IOException e) {
             this.plugin.getLogger().log(Level.SEVERE, "Error while saving players.yml", e);
         }

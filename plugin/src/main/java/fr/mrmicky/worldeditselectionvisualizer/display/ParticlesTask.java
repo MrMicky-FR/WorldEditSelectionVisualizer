@@ -2,7 +2,7 @@ package fr.mrmicky.worldeditselectionvisualizer.display;
 
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.ScheduledTask;
-import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.DisplayConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.PlayerSelection;
@@ -23,16 +23,18 @@ public class ParticlesTask implements Runnable {
 
     private final SelectionType type;
     private final DisplayType displayType;
-    private final SelectionConfig config;
+    private final DisplayConfig config;
+    private final boolean needWand;
 
     public ParticlesTask(WorldEditSelectionVisualizer plugin,
                          SelectionType type,
                          DisplayType displayType,
-                         SelectionConfig config) {
+                         DisplayConfig config) {
         this.plugin = plugin;
         this.type = type;
         this.displayType = displayType;
         this.config = config;
+        this.needWand = plugin.getConfig().getBoolean("need-we-wand");
     }
 
     public ScheduledTask start() {
@@ -43,11 +45,10 @@ public class ParticlesTask implements Runnable {
 
     @Override
     public void run() {
-        boolean needWand = this.plugin.getConfig().getBoolean("need-we-wand");
         double distanceSquare = NumberConversions.square(this.config.getViewDistance());
         Particle particleData = this.config.getParticle();
 
-        for (PlayerVisualizerData playerData : this.plugin.getPlayers()) {
+        for (PlayerVisualizerData playerData : this.plugin.getAllPlayerData()) {
             Player player = playerData.getPlayer();
             PlayerSelection selection = playerData.getSelection(this.type).orElse(null);
 
@@ -55,24 +56,30 @@ public class ParticlesTask implements Runnable {
                 continue;
             }
 
-            SelectionPoints selectionPoints = selection.verifyExpireTime().getSelectionPoints();
-            Location lockLocation = playerData.getClipboardLockLocation();
+            SelectionPoints selectionPoints = selection.clearIfExpired().getSelectionPoints();
 
-            if (selectionPoints == null || (needWand && !playerData.isHoldingSelectionItem())) {
+            if (selectionPoints == null || (this.needWand && !playerData.isHoldingSelectionItem())) {
                 continue;
             }
 
             Collection<Shape> renderables = selectionPoints.get(this.displayType);
             Vector3d playerLocation = new Vector3d(player.getLocation());
-            Vector3d clipboardLocation = lockLocation != null ? new Vector3d(lockLocation) : playerLocation;
-            Vector3d origin = this.type != SelectionType.CLIPBOARD
-                    ? Vector3d.ZERO : clipboardLocation.subtract(selection.getOrigin()).floor();
+            Vector3d origin = Vector3d.ZERO;
+            Vector3d viewerOrigin = playerLocation;
+
+            if (this.type == SelectionType.CLIPBOARD) {
+                Location lock = playerData.getClipboardLockLocation();
+                Vector3d clipboardLocation = lock != null ? new Vector3d(lock) : playerLocation;
+
+                origin = clipboardLocation.subtract(selection.getOrigin()).floor();
+                viewerOrigin = playerLocation.subtract(origin);
+            }
 
             ParticleRenderer renderer = new ParticleRenderer(player, playerLocation,
                     origin, distanceSquare, particleData);
 
             for (Shape renderable : renderables) {
-                renderable.render(renderer);
+                renderable.render(viewerOrigin, renderer);
             }
         }
     }
@@ -94,16 +101,18 @@ public class ParticlesTask implements Runnable {
         }
 
         @Override
-        public void render(double vecX, double vecY, double vecZ) {
+        public boolean render(double vecX, double vecY, double vecZ) {
             double x = vecX + this.origin.getX();
             double y = vecY + this.origin.getY();
             double z = vecZ + this.origin.getZ();
 
             if (this.location.distanceSquared(x, y, z) > this.maxDistance) {
-                return;
+                return false;
             }
 
             this.particle.getType().spawn(this.player, x, y, z, 1, 0, 0, 0, 0, this.particle.getData(), true);
+
+            return true;
         }
     }
 }

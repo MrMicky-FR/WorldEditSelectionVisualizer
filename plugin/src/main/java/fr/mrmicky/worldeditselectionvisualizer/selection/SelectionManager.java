@@ -8,18 +8,15 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.*;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.World;
 import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.compat.ScheduledTask;
+import fr.mrmicky.worldeditselectionvisualizer.config.VisualizationConfig;
 import fr.mrmicky.worldeditselectionvisualizer.event.ClipboardChangeEvent;
 import fr.mrmicky.worldeditselectionvisualizer.event.SelectionChangeEvent;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ConvexPolyhedralProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CuboidProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.CylinderProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.EllipsoidProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.Polygonal2DProcessor;
-import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.ShapeProcessor;
+import fr.mrmicky.worldeditselectionvisualizer.selection.shapes.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -37,6 +34,8 @@ public class SelectionManager implements Runnable {
     private final WorldEditSelectionVisualizer plugin;
     private final WorldEditPlugin worldEditPlugin;
 
+    private @Nullable ScheduledTask task;
+
     public SelectionManager(WorldEditSelectionVisualizer plugin) {
         this.plugin = plugin;
 
@@ -47,72 +46,84 @@ public class SelectionManager implements Runnable {
         }
 
         this.worldEditPlugin = worldEdit;
-        this.shapeProcessors.put(CuboidRegion.class, new CuboidProcessor(this.plugin));
-        this.shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor(this.plugin));
-        this.shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor(this.plugin));
-        this.shapeProcessors.put(CylinderRegion.class, new CylinderProcessor(this.plugin));
-        this.shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor(this.plugin));
+        this.shapeProcessors.put(CuboidRegion.class, new CuboidProcessor());
+        this.shapeProcessors.put(Polygonal2DRegion.class, new Polygonal2DProcessor());
+        this.shapeProcessors.put(EllipsoidRegion.class, new EllipsoidProcessor());
+        this.shapeProcessors.put(CylinderRegion.class, new CylinderProcessor());
+        this.shapeProcessors.put(ConvexPolyhedralRegion.class, new ConvexPolyhedralProcessor());
     }
 
     public void init() {
-        int delay = this.plugin.getConfig().getInt("selection-update-interval");
+        if (this.task != null) {
+            this.task.cancel();
+        }
 
-        this.plugin.getScheduler().scheduleGlobalRepeating(this, 20, delay);
+        int delay = Math.max(1, this.plugin.getConfig().getInt("selection-update-interval"));
+        this.task = this.plugin.getScheduler().scheduleGlobalRepeating(this, 20, delay);
     }
 
     @Override
     public void run() {
-        for (PlayerVisualizerData player : this.plugin.getPlayers()) {
+        for (PlayerVisualizerData player : this.plugin.getAllPlayerData()) {
             updatePlayerVisualizations(player);
         }
     }
 
     public void updatePlayerVisualizations(PlayerVisualizerData playerData) {
+        LocalSession session = getSession(playerData.getPlayer());
+
+        if (session == null) {
+            return;
+        }
+
+        this.plugin.updateHoldingSelectionItem(playerData);
+
         for (SelectionType type : SelectionType.getValues()) {
-            updatePlayerVisualization(playerData, type);
+            updatePlayerVisualization(playerData, session, type);
         }
     }
 
-    public void updatePlayerVisualization(PlayerVisualizerData playerData, SelectionType type) {
+    public void updatePlayerVisualization(PlayerVisualizerData playerData, LocalSession session, SelectionType type) {
         Player player = playerData.getPlayer();
-        LocalSession session = getSession(player);
         PlayerSelection playerSelection = playerData.getSelection(type).orElse(null);
 
-        if (playerSelection == null || session == null) {
+        if (playerSelection == null) {
             return;
         }
 
         ResolvedRegion resolved = resolveRegion(type, session, player);
 
         if (resolved == null) {
+            if (playerSelection.getLastSelectedRegion() != null) {
+                callChangeEvent(player, type, null);
+            }
+
             playerSelection.resetSelection();
             return;
         }
 
-        this.plugin.updateHoldingSelectionItem(playerData);
-
         RegionAdapter regionAdapter = this.plugin.getCompatibilityHelper().adaptRegion(resolved.region);
         RegionInfo regionInfo = regionAdapter.getRegionInfo();
 
+        // Skipping unchanged regions throttles the permission check below to region changes
         if (isUnchanged(playerSelection, regionInfo, resolved.origin)) {
             return;
         }
 
+        callChangeEvent(player, type, resolved.region);
+
+        // Losing 'wesv.use' applies on the next region change, but gaining it only applies
+        // once the selection changes again, as resetSelection() keeps isUnchanged() true
         if (!player.hasPermission("wesv.use")) {
             playerSelection.resetSelection(regionInfo);
             return;
         }
 
-        GlobalSelectionConfig config = this.plugin.getSelectionConfig(type);
+        VisualizationConfig config = this.plugin.getVisualizationConfig(type);
 
         if (isSelectionTooLarge(regionAdapter, config, player, playerSelection, regionInfo)) {
             return;
         }
-
-        Event event = type == SelectionType.SELECTION
-                ? new SelectionChangeEvent(player, resolved.region)
-                : new ClipboardChangeEvent(player, resolved.region);
-        Bukkit.getPluginManager().callEvent(event);
 
         ShapeProcessor<?> shapeProcessor = this.shapeProcessors.get(resolved.region.getClass());
 
@@ -159,7 +170,7 @@ public class SelectionManager implements Runnable {
         return points == null || playerSelection.getOrigin().equals(origin);
     }
 
-    private boolean isSelectionTooLarge(RegionAdapter regionAdapter, GlobalSelectionConfig config,
+    private boolean isSelectionTooLarge(RegionAdapter regionAdapter, VisualizationConfig config,
                                         Player player, PlayerSelection playerSelection, RegionInfo regionInfo) {
         long volume = Math.abs(regionAdapter.getVolume());
 
@@ -189,15 +200,17 @@ public class SelectionManager implements Runnable {
     }
 
     private @Nullable Region getSelectedRegion(LocalSession session, Player player) {
-        if (session.getSelectionWorld() == null) {
+        World selectionWorld = session.getSelectionWorld();
+
+        if (selectionWorld == null) {
             return null;
         }
 
-        if (!session.getSelectionWorld().getName().equals(player.getWorld().getName())) {
+        if (!selectionWorld.getName().equals(player.getWorld().getName())) {
             return null;
         }
 
-        RegionSelector selector = session.getRegionSelector(session.getSelectionWorld());
+        RegionSelector selector = session.getRegionSelector(selectionWorld);
 
         if (!selector.isDefined()) {
             return null;
@@ -217,6 +230,14 @@ public class SelectionManager implements Runnable {
         } catch (EmptyClipboardException e) {
             return null; // ignore, clipboard is empty
         }
+    }
+
+    private void callChangeEvent(Player player, SelectionType type, @Nullable Region region) {
+        Event event = type == SelectionType.SELECTION
+                ? new SelectionChangeEvent(player, region)
+                : new ClipboardChangeEvent(player, region);
+
+        this.plugin.getServer().getPluginManager().callEvent(event);
     }
 
     private static final class ResolvedRegion {

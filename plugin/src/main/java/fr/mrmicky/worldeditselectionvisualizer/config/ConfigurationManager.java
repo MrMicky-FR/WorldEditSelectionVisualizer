@@ -23,21 +23,22 @@ public class ConfigurationManager {
         this.plugin = plugin;
     }
 
-    public GlobalSelectionConfig loadGlobalSelectionConfig(SelectionType type) {
+    public VisualizationConfig loadVisualizationConfig(SelectionType type) {
         ConfigurationSection section = this.plugin.getConfig()
                 .getConfigurationSection("visualization." + type.getName());
 
         int fadeDelay = section.getInt("fade-delay");
         int max = section.getInt("max-selection-size");
-        SelectionConfig primary = loadSelectionConfig(section.getConfigurationSection("primary"));
-        SelectionConfig secondary = loadSelectionConfig(section.getConfigurationSection("secondary"));
-        SelectionConfig origin = loadSelectionConfig(section.getConfigurationSection("origin"));
+        boolean cuboidTopBottom = this.plugin.getConfig().getBoolean("cuboid-top-bottom");
+        DisplayConfig primary = loadDisplayConfig(section.getConfigurationSection("primary"));
+        DisplayConfig secondary = loadDisplayConfig(section.getConfigurationSection("secondary"));
+        DisplayConfig origin = loadDisplayConfig(section.getConfigurationSection("origin"));
 
-        return new GlobalSelectionConfig(fadeDelay, max, primary, secondary, origin);
+        return new VisualizationConfig(fadeDelay, max, cuboidTopBottom, primary, secondary, origin);
     }
 
-    private SelectionConfig loadSelectionConfig(ConfigurationSection config) {
-        return new SelectionConfig(config, this::loadParticle);
+    private DisplayConfig loadDisplayConfig(ConfigurationSection config) {
+        return new DisplayConfig(config, this::loadParticle);
     }
 
     public Particle loadParticle(@Nullable ConfigurationSection config) {
@@ -72,13 +73,14 @@ public class ConfigurationManager {
                 String[] split = name.split(",");
 
                 if (split.length == 3) {
-                    int r = Integer.parseInt(split[0]);
-                    int g = Integer.parseInt(split[1]);
-                    int b = Integer.parseInt(split[2]);
+                    int r = Integer.parseInt(split[0].trim());
+                    int g = Integer.parseInt(split[1].trim());
+                    int b = Integer.parseInt(split[2].trim());
 
                     return ParticleData.createDustOptions(Color.fromRGB(r, g, b), 1);
                 }
 
+                // All public fields in the Color class are colors, so cast is safe
                 Color color = (Color) Color.class.getField(name.toUpperCase(Locale.ROOT)).get(null);
                 return ParticleData.createDustOptions(color, 1);
             } catch (IllegalArgumentException | ReflectiveOperationException e) {

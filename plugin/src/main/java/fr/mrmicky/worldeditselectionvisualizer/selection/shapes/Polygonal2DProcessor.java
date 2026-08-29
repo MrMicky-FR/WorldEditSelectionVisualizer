@@ -1,9 +1,8 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shapes;
 
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
-import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.VisualizationConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.SelectionPoints;
@@ -15,14 +14,14 @@ import java.util.List;
 @NullMarked
 public class Polygonal2DProcessor extends ShapeProcessor<Polygonal2DRegion> {
 
-    public Polygonal2DProcessor(WorldEditSelectionVisualizer plugin) {
-        super(Polygonal2DRegion.class, plugin);
+    public Polygonal2DProcessor() {
+        super(Polygonal2DRegion.class);
     }
 
     @Override
     protected SelectionPoints processSelection(Polygonal2DRegion region,
                                                RegionAdapter adapter,
-                                               GlobalSelectionConfig config) {
+                                               VisualizationConfig config) {
         double minY = adapter.getMinimumPoint().getY();
         int height = region.getHeight();
         List<Vector3d> polygonalPoints = adapter.getPolygonalPoints();

@@ -1,8 +1,6 @@
 package fr.mrmicky.worldeditselectionvisualizer.compat.v7;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionOperationException;
 import fr.mrmicky.worldeditselectionvisualizer.compat.ClipboardAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.Vectors7;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
@@ -27,12 +25,5 @@ public class ClipboardAdapter7 implements ClipboardAdapter {
     @Override
     public Clipboard getClipboard() {
         return this.clipboard;
-    }
-
-    @Override
-    public Region shiftRegion(Vector3d change) throws RegionOperationException {
-        Region region = this.clipboard.getRegion().clone();
-        region.shift(Vectors7.toBlockVector3(change));
-        return region;
     }
 }

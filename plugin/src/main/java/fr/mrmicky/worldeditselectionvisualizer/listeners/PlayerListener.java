@@ -33,14 +33,15 @@ public class PlayerListener implements Listener {
     public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
         Player player = e.getPlayer();
 
-        this.plugin.getScheduler().execute(() -> {
-            this.plugin.getOptionalPlayerData(player).ifPresent(data -> {
-                this.plugin.updateHoldingSelectionItem(data);
+        this.plugin.getScheduler().execute(() ->
+                this.plugin.getOptionalPlayerData(player).ifPresent(data -> {
+                    this.plugin.updateHoldingSelectionItem(data);
 
-                data.getEnabledVisualizations().forEach(PlayerSelection::resetSelection);
-                this.plugin.getSelectionManager().updatePlayerVisualizations(data);
-            });
-        });
+                    data.setClipboardLockLocation(null);
+                    data.getSelections().forEach(PlayerSelection::resetSelection);
+                    this.plugin.getSelectionManager().updatePlayerVisualizations(data);
+                })
+        );
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

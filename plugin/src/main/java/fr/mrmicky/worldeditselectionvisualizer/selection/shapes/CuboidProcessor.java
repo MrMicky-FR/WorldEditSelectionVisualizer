@@ -1,9 +1,8 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shapes;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
-import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.VisualizationConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Line;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Point;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
@@ -18,14 +17,14 @@ import java.util.List;
 @NullMarked
 public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
 
-    public CuboidProcessor(WorldEditSelectionVisualizer plugin) {
-        super(CuboidRegion.class, plugin);
+    public CuboidProcessor() {
+        super(CuboidRegion.class);
     }
 
     @Override
     protected SelectionPoints processSelection(CuboidRegion region,
                                                RegionAdapter adapter,
-                                               GlobalSelectionConfig config) {
+                                               VisualizationConfig config) {
         List<Shape> primary = new ArrayList<>(12);
         List<Shape> secondary = new ArrayList<>();
         Vector3d min = adapter.getMinimumPoint();
@@ -43,7 +42,7 @@ public class CuboidProcessor extends ShapeProcessor<CuboidRegion> {
 
         createLinesFromBottom(primary, secondary, bottomCorners, height, config);
 
-        if (lineGap > 0 && getPlugin().getConfig().getBoolean("cuboid-top-bottom")) {
+        if (lineGap > 0 && config.hasCuboidTopBottom()) {
             int width = region.getWidth();
             for (double offset = lineGap; offset < width; offset += lineGap) {
                 Vector3d start = min.add(offset, 0, 0);

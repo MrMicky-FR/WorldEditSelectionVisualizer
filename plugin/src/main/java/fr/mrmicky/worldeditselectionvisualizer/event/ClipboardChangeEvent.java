@@ -10,7 +10,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Called when the WorldEdit clipboard of a player changed.
+ * Called when the WorldEdit clipboard of a player changes.
+ * Detected by polling, so it may lag by up to {@code selection-update-interval} ticks,
+ * and is only fired for players who have clipboard visualization enabled (off by default).
  */
 @NullMarked
 public class ClipboardChangeEvent extends Event {
@@ -21,7 +23,7 @@ public class ClipboardChangeEvent extends Event {
     private final @Nullable Region region;
 
     /**
-     * Creates a new ClipboardChangeEven for the given player with the specified region.
+     * Creates a new {@link ClipboardChangeEvent} for the given player with the specified region.
      *
      * @param player the player whose clipboard changed
      * @param region the new region in the clipboard, or null if the clipboard is empty
@@ -46,6 +48,7 @@ public class ClipboardChangeEvent extends Event {
 
     /**
      * Returns the region in the clipboard of the player.
+     * This is a transformed copy, so modifying it does not affect the clipboard.
      *
      * @return the region in the clipboard, or null if the clipboard is empty
      */

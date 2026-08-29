@@ -5,11 +5,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Contains the visualizer data of a connected {@link Player}.
@@ -32,7 +28,7 @@ public class PlayerVisualizerData {
         return Optional.ofNullable(this.enabledVisualizations.get(type));
     }
 
-    public Collection<PlayerSelection> getEnabledVisualizations() {
+    public Collection<PlayerSelection> getSelections() {
         return this.enabledVisualizations.values();
     }
 
@@ -52,8 +48,8 @@ public class PlayerVisualizerData {
         return this.enabledVisualizations.containsKey(type);
     }
 
-    public void toggleSelectionVisibility(SelectionType type, boolean enable) {
-        if (!enable) {
+    public void setSelectionVisible(SelectionType type, boolean visible) {
+        if (!visible) {
             this.enabledVisualizations.remove(type);
             return;
         }

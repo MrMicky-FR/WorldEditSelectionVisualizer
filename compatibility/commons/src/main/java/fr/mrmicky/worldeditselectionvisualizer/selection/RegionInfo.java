@@ -1,6 +1,7 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection;
 
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
@@ -12,33 +13,31 @@ import java.util.Objects;
 @NullMarked
 public class RegionInfo {
 
-    private final RegionAdapter regionAdapter;
     private final Vector3d minimum;
     private final Vector3d maximum;
+    private final Vector3d origin;
 
     private final int width;
     private final int length;
     private final int height;
 
     private final long volume;
-    private final int points;
+    private final int triangles;
 
     public RegionInfo(RegionAdapter regionAdapter) {
-        this.regionAdapter = Objects.requireNonNull(regionAdapter, "regionAdapter");
-
         Region region = regionAdapter.getRegion();
         this.minimum = regionAdapter.getMinimumPoint();
-        this.maximum = regionAdapter.getMinimumPoint();
+        this.maximum = regionAdapter.getMaximumPoint();
+        this.origin = region instanceof CuboidRegion
+                ? regionAdapter.getCuboidPos1()
+                : regionAdapter.getCenter();
         this.width = region.getWidth();
         this.length = region.getLength();
         this.height = region.getHeight();
         this.volume = regionAdapter.getVolume();
-        this.points = region instanceof ConvexPolyhedralRegion
+        this.triangles = region instanceof ConvexPolyhedralRegion
+                // triangles lookup is a cheap read operation
                 ? ((ConvexPolyhedralRegion) region).getTriangles().size() : 0;
-    }
-
-    public RegionAdapter getRegionAdapter() {
-        return this.regionAdapter;
     }
 
     public Vector3d getMinimum() {
@@ -47,6 +46,10 @@ public class RegionInfo {
 
     public Vector3d getMaximum() {
         return this.maximum;
+    }
+
+    public Vector3d getOrigin() {
+        return this.origin;
     }
 
     public int getWidth() {
@@ -65,8 +68,8 @@ public class RegionInfo {
         return this.volume;
     }
 
-    public int getPoints() {
-        return this.points;
+    public int getTriangles() {
+        return this.triangles;
     }
 
     @Override
@@ -83,15 +86,16 @@ public class RegionInfo {
                 && this.length == region.length
                 && this.height == region.height
                 && this.volume == region.volume
-                && this.points == region.points
+                && this.triangles == region.triangles
                 && this.minimum.equals(region.minimum)
-                && this.maximum.equals(region.maximum);
+                && this.maximum.equals(region.maximum)
+                && this.origin.equals(region.origin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.minimum, this.maximum, this.width,
-                this.length, this.height, this.volume, this.points);
+        return Objects.hash(this.minimum, this.maximum, this.origin, this.width,
+                this.length, this.height, this.volume, this.triangles);
     }
 
     @Override
@@ -99,11 +103,12 @@ public class RegionInfo {
         return "RegionInfo{" +
                 "minimum=" + this.minimum +
                 ", maximum=" + this.maximum +
+                ", origin=" + this.origin +
                 ", width=" + this.width +
                 ", length=" + this.length +
                 ", height=" + this.height +
                 ", volume=" + this.volume +
-                ", points=" + this.points +
+                ", triangles=" + this.triangles +
                 '}';
     }
 }

@@ -10,6 +10,16 @@ import java.util.concurrent.TimeUnit;
 @NullMarked
 public interface SchedulerAdapter {
 
+    static SchedulerAdapter create(Plugin plugin) {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+
+            return new FoliaSchedulerAdapter(plugin);
+        } catch (ClassNotFoundException e) {
+            return new BukkitSchedulerAdapter(plugin);
+        }
+    }
+
     void execute(Runnable task);
 
     ScheduledTask scheduleGlobalRepeating(Runnable task, long delay, long period);
@@ -21,16 +31,6 @@ public interface SchedulerAdapter {
     void teleport(Player player, Location location);
 
     String name();
-
-    static SchedulerAdapter create(Plugin plugin) {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
-
-            return new FoliaSchedulerAdapter(plugin);
-        } catch (ClassNotFoundException e) {
-            return new BukkitSchedulerAdapter(plugin);
-        }
-    }
 
     class BukkitSchedulerAdapter implements SchedulerAdapter {
 

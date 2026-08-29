@@ -1,10 +1,9 @@
 package fr.mrmicky.worldeditselectionvisualizer.selection.shapes;
 
 import com.sk89q.worldedit.regions.EllipsoidRegion;
-import fr.mrmicky.worldeditselectionvisualizer.WorldEditSelectionVisualizer;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
-import fr.mrmicky.worldeditselectionvisualizer.config.GlobalSelectionConfig;
-import fr.mrmicky.worldeditselectionvisualizer.config.SelectionConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.DisplayConfig;
+import fr.mrmicky.worldeditselectionvisualizer.config.VisualizationConfig;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Ellipse;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Point;
 import fr.mrmicky.worldeditselectionvisualizer.geometry.Shape;
@@ -19,16 +18,19 @@ import java.util.List;
 @NullMarked
 public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
 
+    // The secondary ellipses are offset by half the Y radius, so the scale factor is
+    // cos(asin(offsetY / radiusY)) = cos(asin(0.5)) = sqrt(3) / 2
+    private static final double SECONDARY_RADIUS_FACTOR = Math.sqrt(3) / 2;
     private static final double INCREMENT = Math.PI / 4;
 
-    public EllipsoidProcessor(WorldEditSelectionVisualizer plugin) {
-        super(EllipsoidRegion.class, plugin);
+    public EllipsoidProcessor() {
+        super(EllipsoidRegion.class);
     }
 
     @Override
     protected SelectionPoints processSelection(EllipsoidRegion region,
                                                RegionAdapter adapter,
-                                               GlobalSelectionConfig config) {
+                                               VisualizationConfig config) {
         List<Shape> primary = new ArrayList<>(5);
         List<Shape> secondary = new ArrayList<>(6);
         Vector3d radius = adapter.getEllipsoidRadius().add(0.5, 0.5, 0.5);
@@ -37,7 +39,7 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
         primary.add(new Ellipse(center, radius, config.primary()));
 
         double offsetY = radius.getY() / 2.0;
-        Vector3d offRadius = radius.multiply(Math.cos(Math.asin(offsetY / radius.getY()))).withY(0);
+        Vector3d offRadius = radius.multiply(SECONDARY_RADIUS_FACTOR).withY(0);
 
         secondary.add(new Ellipse(center.add(0, offsetY, 0), offRadius, config.secondary()));
         secondary.add(new Ellipse(center.subtract(0, offsetY, 0), offRadius, config.secondary()));
@@ -47,7 +49,7 @@ public class EllipsoidProcessor extends ShapeProcessor<EllipsoidRegion> {
             double sin = Math.sin(i * INCREMENT);
 
             List<Shape> ellipses = (i % 2 == 0) ? primary : secondary;
-            SelectionConfig localConfig = (i % 2 == 0) ? config.primary() : config.secondary();
+            DisplayConfig localConfig = (i % 2 == 0) ? config.primary() : config.secondary();
 
             ellipses.add(new VerticalEllipse(center, radius.multiply(sin, 1, cos), localConfig));
         }

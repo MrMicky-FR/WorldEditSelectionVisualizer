@@ -12,7 +12,7 @@ folia-supported: true
 
 commands:
   worldeditselectionvisualizer:
-    description: Toggles the visualizer or reload the config
+    description: Toggle the visualizer or reload the configuration
     usage: /<command> <toggle|lock|reload>
     aliases: [wesv]
 

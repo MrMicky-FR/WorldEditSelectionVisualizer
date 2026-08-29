@@ -15,7 +15,7 @@ public class Point implements Shape {
     }
 
     @Override
-    public void render(VectorRenderer renderer) {
+    public void render(Vector3d viewerOrigin, VectorRenderer renderer) {
         renderer.render(this.point.getX(), this.point.getY(), this.point.getZ());
     }
 }

@@ -158,7 +158,9 @@ public class Vector3d {
         }
 
         Vector3d vec = (Vector3d) o;
-        return this.x == vec.getX() && this.y == vec.getY() && this.z == vec.getZ();
+        return Double.compare(this.x, vec.x) == 0
+                && Double.compare(this.y, vec.y) == 0
+                && Double.compare(this.z, vec.z) == 0;
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.function.Function;
 
 @NullMarked
-public class SelectionConfig {
+public class DisplayConfig {
 
     private final double pointsDistance;
     private final double linesGap;
@@ -15,11 +15,11 @@ public class SelectionConfig {
     private final int viewDistance;
     private final Particle particle;
 
-    public SelectionConfig(ConfigurationSection config, Function<ConfigurationSection, Particle> map) {
-        this.pointsDistance = config.getDouble("points-distance");
-        this.linesGap = config.getDouble("lines-gap");
-        this.updateInterval = config.getInt("update-interval");
-        this.viewDistance = config.getInt("view-distance");
+    public DisplayConfig(ConfigurationSection config, Function<ConfigurationSection, Particle> map) {
+        this.pointsDistance = Math.max(0.1, config.getDouble("points-distance"));
+        this.linesGap = Math.max(0.0, config.getDouble("lines-gap"));
+        this.updateInterval = Math.max(1, config.getInt("update-interval"));
+        this.viewDistance = Math.max(1, config.getInt("view-distance"));
         this.particle = map.apply(config.getConfigurationSection("particles"));
     }
 

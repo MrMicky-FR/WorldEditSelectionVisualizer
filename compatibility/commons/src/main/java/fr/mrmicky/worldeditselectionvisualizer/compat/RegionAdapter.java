@@ -2,7 +2,6 @@ package fr.mrmicky.worldeditselectionvisualizer.compat;
 
 import com.sk89q.worldedit.math.transform.Transform;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionOperationException;
 import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import fr.mrmicky.worldeditselectionvisualizer.selection.RegionInfo;
 import org.jspecify.annotations.NullMarked;
@@ -33,8 +32,6 @@ public interface RegionAdapter {
     List<Vector3d> getConvexVertices();
 
     Region transform(Transform transform, Vector3d origin);
-
-    void shift(Vector3d vector) throws RegionOperationException;
 
     Region getRegion();
 

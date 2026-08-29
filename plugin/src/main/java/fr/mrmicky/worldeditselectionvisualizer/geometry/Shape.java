@@ -1,17 +1,15 @@
 package fr.mrmicky.worldeditselectionvisualizer.geometry;
 
+import fr.mrmicky.worldeditselectionvisualizer.math.Vector3d;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-@FunctionalInterface
 public interface Shape {
 
-    double TWO_PI = 2 * Math.PI;
-
-    void render(VectorRenderer renderer);
+    void render(Vector3d viewerOrigin, VectorRenderer renderer);
 
     @FunctionalInterface
     interface VectorRenderer {
-        void render(double x, double y, double z);
+        boolean render(double x, double y, double z);
     }
 }

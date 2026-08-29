@@ -4,21 +4,24 @@ import fr.mrmicky.worldeditselectionvisualizer.display.DisplayType;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class GlobalSelectionConfig {
+public class VisualizationConfig {
 
     private final int fadeDelay;
     private final int maxSelectionSize;
+    private final boolean cuboidTopBottom;
 
-    private final SelectionConfig primary;
-    private final SelectionConfig secondary;
-    private final SelectionConfig origin;
+    private final DisplayConfig primary;
+    private final DisplayConfig secondary;
+    private final DisplayConfig origin;
 
-    public GlobalSelectionConfig(int fadeDelay, int maxSelectionSize,
-                                 SelectionConfig primary,
-                                 SelectionConfig secondary,
-                                 SelectionConfig origin) {
+    public VisualizationConfig(int fadeDelay, int maxSelectionSize,
+                               boolean cuboidTopBottom,
+                               DisplayConfig primary,
+                               DisplayConfig secondary,
+                               DisplayConfig origin) {
         this.fadeDelay = fadeDelay;
         this.maxSelectionSize = maxSelectionSize;
+        this.cuboidTopBottom = cuboidTopBottom;
         this.primary = primary;
         this.secondary = secondary;
         this.origin = origin;
@@ -32,19 +35,23 @@ public class GlobalSelectionConfig {
         return this.maxSelectionSize;
     }
 
-    public SelectionConfig primary() {
+    public boolean hasCuboidTopBottom() {
+        return this.cuboidTopBottom;
+    }
+
+    public DisplayConfig primary() {
         return this.primary;
     }
 
-    public SelectionConfig secondary() {
+    public DisplayConfig secondary() {
         return this.secondary;
     }
 
-    public SelectionConfig origin() {
+    public DisplayConfig origin() {
         return this.origin;
     }
 
-    public SelectionConfig byType(DisplayType type) {
+    public DisplayConfig byDisplay(DisplayType type) {
         switch (type) {
             case PRIMARY:
                 return this.primary;
@@ -52,8 +59,8 @@ public class GlobalSelectionConfig {
                 return this.secondary;
             case ORIGIN:
                 return this.origin;
+            default:
+                throw new IllegalArgumentException("Invalid display type: " + type);
         }
-
-        throw new IllegalArgumentException("Invalid display type: " + type);
     }
 }

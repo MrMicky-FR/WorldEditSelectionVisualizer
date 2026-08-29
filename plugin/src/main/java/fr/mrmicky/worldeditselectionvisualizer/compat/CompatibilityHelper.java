@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 /**
- * Helper class to help support multiples Spigot and WorldEdit versions
+ * Helper class to support multiple Spigot and WorldEdit versions
  */
 @NullMarked
 public class CompatibilityHelper {
@@ -61,9 +61,9 @@ public class CompatibilityHelper {
                 return;
             }
 
-            this.plugin.getLogger().warning("Unsupported item type in WorldEdit config, try to update WorldEdit.");
+            this.plugin.getLogger().warning("Unsupported item type in WorldEdit config, please update WorldEdit.");
         } catch (ReflectiveOperationException e) {
-            this.plugin.getLogger().log(Level.WARNING, "Failed to get WorldEdit wand item, try to update WorldEdit.", e);
+            this.plugin.getLogger().log(Level.WARNING, "Failed to get WorldEdit wand item, please update WorldEdit.", e);
         }
     }
 
@@ -104,7 +104,7 @@ public class CompatibilityHelper {
         return item != null && item.getType() == this.selectionItem;
     }
 
-    @SuppressWarnings("deprecation") // 1.7.10/1.8 servers support
+    @SuppressWarnings("deprecation") // Required for 1.7.10/1.8 support
     private ItemStack getItemInMainHand(Player player) {
         return player.getItemInHand();
     }

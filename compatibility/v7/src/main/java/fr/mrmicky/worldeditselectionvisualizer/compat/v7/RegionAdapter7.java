@@ -2,12 +2,7 @@ package fr.mrmicky.worldeditselectionvisualizer.compat.v7;
 
 import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.Transform;
-import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.EllipsoidRegion;
-import com.sk89q.worldedit.regions.Polygonal2DRegion;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionOperationException;
+import com.sk89q.worldedit.regions.*;
 import com.sk89q.worldedit.regions.polyhedron.Triangle;
 import fr.mrmicky.worldeditselectionvisualizer.compat.RegionAdapter;
 import fr.mrmicky.worldeditselectionvisualizer.compat.v7.utils.RegionTransforms7;
@@ -109,11 +104,6 @@ public class RegionAdapter7 implements RegionAdapter {
                 .stream()
                 .map(Vectors7::toVector3d)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void shift(Vector3d vector) throws RegionOperationException {
-        this.region.shift(Vectors7.toBlockVector3(vector));
     }
 
     @Override
